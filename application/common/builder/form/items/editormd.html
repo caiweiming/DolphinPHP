@@ -1,0 +1,15 @@
+{php}
+    $upload_image_ext = explode(',', config("upload_image_ext"));
+    $upload_image_ext = json_encode($upload_image_ext);
+{/php}
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-md-9">
+        <div id="{$form[type].name}">
+            <textarea style="display:none;" class="js-editormd" data-image-formats='{$upload_image_ext|default=""}' data-watch="{$form[type].watch|default=true}" name="{$form[type].name}">{$form[type].value|default=''}</textarea>
+        </div>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

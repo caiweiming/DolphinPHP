@@ -1,0 +1,11 @@
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-sm-9">
+        <label class="css-input switch switch-{$form[type].attr.size|default='sm'} switch-{$form[type].attr.color|default='primary'} switch-{$form[type].attr.shape|default='rounded'} {$form[type].extra_label_class|default=''}" title="开启/关闭">
+            <input type="checkbox" name="{$form[type].name}" id="{$form[type].name}" {notempty name="form[type].value"}checked{/notempty} {$form[type].extra_attr|default=''}><span></span>
+        </label>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

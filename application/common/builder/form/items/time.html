@@ -1,0 +1,9 @@
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-md-9">
+        <input class="js-datetimepicker form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="{$form[type].format}" data-locale="zh-cn" data-format="{$form[type].format ? $form[type].format : 'HH:mm:ss'}" {$form[type].extra_attr|default=''}>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

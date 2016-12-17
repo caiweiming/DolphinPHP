@@ -1,0 +1,30 @@
+{case value="2"}
+<div class="block pull-r-l">
+    <div class="block-header bg-gray-lighter">
+        <ul class="block-options">
+            <li>
+                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+            </li>
+            <li>
+                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+            </li>
+        </ul>
+        <h3 class="block-title">{$_block.title|default=''}</h3>
+    </div>
+    <div class="block-content block-content-full">
+        {notempty name="_block.list"}
+        <ul class="nav-users remove-margin-b">
+            {volist name="_block.list" id="vo"}
+            <li>
+                <a href="{$vo.url|default='javascript:void(0);'}">
+                    <img class="img-avatar" src="{$vo.avatar|default='__ADMIN_IMG__/avatar.jpg'}" alt="">
+                    <i class="fa fa-circle text-{$vo.online ? 'success' : 'warning'}"></i> {$vo.name|default=''}
+                    <div class="font-w400 text-muted"><small>{$vo.tips|default=''}</small></div>
+                </a>
+            </li>
+            {/volist}
+        </ul>
+        {/notempty}
+    </div>
+</div>
+{/case}

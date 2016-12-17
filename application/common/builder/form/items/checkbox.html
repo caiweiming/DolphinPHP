@@ -1,0 +1,13 @@
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-xs-9">
+        {volist name="form[type].options" id="option"}
+        <label class="css-input css-checkbox css-checkbox-{$form[type].attr.color|default='primary'} css-checkbox-{$form[type].attr.size|default='sm'} css-checkbox-{$form[type].attr.shape|default='rounded'}  {$form[type].extra_label_class|default=''}">
+            <input type="checkbox" name="{$form[type].name}[]" id="{$form[type].name}{$key}" value="{$key}" <?php $key = (string)$key; ?> {in name="key" value="$form[type].value|default=''"}checked{/in} {$form[type].extra_attr|default=''}><span></span> {$option|htmlspecialchars}
+        </label>
+        {/volist}
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

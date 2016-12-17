@@ -1,0 +1,65 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.select2-container--default .select2-search--inline .select2-search__field{
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* 单页 */
+.document-content p img,
+.page-content p img{
+    width: 100%!important;
+}
+
+/* 客服 */
+.support {
+    position: fixed;
+    top: 200px;
+    right: 0;
+    overflow: hidden;
+}
+.support .support-tag{
+    width: 38px;
+    text-align: center;
+    padding: 8px 10px;
+    float: left;
+    background-color: #009EE8;
+    color: #fff;
+    margin-top: 20px;
+}
+.support .support-content{
+    width: 200px;
+    float: right;
+    background: #009EE8;
+    display: none;
+}
+.support .support-item{
+    padding: 5px 0;
+    border-bottom: 1px dotted #ccc;
+}
+.support .support-item a{
+    padding-right: 5px;
+}
+.support .support-content-inner{
+    background-color: #fff;
+    padding: 10px;
+    margin: 8px;
+    min-height: 200px;
+}
+.support .support-wx img{
+    width: 100%;
+}
+.support .support-extra{
+    padding-top: 10px;
+    border-bottom: 1px dotted #ccc;
+    margin-bottom: 10px;
+}

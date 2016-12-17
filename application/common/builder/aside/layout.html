@@ -1,0 +1,50 @@
+<!-- Side Content -->
+<div class="side-content remove-padding-t" id="aside">
+    <!-- Side Overlay Tabs -->
+    <div class="block pull-r-l border-t">
+        {notempty name="aside.tab_nav"}
+        <ul class="nav nav-tabs nav-tabs-alt nav-justified" data-toggle="tabs">
+            {volist name="aside.tab_nav.tab_list" id="tab"}
+            <li {$aside.tab_nav.curr_tab == $key?='class="active"'}>
+                <a href="#{$key}">{$tab}</a>
+            </li>
+            {/volist}
+        </ul>
+        {/notempty}
+
+        {notempty name="aside.tab_con"}
+        <div class="block-content tab-content">
+            {volist name="aside.tab_con" id="con"}
+            <div class="tab-pane fade fade-right {$aside.tab_nav.curr_tab == $key?='in active'}" id="{$key}">
+                {notempty name="con"}
+                {volist name="con" id="_block"}
+                    {switch name="_block.type"}
+                        {include file="./application/common/builder/aside/blocks/recent.html" /}
+                        {include file="./application/common/builder/aside/blocks/online.html" /}
+                        {include file="./application/common/builder/aside/blocks/switch.html" /}
+                    {/switch}
+                {/volist}
+                {/notempty}
+            </div>
+            {/volist}
+        </div>
+        {/notempty}
+
+        {notempty name="aside.blocks"}
+        <div class="block-content">
+            {volist name="aside.blocks" id="_block"}
+                {switch name="_block.type"}
+                    {include file="./application/common/builder/aside/blocks/recent.html" /}
+                    {include file="./application/common/builder/aside/blocks/online.html" /}
+                    {include file="./application/common/builder/aside/blocks/switch.html" /}
+                    {case value="html"}
+                        {$_block.title|default=''}
+                    {/case}
+                {/switch}
+            {/volist}
+        </div>
+        {/notempty}
+    </div>
+    <!-- END Side Overlay Tabs -->
+</div>
+<!-- END Side Content -->

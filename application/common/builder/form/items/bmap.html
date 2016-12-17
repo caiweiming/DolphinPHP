@@ -1,0 +1,14 @@
+<div class="form-group js-bmap {$form[type].extra_class|default=''}" data-level="{$form[type].level == '' ? 12 : $form[type].level}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-sm-9">
+        <input class="form-control bmap-address" id="bmap-address-{$form[type].name}" name="{$form[type].name}_address" type="text" value="{$form[type].address|default=''}" placeholder="请输入要搜索的地址">
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+        <div class="searchResultPanel"></div>
+        <input class="form-control bmap-point" type="hidden" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}">
+        <div class="bmap push-10-t" id="bmap-canvas-{$form[type].name}"></div>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak={$form[type].ak|default=''}"></script>

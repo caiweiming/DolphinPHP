@@ -1,0 +1,180 @@
+{extend name="layout" /}
+
+{block name="content"}
+<div class="row">
+    <div class="col-md-12">
+        <div class="block">
+            <div class="block-header bg-gray-lighter">
+                <ul class="block-options">
+                    <li>
+                        <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                    </li>
+                    <li>
+                        <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                    </li>
+                    <li>
+                        <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                    </li>
+                    <li>
+                        <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                    </li>
+                </ul>
+                <h3 class="block-title">{$page_title|default=""}</h3>
+            </div>
+
+            <div class="block-content tab-content">
+                <div class="tab-pane active">
+                    <div class="block-content">
+                        <form class="form-horizontal form-builder" action="{:url('install', ['name' => $name, 'confirm' => 1])}" method="get">
+                            <div class="form-group">
+                                <h4 class="col-xs-12 push-10">模块依赖检查</h4>
+                                <div class="col-sm-5">
+                                    {empty name="need_module"}
+                                    <div class="form-control-static">无需依赖其他模块</div>
+                                    {else/}
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>模块</th>
+                                                <th>唯一标识</th>
+                                                <th style="width: 100px;">当前版本</th>
+                                                <th style="width: 100px;">所需版本</th>
+                                                <th class="text-center" style="width: 100px;">检查结果</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {volist name="need_module" id="vo"}
+                                            <tr>
+                                                <td>{$vo.module}</td>
+                                                <td><a href="http://www.dolphinphp.com" target="_blank" data-toggle="tooltip" title="到商城查看该模块">{$vo.identifier}</a></td>
+                                                <td>{$vo.version}</td>
+                                                <td>{$vo.version_need}</td>
+                                                <td class="text-center">
+                                                    {$vo.result}
+                                                </td>
+                                            </tr>
+                                        {/volist}
+                                        </tbody>
+                                    </table>
+                                    {/empty}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h4 class="col-xs-12 push-10">插件依赖检查</h4>
+                                <div class="col-sm-5">
+                                    {empty name="need_plugin"}
+                                    <div class="form-control-static">无需依赖其他插件</div>
+                                    {else/}
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>插件</th>
+                                            <th>唯一标识</th>
+                                            <th style="width: 100px;">当前版本</th>
+                                            <th style="width: 100px;">所需版本</th>
+                                            <th class="text-center" style="width: 100px;">检查结果</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {volist name="need_plugin" id="vo"}
+                                        <tr>
+                                            <td>{$vo.plugin}</td>
+                                            <td><a href="http://www.dolphinphp.com" target="_blank" data-toggle="tooltip" title="到商城查看该插件">{$vo.identifier}</a></td>
+                                            <td>{$vo.version}</td>
+                                            <td>{$vo.version_need}</td>
+                                            <td class="text-center">
+                                                {$vo.result}
+                                            </td>
+                                        </tr>
+                                        {/volist}
+                                        </tbody>
+                                    </table>
+                                    {/empty}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h4 class="col-xs-12 push-10">数据表检查</h4>
+                                <div class="col-sm-5">
+                                    {empty name="table_check"}
+                                    <div class="form-control-static">该模块不需要数据表</div>
+                                    {else/}
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>数据表</th>
+                                            <th class="text-center" style="width: 100px;">检查结果</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {volist name="table_check" id="vo"}
+                                        <tr>
+                                            <td>{$vo.table}</td>
+                                            <td class="text-center">
+                                                {$vo.result}
+                                            </td>
+                                        </tr>
+                                        {/volist}
+                                        </tbody>
+                                    </table>
+                                    {/empty}
+                                </div>
+                            </div>
+                            <div class="form-group " id="form_group_group">
+                                <h4 class="col-xs-12 push-10">是否清除旧数据</h4>
+                                <div class="col-xs-9">
+                                    <label class="css-input css-radio css-radio-primary css-radio-sm push-10-r">
+                                        <input type="radio" name="clear" id="clear1" value="0" checked="">
+                                        <span></span> 否
+                                    </label>
+                                    <label class="css-input css-radio css-radio-primary css-radio-sm push-10-r">
+                                        <input type="radio" name="clear" id="clear2" value="1">
+                                        <span></span> 是
+                                    </label>
+                                    <div class="help-block">
+                                        选择“是”，将删除数据库中已存在的相同数据表
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-minw btn-primary" type="button" id="install">
+                                    安装
+                                    </button>
+                                    <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
+                                        返回
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+{block name="script"}
+<script>
+    $(document).ready(function(){
+        $('#install').click(function () {
+            var table_exists = false;
+
+            if ($('.form-builder i.text-danger').length) {
+                Dolphin.notify('缺少依赖模块或插件', 'danger');
+                return false;
+            }
+            if ($('.form-builder span.text-danger').length) {
+                table_exists = true;
+            }
+            if (table_exists && $('.form-builder input[name=clear]:checked').val() == 0) {
+                Dolphin.notify('数据库表存在冲突，如果需要覆盖原有数据，请选择“清除旧数据”', 'danger');
+                return false;
+            }
+
+            $('.form-builder').submit();
+        });
+    });
+</script>
+{/block}

@@ -1,0 +1,101 @@
+{php}
+    // 获取一级联动数据
+    $level_one  = get_level_data($form[type]['table'], 0, $form[type]['pid']);
+    $level_key  = [];
+    $level_data = [];
+
+    // 有默认值
+    if ($form[type]['value'] != '') {
+        $level_key_data = get_level_key_data($form[type]['table'], $form[type]['value'], $form[type]['key'], $form[type]['option'], $form[type]['pid']);
+        $level_key = $level_key_data['key'];
+        $level_data = $level_key_data['data'];
+        sort($level_key);
+        $level_data = array_reverse($level_data);
+    }
+{/php}
+<div class="form-group" id="form_group_{$form[type].name}">
+    <label class="col-xs-12">{$form[type].title|htmlspecialchars}</label>
+    <div class="select-box">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_1" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pidkey|default='pid'}" data-next-level="2" data-next-level-id="linkages_{$form[type].name}_2">
+            <option value="">请选择：</option>
+            {volist name="level_one" id="option"}
+            <option value="{$option[$form['key']]}" {if (isset($level_key[1]) && $level_key[1] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+            {/volist}
+        </select>
+    </div>
+
+    {eq name="form[type].level" value="2"}
+    <div class="select-box">
+        <select class="js-select2 form-control" name="{$form[type].name}" id="linkages_{$form[type].name}_2">
+            <option value="">请选择：</option>
+            {notempty name="level_data.1"}
+                {volist name="level_data.1" id="option"}
+                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    {/eq}
+
+    {eq name="form[type].level" value="3"}
+    <div class="select-box">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pidkey|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
+            <option value="">请选择：</option>
+            {notempty name="level_data.1"}
+                {volist name="level_data.1" id="option"}
+                <option value="{$option[$form['key']]}" {if ($level_key[2] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    <div class="select-box">
+        <select class="js-select2 form-control" name="{$form[type].name}" id="linkages_{$form[type].name}_3">
+            <option value="">请选择：</option>
+            {notempty name="level_data.2"}
+                {volist name="level_data.2" id="option"}
+                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    {/eq}
+
+    {eq name="form[type].level" value="4"}
+    <div class="select-box">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pidkey|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
+            <option value="">请选择：</option>
+            {notempty name="level_data.1"}
+                {volist name="level_data.1" id="option"}
+                <option value="{$option[$form['key']]}" {if ($level_key[2] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    <div class="select-box">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_3" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pidkey|default='pid'}" data-next-level="4" data-next-level-id="linkages_{$form[type].name}_4">
+            <option value="">请选择：</option>
+            {notempty name="level_data.2"}
+                {volist name="level_data.2" id="option"}
+                <option value="{$option[$form['key']]}" {if ($level_key[3] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    <div class="select-box">
+        <select class="js-select2 form-control" name="{$form[type].name}" id="linkages_{$form[type].name}_4">
+            <option value="">请选择：</option>
+            {notempty name="level_data.3"}
+                {volist name="level_data.3" id="option"}
+                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                {/volist}
+            {/notempty}
+        </select>
+    </div>
+    {/eq}
+
+    <div class="col-xs-12">
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

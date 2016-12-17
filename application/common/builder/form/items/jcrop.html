@@ -1,0 +1,50 @@
+<div class="form-group js-jcrop-interface {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-sm-9">
+        <div class="file-item thumbnail" {$form[type]['value'] ?: "style='display:none'"}>
+            <a class="img-link" href="{$form[type].value|get_file_path}">
+                <img src="{$form[type].value|get_thumb}" width="100">
+            </a>
+            <i class="fa fa-times-circle remove-picture"></i>
+        </div>
+        <div class="clearfix"></div>
+        <button class="btn btn-info js-jcrop-upload-btn" type="button">上传图片</button>
+        <input type="hidden" class="js-jcrop-cut-info" value="">
+        <input type="file" class="hidden js-jcrop-file" accept="image/*" value="">
+        <input type="hidden" class="js-jcrop-input" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}">
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+    <!-- Pop In Modal -->
+    <div class="modal modal-popin fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-popin">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent remove-margin-b">
+                    <div class="block-header bg-primary-dark">
+                        <ul class="block-options">
+                            <li>
+                                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">图片裁剪</h3>
+                    </div>
+                    <div class="block-content push-20">
+                        <div class="jcrop-preview-parent" {$form[type]['value'] ?: "style='display:none'"}>
+                            <img src="{$form[type].value|get_file_path}" class="jcrop-preview" />
+                        </div>
+                        <div class="jcrop-img">
+                            <img src="{$form[type].value|get_file_path}" data-id="{$form[type].value|default=''}" data-options='{$form[type].options|default=""}' class="js-jcrop" style="display: none;" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span class="pull-left">在图片上拖动鼠标，选择裁剪选区，然后点击“<strong>立即裁剪</strong>”按钮</span>
+                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-sm btn-primary js-jcrop-cut-btn" type="button"><i class="fa fa-cut"></i> 立即裁剪</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Pop In Modal -->
+</div>

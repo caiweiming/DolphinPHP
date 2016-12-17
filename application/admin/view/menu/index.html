@@ -1,0 +1,203 @@
+{extend name="layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+    <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>按住表头可拖动节点，调整后点击【保存节点】。</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                {notempty name="tab_nav"}
+                <ul class="nav nav-tabs">
+                    {volist name="tab_nav['tab_list']" id="tab"}
+                    <li {eq name="tab_nav.curr_tab" value="$key"}class="active"{/eq}>
+                        <a href="{$tab.url}">{$tab.title}</a>
+                    </li>
+                    {/volist}
+                    <li {eq name="tab_nav.curr_tab" value="module-sort"}class="active"{/eq}>
+                        <a href="{:url('', ['group' => 'module-sort'])}">模块排序</a>
+                    </li>
+                    <li class="pull-right">
+                        <ul class="block-options push-10-t push-10-r">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {else/}
+                <div class="block-header bg-gray-lighter">
+                    <ul class="block-options">
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">{$page_title}</h3>
+                </div>
+                {/notempty}
+                <div class="block-content tab-content">
+                    <div class="tab-pane active">
+                        {notempty name="menus"}
+                        <div class="row data-table-toolbar">
+                            <div class="col-sm-12">
+                                <form action="{$Request.url}" method="get">
+                                <div class="toolbar-btn-action">
+                                    <a title="新增" class="btn btn-primary" href="{:url('add', ['module' => $Request.param.group])}"><i class="fa fa-plus-circle"></i> 新增</a>
+                                    <button title="保存" type="button" class="btn btn-default disabled" id="save" disabled><i class="fa fa-check-circle-o"></i> 保存节点</button>
+                                    <button title="隐藏禁用节点" type="button" class="btn btn-danger" id="hide_disable"><i class="fa fa-eye-slash"></i> 隐藏禁用节点</button>
+                                    <button title="显示禁用节点" type="button" class="btn btn-info" id="show_disable"><i class="fa fa-eye"></i> 显示禁用节点</button>
+                                    <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>
+                                    <button title="收起所有节点" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有节点</button>
+                                    <span class="form-inline">
+                                        <input class="form-control" type="text" name="max" value="{$Request.get.max|default=''}" placeholder="显示层数">
+                                    </span>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dd" id="menu_list">
+                            <ol class="dd-list">{$menus}</ol>
+                        </div>
+                        {/notempty}
+
+                        {notempty name="modules"}
+                        <form action="{:url('')}" method="post" name="sort-form" class="sort-form">
+                            <button title="保存" type="submit" class="btn btn-success push-10 ajax-post" target-form="sort-form">保存排序</button>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="sortable" class="connectedSortable push-20">
+                                        {volist name="modules" id="module"}
+                                        <div class="sortable-item pull-left">
+                                            <input type="hidden" name="sort[]" value="{$key}">
+                                            <i class="{$module.icon}"></i> {$module.title}
+                                        </div>
+                                        {/volist}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {/notempty}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jquery-nestable/jquery.nestable.js"></script>
+<script src="__LIBS__/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // 模块拖拽
+        $( "#sortable" ).sortable({
+            connectWith: ".connectedSortable"
+        }).disableSelection();
+
+        // 保存节点
+        $('#save').click(function(){
+            Dolphin.loading();
+            $.post("{:url('save')}", {menus: $('#menu_list').nestable('serialize')}, function(data) {
+                Dolphin.loading('hide');
+                if (data.code) {
+                    $('#save').removeClass('btn-success').addClass('btn-default disabled');
+                    Dolphin.notify(data.msg, 'success');
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            });
+        });
+
+        // 初始化节点拖拽
+        $('#menu_list').nestable({maxDepth:4}).on('change', function(){
+            $('#save').removeAttr("disabled").removeClass('btn-default disabled').addClass('btn-success');
+        });
+
+        // 隐藏禁用节点
+        $('#hide_disable').click(function(){
+            $('.dd-disable').hide();
+        });
+
+        // 显示禁用节点
+        $('#show_disable').click(function(){
+            $('.dd-disable').show();
+        });
+
+        // 展开所有节点
+        $('#expand-all').click(function(){
+            $('#menu_list').nestable('expandAll');
+        });
+
+        // 收起所有节点
+        $('#collapse-all').click(function(){
+            $('#menu_list').nestable('collapseAll');
+        });
+
+        // 禁用节点
+        $('.dd3-content').delegate('.disable', 'click', function(){
+            var self     = $(this);
+            var ids      = self.data('ids');
+            var ajax_url = '{:url("disable", ["table" => "admin_menu"])}';
+            Dolphin.loading();
+            $.post(ajax_url, {ids:ids}, function(data) {
+                Dolphin.loading('hide');
+                if (data.code) {
+                    self.attr('data-original-title', '启用').removeClass('disable').addClass('enable')
+                        .children().removeClass('fa-ban').addClass('fa-check-circle-o')
+                        .closest('.dd-item')
+                        .addClass('dd-disable');
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            });
+            return false;
+        });
+
+        // 启用节点
+        $('.dd3-content').delegate('.enable', 'click', function(){
+            var self     = $(this);
+            var ids      = self.data('ids');
+            var ajax_url = '{:url("enable", ["table" => "admin_menu"])}';
+            Dolphin.loading();
+            $.post(ajax_url, {ids:ids}, function(data) {
+                Dolphin.loading('hide');
+                if (data.code) {
+                    self.attr('data-original-title', '禁用').removeClass('enable').addClass('disable')
+                        .children().removeClass('fa-check-circle-o').addClass('fa-ban')
+                        .closest('.dd-item')
+                        .removeClass('dd-disable');
+                } else {
+                    Dolphin.notify(data.msg, 'danger');
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{/block}

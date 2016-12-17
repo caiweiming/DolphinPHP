@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>海豚PHP - 安装</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="caiweiming">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="{$static_dir}admin/img/favicons/favicon.png">
+    <!-- END Icons -->
+
+    <!-- Stylesheets -->
+    <!-- Bootstrap and OneUI CSS framework -->
+    <link rel="stylesheet" href="{$static_dir}admin/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$static_dir}admin/css/oneui.css">
+    <link rel="stylesheet" href="{$static_dir}install/css/dolphin.css">
+    <link rel="stylesheet" href="{$static_dir}admin/css/dolphin.css">
+    <!-- END Stylesheets -->
+</head>
+<body>
+<div class="bg-image" style="background-image: url('{$static_dir}install/img/bg.jpg');"></div>
+{block name="progress"}{/block}
+<!-- Install Content -->
+<div class="content overflow-hidden install-page">
+    <!-- Install Block -->
+    <div class="block block-themed box">
+        {block name="content"}{/block}
+    </div>
+    <!-- END Install Block -->
+</div>
+<!-- END Install Content -->
+
+<!-- Install Footer -->
+<div class="push-10-t push-10 text-center animated fadeInUp">
+    <small class="text-white-op font-w600">2016 &copy; DolphinPHP 1.0.0</small>
+</div>
+<!-- END Install Footer -->
+<!-- Pop Out Modal -->
+<div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark" style="background: #0099ff">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">安装协议</h3>
+                </div>
+                <div class="block-content">
+                    <p>安装协议</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Pop Out Modal -->
+<script src="{$static_dir}admin/js/core/jquery.min.js"></script>
+<script src="{$static_dir}admin/js/core/bootstrap.min.js"></script>
+<script src="{$static_dir}libs/bootstrap-notify/bootstrap-notify.min.js"></script>
+<script src="{$static_dir}admin/js/dolphin.js"></script>
+<script>
+    jQuery(function () {
+        jQuery('#agreement').change(function () {
+            jQuery('#next').prop('disabled', !$('#agreement').prop('checked'));
+        });
+        jQuery('#next').click(function () {
+            location.href = '{$Request.baseFile}/index/step2';
+        });
+    });
+</script>
+</body>
+</html>

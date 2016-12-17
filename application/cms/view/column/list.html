@@ -1,0 +1,110 @@
+{extend name="public:layout" /}
+
+{block name="main-container"}
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Hero Content -->
+    <div class="bg-primary-dark">
+        <section class="content content-full content-boxed overflow-hidden">
+            <!-- Section Content -->
+            <div class="push-100-t push-50 text-center">
+                <h1 class="h2 text-white push-10 visibility-hidden" data-toggle="appear" data-class="animated fadeInDown">{$column_info.name}</h1>
+            </div>
+            <!-- END Section Content -->
+        </section>
+    </div>
+    <!-- END Hero Content -->
+
+    <!-- Navigation -->
+    <div class="bg-white">
+        <section class="content content-mini content-mini-full content-boxed overflow-hidden">
+            <ol class="breadcrumb">
+                <li><a class="text-primary-dark" href="{:url('cms/index/index')}">首页</a></li>
+                {volist name="breadcrumb" id="v"}
+                <li><a class="text-primary-dark" href="{$v.url}" target="{$v.target}">{$v.name}</a></li>
+                {/volist}
+            </ol>
+        </section>
+    </div>
+    <!-- END Navigation -->
+
+    <section class="content content-boxed">
+        <!-- Section Content -->
+        <div class="push-50-t push-50">
+            <div class="row">
+                <div class="col-md-8">
+                    {volist name="lists" id="item"}
+                    <div class="block">
+                        <div class="block-content">
+                            <div class="row items-push">
+                                {notempty name="item.cover"}
+                                <div class="col-md-4">
+                                    <a href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">
+                                        <img class="img-responsive" src="{$item.cover|get_file_path}" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="font-s12 push-10">
+                                        <em class="pull-right">{$item.create_time|time_tran}</em>
+                                        <a href="#">{$item.username}</a> 发表于 {$item.create_time|format_time}
+                                    </div>
+                                    <h4 class="text-uppercase push-10"><a class="text-primary-dark" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">{$item.title}</a></h4>
+                                    {present name="item.summary"}
+                                    <p class="push-20">{$item.summary}</p>
+                                    {/present}
+                                    <div class="btn-group btn-group-sm">
+                                        <a class="btn btn-default" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">继续阅读...</a>
+                                    </div>
+                                </div>
+                                {else/}
+                                <div class="col-md-12">
+                                    <div class="font-s12 push-10">
+                                        <em class="pull-right">{$item.create_time|time_tran}</em>
+                                        <a href="#">{$item.username}</a> 发表于 {$item.create_time|format_time}
+                                    </div>
+                                    <h4 class="text-uppercase push-10"><a class="text-primary-dark" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">{$item.title}</a></h4>
+                                    {present name="item.summary"}
+                                    <p class="push-20">{$item.summary}</p>
+                                    {/present}
+                                    <div class="btn-group btn-group-sm">
+                                        <a class="btn btn-default" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">继续阅读...</a>
+                                    </div>
+                                </div>
+                                {/notempty}
+                            </div>
+                        </div>
+                    </div>
+                    {/volist}
+
+                    <!-- Pagination -->
+                    <nav>
+                        {$pages}
+                    </nav>
+                    <!-- END Pagination -->
+                </div>
+                <div class="col-md-4">
+                    <!-- Search -->
+                    <div class="block">
+                        <div class="block-header bg-gray-lighter">
+                            <h3 class="block-title">搜索</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <form action="{:url('cms/search/index')}" method="post">
+                                <div class="input-group input-group-lg">
+                                    <input class="form-control" name="keyword" type="text" placeholder="请输入关键字...">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Search -->
+                </div>
+            </div>
+        </div>
+        <!-- END Section Content -->
+    </section>
+</main>
+<!-- END Main Container -->
+{/block}

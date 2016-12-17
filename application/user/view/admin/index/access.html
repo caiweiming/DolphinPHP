@@ -1,0 +1,177 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="plugins-css"}
+<link href="__LIBS__/jquery-treetable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+<link href="__LIBS__/jquery-treetable/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                {notempty name="tab_nav"}
+                <ul class="nav nav-tabs">
+                    {volist name="tab_nav['tab_list']" id="tab"}
+                    <li {eq name="tab_nav.curr_tab" value="$key"}class="active"{/eq}>
+                    <a href="{$tab.url}">{$tab.title}</a>
+                    </li>
+                    {/volist}
+                    <li class="pull-right">
+                        <ul class="block-options push-10-t push-10-r">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {else/}
+                <div class="block-header bg-gray-lighter">
+                    <ul class="block-options">
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">{$page_title}</h3>
+                </div>
+                {/notempty}
+
+                <form action="{:url('access')}" name="form-builder" method="post" class="form-horizontal form-builder">
+                    <input type="hidden" name="uid" value="{:input('param.uid', '')}">
+                    <input type="hidden" name="tab_name" value="{$tab_name|default=''}">
+                    <div class="block-content tab-content">
+                        <div class="tab-pane fade in active push-20">
+                            {notempty name="groups"}
+                            <div class="row data-table-toolbar push-20">
+                                <div class="col-sm-12">
+                                    <div class="toolbar-btn-action">
+                                        <button title="展开所有" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有</button>
+                                        <button title="收起所有" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {/notempty}
+                            {notempty name="groups"}
+                            <table id="group_auth">
+                                {volist name="groups" id="group"}
+                                <tr data-tt-id="{$group[$field_access['primary_key']]}" {neq name="group[$field_access['parent_id']]" value="0"}data-tt-parent-id="{$group[$field_access['parent_id']]}"{/neq}>
+                                    <td>
+                                        <label class="css-input css-checkbox css-checkbox-primary">
+                                            <input type="checkbox" name="group_auth[]" value="{$group[$field_access['primary_key']]}" {in name="group[$field_access['primary_key']]" value="$node_access"}checked{/in}><span></span> {$group[$field_access['node_name']]}
+                                        </label>
+                                    </td>
+                                </tr>
+                                {/volist}
+                            </table>
+                            {else/}
+                            <div class="form-empty">
+                                <p class="text-center text-muted empty-info">
+                                    <i class="fa fa-database"></i> 暂无授权数据<br>
+                                </p>
+                            </div>
+                            {/notempty}
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                {notempty name="groups"}
+                                <button class="btn btn-minw btn-primary ajax-post" target-form="form-builder" type="submit">
+                                    确定
+                                </button>
+                                {/notempty}
+                                <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
+                                    返回
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/jquery-treetable/jquery.treetable.js"></script>
+<script>
+    $(document).ready(function(){
+        // 初始化折叠树
+        $('#group_auth').treetable({
+            expandable: true,
+            initialState: "expanded"
+        });
+
+        // 展开所有菜单
+        $('#expand-all').click(function(){
+            $('#group_auth').treetable('expandAll');
+        });
+
+        // 折叠所有菜单
+        $('#collapse-all').click(function(){
+            $('#group_auth').treetable('collapseAll');
+        });
+
+        // 选择中或取消选择后代
+        $('input[name="group_auth[]"]').click(function () {
+            var tr  = $(this).closest('tr');
+            var id  = tr.data('tt-id');
+            var pid = tr.data('tt-parent-id');
+
+            if (this.checked) {
+                // 选中所有父辈节点
+//                check_parent(pid);
+            }
+            check_it(id, this.checked);
+        });
+
+        /**
+         * 选中/取消所有子孙节点
+         * @param  int id 菜单自身id
+         * @param  string status 选中状态
+         * @return void
+         */
+        var check_it = function(id, status){
+            var child = $('#group_auth tr[data-tt-parent-id='+id+']');
+            child.find('input:checkbox').prop('checked', status);
+            child.each(function() {
+                check_it($(this).data('tt-id'), status);
+            });
+        };
+
+        /**
+         * 选中所有父辈节点
+         * @param  int id 菜单父级id
+         * @param  string status 选中状态
+         * @return void
+         */
+        var check_parent = function(id){
+            var self = $('#group_auth tr[data-tt-id='+id+']');
+            var pid = self.data('tt-parent-id');
+
+            self.find('input:checkbox').prop('checked', true);
+            if (pid == undefined) {
+                return;
+            }
+            check_parent(pid);
+        };
+    });
+</script>
+{/block}

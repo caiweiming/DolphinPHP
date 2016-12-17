@@ -1,0 +1,33 @@
+{case value="3"}
+<div class="block pull-r-l">
+    <div class="block-header bg-gray-lighter">
+        <ul class="block-options">
+            <li>
+                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+            </li>
+        </ul>
+        <h3 class="block-title">{$_block.title|default=''}</h3>
+    </div>
+    <div class="block-content">
+        {notempty name="_block.list"}
+        <div class="form-bordered">
+            {volist name="_block.list" id="vo"}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="font-s13 font-w600">{$vo.title|default=''}</div>
+                        <div class="font-s13 font-w400 text-muted">{$vo.tips|default=''}</div>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <label class="css-input switch switch-sm switch-primary push-10-t">
+                            <input type="checkbox" {$vo.checked ?= 'checked=""'}><span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+        </div>
+        {/notempty}
+    </div>
+</div>
+{/case}

@@ -1,0 +1,13 @@
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].id}">
+    <label class="col-xs-12">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-md-9">
+        <div class="input-daterange input-group" data-date-format="{$form[type].format ? $form[type].format : 'yyyy-mm-dd'}">
+            <input class="form-control" type="text" id="{$form[type].id_from}" name="{$form[type].name_from}" value="{$form[type].value_from|default=''}" placeholder="{$form[type].format}" {$form[type].extra_attr|default=''}>
+            <span class="input-group-addon"><i class="fa fa-chevron-right"></i></span>
+            <input class="form-control" type="text" id="{$form[type].id_to}" name="{$form[type].name_to}" value="{$form[type].value_to|default=''}" placeholder="{$form[type].format}" {$form[type].extra_attr|default=''}>
+        </div>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

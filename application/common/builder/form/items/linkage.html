@@ -1,0 +1,14 @@
+<div class="form-group" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|clear_js}</label>
+    <div class="col-sm-9">
+        <select class="js-select2 form-control select-linkage" name="{$form[type].name}" id="{$form[type].name}" data-allow-clear="true" data-placeholder="请选择一项" data-url="{$form[type].ajax_url|default=''}" data-param="{$form[type].param|default=$form[type].name}" data-next-items="{$form[type].next_items}">
+            <option></option>
+            {volist name="form[type].options" id="option"}
+                <option value="{$key}" {if ($form[type].value == (string)$key)}selected{/if}>{$option|clear_js}</option>
+            {/volist}
+        </select>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

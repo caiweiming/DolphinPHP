@@ -1,0 +1,95 @@
+{extend name="public:layout" /}
+
+{block name="main-container"}
+<!-- Main Container -->
+<main id="main-container">
+    <!-- Hero Content -->
+    <div class="bg-image" {notempty name="page_info.cover"}style="background-image: url('{$page_info.cover|get_file_path}')"{/notempty}>
+        <div class="bg-primary-dark-op">
+            <section class="content content-full content-boxed overflow-hidden">
+                <!-- Section Content -->
+                <div class="push-100-t push-50 text-center">
+                    <h1 class="h2 text-white push-10 visibility-hidden" data-toggle="appear" data-class="animated fadeInDown">{$page_info.title}</h1>
+                    {notempty name="page_info.description"}
+                    <h2 class="h5 text-white-op visibility-hidden" data-toggle="appear" data-class="animated fadeInDown">{$page_info.description}</h2>
+                    {/notempty}
+                </div>
+                <!-- END Section Content -->
+            </section>
+        </div>
+    </div>
+    <!-- END Hero Content -->
+
+    <!-- Navigation -->
+    <div class="bg-white">
+        <section class="content content-mini content-mini-full content-boxed overflow-hidden">
+            <ol class="breadcrumb">
+                <li><a class="text-primary-dark" href="{:url('cms/index/index')}">首页</a></li>
+                <li><a href="{$page_info.url}">{$page_info.title}</a></li>
+            </ol>
+        </section>
+    </div>
+    <!-- END Navigation -->
+
+    <!-- Lessons -->
+    <section class="content content-boxed overflow-hidden">
+        <!-- Section Content -->
+        <div class="row js-gallery">
+            <div class="col-md-8">
+                <div class="block block-rounded">
+                    <div class="block-content page-content">
+                        {$page_info.content}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="block block-rounded">
+                    <div class="block-header bg-gray-lighter text-center">
+                        <h3 class="block-title">关于 {$page_info.title}</h3>
+                    </div>
+                    <div class="block-content">
+                        <table class="table table-borderless table-condensed">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-fw fa-eye push-10-r"></i> {$page_info.view|default=0} 次阅读
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-fw fa-calendar push-10-r"></i> {$page_info.create_time|time_tran}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-fw fa-tags push-10-r"></i>
+                                    {volist name="page_info.tags" id="tag"}
+                                    <a class="label label-primary" href="{:url('search/index', ['keyword' => $tag])}">{$tag}</a>
+                                    {/volist}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Section Content -->
+    </section>
+    <!-- END Lessons -->
+</main>
+<!-- END Main Container -->
+{/block}
+
+{block name="style"}
+<link rel="stylesheet" href="__LIBS__/magnific-popup/magnific-popup.min.css">
+{/block}
+
+{block name="script"}
+<script src="__LIBS__/magnific-popup/magnific-popup.min.js"></script>
+<script>
+    jQuery(function () {
+        App.initHelpers(['magnific-popup']);
+    });
+</script>
+{/block}

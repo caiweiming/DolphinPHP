@@ -1,0 +1,166 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="style"}
+<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+{/block}
+
+{block name="content"}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                        <a href="#tab1">角色信息</a>
+                    </li>
+                    <li>
+                        <a href="#tab2">访问授权</a>
+                    </li>
+                    <li class="pull-right">
+                        <ul class="block-options push-10-t push-10-r">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form action="{:url('')}" name="form-builder" method="post" class="form-horizontal form-builder">
+                    <div class="block-content tab-content">
+                        <div class="tab-pane fade in active push-20" id="tab1">
+                            <div class="form-group">
+                                <label class="col-xs-12" for="pid">所属角色</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="pid" name="pid">
+                                        <option value="">请选择：</option>
+                                        {volist name="role_list" id="role"}
+                                        <option value="{$key}">{$role}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12" for="title">角色名称</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="title" name="name" value="" placeholder="请输入角色名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12" for="description">角色描述</label>
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" id="description" rows="7" name="description" placeholder="请输入角色描述"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12" for="sort">排序</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="sort" name="sort" value="100" placeholder="请输入排序">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade auth-node" id="tab2">
+                            {notempty name="menus"}
+                            {volist name="menus" id="menu"}
+                            <div class="block block-bordered">
+                                <div class="block-header bg-gray-lighter auth-node-top">
+                                    <label class="css-input css-checkbox css-checkbox-primary">
+                                        <input type="checkbox" name="menu_auth[]" value="{$menu.id}" class="js-check-all-node"><span></span> <i class="{$menu.icon}"></i> {$menu.title}
+                                    </label>
+                                </div>
+                                <div class="block-content">
+                                    {notempty name="menu.child"}
+                                    {volist name="menu.child" id="submenu"}
+                                    <div class="auth-node-parent">
+                                        <div>
+                                            <label class="css-input css-checkbox css-checkbox-primary">
+                                                <input type="checkbox" name="menu_auth[]" data-parent-id="{$menu['id']}" value="{$submenu.id}" class="js-check-all-group"><span></span> <i class="{$submenu.icon}"></i> {$submenu.title}
+                                            </label>
+                                        </div>
+                                        {notempty name="submenu.child"}
+                                        <div class="auth-node-child">
+                                            {php}foreach ($submenu['child'] as $submenu2):{/php}
+                                            <div class="auth-node-row">
+                                                <label class="css-input css-checkbox css-checkbox-primary">
+                                                    <input type="checkbox" name="menu_auth[]" data-parent-id="{$submenu['id']}" value="{$submenu2.id}" class="js-check-all-row"><span></span> <i class="{$submenu2.icon}"></i> {$submenu2.title}
+                                                </label>
+
+                                                {notempty name="$submenu2.child"}
+                                                <div class="auth-node-child">
+                                                    {php}foreach ($submenu2['child'] as $submenu3):{/php}
+                                                    <label class="css-input css-checkbox css-checkbox-primary push-10-r">
+                                                        <input type="checkbox" name="menu_auth[]" data-parent-id="{$submenu2['id']}" value="{$submenu3.id}"><span></span> {$submenu3.title}
+                                                    </label>
+                                                    {php}endforeach;{/php}
+                                                </div>
+                                                {/notempty}
+                                            </div>
+                                            {php}endforeach;{/php}
+                                        </div>
+                                        {/notempty}
+                                    </div>
+                                    {/volist}
+                                    {/notempty}
+                                </div>
+                            </div>
+                            {/volist}
+                            {/notempty}
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <button class="btn btn-minw btn-primary ajax-post" target-form="form-builder" type="submit">
+                                    确定
+                                </button>
+                                <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
+                                    返回
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block name="script"}
+<script>
+    $(document).ready(function(){
+        // 全选或反选
+        $('.js-check-all-node').change(function () {
+            $(this).closest('.block').find('.block-content input:checkbox').prop('checked',this.checked);
+        });
+        $('.js-check-all-group').change(function () {
+            $(this).closest('.auth-node-parent').find('.auth-node-child input:checkbox').prop('checked',this.checked);
+        });
+        $('.js-check-all-row').change(function () {
+            $(this).closest('.auth-node-row').find('.auth-node-child input:checkbox').prop('checked',this.checked);
+        });
+
+        // 自动选中父节点
+        var check_parent = function (id) {
+            var self = $('input:checkbox[value="'+id+'"]');
+            var pid = self.data('parent-id') || '';
+            self.prop('checked', true);
+
+            if (pid == '') {
+                return false;
+            }
+            check_parent(pid);
+        };
+        $('input[name="menu_auth[]"]').change(function () {
+            if (this.checked) {
+                var $parnet_id = $(this).data('parent-id') || '';
+                check_parent($parnet_id);
+            }
+        });
+    });
+</script>
+{/block}

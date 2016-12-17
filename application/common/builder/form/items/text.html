@@ -1,0 +1,26 @@
+<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-sm-9">
+        {notempty name="form[type].group"}
+        <div class="input-group">
+        {/notempty}
+
+        {notempty name="form[type].group.0"}
+        <span class="input-group-addon">{$form[type].group.0|clear_js}</span>
+        {/notempty}
+
+        <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="请输入{$form[type].title}" {$form[type].extra_attr|default=''}>
+
+        {notempty name="form[type].group.1"}
+        <span class="input-group-addon">{$form[type].group.1|clear_js}</span>
+        {/notempty}
+
+        {notempty name="form[type].group"}
+        </div>
+        {/notempty}
+
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

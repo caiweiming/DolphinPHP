@@ -1,0 +1,37 @@
+{case value="recent"}
+<div class="block pull-r-l">
+    <div class="block-header bg-gray-lighter">
+        <ul class="block-options">
+            <li>
+                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+            </li>
+            <li>
+                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+            </li>
+        </ul>
+        <h3 class="block-title">{$_block.title|default=''}</h3>
+    </div>
+    <div class="block-content">
+        {notempty name="_block.list"}
+        <ul class="list list-activity">
+            {volist name="_block.list" id="vo"}
+            <li>
+                {notempty name="vo.icon"}<i class="{$vo.icon}"></i>{/notempty}
+                <div class="font-w600">{$vo.title|default=''}</div>
+                <div>
+                    {notempty name="vo.link.url"}
+                        <a href="{$vo.link.url}">{$vo.link.title|default=''}</a>
+                    {else/}
+                        {$vo.link.title|default=''}
+                    {/notempty}
+                </div>
+                {notempty name="vo.tips"}
+                <div><small class="text-muted">{$vo.tips}</small></div>
+                {/notempty}
+            </li>
+            {/volist}
+        </ul>
+        {/notempty}
+    </div>
+</div>
+{/case}

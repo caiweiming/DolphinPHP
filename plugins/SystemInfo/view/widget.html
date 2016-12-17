@@ -1,0 +1,45 @@
+<div class="col-md-{$width|default=6}">
+    <div class="block block-bordered">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title">系统信息</h3>
+        </div>
+        <div class="block-content">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>DolphinPHP版本</td>
+                    <td>{:config('dolphin.product_version')}</td>
+                </tr>
+                <tr>
+                    <td>ThinkPHP版本</td>
+                    <td>{$Think.VERSION}</td>
+                </tr>
+                <tr>
+                    <td>服务器操作系统</td>
+                    <td>{$Think.const.PHP_OS}</td>
+                </tr>
+                <tr>
+                    <td>运行环境</td>
+                    <td>{$Request.server.SERVER_SOFTWARE}</td>
+                </tr>
+                <tr>
+                    <td>MYSQL版本</td>
+                    <td>{:db()->query('select version() as version')[0]['version']}</td>
+                </tr>
+                <tr>
+                    <td>PHP版本</td>
+                    <td>{$Think.const.PHP_VERSION}</td>
+                </tr>
+                <tr>
+                    <td>上传限制</td>
+                    <td>{:ini_get('upload_max_filesize')}</td>
+                </tr>
+                <tr>
+                    <td>POST限制</td>
+                    <td>{:ini_get('post_max_size')}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

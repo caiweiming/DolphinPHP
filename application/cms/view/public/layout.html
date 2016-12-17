@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--[if IE 9]> <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>{block name="title"}{:config('web_site_title')}{/block}</title>
+
+    <meta name="description" content="{:config('web_site_description')}">
+    <meta name="keywords" content="{:config('web_site_keywords')}">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+    {block name="meta"}{/block}
+
+    {block name="link"}
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="__ADMIN_IMG__/favicons/favicon.ico">
+    <!-- END Icons -->
+    {/block}
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="__LIBS__/slick/slick.min.css">
+    <link rel="stylesheet" href="__LIBS__/slick/slick-theme.min.css">
+
+    <!-- Bootstrap and OneUI CSS framework -->
+    <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css">
+    <link rel="stylesheet" id="css-main" href="__ADMIN_CSS__/oneui.css">
+    <link rel="stylesheet" href="__MODULE_CSS__/main.css">
+    <!-- END Stylesheets -->
+
+    {block name="style"}{/block}
+</head>
+<body id="{$Request.module|strtolower}-{$Request.controller|strtolower}-{$Request.action|strtolower}" class="{$Request.module|strtolower}-{$Request.controller|strtolower}-{$Request.action|strtolower}">
+{block name="page-container"}
+<!-- Page Container -->
+<div id="page-container" class="header-navbar-fixed header-navbar-transparent">
+    {block name="header"}
+    <!-- Header -->
+    <header id="header-navbar" class="content-mini content-mini-full">
+        <div class="content-boxed">
+            <!-- Header Navigation Right -->
+            <ul class="nav-header pull-right">
+                <li class="hidden-md hidden-lg">
+                    <button class="btn btn-link text-white pull-right" data-toggle="class-toggle" data-target=".js-nav-main-header" data-class="nav-main-header-o" type="button">
+                        <i class="fa fa-navicon"></i>
+                    </button>
+                </li>
+            </ul>
+            <!-- END Header Navigation Right -->
+
+            <!-- Main Header Navigation -->
+            <ul class="js-nav-main-header nav-main-header pull-right">
+                <li class="text-right hidden-md hidden-lg">
+                    <button class="btn btn-link text-white" data-toggle="class-toggle" data-target=".js-nav-main-header" data-class="nav-main-header-o" type="button">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </li>
+                {volist name="main_nav" id="menu"}
+                <li class="{$menu.css|default=''}">
+                    <a href="{$menu.url}" rel="{$menu.rel|default=''}" target="{$menu.target}">{$menu.title} {notempty name="menu.child"} <i class="fa fa-fw fa-angle-down"></i>{/notempty}</a>
+                    {notempty name="menu.child"}
+                    <ul>
+                        {volist name="menu.child" id="sub_menu"}
+                        <li class="{$sub_menu.css|default=''}">
+                            <a href="{$sub_menu.url}" rel="{$sub_menu.rel|default=''}" target="{$sub_menu.target}">{$sub_menu.title}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                    {/notempty}
+                </li>
+                {/volist}
+            </ul>
+            <!-- END Main Header Navigation -->
+
+            <!-- Header Navigation Left -->
+            <ul class="nav-header pull-left">
+                <li class="header-content">
+                    <a class="h5" href="{:url('cms/index/index')}">
+                        <img src="__MODULE_IMG__/logo.png" alt="">
+                    </a>
+                </li>
+            </ul>
+            <!-- END Header Navigation Left -->
+        </div>
+    </header>
+    <!-- END Header -->
+    {/block}
+
+    {block name="main-container"}{/block}
+
+    {block name="page-footer"}
+    <!-- Footer -->
+    <footer id="page-footer" class="bg-white">
+        <div class="content content-boxed">
+            <!-- Footer Navigation -->
+            <div class="row push-30-t items-push-2x">
+                <div class="col-sm-4">
+                    <h3 class="h5 font-w600 text-uppercase push-20">公司</h3>
+                    <ul class="list list-simple-mini font-s13">
+                        {volist name="about_nav" id="menu"}
+                        <li class="{$menu.css|default=''}">
+                            <a class="font-w600" rel="{$menu.rel|default=''}" href="{$menu.url}" target="{$menu.target}">{$menu.title}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <h3 class="h5 font-w600 text-uppercase push-20">服务与支持</h3>
+                    <ul class="list list-simple-mini font-s13">
+                        {volist name="support_nav" id="menu"}
+                        <li class="{$menu.css|default=''}">
+                            <a class="font-w600" rel="{$menu.rel|default=''}" href="{$menu.url}" target="{$menu.target}">{$menu.title}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <h3 class="h5 font-w600 text-uppercase push-20">联系我们</h3>
+                    {:config('cms_config.contact')}
+                </div>
+            </div>
+            <!-- END Footer Navigation -->
+
+            <!-- Copyright Info -->
+            <div class="font-s12 push-20 clearfix">
+                <hr class="remove-margin-t">
+                <div class="pull-right">
+                    Crafted with <i class="fa fa-heart text-city"></i> by <a class="font-w600" href="http://www.zrthink.com" target="_blank">卓锐软件</a>
+                </div>
+                <div class="pull-left">
+                    <a class="font-w600" href="http://www.dolphinphp.com" target="_blank">{:config('web_site_title')}</a> &copy; <span class="js-year-copy"></span>
+                </div>
+            </div>
+            <!-- END Copyright Info -->
+        </div>
+    </footer>
+    <!-- END Footer -->
+    {/block}
+</div>
+<!-- END Page Container -->
+{/block}
+
+<div class="hidden">
+    {// 站点统计代码}
+    {:config('web_site_statistics')}
+    {block name="hidden"}{/block}
+</div>
+
+{eq name="Think.config.cms_config.support_status" value="1"}
+<div id="support" class="support">
+    <div class="support-tag" style="background-color: {$Think.config.cms_config.support_color}"><i class="fa fa-fw fa-commenting"></i>在线客服</div>
+    <div class="support-content" style="background-color: {$Think.config.cms_config.support_color}">
+        <div class="support-content-inner">
+            {volist name="support" id="item"}
+            <div class="support-item">
+                <strong>{$item.name}</strong>
+                <p>
+                    {notempty name="item.qq"}
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin={$item.qq}&site=qq&menu=yes">
+                        <img src="http://wpa.qq.com/pa?p=2:348468810:4" alt="{$item.name}">
+                    </a>
+                    {/notempty}
+                    {notempty name="item.taobao"}
+                    <a href="http://www.taobao.com/webww/ww.php?ver=3&touid={$item.taobao}&siteid=cntaobao&status=2&charset=utf-8">
+                        <img border="0" src="http://amos.alicdn.com/online.aw?v=2&uid={$item.taobao}&site=cntaobao&s=2&charset=utf-8" alt="{$item.name}">
+                    </a>
+                    {/notempty}
+                    {notempty name="item.skype"}
+                    <a href="callto://{$item.skype}">
+                        <img border="0" src="http://metinfo.io/public/images/skype/skype_11.gif" alt="{$item.name}">
+                    </a>
+                    {/notempty}
+                    {notempty name="item.alibaba"}
+                    <a href="http://amos.alicdn.com/msg.aw?v=2&uid={$item.alibaba}&site=cnalichn&s=10&charset=UTF-8">
+                        <img border="0" src="http://amos.alicdn.com/online.aw?v=2&uid={$item.alibaba}&site=cnalichn&s=10&charset=UTF-8" alt="{$item.name}">
+                    </a>
+                    {/notempty}
+                    {notempty name="item.msn"}
+                    <a href="msnim:chat?contact={$item.msn}"><img border="0" src="http://metinfo.io/public/images/msn/msn_1.gif" alt="{$item.name}"></a>
+                    {/notempty}
+                </p>
+            </div>
+            {/volist}
+            {notempty name="Think.config.cms_config.support_extra"}
+            <div class="support-extra">
+                {$Think.config.cms_config.support_extra}
+            </div>
+            {/notempty}
+            {notempty name="Think.config.cms_config.support_wx"}
+            <div class="support-wx">
+                <img src="{$Think.config.cms_config.support_wx|get_file_path}" alt="">
+                <div class="text-center">扫描微信二维码</div>
+            </div>
+            {/notempty}
+        </div>
+    </div>
+</div>
+{/eq}
+
+<!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+<script src="__ADMIN_JS__/core/jquery.min.js"></script>
+<script src="__ADMIN_JS__/core/bootstrap.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.slimscroll.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.scrollLock.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.appear.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.countTo.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.placeholder.min.js"></script>
+<script src="__ADMIN_JS__/core/js.cookie.min.js"></script>
+<script src="__ADMIN_JS__/app.js"></script>
+<script src="__LIBS__/slick/slick.min.js"></script>
+
+<!-- Page JS Code -->
+<script>
+    jQuery(function () {
+        // Init page helpers (Appear + CountTo plugins)
+        App.initHelpers(['appear', 'appear-countTo', 'slick']);
+
+        // 在线客服
+        $('#support').hover(function () {
+            $(this).find('.support-content').show();
+        }, function () {
+            $(this).find('.support-content').hide();
+        })
+    });
+</script>
+{block name="script"}{/block}
+</body>
+</html>

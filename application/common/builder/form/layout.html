@@ -1,0 +1,329 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="content"}
+    {notempty name="page_tips"}
+    <div class="alert alert-{$tips_type} alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p>{$page_tips}</p>
+    </div>
+    {/notempty}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                {notempty name="tab_nav"}
+                <ul class="nav nav-tabs">
+                    {volist name="tab_nav['tab_list']" id="tab"}
+                    <li {eq name="tab_nav.curr_tab" value="$key"}class="active"{/eq}>
+                    <a href="{$tab.url}">{$tab.title}</a>
+                    </li>
+                    {/volist}
+                    <li class="pull-right">
+                        <ul class="block-options push-10-t push-10-r">
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                            </li>
+                            <li>
+                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {else/}
+                <div class="block-header bg-gray-lighter">
+                    <ul class="block-options">
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                        </li>
+                        <li>
+                            <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">{$page_title|default=""}</h3>
+                </div>
+                {/notempty}
+                <div class="block-content tab-content">
+                    <div class="tab-pane active">
+                        <div class="block-content">
+                            <form class="form-horizontal form-builder" name="form-builder" action="{$post_url|default=''}" method="post">
+                                {empty name="form_items"}
+                                <div class="form-empty">
+                                    <p class="text-center text-muted empty-info">
+                                        <i class="fa fa-database"></i> 暂无数据<br>
+                                    </p>
+                                </div>
+                                {else /}
+                                    {volist name="form_items" id="form"}
+                                        {switch name="form.type"}
+                                            {case value="bmap"}
+                                                {// 百度地图 }
+                                                {include file="./application/common/builder/form/items/bmap.html" type='' /}
+                                            {/case}
+
+                                            {case value="checkbox"}
+                                                {// 多选 }
+                                                {include file="./application/common/builder/form/items/checkbox.html" type='' /}
+                                            {/case}
+
+                                            {case value="ckeditor"}
+                                                {// ckeditor编辑器 }
+                                                {include file="./application/common/builder/form/items/ckeditor.html" type='' /}
+                                            {/case}
+
+                                            {case value="colorpicker"}
+                                                {// 取色器 }
+                                                {include file="./application/common/builder/form/items/colorpicker.html" type='' /}
+                                            {/case}
+
+                                            {case value="date"}
+                                                {// 日期 }
+                                                {include file="./application/common/builder/form/items/date.html" type='' /}
+                                            {/case}
+
+                                            {case value="daterange"}
+                                                {// 日期范围 }
+                                                {include file="./application/common/builder/form/items/daterange.html" type='' /}
+                                            {/case}
+
+                                            {case value="datetime"}
+                                                {// 日期时间 }
+                                                {include file="./application/common/builder/form/items/datetime.html" type='' /}
+                                            {/case}
+
+                                            {case value="editormd"}
+                                                {// markdown编辑器 }
+                                                {include file="./application/common/builder/form/items/editormd.html" type='' /}
+                                            {/case}
+
+                                            {case value="file"}
+                                                {// 单文件上传 }
+                                                {include file="./application/common/builder/form/items/file.html" type='' /}
+                                            {/case}
+
+                                            {case value="files"}
+                                                {// 多文件上传 }
+                                                {include file="./application/common/builder/form/items/files.html" type='' /}
+                                            {/case}
+
+                                            {case value="group"}
+                                                {// 分组 }
+                                                {include file="./application/common/builder/form/items/group.html" type='' /}
+                                            {/case}
+
+                                            {case value="hidden"}
+                                                {// 隐藏 }
+                                                {include file="./application/common/builder/form/items/hidden.html" type='' /}
+                                            {/case}
+
+                                            {case value="icon"}
+                                                {// 图标选择器 }
+                                                {include file="./application/common/builder/form/items/icon.html" type='' /}
+                                            {/case}
+
+                                            {case value="image"}
+                                                {// 单图片上传 }
+                                                {include file="./application/common/builder/form/items/image.html" type='' /}
+                                            {/case}
+
+                                            {case value="images"}
+                                                {// 多图片上传 }
+                                                {include file="./application/common/builder/form/items/images.html" type='' /}
+                                            {/case}
+
+                                            {case value="jcrop"}
+                                                {// 图片裁剪 }
+                                                {include file="./application/common/builder/form/items/jcrop.html" type='' /}
+                                            {/case}
+
+                                            {case value="linkage"}
+                                                {// 联动下拉框 }
+                                                {include file="./application/common/builder/form/items/linkage.html" type='' /}
+                                            {/case}
+
+                                            {case value="linkages"}
+                                                {// 多级联动下拉框 }
+                                                {include file="./application/common/builder/form/items/linkages.html" type='' /}
+                                            {/case}
+
+                                            {case value="masked"}
+                                                {// 格式文本 }
+                                                {include file="./application/common/builder/form/items/masked.html" type='' /}
+                                            {/case}
+
+                                            {case value="number"}
+                                                {// 数字 }
+                                                {include file="./application/common/builder/form/items/number.html" type='' /}
+                                            {/case}
+
+                                            {case value="password"}
+                                                {// 密码 }
+                                                {include file="./application/common/builder/form/items/password.html" type='' /}
+                                            {/case}
+
+                                            {case value="radio"}
+                                                {// 单选 }
+                                                {include file="./application/common/builder/form/items/radio.html" type='' /}
+                                            {/case}
+
+                                            {case value="range"}
+                                                {// 范围 }
+                                                {include file="./application/common/builder/form/items/range.html" type='' /}
+                                            {/case}
+
+                                            {case value="select"}
+                                                {// 下拉菜单 }
+                                                {include file="./application/common/builder/form/items/select.html" type='' /}
+                                            {/case}
+
+                                            {case value="select2"}
+                                                {// 下拉多选 }
+                                                {include file="./application/common/builder/form/items/select2.html" type='' /}
+                                            {/case}
+
+                                            {case value="sort"}
+                                                {// 排序 }
+                                                {include file="./application/common/builder/form/items/sort.html" type='' /}
+                                            {/case}
+
+                                            {case value="static"}
+                                                {// 静态文本 }
+                                                {include file="./application/common/builder/form/items/static.html" type='' /}
+                                            {/case}
+
+                                            {case value="summernote"}
+                                                {// summernote编辑器 }
+                                                {include file="./application/common/builder/form/items/summernote.html" type='' /}
+                                            {/case}
+
+                                            {case value="switch"}
+                                                {// 开关 }
+                                                {include file="./application/common/builder/form/items/switch.html" type='' /}
+                                            {/case}
+
+                                            {case value="tags"}
+                                                {// 标签 }
+                                                {include file="./application/common/builder/form/items/tags.html" type='' /}
+                                            {/case}
+
+                                            {case value="text"}
+                                                {// 单行文本 }
+                                                {include file="./application/common/builder/form/items/text.html" type='' /}
+                                            {/case}
+
+                                            {case value="time"}
+                                                {// 时间 }
+                                                {include file="./application/common/builder/form/items/time.html" type='' /}
+                                            {/case}
+
+                                            {case value="textarea|array"}
+                                                {// 文本框|数组 }
+                                                {include file="./application/common/builder/form/items/textarea.html" type='' /}
+                                            {/case}
+
+                                            {case value="ueditor"}
+                                                {// 百度编辑器 }
+                                                {include file="./application/common/builder/form/items/ueditor.html" type='' /}
+                                            {/case}
+
+                                            {case value="wangeditor"}
+                                                {// wang编辑器 }
+                                                {include file="./application/common/builder/form/items/wangeditor.html" type='' /}
+                                            {/case}
+                                        {/switch}
+                                    {/volist}
+                                {/empty}
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        {php}if(isset($btn_hide) && !in_array('submit', $btn_hide)):{/php}
+                                        <button class="btn btn-minw btn-primary {eq name="ajax_submit" value="true"}ajax-post{/eq}" target-form="form-builder" type="submit">
+                                            {$btn_title['submit']|default='提交'}
+                                        </button>
+                                        {php}endif;{/php}
+
+                                        {empty name="Think.get._pop"}
+                                        {php}if(isset($btn_hide) && !in_array('back', $btn_hide)):{/php}
+                                        <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
+                                            {$btn_title['back']|default='返回'}
+                                        </button>
+                                        {php}endif;{/php}
+                                        {/empty}
+
+                                        {// 额外按钮}
+                                        {$btn_extra|default=''}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {// 图标 }
+    {notempty name="_icon"}
+    <div id="icon_tab" style="display:none">
+        <div id="icon_search">
+            <form onsubmit="return false;">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-addon">搜索图标</div>
+                    <input class="js-icon-search form-control" type="text" placeholder="例如: 输入 home 或 user">
+                </div>
+            </form>
+        </div>
+        <ul  class="nav nav-tabs nav-simple">
+            <li class="active">
+                <a href="#fa" data-toggle="tab">Font Awesome</a>
+            </li>
+            <li class="">
+                <a href="#gl" data-toggle="tab">Glyphicons</a>
+            </li>
+            <li class="">
+                <a href="#sl" data-toggle="tab">SIMPLE LINE</a>
+            </li>
+        </ul>
+        <div class="tab-content js-icon-content" style="padding: 10px">
+            <div class="tab-pane fade active in" id="fa">
+                {include file="./application/common/builder/form/icon/fa.html" /}
+            </div>
+            <div class="tab-pane fade" id="gl">
+                {include file="./application/common/builder/form/icon/gl.html" /}
+            </div>
+            <div class="tab-pane fade" id="sl">
+                {include file="./application/common/builder/form/icon/sl.html" /}
+            </div>
+        </div>
+    </div>
+    {/notempty}
+{// 额外HTML代码 }
+{$extra_html|default=''}
+{/block}
+
+{block name="style"}
+    {notempty name="_editormd"}
+    <link href="__LIBS__/editormd/css/editormd.min.css" rel="stylesheet" type="text/css" />
+    {/notempty}
+
+    {volist name="css_list" id="vo"}
+    <link rel="stylesheet" href="__MODULE_CSS__/{$vo}.css">
+    {/volist}
+
+    {// 额外CSS代码 }
+    {$extra_css|default=''}
+{/block}
+
+{block name="script"}
+    {notempty name="_ueditor"}
+    <script src="__LIBS__/ueditor/ueditor.config.js"></script>
+    <script src="__LIBS__/ueditor/ueditor.all.min.js"></script>
+    {/notempty}
+
+    {notempty name="_ckeditor"}
+    <script src="__LIBS__/ckeditor/ckeditor.js"></script>
+    {/notempty}
+
+    {volist name="js_list" id="vo"}
+    <script src="__MODULE_JS__/{$vo}.js"></script>
+    {/volist}
+
+    {// 额外JS代码 }
+    {$extra_js|default=''}
+{/block}
