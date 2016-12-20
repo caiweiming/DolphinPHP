@@ -211,6 +211,7 @@ class Field extends Admin
         return ZBuilder::make('form')
             ->addFormItems([
                 ['hidden', 'id'],
+                ['hidden', 'model'],
                 ['text', 'name', '字段名称', '由小写英文字母和下划线组成'],
                 ['text', 'title', '字段标题', '可填写中文'],
                 ['select', 'type', '字段类型', '', config('form_item_type')],
