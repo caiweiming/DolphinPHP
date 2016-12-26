@@ -443,3 +443,11 @@ table.treetable tr.branch {
 .img-link{
     display: inline;
 }
+
+/* 时间段搜索 */
+.toolbar-btn-action .time-filter {
+    display: inline-block;
+}
+.toolbar-btn-action .input-daterange {
+    width: 250px;
+}

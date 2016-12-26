@@ -234,6 +234,23 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 时间段过滤
+     * @param string $field 字段名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function addTimeFilter($field = '')
+    {
+        if ($field != '') {
+            $this->_vars['_js_files'][]  = 'datepicker_js';
+            $this->_vars['_css_files'][] = 'datepicker_css';
+            $this->_vars['_js_init']     = json_encode(['datepicker']);
+            $this->_vars['_filter_time'] = $field;
+        }
+        return $this;
+    }
+
+    /**
      * 添加快捷编辑的验证器
      * @param string $validate 验证器名
      * @param string $fields 要验证的字段，多个用逗号隔开，并且在验证器中要定义该字段名对应的场景

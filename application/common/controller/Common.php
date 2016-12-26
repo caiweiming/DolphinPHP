@@ -26,16 +26,24 @@ class Common extends Controller
      */
     final protected function getMap()
     {
-        $search_field   = input('param.search_field/s', '');
-        $keyword        = input('param.keyword/s', '');
-        $filter         = input('param._filter/s', '');
-        $filter_content = input('param._filter_content/s', '');
+        $search_field     = input('param.search_field/s', '');
+        $keyword          = input('param.keyword/s', '');
+        $filter           = input('param._filter/s', '');
+        $filter_content   = input('param._filter_content/s', '');
+        $filter_time      = input('param._filter_time/s', '');
+        $filter_time_from = input('param._filter_time_from/s', '');
+        $filter_time_to   = input('param._filter_time_to/s', '');
 
         $map = [];
 
         // 搜索框搜索
         if ($search_field != '' && $keyword !== '') {
             $map[$search_field] = ['like', "%$keyword%"];
+        }
+
+        // 时间段搜索
+        if ($filter_time != '' && $filter_time_from != '' && $filter_time_to != '') {
+            $map[$filter_time] = ['between time', [$filter_time_from, $filter_time_to]];
         }
 
         // 下拉筛选
