@@ -194,7 +194,7 @@
                         {volist name="_sidebar_menus" id="menu"}
                         <li {$menu['id'] == $_location[1]["id"]?='class="open"'}>
                             {notempty name="menu.url_value"}
-                                <a href="{$menu.url_value}" target="{$menu.url_target}"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
+                                <a {if($menu['id'] == $_location[1]["id"])}class="active"{/if} href="{$menu.url_value}" target="{$menu.url_target}"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
                             {else/}
                                 <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0);"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
                             {/notempty}
