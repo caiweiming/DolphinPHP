@@ -1040,3 +1040,20 @@ if (!function_exists('get_location')) {
         return $location;
     }
 }
+
+if (!function_exists('packet_exists')) {
+    /**
+     * 查询数据包是否存在，即是否已经安装
+     * @param string $name 数据包名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function packet_exists($name = '')
+    {
+        if (Db::name('admin_packet')->where('name', $name)->find()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

@@ -339,7 +339,7 @@ class Module extends Admin
 
         // 美化数组格式
         $menus = var_export($menus, true);
-        $menus = preg_replace("/(\d|'id'|'pid') =>(.*)/", '', $menus);
+        $menus = preg_replace("/(\d+|'id'|'pid') =>(.*)/", '', $menus);
         $menus = preg_replace("/'child' => (.*)(\r\n|\r|\n)\s*array/", "'child' => $1array", $menus);
         $menus = str_replace(['array (', ')'], ['[', ']'], $menus);
         $menus = preg_replace("/(\s*?\r?\n\s*?)+/", "\n", $menus);
