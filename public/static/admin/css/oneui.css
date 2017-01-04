@@ -6385,7 +6385,7 @@ a.block.block-link-hover3:active {
     box-shadow: 0 2px #5c90d2;
 }
 .block .block-content.tab-content {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .block-options-simple {
     float: right;
