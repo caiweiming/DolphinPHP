@@ -591,7 +591,7 @@ jQuery(document).ready(function() {
             accept: {
                 title: 'Images',
                 extensions: $ext,
-                mimeTypes: 'image/*'
+                mimeTypes: 'image/jpg,image/jpeg,image/bmp,image/png,image/gif'
             }
         });
 
