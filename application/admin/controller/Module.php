@@ -137,7 +137,6 @@ class Module extends Admin
         $menus = ModuleModel::getMenusFromFile($name);
         if (is_array($menus) && !empty($menus)) {
             if (false === $this->addMenus($menus, $name)) {
-                MenuModel::where('module', $name)->delete();
                 return $this->error('菜单添加失败，请重新安装');
             }
         }
@@ -156,6 +155,7 @@ class Module extends Admin
         if (isset($module_info['action']) && !empty($module_info['action'])) {
             $ActionModel = new ActionModel;
             if (!$ActionModel->saveAll($module_info['action'])) {
+                MenuModel::where('module', $name)->delete();
                 return $this->error('行为添加失败，请重新安装');
             }
         }
@@ -186,6 +186,7 @@ class Module extends Admin
             action_log('module_install', 'admin_module', 0, UID, $module_info['title']);
             return $this->success('模块安装成功', 'index');
         } else {
+            MenuModel::where('module', $name)->delete();
             return $this->error('模块安装失败');
         }
     }
