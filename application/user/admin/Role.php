@@ -16,6 +16,7 @@ use app\common\builder\ZBuilder;
 use app\user\model\Role as RoleModel;
 use app\admin\model\Menu as MenuModel;
 use util\Tree;
+use think\Db;
 
 /**
  * 角色控制器
@@ -86,7 +87,8 @@ class Role extends Admin
         // 菜单列表
         $menus = cache('access_menus');
         if (!$menus) {
-            $menus = MenuModel::order('sort,id')->column('id,pid,sort,title,icon');
+            $modules = Db::name('admin_module')->where('status', 1)->column('name');
+            $menus = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
             $menus = Tree::toLayer($menus);
 
             // 非开发模式，缓存菜单
@@ -132,7 +134,8 @@ class Role extends Admin
         // 获取数据
         $info       = RoleModel::get($id);
         $role_list  = RoleModel::getTree($id, '顶级角色');
-        $menus      = MenuModel::order('sort,id')->column('id,pid,sort,title,icon');
+        $modules    = Db::name('admin_module')->where('status', 1)->column('name');
+        $menus      = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
 
         $this->assign('page_title', '编辑');
         $this->assign('role_list', $role_list);
