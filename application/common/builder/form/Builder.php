@@ -1668,6 +1668,7 @@ class Builder extends ZBuilder
                 case 'linkage':
                 case 'linkages':
                 case 'select':
+                case 'select2':
                     $this->_vars['_js_files'][]  = 'select2_js';
                     $this->_vars['_css_files'][] = 'select2_css';
                     $this->_vars['_js_init'][]   = 'select2';
