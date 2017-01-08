@@ -70,6 +70,9 @@ class Role extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if (!isset($data['menu_auth'])) {
+                $data['menu_auth'] = [];
+            }
             // 验证
             $result = $this->validate($data, 'Role');
             // 验证失败 输出错误信息
@@ -117,6 +120,9 @@ class Role extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
+            if (!isset($data['menu_auth'])) {
+                $data['menu_auth'] = [];
+            }
             // 验证
             $result = $this->validate($data, 'Role');
             // 验证失败 输出错误信息
