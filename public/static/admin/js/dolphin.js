@@ -60,6 +60,10 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     self.attr("autocomplete", "on").prop("disabled", false);
                                 }
+                            }).fail(function () {
+                                pageLoader('hide');
+                                tips('服务器发生错误~', 'danger');
+                                self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
                         return false;
@@ -107,6 +111,10 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     self.attr("autocomplete", "on").prop("disabled", false);
                                 }
+                            }).fail(function () {
+                                pageLoader('hide');
+                                tips('服务器发生错误~', 'danger');
+                                self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
                         return false;
@@ -148,6 +156,10 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     self.attr("autocomplete", "on").prop("disabled", false);
                                 }
+                            }).fail(function () {
+                                pageLoader('hide');
+                                tips('服务器发生错误~', 'danger');
+                                self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
                         return false;
@@ -177,6 +189,10 @@ var Dolphin = function () {
                         tips(msg, 'danger');
                         self.attr("autocomplete", "on").prop("disabled", false);
                     }
+                }).fail(function () {
+                    pageLoader('hide');
+                    tips('服务器发生错误~', 'danger');
+                    self.attr("autocomplete", "on").prop("disabled", false);
                 });
             }
 
@@ -225,6 +241,10 @@ var Dolphin = function () {
                             tips(msg, 'danger');
                             self.attr("autocomplete", "on").prop("disabled", false);
                         }
+                    }).fail(function () {
+                        pageLoader('hide');
+                        tips('服务器发生错误~', 'danger');
+                        self.attr("autocomplete", "on").prop("disabled", false);
                     });
                 });
             } else {
@@ -248,6 +268,10 @@ var Dolphin = function () {
                         tips(msg, 'danger');
                         self.attr("autocomplete", "on").prop("disabled", false);
                     }
+                }).fail(function () {
+                    pageLoader('hide');
+                    tips('服务器发生错误~', 'danger');
+                    self.attr("autocomplete", "on").prop("disabled", false);
                 });
             }
 
