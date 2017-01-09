@@ -117,7 +117,7 @@ function check_func(){
     $items = array(
         array('pdo','支持','check','类'),
         array('pdo_mysql','支持','check','模块'),
-        // array('fileinfo','支持','check','模块'),
+        array('fileinfo','支持','check','模块'),
         array('curl','支持','check','模块'),
         array('file_get_contents', '支持', 'check','函数'),
         array('mb_strlen', '支持', 'check','函数'),
