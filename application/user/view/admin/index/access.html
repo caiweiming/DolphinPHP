@@ -88,20 +88,16 @@
                             </div>
                             {/notempty}
                         </div>
-
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                {notempty name="groups"}
-                                <button class="btn btn-minw btn-primary ajax-post" target-form="form-builder" type="submit">
-                                    确定
-                                </button>
-                                {/notempty}
-                                <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
-                                    返回
-                                </button>
-                            </div>
+                        <div class="push-20">
+                            {notempty name="groups"}
+                            <button class="btn btn-minw btn-primary ajax-post" target-form="form-builder" type="submit">
+                                确定
+                            </button>
+                            {/notempty}
+                            <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
+                                返回
+                            </button>
                         </div>
-
                     </div>
                 </form>
             </div>
