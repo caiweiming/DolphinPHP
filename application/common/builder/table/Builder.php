@@ -344,7 +344,14 @@ class Builder extends ZBuilder
     {
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1) {
-            $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
+            if (isset($attribute['href']) && isset($attribute['href']) != '') {
+                $url_value = ltrim($attribute['href'], '/admin.php/');
+                $url_value = explode('/', $url_value);
+                $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
+            } else {
+                $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
+            }
+
             $url_value = strtolower($url_value);
             $user_menu_auth = session('user_menu_auth');
             if (!isset($user_menu_auth[$url_value])) {
@@ -552,17 +559,16 @@ class Builder extends ZBuilder
     {
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1) {
-            $user_menu_auth = session('user_menu_auth');
-            if ($type == 'custom') {
-                $_href = str_replace('/admin.php', '', $attribute['href']);
-                $_href = ltrim($_href, '/');
-                $_href = explode('/', $_href);
-                $url_value = $_href[0]. '/'. $_href[1]. '/'. $_href[2];
-                $url_value = strtolower($url_value);
+            if (isset($attribute['href']) && isset($attribute['href']) != '') {
+                $url_value = ltrim($attribute['href'], '/admin.php/');
+                $url_value = explode('/', $url_value);
+                $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
             } else {
                 $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
-                $url_value = strtolower($url_value);
             }
+
+            $url_value = strtolower($url_value);
+            $user_menu_auth = session('user_menu_auth');
             if (!isset($user_menu_auth[$url_value])) {
                 return $this;
             }
