@@ -347,12 +347,14 @@ class Builder extends ZBuilder
             if (isset($attribute['href']) && isset($attribute['href']) != '') {
                 $url_value = ltrim($attribute['href'], '/admin.php/');
                 $url_value = explode('/', $url_value);
+                if (strpos($url_value[2], '.')) {
+                    $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+                }
                 $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
             } else {
                 $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
             }
-
-            $url_value = strtolower($url_value);
+            $url_value      = strtolower($url_value);
             $user_menu_auth = session('user_menu_auth');
             if (!isset($user_menu_auth[$url_value])) {
                 return $this;
@@ -562,12 +564,14 @@ class Builder extends ZBuilder
             if (isset($attribute['href']) && isset($attribute['href']) != '') {
                 $url_value = ltrim($attribute['href'], '/admin.php/');
                 $url_value = explode('/', $url_value);
+                if (strpos($url_value[2], '.')) {
+                    $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+                }
                 $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
             } else {
                 $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
             }
-
-            $url_value = strtolower($url_value);
+            $url_value      = strtolower($url_value);
             $user_menu_auth = session('user_menu_auth');
             if (!isset($user_menu_auth[$url_value])) {
                 return $this;
