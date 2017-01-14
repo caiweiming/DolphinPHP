@@ -273,14 +273,28 @@ class Index extends Admin
             ];
             $this->assign('tab_nav', $tab_nav);
 
-            // 获取授权分组数据
-            $fileds = [
-                $curr_access['primary_key'],
-                $curr_access['parent_id'],
-                $curr_access['node_name']
-            ];
+            // 获取授权数据
+            $groups = '';
+            if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
+                $class = "app\\{$module}\\model\\".$curr_access['model_name'];
+                $model = new $class;
 
-            $groups = Db::name($group_table)->order($curr_access['primary_key'])->field($fileds)->select();
+                try{
+                    $groups = $model->access();
+                }catch(\Exception $e){
+                    $this->error('模型：'.$class."缺少“access”方法");
+                }
+            } else {
+                // 没有设置模型名，则按表名获取数据
+                $fileds = [
+                    $curr_access['primary_key'],
+                    $curr_access['parent_id'],
+                    $curr_access['node_name']
+                ];
+
+                $groups = Db::name($group_table)->order($curr_access['primary_key'])->field($fileds)->select();
+            }
+
             if ($groups) {
                 // 查询当前用户的权限
                 $map['module'] = $module;
