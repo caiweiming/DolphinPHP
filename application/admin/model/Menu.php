@@ -13,6 +13,7 @@ namespace app\admin\model;
 
 use app\user\model\Role as RoleModel;
 use think\Model;
+use think\Exception;
 use util\Tree;
 
 /**
@@ -136,23 +137,26 @@ class Menu extends Model
 
     /**
      * 获取侧栏节点
+     * @param string $id 模块id
+     * @param string $module 模块名
+     * @param string $controller 控制器名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return array|mixed
      */
-    public static function getSidebarMenu()
+    public static function getSidebarMenu($id = '', $module = '', $controller = '')
     {
-        $module     = request()->module();
-        $controller = request()->controller();
+        $module     = $module == '' ? request()->module() : $module;
+        $controller = $controller == '' ? request()->controller() : $controller;
         $menus      = cache('_sidebar_menus.' . $module . '_' . $controller);
         if (!$menus) {
             // 获取当前节点地址
-            $location = self::getLocation();
+            $location = self::getLocation($id);
             // 当前顶级节点id
             $top_id = $location[0]['id'];
             // 获取顶级节点下的所有节点
             $map = [
                 'status' => 1,
-                'module' => request()->module()
+                'module' => $module
             ];
             // 非开发模式，只显示可以显示的菜单
             if (config('develop_mode') == 0) {
@@ -185,11 +189,12 @@ class Menu extends Model
      * 获取指定节点ID的位置
      * @param string $id 节点id，如果没有指定，则取当前节点id
      * @param bool $del_last_url 是否删除最后一个节点的url地址
+     * @param bool $check 检查节点是否存在，不存在则抛出错误
      * @author 蔡伟明 <314013107@qq.com>
      * @return array
      * @throws \think\Exception
      */
-    public static function getLocation($id = '', $del_last_url = false)
+    public static function getLocation($id = '', $del_last_url = false, $check = true)
     {
         $model      = request()->module();
         $controller = request()->controller();
@@ -208,8 +213,8 @@ class Menu extends Model
             // 获取节点ID是所有父级节点
             $location = Tree::getParents(self::column('id,pid,title,url_value'), $curr_id);
 
-            if (empty($location)) {
-                throw new \think\Exception('获取不到当前节点地址，可能未添加节点', 9001);
+            if ($check && empty($location)) {
+                throw new Exception('获取不到当前节点地址，可能未添加节点', 9001);
             }
 
             // 剔除最后一个节点url

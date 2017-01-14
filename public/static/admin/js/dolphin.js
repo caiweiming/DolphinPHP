@@ -333,6 +333,52 @@ var Dolphin = function () {
     };
 
     /**
+     * 顶部菜单
+     * @author CaiWeiMing <314013107@qq.com>
+     */
+    var topMenu = function () {
+        $('.top-menu').click(function () {
+            var self = $(this);
+            var li   = self.parent();
+            var data = {
+                module_id: $(this).data('module-id') || '',
+                module: $(this).data('module') || '',
+                controller: $(this).data('controller') || ''
+            };
+
+            if ($('#nav-' + data.module_id).length) {
+                $('#nav-' + data.module_id).show().siblings().hide();
+            } else {
+                $.post('/admin.php/admin/ajax/getSidebarMenu', data, function (res) {
+                    $('#sidebar-menu').append(res);
+                    jQuery('#nav-' + data.module_id + ' [data-toggle="nav-submenu"]').on('click', function(e){
+                        // Get link
+                        var $link = jQuery(this);
+
+                        // Get link's parent
+                        var $parentLi = $link.parent('li');
+
+                        if ($parentLi.hasClass('open')) { // If submenu is open, close it..
+                            $parentLi.removeClass('open');
+                        } else { // .. else if submenu is closed, close all other (same level) submenus first before open it
+                            $link
+                                .closest('ul')
+                                .find('> li')
+                                .removeClass('open');
+
+                            $parentLi
+                                .addClass('open');
+                        }
+                    });
+                    $('#nav-' + data.module_id).show().siblings().hide();
+                });
+            }
+            li.addClass('active').siblings().removeClass('active');
+            return false;
+        });
+    };
+
+    /**
      * 页面小提示
      * @param $msg 提示信息
      * @param $type 提示类型:'info', 'success', 'warning', 'danger'
@@ -431,6 +477,7 @@ var Dolphin = function () {
             ajaxPost();
             ajaxGet();
             jsGet();
+            topMenu();
         },
         // 页面加载提示
         loading: function ($mode) {

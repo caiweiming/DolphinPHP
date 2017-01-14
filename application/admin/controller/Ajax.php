@@ -148,4 +148,41 @@ class Ajax extends Common
             $this->error('设置失败，请重试');
         }
     }
+
+    /**
+     * 获取侧栏菜单
+     * @param string $module_id 模块id
+     * @param string $module 模型名
+     * @param string $controller 控制器名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    public function getSidebarMenu($module_id = '', $module = '', $controller = '')
+    {
+        $menus = MenuModel::getSidebarMenu($module_id, $module, $controller);
+        $output = '<ul class="nav-main" id="nav-'.$module_id.'">';
+        foreach ($menus as $key => $menu) {
+            if ($key == 0){
+                $output .= '<li class="open">';
+            } else {
+                $output .= '<li>';
+            }
+
+            if (!empty($menu['url_value'])) {
+                $output .= "<a href='{$menu['url_value']}' target='{$menu['url_target']}'><i class='{$menu['icon']}'></i><span class='sidebar-mini-hide'>{$menu['title']}</span></a>";
+            } else {
+                $output .= "<a class='nav-submenu' data-toggle='nav-submenu' href='javascript:void(0);'><i class='{$menu['icon']}'></i><span class='sidebar-mini-hide'>{$menu['title']}</span></a>";
+            }
+            if (!empty($menu['child'])) {
+                $output .= '<ul>';
+                foreach ($menu['child'] as $submenu) {
+                    $output .= "<li><a href='{$submenu['url_value']}' target='{$submenu['url_target']}'><i class='{$submenu['icon']}'></i>{$submenu['title']}</a></li>";
+                }
+                $output .= '</ul>';
+            }
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+        return $output;
+    }
 }

@@ -188,9 +188,9 @@
                 <!-- END Side Header -->
 
                 <!-- Side Content -->
-                <div class="side-content">
+                <div class="side-content" id="sidebar-menu">
                     {notempty name="_sidebar_menus"}
-                    <ul class="nav-main">
+                    <ul class="nav-main" id="nav-{$_location[0]['id']}">
                         {volist name="_sidebar_menus" id="menu"}
                         <li {$menu['id'] == $_location[1]["id"]?='class="open"'}>
                             {notempty name="menu.url_value"}
@@ -281,7 +281,7 @@
             </li>
             {volist name="_top_menus" id="menu"}
             <li class="hidden-xs hidden-sm {$menu['id'] == $_location[0]['id'] ?= 'active'}">
-                <a href="{$menu['url_value']}" target="{$menu['url_target']}"><i class="{$menu.icon}"></i> {$menu.title}</a>
+                <a href="javascript:void(0);" data-module-id="{$menu['id']}" data-module="{$menu['module']}" data-controller="{$menu['controller']}" target="{$menu['url_target']}" class="top-menu"><i class="{$menu.icon}"></i> {$menu.title}</a>
             </li>
             {/volist}
             <li>

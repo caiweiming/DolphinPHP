@@ -102,7 +102,7 @@ class Role extends Model
         $role = session('user_auth.role');
 
         // id为1的是超级管理员，或者角色为1的，拥有最高权限
-        if (UID == '1' || $role == '1') {
+        if (session('user_auth.uid') == '1' || $role == '1') {
             return true;
         }
 
