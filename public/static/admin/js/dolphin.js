@@ -55,7 +55,7 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
-                                        if (res.data == '_close' || res.data._close) {
+                                        if (res.data == '_close_pop' || res.data._close_pop) {
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -115,7 +115,7 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
-                                        if (res.data == '_close' || res.data._close) {
+                                        if (res.data == '_close_pop' || res.data._close_pop) {
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -169,7 +169,7 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
-                                        if (res.data == '_close' || res.data._close) {
+                                        if (res.data == '_close_pop' || res.data._close_pop) {
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -211,7 +211,7 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                             // 关闭弹出框
-                            if (res.data == '_close' || res.data._close) {
+                            if (res.data == '_close_pop' || res.data._close_pop) {
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
@@ -273,7 +273,7 @@ var Dolphin = function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 // 关闭弹出框
-                                if (res.data == '_close' || res.data._close) {
+                                if (res.data == '_close_pop' || res.data._close_pop) {
                                     parent.layer.close(index);return false;
                                 }
                                 // 刷新父窗口
@@ -309,7 +309,7 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                             // 关闭弹出框
-                            if (res.data == '_close' || res.data._close) {
+                            if (res.data == '_close_pop' || res.data._close_pop) {
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
