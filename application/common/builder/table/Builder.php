@@ -193,6 +193,9 @@ class Builder extends ZBuilder
                 } else {
                     $filter = $display;
                 }
+                if (strpos($display, '.')) {
+                    $display = explode('.', $display)[1];
+                }
                 $this->_vars['_field_display'][]  = $display;
                 $this->_vars['_filter'][]         = $filter;
                 $this->_vars['_filter_content'][] = is_array($content) ? implode(',', $content) : $content;
