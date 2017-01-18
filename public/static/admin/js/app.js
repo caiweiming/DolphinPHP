@@ -157,25 +157,6 @@ var App = function() {
                         .add($lSidebarScroll.parent())
                         .css('height', $lSidebar.outerHeight());
                 }
-
-                // If side overlay scrolling does not exist init it..
-                if ($lSideOverlayScroll.length && (!$lSideOverlayScroll.parent('.slimScrollDiv').length)) {
-                    $lSideOverlayScroll.slimScroll({
-                        height: $lSideOverlay.outerHeight(),
-                        color: '#000',
-                        size: '5px',
-                        opacity : .35,
-                        wheelStep : 15,
-                        distance : '2px',
-                        railVisible: false,
-                        railOpacity: 1
-                    });
-                }
-                else { // ..else resize scrolling height
-                    $lSideOverlayScroll
-                        .add($lSideOverlayScroll.parent())
-                        .css('height', $lSideOverlay.outerHeight());
-                }
             } else {
                 // Turn scroll lock on (sidebar and side overlay)
                 jQuery($lSidebar).scrollLock();
@@ -186,14 +167,6 @@ var App = function() {
                     $lSidebarScroll
                         .slimScroll({destroy: true});
                     $lSidebarScroll
-                        .attr('style', '');
-                }
-
-                // If side overlay scrolling exists destroy it..
-                if ($lSideOverlayScroll.length && $lSideOverlayScroll.parent('.slimScrollDiv').length) {
-                    $lSideOverlayScroll
-                        .slimScroll({destroy: true});
-                    $lSideOverlayScroll
                         .attr('style', '');
                 }
             }
@@ -256,12 +229,37 @@ var App = function() {
                 }
                 break;
             case 'side_overlay_toggle':
+                // If side overlay scrolling does not exist init it..
+                if ($lSideOverlayScroll.length && (!$lSideOverlayScroll.parent('.slimScrollDiv').length)) {
+                    $lSideOverlayScroll.slimScroll({
+                        height: $lSideOverlay.outerHeight(),
+                        color: '#000',
+                        size: '5px',
+                        opacity : .35,
+                        wheelStep : 15,
+                        distance : '2px',
+                        railVisible: false,
+                        railOpacity: 1
+                    });
+                }
+                else { // ..else resize scrolling height
+                    $lSideOverlayScroll
+                        .add($lSideOverlayScroll.parent())
+                        .css('height', $lSideOverlay.outerHeight());
+                }
                 $lPage.toggleClass('side-overlay-o');
                 break;
             case 'side_overlay_open':
                 $lPage.addClass('side-overlay-o');
                 break;
             case 'side_overlay_close':
+                // If side overlay scrolling exists destroy it..
+                if ($lSideOverlayScroll.length && $lSideOverlayScroll.parent('.slimScrollDiv').length) {
+                    $lSideOverlayScroll
+                        .slimScroll({destroy: true});
+                    $lSideOverlayScroll
+                        .attr('style', '');
+                }
                 $lPage.removeClass('side-overlay-o');
                 break;
             case 'side_overlay_hoverable_toggle':
