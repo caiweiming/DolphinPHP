@@ -26,6 +26,9 @@ jQuery(document).ready(function() {
             } else {
                 Dolphin.notify(res.msg, 'success');
             }
+        }).fail(function () {
+            Dolphin.loading('hide');
+            Dolphin.notify('服务器发生错误~', 'danger');
         });
     });
 });

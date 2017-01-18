@@ -281,6 +281,9 @@ jQuery(document).ready(function() {
                                 Dolphin.notify('上传失败，请重新上传', 'warning');
                             }
                         }
+                    }).fail(function() {
+                        Dolphin.loading('hide');
+                        Dolphin.notify('服务器错误~', 'danger');
                     });
                     $jcrop_file.val('');
                 } else {
@@ -319,22 +322,22 @@ jQuery(document).ready(function() {
                     dataType: 'json',
                     data: $data
                 })
-                    .done(function(res) {
-                        Dolphin.loading('hide');
-                        if (res.code == '1') {
-                            $thumbnail.show().find('img').attr('src', res.thumb || res.src);
-                            $jcrop_input.val(res.id);
-                            $img_link.attr('href', res.src);
-                            $jcrop_cut_info.val('');
-                            $modal.modal('hide');
-                        } else {
-                            Dolphin.notify(res.msg, 'danger');
-                        }
-                    })
-                    .fail(function() {
-                        Dolphin.loading('hide');
-                        Dolphin.notify('请求失败', 'danger');
-                    });
+                .done(function(res) {
+                    Dolphin.loading('hide');
+                    if (res.code == '1') {
+                        $thumbnail.show().find('img').attr('src', res.thumb || res.src);
+                        $jcrop_input.val(res.id);
+                        $img_link.attr('href', res.src);
+                        $jcrop_cut_info.val('');
+                        $modal.modal('hide');
+                    } else {
+                        Dolphin.notify(res.msg, 'danger');
+                    }
+                })
+                .fail(function() {
+                    Dolphin.loading('hide');
+                    Dolphin.notify('请求失败', 'danger');
+                });
             } else {
                 Dolphin.notify('请选择要裁剪的大小', 'warning');
             }
@@ -761,25 +764,25 @@ jQuery(document).ready(function() {
                 dataType: 'json',
                 data: param + "=" + value
             })
-                .done(function(res) {
-                    Dolphin.loading('hide');
-                    if (res.code == '1') {
-                        var list = res.list;
-                        if (list) {
-                            for (var item in list) {
-                                var option = $('<option></option>');
-                                option.val(list[item].key).html(list[item].value);
-                                $('select[name="'+ next_item +'"]').append(option);
-                            }
+            .done(function(res) {
+                Dolphin.loading('hide');
+                if (res.code == '1') {
+                    var list = res.list;
+                    if (list) {
+                        for (var item in list) {
+                            var option = $('<option></option>');
+                            option.val(list[item].key).html(list[item].value);
+                            $('select[name="'+ next_item +'"]').append(option);
                         }
-                    } else {
-                        Dolphin.notify(res.msg, 'danger');
                     }
-                })
-                .fail(function() {
-                    Dolphin.loading('hide');
-                    Dolphin.notify('数据请求失败', 'danger');
-                });
+                } else {
+                    Dolphin.notify(res.msg, 'danger');
+                }
+            })
+            .fail(function() {
+                Dolphin.loading('hide');
+                Dolphin.notify('数据请求失败', 'danger');
+            });
         }
     });
 
@@ -823,26 +826,26 @@ jQuery(document).ready(function() {
                     option: option
                 }
             })
-                .done(function(res) {
-                    Dolphin.loading('hide');
-                    if (res.code == '1') {
-                        var list = res.list;
-                        if (list) {
-                            for (var item in list) {
-                                var option = $('<option></option>');
-                                option.val(list[item].key).text(list[item].value);
-                                $('#' + next_level_id).append(option);
-                            }
+            .done(function(res) {
+                Dolphin.loading('hide');
+                if (res.code == '1') {
+                    var list = res.list;
+                    if (list) {
+                        for (var item in list) {
+                            var option = $('<option></option>');
+                            option.val(list[item].key).text(list[item].value);
+                            $('#' + next_level_id).append(option);
                         }
-                    } else {
-                        Dolphin.loading('hide');
-                        Dolphin.notify(res.msg, 'danger');
                     }
-                })
-                .fail(function() {
+                } else {
                     Dolphin.loading('hide');
-                    Dolphin.notify('数据请求失败', 'danger');
-                });
+                    Dolphin.notify(res.msg, 'danger');
+                }
+            })
+            .fail(function() {
+                Dolphin.loading('hide');
+                Dolphin.notify('数据请求失败', 'danger');
+            });
         }
     });
 
