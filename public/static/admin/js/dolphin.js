@@ -53,9 +53,9 @@ var Dolphin = function () {
                                     tips(msg, 'success');
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
                                         if (res.data == '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -113,9 +113,9 @@ var Dolphin = function () {
                                     tips(msg, 'success');
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
                                         if (res.data == '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -167,9 +167,9 @@ var Dolphin = function () {
                                     tips(msg, 'success');
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                         // 关闭弹出框
                                         if (res.data == '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
@@ -209,9 +209,9 @@ var Dolphin = function () {
                         tips(msg, 'success');
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
-                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                             // 关闭弹出框
                             if (res.data == '_close_pop' || res.data._close_pop) {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
@@ -271,9 +271,9 @@ var Dolphin = function () {
                             tips(msg, 'success');
                             setTimeout(function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
-                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 // 关闭弹出框
                                 if (res.data == '_close_pop' || res.data._close_pop) {
+                                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
                                 }
                                 // 刷新父窗口
@@ -307,9 +307,9 @@ var Dolphin = function () {
                         tips(msg, 'success');
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
-                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                             // 关闭弹出框
                             if (res.data == '_close_pop' || res.data._close_pop) {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
