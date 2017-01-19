@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="form-group push-30-t">
                                     <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                                        <button class="btn btn-block btn-primary ajax-post" type="submit" target-form="signin-form">登 录</button>
+                                        <button class="btn btn-block btn-primary" type="submit">登 录</button>
                                     </div>
                                 </div>
                             </form>
@@ -137,5 +137,32 @@
         <!-- Page JS Code -->
         <script src="__ADMIN_JS__/dolphin.js"></script>
         {:hook('signin_footer')}
+        <script>
+            $(document).ready(function () {
+                $('.signin-form').on('submit', function () {
+                    var $data = $(this).serialize();
+
+                    Dolphin.loading();
+                    $.post($(this).attr('action'), $data, function (res) {
+                        Dolphin.loading('hide');
+                        if (res.code) {
+                            Dolphin.notify('登录成功，页面即将跳转~', 'success');
+                            setTimeout(function () {
+                                location.href = res.url;
+                            }, 1500);
+                        } else {
+                            if (res.msg == '验证码错误或失效') {
+                                $('#captcha').click();
+                            }
+                            Dolphin.notify(res.msg, 'danger');
+                        }
+                    }).fail(function () {
+                        Dolphin.loading('hide');
+                        Dolphin.notify('服务器错误~', 'danger');
+                    });
+                    return false;
+                });
+            });
+        </script>
     </body>
 </html>
