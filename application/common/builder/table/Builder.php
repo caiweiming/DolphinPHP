@@ -957,7 +957,7 @@ class Builder extends ZBuilder
      * @return array|string
      */
     private function compileHtmlAttr($attr = []) {
-        $result = '';
+        $result = [];$index=0;
         if ($attr) {
             foreach ($attr as $key => &$value) {
                 if ($key == 'title') {
@@ -965,7 +965,7 @@ class Builder extends ZBuilder
                 } else {
                     $value = htmlspecialchars($value);
                 }
-                $result[] = "$key=\"$value\"";
+                $result[$index++] = "$key=\"$value\"";
             }
             $result = implode(' ', $result);
         }
