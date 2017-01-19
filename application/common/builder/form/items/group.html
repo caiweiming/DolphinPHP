@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-12">
         <div class="block block-bordered">
             <ul class="nav nav-tabs" data-toggle="tabs">
                 {volist name="form.options" id="item" key="items_key"}
@@ -10,7 +10,7 @@
             </ul>
             <div class="block-content tab-content block-group">
                 {volist name="form.options" id="items" key="items_key"}
-                <div class="tab-pane {eq name="items_key" value="1"}active{/eq}" id="tab-{$items_key}" >
+                <div class="tab-pane row {eq name="items_key" value="1"}active{/eq}" id="tab-{$items_key}" >
                     {volist name="items" id="form_group"}
                         {switch name="form_group.type"}
                             {case value="bmap"}

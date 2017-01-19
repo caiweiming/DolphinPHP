@@ -1552,6 +1552,18 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 表单项布局
+     * @param array $column 布局参数 ['表单项名' => 所占宽度,....]
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function layout($column = [])
+    {
+        $this->_vars['_layout'] = $column;
+        return $this;
+    }
+
+    /**
      * 引入模块js文件
      * @param string $files_name js文件名，多个文件用逗号隔开
      * @author caiweiming <314013107@qq.com>

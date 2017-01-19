@@ -1,6 +1,6 @@
-<div class="form-group {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+<div class="form-group col-md-{$_layout[$form[type].name]|default='12'} {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
     <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
-    <div class="col-xs-9">
+    <div class="col-xs-12">
         <textarea class="form-control" id="{$form[type].name}" rows="7" name="{$form[type].name}" placeholder="请输入{$form[type].title}" {$form[type].extra_attr|default=''}>{$form[type].value|default=''}</textarea>
         {notempty name="form[type].tips"}
         <div class="help-block">{$form[type].tips|clear_js}</div>
