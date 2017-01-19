@@ -297,6 +297,9 @@ class Module extends Admin
             $module_info['action'] = $action;
         }
 
+        // 表前缀
+        $module_info['database_prefix'] = config('database.prefix');
+
         // 生成配置文件
         if (false === $this->buildInfoFile($module_info, $name)) {
             return $this->error('模块配置文件创建失败，请重新导出');
@@ -380,6 +383,7 @@ INFO;
         $info = var_export($info, true);
         $info = preg_replace("/'(.*)' => (.*)(\r\n|\r|\n)\s*array/", "'$1' => array", $info);
         $info = preg_replace("/(\d+) => (\s*)(\r\n|\r|\n)\s*array/", "array", $info);
+        $info = preg_replace("/(\d+ => )/", "", $info);
         $info = preg_replace("/array \((\r\n|\r|\n)\s*\)/", "[)", $info);
         $info = preg_replace("/array \(/", "[", $info);
         $info = preg_replace("/\)/", "]", $info);
