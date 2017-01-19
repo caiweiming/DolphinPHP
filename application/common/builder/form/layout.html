@@ -10,6 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="block">
+                {empty name="Think.get._pop"}
                 {notempty name="tab_nav"}
                 <ul class="nav nav-tabs">
                     {volist name="tab_nav['tab_list']" id="tab"}
@@ -41,6 +42,7 @@
                     <h3 class="block-title">{$page_title|default=""}</h3>
                 </div>
                 {/notempty}
+                {/empty}
                 <div class="block-content tab-content">
                     <div class="tab-pane active">
                         <div class="block-content">
