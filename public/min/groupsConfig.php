@@ -113,7 +113,7 @@ return [
     ],
     'rangeslider_css' => [ // 范围
         $libs_path. "ion-rangeslider/css/ion.rangeSlider.min.css",
-        $libs_path. "iion-rangeslider/css/ion.rangeSlider.skinHTML5.min.css",
+        $libs_path. "ion-rangeslider/css/ion.rangeSlider.skinHTML5.min.css",
     ],
     'nestable_js' => [ // 拖拽排序
         $libs_path. "jquery-nestable/jquery.nestable.js",
