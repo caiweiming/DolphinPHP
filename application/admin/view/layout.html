@@ -63,6 +63,7 @@
     <script>
         // url
         var dolphin = {
+            'top_menu_url': '{:url("admin/ajax/getSidebarMenu")}',
             'theme_url': '{:url("admin/ajax/setTheme")}',
             'jcrop_upload_url': '{:url("admin/attachment/upload", ["dir" => "images", "from" => "jcrop", "module" => request()->module()])}',
             'editormd_upload_url': '{:url("admin/attachment/upload", ["dir" => "images", "from" => "editormd", "module" => request()->module()])}',

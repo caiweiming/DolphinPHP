@@ -403,7 +403,7 @@ var Dolphin = function () {
             if ($('#nav-' + data.module_id).length) {
                 $('#nav-' + data.module_id).show().siblings().hide();
             } else {
-                $.post('/admin.php/admin/ajax/getSidebarMenu', data, function (res) {
+                $.post(dolphin.top_menu_url, data, function (res) {
                     $('#sidebar-menu').append(res);
                     jQuery('#nav-' + data.module_id + ' [data-toggle="nav-submenu"]').on('click', function(e){
                         // Get link
