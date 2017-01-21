@@ -76,7 +76,8 @@
             'file_upload_url': '{:url("admin/attachment/upload", ["dir" => "files", "module" => request()->module()])}',
             'image_upload_url': '{:url("admin/attachment/upload", ["dir" => "images", "module" => request()->module()])}',
             'get_level_data': '{:url("admin/ajax/getLevelData")}',
-            'quick_edit_url': '{:url("admin/system/quickEdit")}',
+            'quick_edit_url': '{:url("quickEdit")}',
+            'aside_edit_url': '{:url("admin/system/quickEdit")}',
             'triggers': {$field_triggers|default=[]|json_encode}, // 触发器集合
             'field_hide': '{$field_hide|default=""}', // 需要隐藏的字段
             'field_values': '{$field_values|default=""}',

@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
 
         // 发送ajax请求
         Dolphin.loading();
-        $.post(dolphin.quick_edit_url, $data).success(function(res) {
+        $.post(dolphin.aside_edit_url, $data).success(function(res) {
             Dolphin.loading('hide');
             if (1 != res.code) {
                 Dolphin.notify(res.msg, 'danger');
