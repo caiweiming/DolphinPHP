@@ -392,8 +392,6 @@ var Dolphin = function () {
      */
     var topMenu = function () {
         $('.top-menu').click(function () {
-            var self = $(this);
-            var li   = self.parent();
             var data = {
                 module_id: $(this).data('module-id') || '',
                 module: $(this).data('module') || '',
@@ -401,33 +399,18 @@ var Dolphin = function () {
             };
 
             if ($('#nav-' + data.module_id).length) {
-                $('#nav-' + data.module_id).show().siblings().hide();
+                location.href = $('#nav-' + data.module_id).find('a').not('.nav-submenu').first().attr('href');
             } else {
                 $.post(dolphin.top_menu_url, data, function (res) {
-                    $('#sidebar-menu').append(res);
-                    jQuery('#nav-' + data.module_id + ' [data-toggle="nav-submenu"]').on('click', function(e){
-                        // Get link
-                        var $link = jQuery(this);
-
-                        // Get link's parent
-                        var $parentLi = $link.parent('li');
-
-                        if ($parentLi.hasClass('open')) { // If submenu is open, close it..
-                            $parentLi.removeClass('open');
-                        } else { // .. else if submenu is closed, close all other (same level) submenus first before open it
-                            $link
-                                .closest('ul')
-                                .find('> li')
-                                .removeClass('open');
-
-                            $parentLi
-                                .addClass('open');
-                        }
-                    });
-                    $('#nav-' + data.module_id).show().siblings().hide();
+                    if (res != '') {
+                        location.href = res;
+                    } else {
+                        tips('无任何节点权限', 'danger');
+                    }
+                }).fail(function () {
+                    tips('服务器发生错误~', 'danger');
                 });
             }
-            li.addClass('active').siblings().removeClass('active');
             return false;
         });
     };
