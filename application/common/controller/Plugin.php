@@ -67,11 +67,14 @@ abstract class Plugin
     /**
      * 显示方法
      * @param string $template 模板或直接解析内容
-     * @param array $vars
+     * @param array $vars 模板输出变量
+     * @param array $replace 替换内容
+     * @param array $config 模板参数
+     * @param bool $renderContent 是否渲染内容
      * @throws Exception
      * @author 蔡伟明 <314013107@qq.com>
      */
-    final protected function fetch($template = '', $vars = [])
+    final protected function fetch($template = '', $vars = [], $replace = [], $config = [], $renderContent = false)
     {
         if ($template != '') {
             if (!is_file($template)) {
@@ -81,7 +84,7 @@ abstract class Plugin
                 }
             }
 
-            echo $this->view->fetch($template, $vars);
+            echo $this->view->fetch($template, $vars, $replace, $config, $renderContent);
         }
     }
 
