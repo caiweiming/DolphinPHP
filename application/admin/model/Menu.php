@@ -200,8 +200,13 @@ class Menu extends Model
         $controller = request()->controller();
         $action     = request()->action();
 
-        $cache_name = 'location.'.$model.'_'.$controller.'_'.$action;
-        $location   = cache($cache_name);
+        if ($id != '') {
+            $cache_name = 'location.menu_'.$id;
+        } else {
+            $cache_name = 'location.'.$model.'_'.$controller.'_'.$action;
+        }
+
+        $location = cache($cache_name);
 
         if (!$location) {
             $map['pid'] = ['<>', 0];
