@@ -184,7 +184,7 @@ class Attachment extends Admin
 
         // 判断附件格式是否符合
         $file_name = $file->getInfo('name');
-        $file_ext  = substr($file_name, strrpos($file_name, '.')+1);
+        $file_ext  = strtolower(substr($file_name, strrpos($file_name, '.')+1));
         $error_msg = '';
         if ($ext_limit == '') {
             $error_msg = '获取文件信息失败！';
