@@ -92,7 +92,7 @@ class Document extends ThinkModel
         // 文档模型
         $model = Db::name('cms_model')->where('id', $data['model'])->find();
 
-        if ($model['type'] != 2 && $data['summary'] == '' && config('cms_config.summary') > 0) {
+        if ($model['type'] != 2 && empty($data['summary']) && config('cms_config.summary') > 0) {
             $data['summary'] = mb_substr(strip_tags($data['content']), 0, config('cms_config.summary'), 'utf-8');
         }
 
