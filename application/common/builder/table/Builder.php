@@ -1067,6 +1067,7 @@ class Builder extends ZBuilder
                                 $replace_to = [];
                                 $pattern    = [];
                                 $url        = $column['default'];
+                                $target     = $column['param'] == '' ? '_self' : $column['param'];
                                 if (preg_match_all('/__(.*?)__/', $column['default'], $matches)) {
                                     foreach ($matches[1] as $match) {
                                         $pattern[] = '/__'. $match .'__/i';
@@ -1080,7 +1081,7 @@ class Builder extends ZBuilder
                                 }
                                 $row[$column['name']] = '<a href="'. $url .'"
                                     title="'. $row[$column['name']] .'"
-                                    target="_blank">'.$row[$column['name']].'</a>';
+                                    target="'.$target.'">'.$row[$column['name']].'</a>';
                             }
                             break;
                         case 'switch': // 开关
