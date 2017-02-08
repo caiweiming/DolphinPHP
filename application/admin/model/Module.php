@@ -56,7 +56,7 @@ class Module extends Model
         if (!$result) {
             $dirs = array_map('basename', glob(APP_PATH.'*', GLOB_ONLYDIR));
             if ($dirs === false || !file_exists(APP_PATH)) {
-                $this->error = '插件目录不可读或者不存在';
+                $this->error = '模块目录不可读或者不存在';
                 return false;
             }
 
