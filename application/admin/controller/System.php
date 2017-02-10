@@ -114,6 +114,12 @@ class System extends Admin
                     }
                 }
 
+                // 默认模块列表
+                if (isset($data_list['default_module'])) {
+                    $list_module['index'] = '默认';
+                    $data_list['default_module']['options'] = array_merge($list_module, ModuleModel::getModule());
+                }
+
                 // 使用ZBuilder快速创建表单
                 return ZBuilder::make('form')
                     ->setPageTitle('系统设置')
