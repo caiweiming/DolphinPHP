@@ -60,4 +60,50 @@ class Index extends Admin
             $this->error('请在系统设置中选择需要清除的缓存类型');
         }
     }
+
+    /**
+     * 检查版本更新
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return \think\response\Json
+     */
+    public function checkUpdate()
+    {
+        $params = config('dolphin');
+        $params['domain'] = request()->domain();
+        $params['ip']     = $_SERVER['SERVER_ADDR'];
+        $params['php_os'] = PHP_OS;
+        $params['php_version'] = PHP_VERSION;
+        $params['mysql_version'] = db()->query('select version() as version')[0]['version'];
+        $params['server_software'] = $_SERVER['SERVER_SOFTWARE'];
+        $params = http_build_query($params);
+
+        $opts = [
+            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_URL            => config('dolphin.product_update'),
+            CURLOPT_USERAGENT      => $_SERVER['HTTP_USER_AGENT'],
+            CURLOPT_POST           => 1,
+            CURLOPT_POSTFIELDS     => $params
+        ];
+
+        // 初始化并执行curl请求
+        $ch = curl_init();
+        curl_setopt_array($ch, $opts);
+        $data  = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($data, true);
+
+        if ($result['code'] == 1) {
+            return json([
+                'update' => '<a class="badge badge-primary" href="http://www.dolphinphp.com/download" target="_blank">有新版本：'.$result["version"].'</a>',
+                'auth'   => $result['auth']
+            ]);
+        } else {
+            return json([
+                'update' => '',
+                'auth'   => $result['auth']
+            ]);
+        }
+    }
 }

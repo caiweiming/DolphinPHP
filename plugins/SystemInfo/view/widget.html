@@ -7,8 +7,12 @@
             <table class="table">
                 <tbody>
                 <tr>
+                    <td>商业授权版本</td>
+                    <td id="product-auth"><a class="label label-danger" href="http://www.dolphinphp.com/pricing" target="_blank">未授权</a></td>
+                </tr>
+                <tr>
                     <td>DolphinPHP版本</td>
-                    <td>{:config('dolphin.product_version')}</td>
+                    <td id="product-update">{:config('dolphin.product_version')}</td>
                 </tr>
                 <tr>
                     <td>ThinkPHP版本</td>
@@ -33,10 +37,6 @@
                 <tr>
                     <td>上传限制</td>
                     <td>{:ini_get('upload_max_filesize')}</td>
-                </tr>
-                <tr>
-                    <td>POST限制</td>
-                    <td>{:ini_get('post_max_size')}</td>
                 </tr>
                 </tbody>
             </table>

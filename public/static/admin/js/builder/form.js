@@ -578,6 +578,7 @@ jQuery(document).ready(function() {
             duplicate: true,
             // 不压缩图片
             resize: false,
+            compress: false,
             // swf图片路径
             swf: dolphin.WebUploader_swf,
             // 图片接收服务端。
