@@ -70,6 +70,9 @@ class Config
 
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
+            if ($module == '') {
+                redirect('/admin');
+            }
             if ($module != '' && $module != 'admin' && $module != 'common' && $module != 'index' && $module != 'extra') {
                 // 修改默认访问控制器层
                 config('url_controller_layer', 'admin');
@@ -79,6 +82,9 @@ class Config
             // 插件静态资源目录
             config('view_replace_str.__PLUGINS__', PUBLIC_PATH. 'static/plugins');
         } else {
+            if ($module == 'admin') {
+                return redirect('/admin.php/admin');
+            }
             // 修改默认访问控制器层
             if ($module != '' && $module != 'index') {
                 config('url_controller_layer', 'home');
