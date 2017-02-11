@@ -104,7 +104,7 @@ class Attachment extends Admin
     {
         // 附件大小限制
         $size_limit = $dir == 'images' ? config('upload_image_size') : config('upload_file_size');
-        $size_limit = $size_limit * 1024 * 1024;
+        $size_limit = $size_limit * 1024;
         // 附件类型限制
         $ext_limit = $dir == 'images' ? config('upload_image_ext') : config('upload_file_ext');
         $ext_limit = $ext_limit != '' ? parse_attr($ext_limit) : '';
