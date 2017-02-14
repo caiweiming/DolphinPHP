@@ -80,7 +80,7 @@ class Config
                 config('template.view_path', APP_PATH. $module. '/view/admin/');
             }
             // 插件静态资源目录
-            config('view_replace_str.__PLUGINS__', PUBLIC_PATH. 'static/plugins');
+            config('view_replace_str.__PLUGINS__', '/plugins');
         } else {
             if ($module == 'admin') {
                 return redirect('/admin.php/admin');
