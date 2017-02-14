@@ -370,6 +370,9 @@ class Builder extends ZBuilder
         // 表单名，用于替换
         $table = isset($attribute['table']) ? $attribute['table'] : '__table__';
 
+        // 自定义字段
+        $field = isset($attribute['field']) ? $attribute['field'] : '';
+
         // 这个专门为插件准备的属性，是插件名称
         $plugin_name = isset($attribute['plugin_name']) ? $attribute['plugin_name'] : $this->_plugin_name;
 
@@ -398,7 +401,7 @@ class Builder extends ZBuilder
                     'target-form' => 'ids',
                     'href'        => url(
                         $this->_module.'/'.$this->_controller.'/enable',
-                        ['table' => $table]
+                        ['table' => $table, 'field' => $field]
                     ),
                 ];
                 break;
@@ -413,7 +416,7 @@ class Builder extends ZBuilder
                     'target-form' => 'ids',
                     'href'        => url(
                         $this->_module.'/'.$this->_controller.'/disable',
-                        ['table' => $table]
+                        ['table' => $table, 'field' => $field]
                     ),
                 ];
                 break;
