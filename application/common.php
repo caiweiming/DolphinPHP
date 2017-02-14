@@ -1057,3 +1057,27 @@ if (!function_exists('packet_exists')) {
         }
     }
 }
+
+if (!function_exists('load_assets')) {
+    /**
+     * 加载静态资源
+     * @param string $assets 资源名称
+     * @param string $type 资源类型
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function load_assets($assets = '', $type = 'css')
+    {
+        $assets_list = config('assets.'. $assets);
+
+        $result = '';
+        foreach ($assets_list as $item) {
+            if ($type == 'css') {
+                $result .= '<link rel="stylesheet" href="'.$item.'">';
+            } else {
+                $result .= '<script src="'.$item.'"></script>';
+            }
+        }
+        return $result;
+    }
+}

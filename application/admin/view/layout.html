@@ -35,13 +35,29 @@
     <!-- Stylesheets -->
     <!-- Page JS Plugins CSS -->
     {notempty name="_css_files"}
-    <link rel="stylesheet" href="{:minify('group', $_css_files)}">
+        {eq name="Think.config.minify_status" value="1"}
+            <link rel="stylesheet" href="{:minify('group', $_css_files)}">
+        {else/}
+            {volist name="_css_files" id="css"}
+            {:load_assets($css)}
+            {/volist}
+        {/eq}
     {/notempty}
+
 
     {block name="plugins-css"}{/block}
 
     <!-- Bootstrap and OneUI CSS framework -->
+    {eq name="Think.config.minify_status" value="1"}
     <link rel="stylesheet" id="css-main" href="{:minify('group', 'libs_css,core_css')}">
+    {else/}
+    <link rel="stylesheet" href="__LIBS__/sweetalert/sweetalert.min.css">
+    <link rel="stylesheet" href="__LIBS__/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" href="__LIBS__/magnific-popup/magnific-popup.min.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/oneui.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css" id="css-main">
+    {/eq}
     <link rel="stylesheet" id="css-theme" href="__ADMIN_CSS__/themes/{:config('system_color')}.min.css">
 
     <!--页面css-->
@@ -388,12 +404,38 @@
 </div>
 <!-- END Apps Modal -->
 <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+{eq name="Think.config.minify_status" value="1"}
 <script src="{:minify('group', 'core_js,libs_js')}"></script>
+{else/}
+<script src="__ADMIN_JS__/core/jquery.min.js"></script>
+<script src="__ADMIN_JS__/core/bootstrap.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.slimscroll.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.scrollLock.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.appear.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.countTo.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.placeholder.min.js"></script>
+<script src="__ADMIN_JS__/core/js.cookie.min.js"></script>
+<script src="__LIBS__/bootstrap3-editable/js/bootstrap-editable.js"></script>
+<script src="__LIBS__/magnific-popup/magnific-popup.min.js"></script>
+<script src="__ADMIN_JS__/app.js"></script>
+<script src="__ADMIN_JS__/dolphin.js"></script>
+<script src="__ADMIN_JS__/builder/form.js"></script>
+<script src="__ADMIN_JS__/builder/aside.js"></script>
+<script src="__ADMIN_JS__/builder/table.js"></script>
+<script src="__LIBS__/bootstrap-notify/bootstrap-notify.min.js"></script>
+<script src="__LIBS__/sweetalert/sweetalert.min.js"></script>
+{/eq}
 
 <!-- Page JS Plugins -->
 <script src="__LIBS__/layer/layer.js"></script>
 {notempty name="_js_files"}
-<script src="{:minify('group', $_js_files)}"></script>
+    {eq name="Think.config.minify_status" value="1"}
+        <script src="{:minify('group', $_js_files)}"></script>
+    {else/}
+        {volist name="_js_files" id="js"}
+        {:load_assets($js, 'js')}
+        {/volist}
+    {/eq}
 {/notempty}
 
 <script>
