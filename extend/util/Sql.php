@@ -51,8 +51,6 @@ class Sql
      */
     public static function parseSql($content = '', $string = false, $replace = [])
     {
-        // 纯sql内容
-        $pure_sql = '';
         // 被替换的前缀
         $from = '';
         // 要替换的前缀
@@ -65,6 +63,9 @@ class Sql
         }
 
         if ($content != '') {
+            // 纯sql内容
+            $pure_sql = [];
+
             // 多行注释标记
             $comment = false;
 
@@ -112,7 +113,7 @@ class Sql
                 }
 
                 // sql语句
-                $pure_sql[] = $line;
+                array_push($pure_sql, $line);
             }
 
             // 只返回一条语句
@@ -123,9 +124,10 @@ class Sql
             // 以数组形式返回sql语句
             $pure_sql = implode($pure_sql, "\n");
             $pure_sql = explode(";\n", $pure_sql);
+            return $pure_sql;
+        } else {
+            return $string == true ? '' : [];
         }
-
-        return $pure_sql;
     }
 
     /**
