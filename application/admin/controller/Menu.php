@@ -95,6 +95,11 @@ class Menu extends Admin
             // 验证失败 输出错误信息
             if(true !== $result) return $this->error($result);
 
+            // 顶部节点url检查
+            if ($data['pid'] == 0 && $data['url_value'] == '' && $data['url_type'] == 'module') {
+                return $this->error('顶级节点的节点链接不能为空');
+            }
+
             if ($menu = MenuModel::create($data)) {
                 Cache::clear();
                 // 记录行为
@@ -146,6 +151,11 @@ class Menu extends Admin
             $result = $this->validate($data, 'Menu');
             // 验证失败 输出错误信息
             if(true !== $result) return $this->error($result);
+
+            // 顶部节点url检查
+            if ($data['pid'] == 0 && $data['url_value'] == '' && $data['url_type'] == 'module') {
+                return $this->error('顶级节点的节点链接不能为空');
+            }
 
             // 验证是否更改所属模块，如果是，则该节点的所有子孙节点的模块都要修改
             $map['id'] = $data['id'];

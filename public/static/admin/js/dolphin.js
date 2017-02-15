@@ -392,6 +392,7 @@ var Dolphin = function () {
      */
     var topMenu = function () {
         $('.top-menu').click(function () {
+            var $target = $(this).attr('target');
             var data = {
                 module_id: $(this).data('module-id') || '',
                 module: $(this).data('module') || '',
@@ -403,7 +404,11 @@ var Dolphin = function () {
             } else {
                 $.post(dolphin.top_menu_url, data, function (res) {
                     if (res != '') {
-                        location.href = res;
+                        if ($target == '_self') {
+                            location.href = res;
+                        } else {
+                            window.open(res);
+                        }
                     } else {
                         tips('无任何节点权限', 'danger');
                     }
