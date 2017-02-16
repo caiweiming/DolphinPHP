@@ -33,7 +33,7 @@ class Plugin extends Admin
     public function index($group = 'local')
     {
         // 配置分组信息
-        $list_group = ['local' => '本地插件', 'online' => '在线插件'];
+        $list_group = ['local' => '本地插件'];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);

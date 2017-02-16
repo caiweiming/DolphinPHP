@@ -29,7 +29,7 @@ class Packet extends Admin
     public function index($group = 'local')
     {
         // 配置分组信息
-        $list_group = ['local' => '本地数据包', 'online' => '在线数据包'];
+        $list_group = ['local' => '本地数据包'];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);

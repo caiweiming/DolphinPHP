@@ -38,7 +38,7 @@ class Module extends Admin
     public function index($group = 'local')
     {
         // 配置分组信息
-        $list_group = ['local' => '本地模块', 'online' => '在线模块'];
+        $list_group = ['local' => '本地模块'];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);
