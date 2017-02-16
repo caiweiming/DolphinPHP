@@ -277,6 +277,11 @@ class Module extends Admin
         // 模块导出目录
         $module_dir = ROOT_PATH. 'export/module/'. $name;
 
+        // 删除旧的导出数据
+        if (is_dir($module_dir)) {
+            File::del_dir($module_dir);
+        }
+
         // 复制模块目录到导出目录
         File::copy_dir(APP_PATH. $name, $module_dir);
 
