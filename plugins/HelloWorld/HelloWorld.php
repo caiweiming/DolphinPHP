@@ -61,26 +61,11 @@ class HelloWorld extends Plugin
 
         // 后台列表字段
         'columns' => [
-            'id' => [
-                'title' => 'ID',
-                'type'  => 'text',
-            ],
-            'said' => [
-                'title' => '名言',
-                'type'  => 'text',
-            ],
-            'name' => [
-                'title' => '出处',
-                'type'  => 'text',
-            ],
-            'status' => [
-                'title' => '状态',
-                'type'  => 'switch',
-            ],
-            'right_button' => [
-                'title' => '操作',
-                'type'  => 'btn',
-            ],
+            ['id', 'ID'],
+            ['said', '名言'],
+            ['name', '出处'],
+            ['status', '状态', 'switch'],
+            ['right_button', '操作', 'btn']
         ],
 
         // 右侧按钮
@@ -106,7 +91,7 @@ class HelloWorld extends Plugin
                     'icon'  => 'fa fa-user',
                     'href'  => [
                         'url'   => 'HelloWorld/Admin/testForm',
-                        'param' => [
+                        'params' => [
                             'id'    => '__id__',
                             'table' => '__table__',
                             'name'  => 'molly',

@@ -181,11 +181,15 @@ class Admin extends Common
 
     /**
      * 插件自定义方法
-     * @param array $params 除插件名称、控制器、动作以外的参数
+     * 这里的参数是根据插件定义的按钮链接按顺序设置
+     * @param string $id
+     * @param string $table
+     * @param string $name
+     * @param string $age
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function testForm($params = [])
+    public function testForm($id = '', $table = '', $name = '', $age = '')
     {
         if ($this->request->isPost()) {
             $data = $this->request->post();
