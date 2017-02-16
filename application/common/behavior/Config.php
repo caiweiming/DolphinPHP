@@ -83,7 +83,7 @@ class Config
             config('view_replace_str.__PLUGINS__', '/plugins');
         } else {
             if ($module == 'admin') {
-                return redirect('/admin.php/admin');
+                header("Location: /admin.php", true, 302);exit();
             }
             // 修改默认访问控制器层
             if ($module != '' && $module != 'index') {
