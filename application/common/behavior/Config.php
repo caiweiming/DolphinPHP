@@ -70,7 +70,7 @@ class Config
 
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
-            if ($module == '') {
+            if ($dispatch['type'] == 'module' && $module == '') {
                 header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
             }
             if ($module != '' && $module != 'admin' && $module != 'common' && $module != 'index' && $module != 'extra') {
@@ -82,7 +82,7 @@ class Config
             // 插件静态资源目录
             config('view_replace_str.__PLUGINS__', '/plugins');
         } else {
-            if ($module == 'admin') {
+            if ($dispatch['type'] == 'module' && $module == 'admin') {
                 header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
             }
             // 修改默认访问控制器层
