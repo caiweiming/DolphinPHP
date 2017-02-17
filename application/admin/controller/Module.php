@@ -133,6 +133,25 @@ class Module extends Admin
             return $this->fetch();
         }
 
+        // 执行安装模块sql文件
+        $sql_file = realpath(APP_PATH.$name.'/sql/install.sql');
+        if (file_exists($sql_file)) {
+            if (isset($module_info['database_prefix']) && !empty($module_info['database_prefix'])) {
+                $sql_statement = Sql::getSqlFromFile($sql_file, false, [$module_info['database_prefix'] => config('database.prefix')]);
+            } else {
+                $sql_statement = Sql::getSqlFromFile($sql_file);
+            }
+            if (!empty($sql_statement)) {
+                foreach ($sql_statement as $value) {
+                    try{
+                        Db::execute($value);
+                    }catch(\Exception $e){
+                        $this->error('导入SQL失败，请检查install.sql的语句是否正确');
+                    }
+                }
+            }
+        }
+
         // 添加菜单
         $menus = ModuleModel::getMenusFromFile($name);
         if (is_array($menus) && !empty($menus)) {
@@ -157,21 +176,6 @@ class Module extends Admin
             if (!$ActionModel->saveAll($module_info['action'])) {
                 MenuModel::where('module', $name)->delete();
                 return $this->error('行为添加失败，请重新安装');
-            }
-        }
-
-        // 执行安装模块sql文件
-        $sql_file = realpath(APP_PATH.$name.'/sql/install.sql');
-        if (file_exists($sql_file)) {
-            if (isset($module_info['database_prefix']) && !empty($module_info['database_prefix'])) {
-                $sql_statement = Sql::getSqlFromFile($sql_file, false, [$module_info['database_prefix'] => config('database.prefix')]);
-            } else {
-                $sql_statement = Sql::getSqlFromFile($sql_file);
-            }
-            if (!empty($sql_statement)) {
-                foreach ($sql_statement as $value) {
-                    Db::execute($value);
-                }
             }
         }
 
@@ -212,11 +216,6 @@ class Module extends Admin
             return $this->fetch();
         }
 
-        // 删除菜单
-        if (false === MenuModel::where('module', $name)->delete()) {
-            return $this->error('菜单删除失败，请重新卸载');
-        }
-
         // 执行卸载模块sql文件
         $clear = $this->request->get('clear');
         if ($clear == 1) {
@@ -230,10 +229,19 @@ class Module extends Admin
 
                 if (!empty($sql_statement)) {
                     foreach ($sql_statement as $sql) {
-                        Db::execute($sql);
+                        try{
+                            Db::execute($sql);
+                        }catch(\Exception $e){
+                            $this->error('卸载失败，请检查uninstall.sql的语句是否正确');
+                        }
                     }
                 }
             }
+        }
+
+        // 删除菜单
+        if (false === MenuModel::where('module', $name)->delete()) {
+            return $this->error('菜单删除失败，请重新卸载');
         }
 
         // 删除授权信息
