@@ -3,7 +3,7 @@
     <div class="col-sm-12 js-upload-files">
         <ul class="list-group uploader-list" id="file_list_{$form[type].name}">
             {notempty name="form[type].value"}
-                {volist name="form['value']|explode=',',###" id="vo"}
+                {volist name="form[type]['value']|explode=',',###" id="vo"}
                 <li class="list-group-item file-item"><i class="fa fa-times-circle remove-file" data-id="{$vo}"></i> {$vo|get_file_name}</li>
                 {/volist}
             {/notempty}

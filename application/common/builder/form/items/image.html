@@ -3,14 +3,12 @@
     <div class="col-xs-12 js-upload-image">
         <div id="file_list_{$form[type].name}" class="uploader-list">
             {notempty name="form[type].value"}
-                {volist name="form['value']|explode=',',###" id="vo"}
-                <div class="file-item thumbnail">
-                    <a class="img-link" href="{$vo|get_file_path}">
-                        <img src="{$vo|get_thumb}" width="100">
-                    </a>
-                    <i class="fa fa-times-circle remove-picture"></i>
-                </div>
-                {/volist}
+            <div class="file-item thumbnail">
+                <a class="img-link" href="{$form[type]['value']|get_file_path}">
+                    <img src="{$form[type]['value']|get_thumb}" width="100">
+                </a>
+                <i class="fa fa-times-circle remove-picture"></i>
+            </div>
             {/notempty}
         </div>
         <div class="clearfix"></div>

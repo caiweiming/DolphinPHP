@@ -3,7 +3,7 @@
     <div class="col-xs-12 js-upload-images">
         <div id="file_list_{$form[type].name}" class="uploader-list">
             {notempty name="form[type].value"}
-                {volist name="form['value']|explode=',',###" id="vo"}
+                {volist name="form[type]['value']|explode=',',###" id="vo"}
                 <div class="file-item thumbnail">
                     <a class="img-link" href="{$vo|get_file_path}">
                         <img src="{$vo|get_thumb}" width="100">

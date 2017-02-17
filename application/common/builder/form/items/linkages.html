@@ -19,7 +19,7 @@
         <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_1" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="2" data-next-level-id="linkages_{$form[type].name}_2">
             <option value="">请选择：</option>
             {volist name="level_one" id="option"}
-            <option value="{$option[$form['key']]}" {if (isset($level_key[1]) && $level_key[1] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+            <option value="{$option[$form[type]['key']]}" {if (isset($level_key[1]) && $level_key[1] == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
             {/volist}
         </select>
     </div>
@@ -30,7 +30,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.1"}
                 {volist name="level_data.1" id="option"}
-                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($form[type].value == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
@@ -43,7 +43,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.1"}
                 {volist name="level_data.1" id="option"}
-                <option value="{$option[$form['key']]}" {if ($level_key[2] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($level_key[2] == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
@@ -53,7 +53,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.2"}
                 {volist name="level_data.2" id="option"}
-                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($form[type].value == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
@@ -66,7 +66,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.1"}
                 {volist name="level_data.1" id="option"}
-                <option value="{$option[$form['key']]}" {if ($level_key[2] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($level_key[2] == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
@@ -76,7 +76,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.2"}
                 {volist name="level_data.2" id="option"}
-                <option value="{$option[$form['key']]}" {if ($level_key[3] == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($level_key[3] == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
@@ -86,7 +86,7 @@
             <option value="">请选择：</option>
             {notempty name="level_data.3"}
                 {volist name="level_data.3" id="option"}
-                <option value="{$option[$form['key']]}" {if ($form[type].value == (string)$option[$form['key']])}selected{/if}>{$option[$form['option']]|clear_js}</option>
+                <option value="{$option[$form[type]['key']]}" {if ($form[type].value == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
                 {/volist}
             {/notempty}
         </select>
