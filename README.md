@@ -21,7 +21,7 @@ DophinPHP（海豚PHP）集成BootStrap、JQuery、Xeditable、Select2等优秀�
 
 ## 版权信息
 
-DolphinPHP遵循Apache2开源协议发布，并提供个人免费使用，商业需授权。
+DolphinPHP提供个人非商业用途免费使用，商业需授权。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
