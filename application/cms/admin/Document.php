@@ -130,6 +130,7 @@ class Document extends Admin
             // 使用ZBuilder快速创建表单
             return ZBuilder::make('form')
                 ->setFormItems($fields)
+                ->hideBtn('back')
                 ->fetch();
         }
 
