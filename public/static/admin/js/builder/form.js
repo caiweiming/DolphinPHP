@@ -389,7 +389,9 @@ jQuery(document).ready(function() {
     $('.js-ueditor').each(function () {
         var ueditor_name = $(this).attr('name');
         ueditors[ueditor_name] = UE.getEditor(ueditor_name, {
-            initialFrameHeight:320,  //初始化编辑器高度,默认320
+            initialFrameHeight:400,  //初始化编辑器高度,默认320
+            autoHeightEnabled:false,  //是否自动长高
+            maximumWords: 50000, //允许的最大字符数
             serverUrl: dolphin.ueditor_upload_url
         });
     });
