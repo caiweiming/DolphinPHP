@@ -182,11 +182,11 @@ class Builder extends ZBuilder
     public function setTrigger($trigger = '', $values = '', $show = '')
     {
         if (is_array($trigger)) {
-            foreach ($trigger as &$item) {
+            foreach ($trigger as $item) {
                 $this->_vars['field_hide']   .= $item[2].',';
                 $this->_vars['field_values'] .= $item[1].',';
+                $this->_vars['field_triggers'][$item[0]][] = [(string)$item[1], $item[2]];
             }
-            $this->_vars['field_triggers'] = array_merge($this->_vars['field_triggers'], $trigger);
         } else {
             $this->_vars['field_hide']   .= $show.',';
             $this->_vars['field_values'] .= (string)$values.',';
