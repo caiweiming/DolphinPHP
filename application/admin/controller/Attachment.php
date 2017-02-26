@@ -42,7 +42,7 @@ class Attachment extends Admin
                     target="_blank">
                     <img class="image" src="'. PUBLIC_PATH . $thumb.'"></a>';
             } else {
-                if (is_file('.'.config('public_static_path').'img/files/'.$value['ext'].'.png')) {
+                if (is_file('.'.config('public_static_path').'admin/img/files/'.$value['ext'].'.png')) {
                     $value['type'] = '<a href="'. PUBLIC_PATH. $value['path'].'"
                         data-toggle="tooltip" title="点击下载">
                         <img class="image" src="'.config('public_static_path').'admin/img/files/'.$value['ext'].'.png"></a>';
