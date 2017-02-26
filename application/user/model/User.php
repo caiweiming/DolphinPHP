@@ -92,10 +92,12 @@ class User extends Model
                 $user->last_login_ip   = get_client_ip(1);
                 if ($user->save()) {
                     // 自动登录
-                    $this->autoLogin($this::get($uid), $rememberme);
-                };
-
-                return $uid;
+                    return $this->autoLogin($this::get($uid), $rememberme);
+                } else {
+                    // 更新登录信息失败
+                    $this->error = '登录信息更新失败，请重新登录！';
+                    return false;
+                }
             }
         }
         return false;
@@ -103,9 +105,10 @@ class User extends Model
 
     /**
      * 自动登录
-     * @param $user 用户对象
+     * @param object $user 用户对象
      * @param bool $rememberme 是否记住登录，默认7天
      * @author 蔡伟明 <314013107@qq.com>
+     * @return bool|int
      */
     public function autoLogin($user, $rememberme = false)
     {
@@ -128,9 +131,12 @@ class User extends Model
         $url_value = [];
         if ($user->role != 1) {
             $menu_auth = Db::name('admin_role')->where('id', session('user_auth.role'))->value('menu_auth');
+            $menu_auth = json_decode($menu_auth, true);
             if ($menu_auth) {
-                $menu_auth = json_decode($menu_auth, true);
                 $url_value = Db::name('admin_menu')->where('id', 'in', $menu_auth)->where('url_value', 'neq', '')->column('id', 'url_value');
+            } else {
+                $this->error = '未分配任何节点权限！';
+                return false;
             }
         }
         session('user_menu_auth', $url_value);
@@ -141,6 +147,8 @@ class User extends Model
             cookie('uid', $user->id, 24 * 3600 * 7);
             cookie('signin_token', $this->dataAuthSign($signin_token), 24 * 3600 * 7);
         }
+
+        return $user->id;
     }
 
     /**
