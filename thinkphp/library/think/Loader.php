@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -369,12 +369,17 @@ class Loader
         if (isset(self::$instance[$guid])) {
             return self::$instance[$guid];
         }
-        if (strpos($name, '/')) {
-            list($module, $name) = explode('/', $name, 2);
-        } else {
+        if (false !== strpos($name, '\\')) {
+            $class  = $name;
             $module = Request::instance()->module();
+        } else {
+            if (strpos($name, '/')) {
+                list($module, $name) = explode('/', $name, 2);
+            } else {
+                $module = Request::instance()->module();
+            }
+            $class = self::parseClass($module, $layer, $name, $appendSuffix);
         }
-        $class = self::parseClass($module, $layer, $name, $appendSuffix);
         if (class_exists($class)) {
             $model = new $class();
         } else {
@@ -400,12 +405,17 @@ class Loader
      */
     public static function controller($name, $layer = 'controller', $appendSuffix = false, $empty = '')
     {
-        if (strpos($name, '/')) {
-            list($module, $name) = explode('/', $name);
-        } else {
+        if (false !== strpos($name, '\\')) {
+            $class  = $name;
             $module = Request::instance()->module();
+        } else {
+            if (strpos($name, '/')) {
+                list($module, $name) = explode('/', $name);
+            } else {
+                $module = Request::instance()->module();
+            }
+            $class = self::parseClass($module, $layer, $name, $appendSuffix);
         }
-        $class = self::parseClass($module, $layer, $name, $appendSuffix);
         if (class_exists($class)) {
             return App::invokeClass($class);
         } elseif ($empty && class_exists($emptyClass = self::parseClass($module, $layer, $empty, $appendSuffix))) {
@@ -432,12 +442,17 @@ class Loader
         if (isset(self::$instance[$guid])) {
             return self::$instance[$guid];
         }
-        if (strpos($name, '/')) {
-            list($module, $name) = explode('/', $name);
-        } else {
+        if (false !== strpos($name, '\\')) {
+            $class  = $name;
             $module = Request::instance()->module();
+        } else {
+            if (strpos($name, '/')) {
+                list($module, $name) = explode('/', $name);
+            } else {
+                $module = Request::instance()->module();
+            }
+            $class = self::parseClass($module, $layer, $name, $appendSuffix);
         }
-        $class = self::parseClass($module, $layer, $name, $appendSuffix);
         if (class_exists($class)) {
             $validate = new $class;
         } else {
@@ -494,14 +509,16 @@ class Loader
      * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
      * @param string  $name 字符串
      * @param integer $type 转换类型
+     * @param bool    $ucfirst 首字母是否大写（驼峰规则）
      * @return string
      */
-    public static function parseName($name, $type = 0)
+    public static function parseName($name, $type = 0, $ucfirst = true)
     {
         if ($type) {
-            return ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {
+            $name = preg_replace_callback('/_([a-zA-Z])/', function ($match) {
                 return strtoupper($match[1]);
-            }, $name));
+            }, $name);
+            return $ucfirst ? ucfirst($name) : lcfirst($name);
         } else {
             return strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
         }

@@ -55,7 +55,7 @@ class DevTeam extends Plugin
      * 后台首页钩子
      * @author 蔡伟明 <314013107@qq.com>
      */
-    public function admin_index()
+    public function adminIndex()
     {
         $config = $this->getConfigValue();
         if ($config['display']) {
