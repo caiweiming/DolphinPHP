@@ -1,3 +1,8 @@
 .idea
 composer.lock
+/runtime/
+/.settings/
+/composer.lock
+/.buildpath
+/.project
 *.log

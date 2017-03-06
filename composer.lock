@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f135ae20957c341374254bcd752ddf5c",
-    "content-hash": "c62224e2911206f87c8ad63f0cee38fa",
+    "hash": "d2e6380848415480677249d228784d56",
+    "content-hash": "13ef466ae1f51bc65edec08624e7da2c",
     "packages": [
         {
             "name": "topthink/framework",
-            "version": "5.0",
+            "version": "v5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "4115408538b566d795d621385f9c293f026fb3f4"
+                "reference": "bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/4115408538b566d795d621385f9c293f026fb3f4",
-                "reference": "4115408538b566d795d621385f9c293f026fb3f4",
+                "url": "https://dl.composer-proxy.org/topthink/framework/bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3.zip",
+                "reference": "bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3",
                 "shasum": ""
             },
             "require": {
@@ -31,10 +31,14 @@
                 "phpdocumentor/reflection-docblock": "^2.0",
                 "phploc/phploc": "2.*",
                 "phpunit/phpunit": "4.8.*",
-                "sebastian/phpcpd": "2.*",
-                "squizlabs/php_codesniffer": "2.*"
+                "sebastian/phpcpd": "2.*"
             },
             "type": "think-framework",
+            "autoload": {
+                "psr-4": {
+                    "think\\": "library/think"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
@@ -52,7 +56,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2016-09-15 04:58:29"
+            "time": "2017-02-25 02:51:57"
         },
         {
             "name": "topthink/think-captcha",
@@ -92,23 +96,26 @@
         },
         {
             "name": "topthink/think-helper",
-            "version": "v1.0.3",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-helper.git",
-                "reference": "28d0299ff3327420abe07df5492cdd9b6c968262"
+                "reference": "ed64408cdc4cdbd390365ba0906d208b987af520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-helper/zipball/28d0299ff3327420abe07df5492cdd9b6c968262",
-                "reference": "28d0299ff3327420abe07df5492cdd9b6c968262",
+                "url": "https://dl.composer-proxy.org/topthink/think-helper/ed64408cdc4cdbd390365ba0906d208b987af520.zip",
+                "reference": "ed64408cdc4cdbd390365ba0906d208b987af520",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "think\\helper\\": "src"
-                }
+                },
+                "files": [
+                    "src/helper.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -121,20 +128,20 @@
                 }
             ],
             "description": "The ThinkPHP5 Helper Package",
-            "time": "2016-07-13 01:56:39"
+            "time": "2016-12-01 07:08:40"
         },
         {
             "name": "topthink/think-image",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-image.git",
-                "reference": "a708d93ec30bae62bad53f7b82e466cfada2b7d6"
+                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-image/zipball/a708d93ec30bae62bad53f7b82e466cfada2b7d6",
-                "reference": "a708d93ec30bae62bad53f7b82e466cfada2b7d6",
+                "url": "https://dl.composer-proxy.org/topthink/think-image/8586cf47f117481c6d415b20f7dedf62e79d5512.zip",
+                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +149,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "4.8.*",
-                "topthink/framework": "dev-master"
+                "topthink/framework": "^5.0"
             },
             "type": "library",
             "autoload": {
@@ -161,20 +168,20 @@
                 }
             ],
             "description": "The ThinkPHP5 Image Package",
-            "time": "2016-07-20 04:18:35"
+            "time": "2016-09-29 06:05:43"
         },
         {
             "name": "topthink/think-installer",
-            "version": "v1.0.10",
+            "version": "v1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-installer.git",
-                "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3"
+                "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-installer/zipball/ae50760ebd7c687c7a8573db2cfa94a41e5100e3",
-                "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3",
+                "url": "https://dl.composer-proxy.org/topthink/think-installer/4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d.zip",
+                "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +209,7 @@
                     "email": "448901948@qq.com"
                 }
             ],
-            "time": "2016-09-23 04:04:44"
+            "time": "2016-12-01 09:08:45"
         }
     ],
     "packages-dev": [],

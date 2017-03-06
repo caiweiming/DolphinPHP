@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -11,19 +11,9 @@
 
 namespace think;
 
-use think\Config;
-use think\Env;
-use think\Exception;
 use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\exception\RouteNotFoundException;
-use think\Hook;
-use think\Lang;
-use think\Loader;
-use think\Log;
-use think\Request;
-use think\Response;
-use think\Route;
 
 /**
  * App 应用管理
@@ -128,7 +118,7 @@ class App
             // 监听app_begin
             Hook::listen('app_begin', $dispatch);
             // 请求缓存检查
-            $request->cache($config['request_cache'], $config['request_cache_expire']);
+            $request->cache($config['request_cache'], $config['request_cache_expire'], $config['request_cache_except']);
 
             switch ($dispatch['type']) {
                 case 'redirect':
@@ -141,11 +131,13 @@ class App
                     break;
                 case 'controller':
                     // 执行控制器操作
-                    $data = Loader::action($dispatch['controller']);
+                    $vars = array_merge(Request::instance()->param(), $dispatch['var']);
+                    $data = Loader::action($dispatch['controller'], $vars, $config['url_controller_layer'], $config['controller_suffix']);
                     break;
                 case 'method':
                     // 执行回调方法
-                    $data = self::invokeMethod($dispatch['method']);
+                    $vars = array_merge(Request::instance()->param(), $dispatch['var']);
+                    $data = self::invokeMethod($dispatch['method'], $vars);
                     break;
                 case 'function':
                     // 执行闭包
@@ -220,7 +212,7 @@ class App
     public static function invokeMethod($method, $vars = [])
     {
         if (is_array($method)) {
-            $class   = is_object($method[0]) ? $method[0] : new $method[0](Request::instance());
+            $class   = is_object($method[0]) ? $method[0] : self::invokeClass($method[0]);
             $reflect = new \ReflectionMethod($class, $method[1]);
         } else {
             // 静态方法
@@ -255,7 +247,7 @@ class App
      * 绑定参数
      * @access public
      * @param \ReflectionMethod|\ReflectionFunction $reflect 反射类
-     * @param array             $vars    变量
+     * @param array                                 $vars    变量
      * @return array
      */
     private static function bindParams($reflect, $vars = [])
@@ -302,8 +294,6 @@ class App
                     throw new \InvalidArgumentException('method param miss:' . $name);
                 }
             }
-            // 全局过滤
-            array_walk_recursive($args, [Request::instance(), 'filterExp']);
         }
         return $args;
     }
@@ -345,6 +335,8 @@ class App
                 // 初始化模块
                 $request->module($module);
                 $config = self::init($module);
+                // 模块请求缓存检查
+                $request->cache($config['request_cache'], $config['request_cache_expire'], $config['request_cache_except']);
             } else {
                 throw new HttpException(404, 'module not exists:' . $module);
             }
@@ -386,7 +378,7 @@ class App
         } elseif (is_callable([$instance, '_empty'])) {
             // 空操作
             $call = [$instance, '_empty'];
-            $vars = [$action];
+            $vars = [$actionName];
         } else {
             // 操作不存在
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $action . '()');
@@ -446,9 +438,9 @@ class App
             // 监听app_init
             Hook::listen('app_init');
 
-            self::$init = $config;
+            self::$init = true;
         }
-        return self::$init;
+        return Config::get();
     }
 
     /**

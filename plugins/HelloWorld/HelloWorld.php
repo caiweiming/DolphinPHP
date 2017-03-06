@@ -187,7 +187,7 @@ class HelloWorld extends Plugin
      * @param $params
      * @author 蔡伟明 <314013107@qq.com>
      */
-    public function page_tips(&$params)
+    public function pageTips(&$params)
     {
         echo '<div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
