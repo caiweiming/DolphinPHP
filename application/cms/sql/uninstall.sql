@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS `dp_cms_advert`;
 DROP TABLE IF EXISTS `dp_cms_advert_type`;
 DROP TABLE IF EXISTS `dp_cms_column`;
 DROP TABLE IF EXISTS `dp_cms_document`;
-DROP TABLE IF EXISTS `dp_cms_document_article`;
 DROP TABLE IF EXISTS `dp_cms_field`;
 DROP TABLE IF EXISTS `dp_cms_link`;
 DROP TABLE IF EXISTS `dp_cms_menu`;
