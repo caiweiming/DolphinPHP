@@ -105,25 +105,6 @@ CREATE TABLE `dp_cms_document` (
 -- -----------------------------
 
 -- -----------------------------
--- 表结构 `dp_cms_document_article`
--- -----------------------------
-DROP TABLE IF EXISTS `dp_cms_document_article`;
-CREATE TABLE `dp_cms_document_article` (
-  `aid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '文档id',
-  `content` text NOT NULL COMMENT '内容',
-  `summary` varchar(256) NOT NULL COMMENT '摘要',
-  `tags` varchar(128) NOT NULL COMMENT '标签',
-  `cover` int(11) unsigned NOT NULL COMMENT '封面',
-  `files` varchar(64) NOT NULL COMMENT '附件',
-  `publish_time` int(11) unsigned NOT NULL COMMENT '发布时间',
-  PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='普通文章模型扩展表';
-
--- -----------------------------
--- 表数据 `dp_cms_document_article`
--- -----------------------------
-
--- -----------------------------
 -- 表结构 `dp_cms_field`
 -- -----------------------------
 DROP TABLE IF EXISTS `dp_cms_field`;
@@ -154,7 +135,7 @@ CREATE TABLE `dp_cms_field` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='文档字段表';
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='文档字段表';
 
 -- -----------------------------
 -- 表数据 `dp_cms_field`
@@ -176,12 +157,6 @@ INSERT INTO `dp_cms_field` VALUES ('14', 'update_time', '更新时间', 'datetim
 INSERT INTO `dp_cms_field` VALUES ('15', 'sort', '排序', 'text', 'int(11) NOT NULL', '100', '', '', '0', '1', '0', '', '', '', '', '', '0', '', '', '', '', '1480563510', '1480563510', '100', '1');
 INSERT INTO `dp_cms_field` VALUES ('16', 'status', '状态', 'radio', 'tinyint(2) UNSIGNED NOT NULL', '1', '0:禁用\r\n1:启用', '', '0', '1', '0', '', '', '', '', '', '0', '', '', '', '', '1480563576', '1480563576', '100', '1');
 INSERT INTO `dp_cms_field` VALUES ('17', 'trash', '回收站', 'text', 'tinyint(2) UNSIGNED NOT NULL', '0', '', '', '0', '0', '0', '', '', '', '', '', '0', '', '', '', '', '1480563576', '1480563576', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('18', 'summary', '摘要', 'textarea', 'varchar(256) NOT NULL', '', '', '', '0', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778048', '1480778048', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('19', 'content', '内容', 'ckeditor', 'text NOT NULL', '', '', '', '1', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778145', '1480778145', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('20', 'tags', '标签', 'tags', 'varchar(128) NOT NULL', '', '', '文章标签', '0', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778305', '1480778305', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('21', 'cover', '封面', 'image', 'int(11) UNSIGNED NOT NULL', '', '', '文章封面', '0', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778499', '1480778499', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('22', 'files', '附件', 'files', 'varchar(64) NOT NULL', '', '', '文章附件', '0', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778528', '1480778528', '100', '1');
-INSERT INTO `dp_cms_field` VALUES ('23', 'publish_time', '发布时间', 'datetime', 'int(11) UNSIGNED NOT NULL', '', '', '文档发布时间，不填写则立即发布，可作为定时发布时间', '0', '1', '1', '', '', '', '', '', '0', '', '', '', '', '1480778564', '1480937312', '100', '1');
 
 -- -----------------------------
 -- 表结构 `dp_cms_link`
@@ -249,12 +224,7 @@ CREATE TABLE `dp_cms_model` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='内容模型表';
-
--- -----------------------------
--- 表数据 `dp_cms_model`
--- -----------------------------
-INSERT INTO `dp_cms_model` VALUES ('1', 'article', '普通文章', 'dp_cms_document_article', '0', 'fa fa-fw fa-file-text-o', '100', '0', '1480777244', '1480777244', '1');
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容模型表';
 
 -- -----------------------------
 -- 表结构 `dp_cms_nav`

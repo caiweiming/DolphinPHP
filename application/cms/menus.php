@@ -209,17 +209,7 @@ return [
                 'url_target'  => '_self',
                 'online_hide' => 0,
                 'sort'        => 100,
-                'child'       => [
-                    [
-                        'title'       => '普通文章',
-                        'icon'        => 'fa fa-fw fa-list',
-                        'url_type'    => 'module',
-                        'url_value'   => 'cms/content/article',
-                        'url_target'  => '_self',
-                        'online_hide' => 0,
-                        'sort'        => 100,
-                    ]
-                ],
+                'child'       => [],
             ],
             [
                 'title'       => '营销管理',
