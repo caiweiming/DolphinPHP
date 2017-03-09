@@ -14,6 +14,8 @@ namespace app\admin\controller;
 use think\Cache;
 use think\helper\Hash;
 use think\Db;
+use app\common\builder\ZBuilder;
+use app\user\model\User as UserModel;
 
 /**
  * 后台默认控制器
@@ -59,6 +61,51 @@ class Index extends Admin
         } else {
             $this->error('请在系统设置中选择需要清除的缓存类型');
         }
+    }
+
+    /**
+     * 个人设置
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function profile()
+    {
+        // 保存数据
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            $data['nickname'] == '' && $this->error('昵称不能为空');
+            $data['id'] = UID;
+
+            // 如果没有填写密码，则不更新密码
+            if ($data['password'] == '') {
+                unset($data['password']);
+            }
+
+            $UserModel = new UserModel();
+            if ($user = $UserModel->allowField(['nickname', 'email', 'password', 'mobile', 'avatar'])->update($data)) {
+                // 记录行为
+                action_log('user_edit', 'admin_user', UID, UID, get_nickname(UID));
+                return $this->success('编辑成功');
+            } else {
+                return $this->error('编辑失败');
+            }
+        }
+
+        // 获取数据
+        $info = UserModel::where('id', UID)->field('password', true)->find();
+
+        // 使用ZBuilder快速创建表单
+        return ZBuilder::make('form')
+            ->addFormItems([ // 批量添加表单项
+                ['static', 'username', '用户名', '不可更改'],
+                ['text', 'nickname', '昵称', '可以是中文'],
+                ['text', 'email', '邮箱', ''],
+                ['password', 'password', '密码', '必填，6-20位'],
+                ['text', 'mobile', '手机号'],
+                ['image', 'avatar', '头像']
+            ])
+            ->setFormData($info) // 设置表单数据
+            ->fetch();
     }
 
     /**

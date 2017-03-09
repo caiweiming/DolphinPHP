@@ -285,14 +285,14 @@ CREATE TABLE `dp_admin_menu` (
   `system_menu` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否为系统菜单，系统菜单不可删除',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=212 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=213 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of dp_admin_menu
 -- ----------------------------
 INSERT INTO `dp_admin_menu` VALUES ('1', '0', 'admin', '首页', 'fa fa-fw fa-home', 'module', 'admin/index/index', '_self', '0', '1467617722', '1477710540', '1', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('2', '1', 'admin', '快捷操作', 'fa fa-fw fa-folder-open-o', 'module', '', '_self', '0', '1467618170', '1477710695', '1', '1', '1');
-INSERT INTO `dp_admin_menu` VALUES ('3', '2', 'admin', '清空缓存', 'fa fa-fw fa-trash-o', 'module', 'admin/index/wipecache', '_self', '0', '1467618273', '1477710695', '2', '1', '1');
+INSERT INTO `dp_admin_menu` VALUES ('3', '2', 'admin', '清空缓存', 'fa fa-fw fa-trash-o', 'module', 'admin/index/wipecache', '_self', '0', '1467618273', '1489049773', '3', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('4', '0', 'admin', '系统', 'fa fa-fw fa-gear', 'module', 'admin/system/index', '_self', '0', '1467618361', '1477710540', '2', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('5', '4', 'admin', '系统功能', 'si si-wrench', 'module', '', '_self', '0', '1467618441', '1477710695', '1', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('6', '5', 'admin', '系统设置', 'fa fa-fw fa-wrench', 'module', 'admin/system/index', '_self', '0', '1467618490', '1477710695', '1', '1', '1');
@@ -335,7 +335,7 @@ INSERT INTO `dp_admin_menu` VALUES ('47', '41', 'admin', '禁用', '', 'module',
 INSERT INTO `dp_admin_menu` VALUES ('48', '41', 'admin', '设置', '', 'module', 'admin/plugin/config', '_self', '0', '1467689789', '1477710695', '7', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('49', '41', 'admin', '管理', '', 'module', 'admin/plugin/manage', '_self', '0', '1467689846', '1477710695', '8', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('50', '5', 'admin', '附件管理', 'fa fa-fw fa-cloud-upload', 'module', 'admin/attachment/index', '_self', '0', '1467690161', '1477710695', '4', '1', '1');
-INSERT INTO `dp_admin_menu` VALUES ('51', '50', 'admin', '上传', '', 'module', 'admin/attachment/upload', '_self', '0', '1467690240', '1477710695', '1', '1', '1');
+INSERT INTO `dp_admin_menu` VALUES ('51', '70', 'admin', '文件上传', '', 'module', 'admin/attachment/upload', '_self', '0', '1467690240', '1489049773', '1', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('52', '50', 'admin', '下载', '', 'module', 'admin/attachment/download', '_self', '0', '1467690334', '1477710695', '2', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('53', '50', 'admin', '启用', '', 'module', 'admin/attachment/enable', '_self', '0', '1467690352', '1477710695', '3', '1', '1');
 INSERT INTO `dp_admin_menu` VALUES ('54', '50', 'admin', '禁用', '', 'module', 'admin/attachment/disable', '_self', '0', '1467690369', '1477710695', '4', '1', '1');
@@ -351,7 +351,7 @@ INSERT INTO `dp_admin_menu` VALUES ('66', '32', 'admin', '数据包管理', 'fa 
 INSERT INTO `dp_admin_menu` VALUES ('67', '19', 'user', '角色管理', 'fa fa-fw fa-users', 'module', 'user/role/index', '_self', '0', '1476113025', '1477710702', '3', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('68', '0', 'user', '用户', 'fa fa-fw fa-user', 'module', 'user/index/index', '_self', '0', '1476193348', '1477710540', '3', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('69', '32', 'admin', '钩子管理', 'fa fa-fw fa-anchor', 'module', 'admin/hook/index', '_self', '0', '1476236193', '1477710695', '3', '0', '1');
-INSERT INTO `dp_admin_menu` VALUES ('70', '2', 'admin', '后台首页', 'fa fa-fw fa-tachometer', 'module', 'admin/index/index', '_self', '0', '1476237472', '1477710695', '1', '0', '1');
+INSERT INTO `dp_admin_menu` VALUES ('70', '2', 'admin', '后台首页', 'fa fa-fw fa-tachometer', 'module', 'admin/index/index', '_self', '0', '1476237472', '1489049773', '1', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('71', '67', 'user', '新增', '', 'module', 'user/role/add', '_self', '0', '1476256935', '1477710702', '1', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('72', '67', 'user', '编辑', '', 'module', 'user/role/edit', '_self', '0', '1476256968', '1477710702', '2', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('73', '67', 'user', '删除', '', 'module', 'user/role/delete', '_self', '0', '1476256993', '1477710702', '3', '0', '1');
@@ -380,6 +380,7 @@ INSERT INTO `dp_admin_menu` VALUES ('210', '41', 'admin', '快速编辑', '', 'm
 INSERT INTO `dp_admin_menu` VALUES ('209', '185', 'admin', '快速编辑', '', 'module', 'admin/action/quickedit', '_self', '0', '1477713939', '1477713939', '100', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('208', '7', 'admin', '快速编辑', '', 'module', 'admin/config/quickedit', '_self', '0', '1477713808', '1477713808', '100', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('207', '69', 'admin', '快速编辑', '', 'module', 'admin/hook/quickedit', '_self', '0', '1477713770', '1477713770', '100', '0', '1');
+INSERT INTO `dp_admin_menu` VALUES ('212', '2', 'admin', '个人设置', 'fa fa-fw fa-user', 'module', 'admin/index/profile', '_self', '0', '1489049767', '1489049773', '2', '0', '1');
 
 -- ----------------------------
 -- Table structure for `dp_admin_module`
