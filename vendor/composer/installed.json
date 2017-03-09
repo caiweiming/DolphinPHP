@@ -14,7 +14,7 @@
             "reference": "0c55455df26a1626a60d0dc35d2d89002b741d44",
             "shasum": ""
         },
-        "time": "2016-07-06 01:47:11",
+        "time": "2016-07-06T01:47:11+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -58,7 +58,7 @@
         "require-dev": {
             "composer/composer": "1.0.*@dev"
         },
-        "time": "2016-12-01 09:08:45",
+        "time": "2016-12-01T09:08:45+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "think\\composer\\Plugin"
@@ -107,7 +107,7 @@
             "phpunit/phpunit": "4.8.*",
             "sebastian/phpcpd": "2.*"
         },
-        "time": "2017-02-25 02:51:57",
+        "time": "2017-02-25T02:51:57+00:00",
         "type": "think-framework",
         "installation-source": "dist",
         "autoload": {
@@ -155,7 +155,7 @@
             "phpunit/phpunit": "4.8.*",
             "topthink/framework": "^5.0"
         },
-        "time": "2016-09-29 06:05:43",
+        "time": "2016-09-29T06:05:43+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -190,7 +190,7 @@
             "reference": "ed64408cdc4cdbd390365ba0906d208b987af520",
             "shasum": ""
         },
-        "time": "2016-12-01 07:08:40",
+        "time": "2016-12-01T07:08:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
