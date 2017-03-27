@@ -14,7 +14,7 @@ namespace app\cms\admin;
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 use app\cms\model\Advert as AdvertModel;
-use app\cms\model\AdvertType as AdvertTypetModel;
+use app\cms\model\AdvertType as AdvertTypeModel;
 use think\Validate;
 
 /**
@@ -44,7 +44,7 @@ class Advert extends Admin
             'href'  => url('advert_type/index')
         ];
 
-        $list_type = AdvertTypetModel::where('status', 1)->column('id,name');
+        $list_type = AdvertTypeModel::where('status', 1)->column('id,name');
         array_unshift($list_type, '默认分类');
 
         // 使用ZBuilder快速创建数据表格
@@ -148,7 +148,7 @@ class Advert extends Admin
             }
         }
 
-        $list_type = AdvertTypetModel::where('status', 1)->column('id,name');
+        $list_type = AdvertTypeModel::where('status', 1)->column('id,name');
         array_unshift($list_type, '默认分类');
 
         // 显示添加页面
@@ -209,7 +209,7 @@ class Advert extends Admin
             }
         }
 
-        $list_type = AdvertTypetModel::where('status', 1)->column('id,name');
+        $list_type = AdvertTypeModel::where('status', 1)->column('id,name');
         array_unshift($list_type, '默认分类');
 
         $info = AdvertModel::get($id);
