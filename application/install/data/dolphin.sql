@@ -285,7 +285,7 @@ CREATE TABLE `dp_admin_menu` (
   `system_menu` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否为系统菜单，系统菜单不可删除',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=213 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=214 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of dp_admin_menu
@@ -381,6 +381,7 @@ INSERT INTO `dp_admin_menu` VALUES ('209', '185', 'admin', '快速编辑', '', '
 INSERT INTO `dp_admin_menu` VALUES ('208', '7', 'admin', '快速编辑', '', 'module', 'admin/config/quickedit', '_self', '0', '1477713808', '1477713808', '100', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('207', '69', 'admin', '快速编辑', '', 'module', 'admin/hook/quickedit', '_self', '0', '1477713770', '1477713770', '100', '0', '1');
 INSERT INTO `dp_admin_menu` VALUES ('212', '2', 'admin', '个人设置', 'fa fa-fw fa-user', 'module', 'admin/index/profile', '_self', '0', '1489049767', '1489049773', '2', '0', '1');
+INSERT INTO `dp_admin_menu` VALUES ('213', '70', 'admin', '检查版本更新', '', 'module', 'admin/index/checkupdate', '_self', '0', '1490588610', '1490588610', '100', '0', '1');
 
 -- ----------------------------
 -- Table structure for `dp_admin_module`
