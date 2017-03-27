@@ -122,7 +122,6 @@ class Index extends Controller
                 || empty($db['hostname'])
                 || empty($db['database'])
                 || empty($db['username'])
-                || empty($db['password'])
                 || empty($db['prefix'])){
                 $this->error('请填写完整的数据库配置');
             }
