@@ -30,9 +30,11 @@ class Config extends Model
      * @param  string $name 配置名
      * @return mixed
      */
-    public static function getConfig($name = '')
+    public function getConfig($name = '')
     {
         $configs = self::column('value,type', 'name');
+
+        $result = [];
         foreach ($configs as $config) {
             switch ($config['type']) {
                 case 'array':
