@@ -434,13 +434,12 @@ if (!function_exists('format_bytes')) {
 if (!function_exists('format_time')) {
     /**
      * 时间戳格式化
-     * @param null $time
-     * @param string $format
+     * @param string $time 时间戳
+     * @param string $format 输出格式
      * @return false|string
      */
-    function format_time($time = null, $format='Y-m-d H:i') {
-        $time = $time === null ? time() : intval($time);
-        return date($format, $time);
+    function format_time($time = '', $format='Y-m-d H:i') {
+        return !$time ? '' : date($format, intval($time));
     }
 }
 

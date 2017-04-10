@@ -1,5 +1,5 @@
 /*!
-* Dolphin CSS - v1.0.0
+* Dolphin CSS - v1.0.2
 * @author caiweiming
 */
 body,
@@ -450,4 +450,16 @@ table.treetable tr.branch {
 }
 .toolbar-btn-action .input-daterange {
     width: 250px;
+}
+
+/* 表单按钮 */
+.form-btn-parent {
+    margin-top: 22px;
+}
+.form-btn {
+    margin-bottom: 23px;
+}
+.col-md-12 > .form-btn-parent,
+.col-md-12 > .form-btn-parent > .form-btn{
+    margin: 0;
 }

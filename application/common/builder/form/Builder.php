@@ -52,6 +52,8 @@ class Builder extends ZBuilder
         '_js_files'       => [],    // 需要加载的js（合并输出）
         '_js_init'        => [],    // 初始化的js（合并输出）
         '_css_files'      => [],    // 需要加载的css（合并输出）
+        '_layout'         => [],    // 布局参数
+        'btn_extra'       => [],    // 额外按钮
     ];
 
     /**
@@ -77,7 +79,9 @@ class Builder extends ZBuilder
      */
     public function setPageTitle($title = '')
     {
-        $this->_vars['page_title'] = trim($title);
+        if ($title != '') {
+            $this->_vars['page_title'] = trim($title);
+        }
         return $this;
     }
 
@@ -90,8 +94,10 @@ class Builder extends ZBuilder
      */
     public function setPageTips($tips = '', $type = 'info')
     {
-        $this->_vars['page_tips'] = $tips;
-        $this->_vars['tips_type'] = trim($type);
+        if ($tips != '') {
+            $this->_vars['page_tips'] = $tips;
+            $this->_vars['tips_type'] = trim($type);
+        }
         return $this;
     }
 
@@ -103,7 +109,9 @@ class Builder extends ZBuilder
      */
     public function setUrl($post_url = '')
     {
-        $this->_vars['post_url'] = trim($post_url);
+        if ($post_url != '') {
+            $this->_vars['post_url'] = trim($post_url);
+        }
         return $this;
     }
 
@@ -115,19 +123,23 @@ class Builder extends ZBuilder
      */
     public function hideBtn($btn = [])
     {
-        $this->_vars['btn_hide'] = is_array($btn) ? $btn : explode(',', $btn);
+        if (!empty($btn)) {
+            $this->_vars['btn_hide'] = is_array($btn) ? $btn : explode(',', $btn);
+        }
         return $this;
     }
 
     /**
-     * 添加按钮
+     * 添加底部额外按钮
      * @param string $btn 按钮内容
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
     public function addBtn($btn = '')
     {
-        $this->_vars['btn_extra'] = $btn;
+        if ($btn != '') {
+            $this->_vars['btn_extra'][] = $btn;
+        }
         return $this;
     }
 
@@ -140,10 +152,12 @@ class Builder extends ZBuilder
      */
     public function setBtnTitle($btn = '', $title = '')
     {
-        if (is_array($btn)) {
-            $this->_vars['btn_title'] = $btn;
-        } else {
-            $this->_vars['btn_title'][trim($btn)] = trim($title);
+        if (!empty($btn)) {
+            if (is_array($btn)) {
+                $this->_vars['btn_title'] = $btn;
+            } else {
+                $this->_vars['btn_title'][trim($btn)] = trim($title);
+            }
         }
         return $this;
     }
@@ -181,16 +195,18 @@ class Builder extends ZBuilder
      */
     public function setTrigger($trigger = '', $values = '', $show = '')
     {
-        if (is_array($trigger)) {
-            foreach ($trigger as $item) {
-                $this->_vars['field_hide']   .= $item[2].',';
-                $this->_vars['field_values'] .= $item[1].',';
-                $this->_vars['field_triggers'][$item[0]][] = [(string)$item[1], $item[2]];
+        if (!empty($trigger)) {
+            if (is_array($trigger)) {
+                foreach ($trigger as $item) {
+                    $this->_vars['field_hide']   .= $item[2].',';
+                    $this->_vars['field_values'] .= $item[1].',';
+                    $this->_vars['field_triggers'][$item[0]][] = [(string)$item[1], $item[2]];
+                }
+            } else {
+                $this->_vars['field_hide']   .= $show.',';
+                $this->_vars['field_values'] .= (string)$values.',';
+                $this->_vars['field_triggers'][$trigger][] = [(string)$values, $show];
             }
-        } else {
-            $this->_vars['field_hide']   .= $show.',';
-            $this->_vars['field_values'] .= (string)$values.',';
-            $this->_vars['field_triggers'][$trigger][] = [(string)$values, $show];
         }
         return $this;
     }
@@ -203,7 +219,9 @@ class Builder extends ZBuilder
      */
     public function addTrigger($triggers = [])
     {
-        $this->setTrigger($triggers);
+        if (!empty($triggers)) {
+            $this->setTrigger($triggers);
+        }
         return $this;
     }
 
@@ -233,7 +251,7 @@ class Builder extends ZBuilder
      * @param string $level 地图显示级别
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addBmap($name = '', $title = '', $ak = '', $tips = '', $default = '', $address = '', $level = '', $extra_class = '')
     {
@@ -258,6 +276,40 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 添加按钮
+     * @param string $name 表单项名，也是按钮id
+     * @param array $attr 按钮属性
+     * @param string $ele_type 按钮类型，默认为button，也可以为a标签
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this|array
+     */
+    public function addButton($name = '', $attr = [], $ele_type = 'button')
+    {
+        $item = [
+            'type'     => 'button',
+            'name'     => $name,
+            'id'       => $name,
+            'ele_type' => $ele_type,
+            'data'     => '',
+        ];
+        if ($attr) {
+            foreach ($attr as $key => $value) {
+                if (substr($key, 0, 5) == 'data-') {
+                    $item['data'] .= $key. '=' . $value . ' ';
+                }
+            }
+            $item = array_merge($item, $attr);
+        }
+
+        if ($this->_is_group) {
+            return $item;
+        }
+
+        $this->_vars['form_items'][] = $item;
+        return $this;
+    }
+
+    /**
      * 添加复选框
      * @param string $name 复选框名
      * @param string $title 复选框标题
@@ -271,7 +323,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addCheckbox($name = '', $title = '', $tips = '', $options = [], $default = '', $attr = [], $extra_attr = '', $extra_class = '')
     {
@@ -306,7 +358,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addCkeditor($name = '', $title = '', $tips = '', $default = '', $width = '100%', $height = 400, $extra_class = '')
     {
@@ -339,7 +391,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addColorpicker($name = '', $title = '', $tips = '', $default = '', $mode = 'rgba', $extra_attr = '', $extra_class = '')
     {
@@ -372,7 +424,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addDate($name = '', $title = '', $tips = '', $default = '', $format = '', $extra_attr = '', $extra_class = '')
     {
@@ -405,7 +457,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addDaterange($name = '', $title = '', $tips = '', $default = '', $format = '', $extra_attr = '', $extra_class = '')
     {
@@ -462,7 +514,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addDatetime($name = '', $title = '', $tips = '', $default = '', $format = '', $extra_attr = '', $extra_class = '')
     {
@@ -494,7 +546,7 @@ class Builder extends ZBuilder
      * @param bool $watch 是否实时预览
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addEditormd($name = '', $title = '', $tips = '', $default = '', $watch = true, $extra_class = '')
     {
@@ -526,7 +578,7 @@ class Builder extends ZBuilder
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addFile($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
     {
@@ -562,7 +614,7 @@ class Builder extends ZBuilder
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addFiles($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
     {
@@ -592,7 +644,7 @@ class Builder extends ZBuilder
      * 添加分组
      * @param array $groups 分组数据
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addGroup($groups = [])
     {
@@ -628,7 +680,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addHidden($name = '', $default = '', $extra_class = '')
     {
@@ -656,7 +708,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addIcon($name = '', $title = '', $tips = '', $default = '', $extra_attr = '', $extra_class = '')
     {
@@ -688,7 +740,7 @@ class Builder extends ZBuilder
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addImage($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
     {
@@ -724,7 +776,7 @@ class Builder extends ZBuilder
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addImages($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
     {
@@ -759,7 +811,7 @@ class Builder extends ZBuilder
      * @param array $options 参数
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addJcrop($name = '', $title = '', $tips = '', $default = '', $options = [], $extra_class = '')
     {
@@ -807,7 +859,7 @@ class Builder extends ZBuilder
      *      比如$param为“key”
      *      那么请求数据的时候会发送参数key=某个下拉框选项值
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addLinkage($name = '', $title = '', $tips = '', $options = [], $default = '', $ajax_url = '', $next_items = '', $param = '')
     {
@@ -841,7 +893,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param array $fields 字段名，默认为id,name,pid
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addLinkages($name = '', $title = '', $tips = '', $table = '', $level = 2, $default = '', $fields = [])
     {
@@ -900,7 +952,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addMasked($name = '', $title = '', $tips = '', $format = '', $default = '', $extra_attr = '', $extra_class = '')
     {
@@ -935,7 +987,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addNumber($name = '', $title = '', $tips = '', $default = '', $min = '', $max = '', $step = '', $extra_attr = '', $extra_class = '')
     {
@@ -969,7 +1021,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addPassword($name = '', $title = '', $tips = '', $default = '', $extra_attr = '', $extra_class = '')
     {
@@ -1004,7 +1056,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this
+     * @return mixed
      */
     public function addRadio($name = '', $title = '', $tips = '', $options = [], $default = '', $attr = [], $extra_attr = '', $extra_class = '')
     {
@@ -1039,7 +1091,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addRange($name = '', $title = '', $tips = '', $default = '', $options = [], $extra_attr = '', $extra_class = '')
     {
@@ -1075,7 +1127,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addSelect($name = '', $title = '', $tips = '', $options = [], $default = '', $extra_attr = '', $extra_class = '')
     {
@@ -1113,7 +1165,7 @@ class Builder extends ZBuilder
      * @param array $value 值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addSort($name = '', $title = '', $tips = '', $value = [], $extra_class = '')
     {
@@ -1149,7 +1201,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addStatic($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
     {
@@ -1180,7 +1232,7 @@ class Builder extends ZBuilder
      * @param int $height 编辑器高度
      * @param string $extra_class
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addSummernote($name = '', $title = '', $tips = '', $default = '', $width = '100%', $height = 350, $extra_class = '')
     {
@@ -1216,7 +1268,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addSwitch($name = '', $title = '', $tips = '', $default = '', $attr = [], $extra_attr = '', $extra_class = '')
     {
@@ -1248,7 +1300,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addTags($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
     {
@@ -1279,7 +1331,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addText($name = '', $title = '', $tips = '', $default = '', $group = [], $extra_attr = '', $extra_class = '')
     {
@@ -1311,7 +1363,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addTextarea($name = '', $title = '', $tips = '', $default = '', $extra_attr = '', $extra_class = '')
     {
@@ -1343,7 +1395,7 @@ class Builder extends ZBuilder
      * @param string $extra_attr 额外属性
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addTime($name = '', $title = '', $tips = '', $default = '', $format = '', $extra_attr = '', $extra_class = '')
     {
@@ -1374,7 +1426,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addUeditor($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
     {
@@ -1403,7 +1455,7 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return $this|array
+     * @return mixed
      */
     public function addWangeditor($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
     {
@@ -1428,20 +1480,25 @@ class Builder extends ZBuilder
      * 添加表单项
      * 这个是addCheckbox等方法的别名方法，第一个参数传表单项类型，其余参数与各自方法中的参数一致
      * @param string $type 表单项类型
+     * @param string $name 表单项名
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addFormItem($type = '')
+    public function addFormItem($type = '', $name = '')
     {
-        // 获取所有参数值
-        $args = func_get_args();
-        array_shift($args);
+        if ($type != '') {
+            // 获取所有参数值
+            $args = func_get_args();
+            array_shift($args);
 
-        if (!empty($type)) {
+            // 判断是否有布局参数
+            if (strpos($type, ':')) {
+                list($type, $this->_vars['_layout'][$name]) = explode(':', $type);
+            }
+
             $method = 'add'. ucfirst($type);
             call_user_func_array([$this, $method], $args);
         }
-
         return $this;
     }
 
@@ -1469,17 +1526,19 @@ class Builder extends ZBuilder
      */
     public function setFormItems($items = [])
     {
-        // 额外已经构造好的表单项目与单个组装的的表单项目进行合并
-        $this->_vars['form_items'] = array_merge($this->_vars['form_items'], $items);
-        foreach ($items as $item) {
-            if ($item['type'] == 'group') {
-                foreach ($item['options'] as $group) {
-                    foreach ($group as $key => $value) {
-                        $this->loadMinify($group[$key]['type']);
+        if (!empty($items)) {
+            // 额外已经构造好的表单项目与单个组装的的表单项目进行合并
+            $this->_vars['form_items'] = array_merge($this->_vars['form_items'], $items);
+            foreach ($items as $item) {
+                if ($item['type'] == 'group') {
+                    foreach ($item['options'] as $group) {
+                        foreach ($group as $key => $value) {
+                            $this->loadMinify($group[$key]['type']);
+                        }
                     }
+                } else {
+                    $this->loadMinify($item['type']);
                 }
-            } else {
-                $this->loadMinify($item['type']);
             }
         }
         return $this;
@@ -1511,7 +1570,9 @@ class Builder extends ZBuilder
      */
     public function setFormData($form_data = [])
     {
-        $this->_vars['form_data'] = $form_data;
+        if (!empty($form_data)) {
+            $this->_vars['form_data'] = $form_data;
+        }
         return $this;
     }
 
@@ -1523,7 +1584,9 @@ class Builder extends ZBuilder
      */
     public function setExtraHtml($extra_html = '')
     {
-        $this->_vars['extra_html'] = $extra_html;
+        if ($extra_html != '') {
+            $this->_vars['extra_html'] = $extra_html;
+        }
         return $this;
     }
 
@@ -1535,7 +1598,9 @@ class Builder extends ZBuilder
      */
     public function setExtraJs($extra_js = '')
     {
-        $this->_vars['extra_js'] = $extra_js;
+        if ($extra_js != '') {
+            $this->_vars['extra_js'] = $extra_js;
+        }
         return $this;
     }
 
@@ -1547,7 +1612,9 @@ class Builder extends ZBuilder
      */
     public function setExtraCss($extra_css = '')
     {
-        $this->_vars['extra_css'] = $extra_css;
+        if ($extra_css != '') {
+            $this->_vars['extra_css'] = $extra_css;
+        }
         return $this;
     }
 
@@ -1559,7 +1626,9 @@ class Builder extends ZBuilder
      */
     public function layout($column = [])
     {
-        $this->_vars['_layout'] = $column;
+        if (!empty($column)) {
+            $this->_vars['_layout'] = array_merge($this->_vars['_layout'], $column);
+        }
         return $this;
     }
 
@@ -1571,7 +1640,9 @@ class Builder extends ZBuilder
      */
     public function js($files_name = '')
     {
-        $this->loadFile('js', $files_name);
+        if ($files_name != '') {
+            $this->loadFile('js', $files_name);
+        }
         return $this;
     }
 
@@ -1583,7 +1654,9 @@ class Builder extends ZBuilder
      */
     public function css($files_name = '')
     {
-        $this->loadFile('css', $files_name);
+        if ($files_name != '') {
+            $this->loadFile('css', $files_name);
+        }
         return $this;
     }
 
@@ -1625,7 +1698,9 @@ class Builder extends ZBuilder
      */
     public function setTemplate($template = '')
     {
-        $this->_template = $template;
+        if ($template != '') {
+            $this->_template = $template;
+        }
         return $this;
     }
 
@@ -1834,6 +1909,9 @@ class Builder extends ZBuilder
             sort($this->_vars['_js_init']);
             $this->_vars['_js_init'] = json_encode($this->_vars['_js_init']);
         }
+
+        // 处理额外按钮
+        $this->_vars['btn_extra'] = implode(' ', $this->_vars['btn_extra']);
 
         // 实例化视图并渲染
         return parent::fetch($this->_template, $this->_vars, $replace, $config);

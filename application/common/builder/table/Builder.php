@@ -81,9 +81,9 @@ class Builder extends ZBuilder
         'order_columns'      => [],       // 需要排序的列表头
         'filter_columns'     => [],       // 需要筛选功能的列表头
         'filter_map'         => [],       // 字段筛选的排序条件
-        '_field_display'     => '',       // 字段筛选的默认选项
-        '_filter_content'    => '',       // 字段筛选的默认选中值
-        '_filter'            => '',       // 字段筛选的默认字段名
+        '_field_display'     => [],       // 字段筛选的默认选项
+        '_filter_content'    => [],       // 字段筛选的默认选中值
+        '_filter'            => [],       // 字段筛选的默认字段名
         'top_buttons'        => [],       // 顶部栏按钮
         'right_buttons'      => [],       // 表格右侧按钮
         'search'             => [],       // 搜索参数
@@ -96,6 +96,8 @@ class Builder extends ZBuilder
         'js_list'            => [],       // js文件名
         'css_list'           => [],       // css文件名
         'validate'           => '',       // 快速编辑的验证器名
+        '_js_files'          => [],       // js文件
+        '_css_files'         => [],       // css文件
     ];
 
     /**
@@ -119,7 +121,9 @@ class Builder extends ZBuilder
      */
     public function setPageTitle($page_title = '')
     {
-        $this->_vars['page_title'] = $page_title;
+        if ($page_title != '') {
+            $this->_vars['page_title'] = $page_title;
+        }
         return $this;
     }
 
@@ -143,8 +147,10 @@ class Builder extends ZBuilder
      */
     public function setPageTips($tips = '', $type = 'info')
     {
-        $this->_vars['page_tips'] = $tips;
-        $this->_vars['tips_type'] = $type;
+        if ($tips != '') {
+            $this->_vars['page_tips'] = $tips;
+            $this->_vars['tips_type'] = $type;
+        }
         return $this;
     }
 
@@ -156,8 +162,10 @@ class Builder extends ZBuilder
      */
     public function addOrder($column = [])
     {
-        $column = is_array($column) ? $column : explode(',', $column);
-        $this->_vars['order_columns'] = array_merge($this->_vars['order_columns'], $column);
+        if (!empty($column)) {
+            $column = is_array($column) ? $column : explode(',', $column);
+            $this->_vars['order_columns'] = array_merge($this->_vars['order_columns'], $column);
+        }
         return $this;
     }
 
@@ -171,34 +179,36 @@ class Builder extends ZBuilder
      */
     public function addFilter($columns = [], $options = [], $default = [])
     {
-        $columns = is_array($columns) ? $columns : explode(',', $columns);
-        $this->_vars['filter_columns'] = array_merge($this->_vars['filter_columns'], $columns);
-        // 存储对应的字段选项
-        if (!empty($options) && is_array($options)) {
-            foreach ($columns as $key => $column) {
-                if (is_numeric($key)) {
-                    cache('filter_options_'.$column, $options);
-                    $this->_filter_options[$column] = 'filter_options_'.$column;
-                } else {
-                    cache('filter_options_'.$key, $options);
-                    $this->_filter_options[$key] = 'filter_options_'.$key;
+        if (!empty($columns)) {
+            $columns = is_array($columns) ? $columns : explode(',', $columns);
+            $this->_vars['filter_columns'] = array_merge($this->_vars['filter_columns'], $columns);
+            // 存储对应的字段选项
+            if (!empty($options) && is_array($options)) {
+                foreach ($columns as $key => $column) {
+                    if (is_numeric($key)) {
+                        cache('filter_options_'.$column, $options);
+                        $this->_filter_options[$column] = 'filter_options_'.$column;
+                    } else {
+                        cache('filter_options_'.$key, $options);
+                        $this->_filter_options[$key] = 'filter_options_'.$key;
+                    }
                 }
             }
-        }
-        // 处理默认选项和值
-        if (!empty($default) && is_array($default)) {
-            foreach ($default as $display => $content) {
-                if (strpos($display, '|')) {
-                    list($display, $filter) = explode('|', $display);
-                } else {
-                    $filter = $display;
+            // 处理默认选项和值
+            if (!empty($default) && is_array($default)) {
+                foreach ($default as $display => $content) {
+                    if (strpos($display, '|')) {
+                        list($display, $filter) = explode('|', $display);
+                    } else {
+                        $filter = $display;
+                    }
+                    if (strpos($display, '.')) {
+                        $display = explode('.', $display)[1];
+                    }
+                    $this->_vars['_field_display'][]  = $display;
+                    $this->_vars['_filter'][]         = $filter;
+                    $this->_vars['_filter_content'][] = is_array($content) ? implode(',', $content) : $content;
                 }
-                if (strpos($display, '.')) {
-                    $display = explode('.', $display)[1];
-                }
-                $this->_vars['_field_display'][]  = $display;
-                $this->_vars['_filter'][]         = $filter;
-                $this->_vars['_filter_content'][] = is_array($content) ? implode(',', $content) : $content;
             }
         }
         return $this;
@@ -213,23 +223,25 @@ class Builder extends ZBuilder
      */
     public function addFilterMap($fields = '', $map = [])
     {
-        if (is_array($fields)) {
-            $this->_vars['filter_map'] = array_merge($this->_vars['filter_map'], $fields);
-        } else {
-            if (strpos($fields, ',')) {
-                $fields = explode(',', $fields);
-                foreach ($fields as $field) {
-                    if (isset($this->_vars['filter_map'][$field])) {
-                        $this->_vars['filter_map'][$field] = array_merge($this->_vars['filter_map'][$field], $map);
-                    } else {
-                        $this->_vars['filter_map'][$field] = $map;
-                    }
-                }
+        if ($fields != '') {
+            if (is_array($fields)) {
+                $this->_vars['filter_map'] = array_merge($this->_vars['filter_map'], $fields);
             } else {
-                if (isset($this->_vars['filter_map'][$fields])) {
-                    $this->_vars['filter_map'][$fields] = array_merge($this->_vars['filter_map'][$fields], $map);
+                if (strpos($fields, ',')) {
+                    $fields = explode(',', $fields);
+                    foreach ($fields as $field) {
+                        if (isset($this->_vars['filter_map'][$field])) {
+                            $this->_vars['filter_map'][$field] = array_merge($this->_vars['filter_map'][$field], $map);
+                        } else {
+                            $this->_vars['filter_map'][$field] = $map;
+                        }
+                    }
                 } else {
-                    $this->_vars['filter_map'][$fields] = $map;
+                    if (isset($this->_vars['filter_map'][$fields])) {
+                        $this->_vars['filter_map'][$fields] = array_merge($this->_vars['filter_map'][$fields], $map);
+                    } else {
+                        $this->_vars['filter_map'][$fields] = $map;
+                    }
                 }
             }
         }
@@ -262,8 +274,10 @@ class Builder extends ZBuilder
      */
     public function addValidate($validate = '', $fields = '')
     {
-        $this->_vars['validate']        = $validate;
-        $this->_vars['validate_fields'] = $fields;
+        if ($validate != '') {
+            $this->_vars['validate']        = $validate;
+            $this->_vars['validate_fields'] = $fields;
+        }
         return $this;
     }
 
@@ -276,10 +290,12 @@ class Builder extends ZBuilder
      */
     public function replaceRightButton($map = [], $content = '')
     {
-        $this->_replace_right_buttons[] = [
-            'map'     => $map,
-            'content' => $content
-        ];
+        if (!empty($map)) {
+            $this->_replace_right_buttons[] = [
+                'map'     => $map,
+                'content' => $content
+            ];
+        }
         return $this;
     }
 
@@ -294,44 +310,46 @@ class Builder extends ZBuilder
      */
     public function autoAdd($items = [], $table = '', $validate = '', $auto_time = '')
     {
-        cookie('__forward__', $_SERVER['REQUEST_URI']);
-        // 默认属性
-        $btn_attribute = [
-            'title' => '新增',
-            'icon'  => 'fa fa-plus-circle',
-            'class' => 'btn btn-primary',
-            'href'  => url(
-                $this->_module.'/'.$this->_controller.'/add'
-            ),
-        ];
+        if (!empty($items)) {
+            cookie('__forward__', $_SERVER['REQUEST_URI']);
+            // 默认属性
+            $btn_attribute = [
+                'title' => '新增',
+                'icon'  => 'fa fa-plus-circle',
+                'class' => 'btn btn-primary',
+                'href'  => url(
+                    $this->_module.'/'.$this->_controller.'/add'
+                ),
+            ];
 
-        // 缓存名称
-        $cache_name = strtolower($this->_module.'/'.$this->_controller.'/add');
+            // 缓存名称
+            $cache_name = strtolower($this->_module.'/'.$this->_controller.'/add');
 
-        // 自动插入时间
-        if ($auto_time != '') {
-            $auto_time = $auto_time === true ? ['create_time', 'update_time'] : explode(',', $auto_time);
+            // 自动插入时间
+            if ($auto_time != '') {
+                $auto_time = $auto_time === true ? ['create_time', 'update_time'] : explode(',', $auto_time);
+            }
+
+            // 表单缓存数据
+            $form = [
+                'items'     => $items,
+                'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
+                'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
+                'auto_time' => $auto_time
+            ];
+
+            // 开发模式
+            if (config('develop_mode')) {
+                Cache::set($cache_name, $form);
+            }
+
+            if (!Cache::get($cache_name)) {
+                Cache::set($cache_name, $form);
+            }
+
+            // 添加到按钮组
+            $this->_vars['top_buttons'][] = $btn_attribute;
         }
-
-        // 表单缓存数据
-        $form = [
-            'items'     => $items,
-            'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
-            'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
-            'auto_time' => $auto_time
-        ];
-
-        // 开发模式
-        if (config('develop_mode')) {
-            Cache::set($cache_name, $form);
-        }
-
-        if (!Cache::get($cache_name)) {
-            Cache::set($cache_name, $form);
-        }
-
-        // 添加到按钮组
-        $this->_vars['top_buttons'][] = $btn_attribute;
         return $this;
     }
 
@@ -457,6 +475,9 @@ class Builder extends ZBuilder
                     'href'        => 'javascript:void(0);'
                 ];
                 break;
+
+            default:
+                $this->error('未知的按钮类型');
         }
 
         // 合并自定义属性
@@ -488,7 +509,7 @@ class Builder extends ZBuilder
      */
     public function addTopButtons($buttons = [])
     {
-        if ($buttons) {
+        if (!empty($buttons)) {
             $buttons = is_array($buttons) ? $buttons : explode(',', $buttons);
             foreach ($buttons as $key => $value) {
                 if (is_numeric($key)) {
@@ -512,46 +533,48 @@ class Builder extends ZBuilder
      */
     public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '')
     {
-        cookie('__forward__', $_SERVER['REQUEST_URI']);
-        // 默认属性
-        $btn_attribute = [
-            'title' => '编辑',
-            'icon'  => 'fa fa-pencil',
-            'class' => 'btn btn-xs btn-default',
-            'href'  => url(
-                $this->_module.'/'.$this->_controller.'/edit',
-                ['id' => '__id__']
-            ),
-            'target' => '_self'
-        ];
+        if (!empty($items)) {
+            cookie('__forward__', $_SERVER['REQUEST_URI']);
+            // 默认属性
+            $btn_attribute = [
+                'title' => '编辑',
+                'icon'  => 'fa fa-pencil',
+                'class' => 'btn btn-xs btn-default',
+                'href'  => url(
+                    $this->_module.'/'.$this->_controller.'/edit',
+                    ['id' => '__id__']
+                ),
+                'target' => '_self'
+            ];
 
-        // 缓存名称
-        $cache_name = strtolower($this->_module.'/'.$this->_controller.'/edit');
+            // 缓存名称
+            $cache_name = strtolower($this->_module.'/'.$this->_controller.'/edit');
 
-        // 自动插入时间
-        if ($auto_time != '') {
-            $auto_time = $auto_time === true ? ['update_time'] : explode(',', $auto_time);
+            // 自动插入时间
+            if ($auto_time != '') {
+                $auto_time = $auto_time === true ? ['update_time'] : explode(',', $auto_time);
+            }
+
+            // 表单缓存数据
+            $form = [
+                'items'     => $items,
+                'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
+                'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
+                'auto_time' => $auto_time
+            ];
+
+            // 开发模式
+            if (config('develop_mode')) {
+                Cache::set($cache_name, $form);
+            }
+
+            if (!Cache::get($cache_name)) {
+                Cache::set($cache_name, $form);
+            }
+
+            // 添加到按钮组
+            $this->_vars['right_buttons'][] = $btn_attribute;
         }
-
-        // 表单缓存数据
-        $form = [
-            'items'     => $items,
-            'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
-            'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
-            'auto_time' => $auto_time
-        ];
-
-        // 开发模式
-        if (config('develop_mode')) {
-            Cache::set($cache_name, $form);
-        }
-
-        if (!Cache::get($cache_name)) {
-            Cache::set($cache_name, $form);
-        }
-
-        // 添加到按钮组
-        $this->_vars['right_buttons'][] = $btn_attribute;
         return $this;
     }
 
@@ -673,6 +696,9 @@ class Builder extends ZBuilder
                     'href'  => 'javascript:void(0);'
                 ];
                 break;
+
+            default:
+                $this->error('未知的按钮类型');
         }
 
         // 合并自定义属性
@@ -704,7 +730,7 @@ class Builder extends ZBuilder
      */
     public function addRightButtons($buttons = [])
     {
-        if ($buttons) {
+        if (!empty($buttons)) {
             $buttons = is_array($buttons) ? $buttons : explode(',', $buttons);
             foreach ($buttons as $key => $value) {
                 if (is_numeric($key)) {
@@ -746,7 +772,9 @@ class Builder extends ZBuilder
      */
     public function js($files_name = '')
     {
-        $this->loadFile('js', $files_name);
+        if ($files_name != '') {
+            $this->loadFile('js', $files_name);
+        }
         return $this;
     }
 
@@ -758,7 +786,9 @@ class Builder extends ZBuilder
      */
     public function css($files_name = '')
     {
-        $this->loadFile('css', $files_name);
+        if ($files_name != '') {
+            $this->loadFile('css', $files_name);
+        }
         return $this;
     }
 
@@ -788,7 +818,9 @@ class Builder extends ZBuilder
      */
     public function setTableName($table = '')
     {
-        $this->_table_name = $table;
+        if ($table != '') {
+            $this->_table_name = $table;
+        }
         return $this;
     }
 
@@ -800,7 +832,9 @@ class Builder extends ZBuilder
      */
     public function setPluginName($plugin_name = '')
     {
-        $this->_plugin_name = $plugin_name;
+        if ($plugin_name != '') {
+            $this->_plugin_name = $plugin_name;
+        }
         return $this;
     }
 
@@ -854,13 +888,15 @@ class Builder extends ZBuilder
      */
     public function setRowList($row_list = [])
     {
-        if (is_array($row_list) && !empty($row_list)) {
-            $this->_vars['row_list'] = $row_list;
-        } elseif (is_object($row_list) && !$row_list->isEmpty()) {
-            $this->_vars['row_list']   = is_object(current($row_list->getIterator())) ? $row_list : $row_list->all();
-            $this->_vars['_page_info'] = $row_list;
-            // 设置分页
-            $this->setPages($row_list->render());
+        if (!empty($row_list)) {
+            if (is_array($row_list) && !empty($row_list)) {
+                $this->_vars['row_list'] = $row_list;
+            } elseif (is_object($row_list) && !$row_list->isEmpty()) {
+                $this->_vars['row_list']   = is_object(current($row_list->getIterator())) ? $row_list : $row_list->all();
+                $this->_vars['_page_info'] = $row_list;
+                // 设置分页
+                $this->setPages($row_list->render());
+            }
         }
         return $this;
     }
@@ -873,7 +909,9 @@ class Builder extends ZBuilder
      */
     public function setPrimaryKey($key = '')
     {
-        $this->_vars['primary_key'] = $key;
+        if ($key != '') {
+            $this->_vars['primary_key'] = $key;
+        }
         return $this;
     }
 
@@ -903,7 +941,9 @@ class Builder extends ZBuilder
      */
     public function setPages($pages = '')
     {
-        $this->_vars['pages'] = $pages;
+        if ($pages != '') {
+            $this->_vars['pages'] = $pages;
+        }
         return $this;
     }
 
@@ -926,7 +966,9 @@ class Builder extends ZBuilder
      */
     public function setExtraHtml($extra_html = '')
     {
-        $this->_vars['extra_html'] = $extra_html;
+        if ($extra_html != '') {
+            $this->_vars['extra_html'] = $extra_html;
+        }
         return $this;
     }
 
@@ -938,7 +980,9 @@ class Builder extends ZBuilder
      */
     public function setExtraJs($extra_js = '')
     {
-        $this->_vars['extra_js'] = $extra_js;
+        if ($extra_js != '') {
+            $this->_vars['extra_js'] = $extra_js;
+        }
         return $this;
     }
 
@@ -950,7 +994,9 @@ class Builder extends ZBuilder
      */
     public function setExtraCss($extra_css = '')
     {
-        $this->_vars['extra_css'] = $extra_css;
+        if ($extra_css != '') {
+            $this->_vars['extra_css'] = $extra_css;
+        }
         return $this;
     }
 
@@ -962,7 +1008,9 @@ class Builder extends ZBuilder
      */
     public function setTemplate($template = '')
     {
-        $this->_template = $template;
+        if ($template != '') {
+            $this->_template = $template;
+        }
         return $this;
     }
 
@@ -1382,15 +1430,9 @@ class Builder extends ZBuilder
         }
 
         // 处理字段筛选默认选项
-        if ($this->_vars['_filter_content']) {
-            $this->_vars['_filter_content'] = implode('|', $this->_vars['_filter_content']);
-        }
-        if ($this->_vars['_field_display']) {
-            $this->_vars['_field_display'] = implode(',', $this->_vars['_field_display']);
-        }
-        if ($this->_vars['_filter']) {
-            $this->_vars['_filter'] = implode('|', $this->_vars['_filter']);
-        }
+        $this->_vars['_filter_content'] = implode('|', $this->_vars['_filter_content']);
+        $this->_vars['_field_display']  = implode(',', $this->_vars['_field_display']);
+        $this->_vars['_filter']         = implode('|', $this->_vars['_filter']);
 
         // 处理字段排序
         if ($this->_vars['order_columns']) {

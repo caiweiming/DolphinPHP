@@ -1,4 +1,4 @@
-<div class="row">
+<div>
     <div class="col-sm-12">
         <div class="block block-bordered">
             <ul class="nav nav-tabs" data-toggle="tabs">
@@ -16,6 +16,11 @@
                             {case value="bmap"}
                                 {// 百度地图 }
                                 {include file="./application/common/builder/form/items/bmap.html" type="_group" /}
+                            {/case}
+
+                            {case value="button"}
+                                {// 按钮 }
+                                {include file="./application/common/builder/form/items/button.html" type="_group" /}
                             {/case}
 
                             {case value="checkbox"}
