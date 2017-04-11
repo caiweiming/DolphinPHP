@@ -1,7 +1,7 @@
 <div>
     <div class="col-sm-12">
         <div class="block block-bordered">
-            <ul class="nav nav-tabs" data-toggle="tabs">
+            <ul class="nav nav-tabs" data-toggle="tabs" id="builder-form-group-tab">
                 {volist name="form.options" id="item" key="items_key"}
                 <li {eq name="items_key" value="1"}class="active"{/eq}>
                 <a href="#tab-{$items_key}">{$key|htmlspecialchars}</a>

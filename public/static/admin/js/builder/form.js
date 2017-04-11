@@ -4,6 +4,8 @@
  *  Description: 表单构建器
  */
 jQuery(document).ready(function() {
+    // 文件上传集合
+    var webuploader = [];
     // editordm编辑器集合
     var editormds   = {};
     // ueditor编辑器集合
@@ -553,6 +555,9 @@ jQuery(document).ready(function() {
             }
             $(this).closest('.file-item').remove();
         });
+
+        // 将上传实例存起来
+        webuploader.push(uploader);
     });
 
     // 图片上传
@@ -719,6 +724,9 @@ jQuery(document).ready(function() {
                 enabled: true
             }
         });
+
+        // 将上传实例存起来
+        webuploader.push(uploader);
     });
 
     // 排序
@@ -951,4 +959,11 @@ jQuery(document).ready(function() {
             }
         });
     }
+
+    // 切换分组时，重新初始化上传组件
+    $('#builder-form-group-tab a').click(function () {
+        $.each(webuploader, function(index, el){
+            el.refresh();
+        });
+    });
 });
