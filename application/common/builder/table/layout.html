@@ -112,7 +112,7 @@
                                     {/if}
 
                                     {volist name="columns" id="column"}
-                                    <th class="{$column.class|default=''}">
+                                    <th class="column-{$column['name']} {$column.class|default=''}">
                                         {// 字段标题}
                                         {$column.title|default=''|htmlspecialchars}
 
