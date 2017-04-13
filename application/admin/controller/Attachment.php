@@ -86,6 +86,8 @@ class Attachment extends Admin
      */
     public function upload($dir = '', $from = '', $module = '')
     {
+        // 临时取消执行时间限制
+        set_time_limit(0);
         if ($dir == '')         return $this->error('没有指定上传目录');
         if ($from == 'ueditor') return $this->ueditor();
         if ($from == 'jcrop')   return $this->jcrop();
