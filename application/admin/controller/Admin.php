@@ -41,6 +41,11 @@ class Admin extends Common
         // 设置分页参数
         $this->setPageParam();
 
+        // 后台公共模板
+        $this->assign('_admin_base_layout', config('admin_base_layout'));
+        // 当前配色方案
+        $this->assign('system_color', config('system_color'));
+
         // 如果不是ajax请求，则读取菜单
         if (!$this->request->isAjax()) {
             // 读取顶部菜单
@@ -51,10 +56,6 @@ class Admin extends Common
             $this->assign('_sidebar_menus', MenuModel::getSidebarMenu());
             // 获取面包屑导航
             $this->assign('_location', MenuModel::getLocation('', true));
-            // 后台公共模板
-            $this->assign('_admin_base_layout', config('admin_base_layout'));
-            // 当前配色方案
-            $this->assign('system_color', config('system_color'));
             // 构建侧栏
             $settings = [
                 [

@@ -300,6 +300,7 @@
                 <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
                 <a href="javascript:void(0)" title="打开/关闭左侧导航" data-toggle="layout" data-action="sidebar_mini_toggle"><i class="fa fa-bars"></i></a>
             </li>
+            {notempty name="_top_menus"}
             {volist name="_top_menus" id="menu"}
             <li class="hidden-xs hidden-sm {$menu['id'] == $_location[0]['id'] ?= 'active'}">
                 {eq name="menu.url_type" value="module"}
@@ -309,6 +310,7 @@
                 {/eq}
             </li>
             {/volist}
+            {/notempty}
             <li>
                 <!-- Opens the Apps modal found at the bottom of the page, before including JS code -->
                 <a href="#" data-toggle="modal" data-target="#apps-modal"><i class="si si-grid"></i></a>
@@ -335,9 +337,11 @@
                 <div class="col-sm-5 text-right hidden-xs">
                     <ol class="breadcrumb push-10-t">
                         <li><i class="fa fa-map-marker"></i></li>
+                        {notempty name="_location"}
                         {volist name="_location" id="v"}
                         <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{$v.url_value|url}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>
                         {/volist}
+                        {/notempty}
                     </ol>
                 </div>
             </div>
@@ -389,6 +393,7 @@
                 </div>
                 <div class="block-content">
                     <div class="row text-center">
+                        {notempty name="_top_menus_all"}
                         {volist name="_top_menus_all" id="menu"}
                         <div class="col-xs-6 col-sm-3">
                             {eq name="menu.url_type" value="module"}
@@ -408,6 +413,7 @@
                             {/eq}
                         </div>
                         {/volist}
+                        {/notempty}
                     </div>
                 </div>
             </div>
