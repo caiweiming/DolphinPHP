@@ -1112,7 +1112,9 @@ class Builder extends ZBuilder
                     }
 
                     // 备份原数据
-                    $row['__'.$column['name'].'__'] = $row[$column['name']];
+                    if (isset($row[$column['name']])) {
+                        $row['__'.$column['name'].'__'] = $row[$column['name']];
+                    }
 
                     switch ($column['type']) {
                         case 'link': // 链接
