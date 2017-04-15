@@ -1097,7 +1097,8 @@ class Builder extends ZBuilder
             // 编译单元格数据类型
             if ($this->_vars['columns']) {
                 // 另外拷贝一份主键值，以免将主键设置为快速编辑的时候解析出错
-                $row['_primary_key_value'] = $row[$this->_vars['primary_key']];
+                $row['_primary_key_value'] = isset($row[$this->_vars['primary_key']]) ? $row[$this->_vars['primary_key']] : '';
+
                 foreach ($this->_vars['columns'] as $column) {
                     $_name       = $column['name'];
                     $_table_name = $this->_table_name;

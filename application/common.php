@@ -686,7 +686,7 @@ if (!function_exists('get_plugin_model')) {
      * 获取插件模型实例
      * @param  string $name 插件名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return string
+     * @return object
      */
     function get_plugin_model($name)
     {
