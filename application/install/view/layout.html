@@ -39,7 +39,7 @@
 
 <!-- Install Footer -->
 <div class="push-10-t push-10 text-center animated fadeInUp">
-    <small class="text-white-op font-w600">2016-2017 &copy; DolphinPHP 1.0.0</small>
+    <small class="text-white-op font-w600">2016-2017 &copy; DolphinPHP 1.0.2</small>
 </div>
 <!-- END Install Footer -->
 <!-- Pop Out Modal -->
@@ -88,7 +88,7 @@
             jQuery('#next').prop('disabled', !$('#agreement').prop('checked'));
         });
         jQuery('#next').click(function () {
-            location.href = '{$Request.baseFile}/index/step2';
+            location.href = '{$Request.baseFile}?s=/index/step2.html';
         });
     });
 </script>

@@ -59,10 +59,10 @@ class Index extends Controller
      */
     public function step2()
     {
-        if (session('step') != 1 && session('step') != 3) $this->redirect('index');
+        if (session('step') != 1 && session('step') != 3) $this->redirect('/');
         if(session('reinstall')){
             session('step', 2);
-            $this->redirect('step4');
+            $this->redirect('/index.php?s=/index/step4.html');
         }else{
             session('error', false);
 
@@ -97,10 +97,10 @@ class Index extends Controller
             if (session('error')) {
                 $this->error('环境检测没有通过，请调整环境后重试！');
             } else {
-                $this->success('恭喜您环境检测通过', 'step3');
+                $this->success('恭喜您环境检测通过', '/index.php?s=/index/step3.html');
             }
         }
-        if (session('step') != 2) $this->redirect('index');
+        if (session('step') != 2) $this->redirect('/');
         session('error', false);
         session('step', 3);
         return $this->fetch();
@@ -157,10 +157,10 @@ class Index extends Controller
             $db_instance->execute($sql) || $this->error($db_instance->getError());
 
             // 跳转到数据库安装页面
-            $this->success('参数正确开始安装', 'step4');
+            $this->success('参数正确开始安装', '/index.php?s=/index/step4.html');
         } else {
             if (session('step') != 3 && !session('reinstall')) {
-                $this->redirect('index');
+                $this->redirect('/');
             }
 
             session('step', 4);
@@ -176,11 +176,11 @@ class Index extends Controller
     public function complete()
     {
         if (session('step') != 4) {
-            $this->error('请按步骤安装系统', 'index');
+            $this->error('请按步骤安装系统', '/');
         }
 
         if (session('error')) {
-            $this->error('安装出错，请重新安装！', 'index');
+            $this->error('安装出错，请重新安装！', '/');
         } else {
             // 写入安装锁定文件(只能在最后一步写入锁定文件，因为锁定文件写入后安装模块将无法访问)
             file_put_contents('./data/install.lock', 'lock');

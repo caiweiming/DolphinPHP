@@ -35,6 +35,6 @@
     // 创建配置文件
     $conf = write_config($db_config);
 
-    echo "<script type=\"text/javascript\">location.href='". url('complete') ."'</script>";
+    echo "<script type=\"text/javascript\">location.href='". request()->baseFile() ."?s=/index/complete.html'</script>";
     {/php}
 {/block}
