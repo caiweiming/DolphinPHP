@@ -927,6 +927,8 @@ jQuery(document).ready(function() {
                                 $form_item.find("[name='"+$targets[item]+"']:checked").prop('checked', false).trigger("change");
                             } else if ($form_item.find("[name='"+$targets[item]+"[]']").attr('type') == 'checkbox') {
                                 $form_item.find("[name='"+$targets[item]+"[]']:checked").prop('checked', false).trigger("change");
+                            } else if ($form_item.find("[name='"+$targets[item]+"']").attr('data-ext') != undefined) {
+                                $form_item.find("[name='"+$targets[item]+"']").val(null);
                             } else {
                                 $form_item.find("[name^='"+$targets[item]+"']").val(null).trigger("change");
                             }
