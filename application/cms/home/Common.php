@@ -30,47 +30,46 @@ class Common extends Home
         parent::_initialize();
 
         // 获取菜单
-        $this->assign('main_nav', $this->getNav('顶部导航'));
-        $this->assign('about_nav', $this->getNav('关于'));
-        $this->assign('support_nav', $this->getNav('服务与支持'));
+        $this->getNav();
+        // 获取滚动图片
         $this->assign('slider', $this->getSlider());
+        // 获取客服
         $this->assign('support', $this->getSupport());
     }
 
     /**
      * 获取导航
-     * @param string $title 导航标题
      * @author 蔡伟明 <314013107@qq.com>
-     * @return string
      */
-    private function getNav($title = '')
+    private function getNav()
     {
-        if ($title == '') return [];
+        $list_nav = Db::name('cms_nav')->where('status', 1)->column('id,tag');
 
-        $data_list = Db::view('cms_menu', true)
-            ->view('cms_nav', ['title' => 'nav_title'], 'cms_menu.nid=cms_nav.id', 'left')
-            ->view('cms_column', ['name' => 'column_name'], 'cms_menu.column=cms_column.id', 'left')
-            ->view('cms_page', ['title' => 'page_title'], 'cms_menu.page=cms_page.id', 'left')
-            ->where('cms_nav.title', $title)
-            ->where('cms_menu.status', 1)
-            ->order('cms_menu.sort,cms_menu.pid,cms_menu.id')
-            ->select();
+        foreach ($list_nav as $id => $tag) {
+            $data_list = Db::view('cms_menu', true)
+                ->view('cms_column', ['name' => 'column_name'], 'cms_menu.column=cms_column.id', 'left')
+                ->view('cms_page', ['title' => 'page_title'], 'cms_menu.page=cms_page.id', 'left')
+                ->where('cms_menu.nid', $id)
+                ->where('cms_menu.status', 1)
+                ->order('cms_menu.sort,cms_menu.pid,cms_menu.id')
+                ->select();
 
-        foreach ($data_list as &$item) {
-            if ($item['type'] == 0) { // 栏目链接
-                $item['title'] = $item['column_name'];
-                $item['url'] = url('cms/column/index', ['id' => $item['column']]);
-            } elseif ($item['type'] == 1) { // 单页链接
-                $item['title'] = $item['page_title'];
-                $item['url'] = url('cms/page/detail', ['id' => $item['page']]);
-            } else {
-                if ($item['url'] != '#' && substr($item['url'], 0, 4) != 'http') {
-                    $item['url'] = url($item['url']);
+            foreach ($data_list as &$item) {
+                if ($item['type'] == 0) { // 栏目链接
+                    $item['title'] = $item['column_name'];
+                    $item['url'] = url('cms/column/index', ['id' => $item['column']]);
+                } elseif ($item['type'] == 1) { // 单页链接
+                    $item['title'] = $item['page_title'];
+                    $item['url'] = url('cms/page/detail', ['id' => $item['page']]);
+                } else {
+                    if ($item['url'] != '#' && substr($item['url'], 0, 4) != 'http') {
+                        $item['url'] = url($item['url']);
+                    }
                 }
             }
-        }
 
-        return Tree::toLayer($data_list);
+            $this->assign($tag, Tree::toLayer($data_list));
+        }
     }
 
     /**

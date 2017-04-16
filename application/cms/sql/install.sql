@@ -201,11 +201,17 @@ CREATE TABLE `dp_cms_menu` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- -----------------------------
 -- 表数据 `dp_cms_menu`
 -- -----------------------------
+INSERT INTO `dp_cms_menu` VALUES ('1', '1', '0', '0', '0', '2', '首页', 'cms/index/index', '', '', '_self', '1492345605', '1492345605', '100', '1');
+INSERT INTO `dp_cms_menu` VALUES ('2', '2', '0', '0', '0', '2', '关于我们', 'http://www.dolphinphp.com', '', '', '_self', '1492346763', '1492346763', '100', '1');
+INSERT INTO `dp_cms_menu` VALUES ('3', '3', '0', '0', '0', '2', '开发文档', 'http://www.kancloud.cn/ming5112/dolphinphp', '', '', '_self', '1492346812', '1492346812', '100', '1');
+INSERT INTO `dp_cms_menu` VALUES ('4', '3', '0', '0', '0', '2', '开发者社区', 'http://bbs.dolphinphp.com/', '', '', '_self', '1492346832', '1492346832', '100', '1');
+INSERT INTO `dp_cms_menu` VALUES ('5', '1', '0', '0', '0', '2', '二级菜单', 'http://www.dolphinphp.com', '', '', '_self', '1492347372', '1492347510', '100', '1');
+INSERT INTO `dp_cms_menu` VALUES ('6', '1', '5', '0', '0', '2', '子菜单', 'http://www.dolphinphp.com', '', '', '_self', '1492347388', '1492347520', '100', '1');
 
 -- -----------------------------
 -- 表结构 `dp_cms_model`
@@ -224,7 +230,7 @@ CREATE TABLE `dp_cms_model` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容模型表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='内容模型表';
 
 -- -----------------------------
 -- 表结构 `dp_cms_nav`
@@ -232,16 +238,20 @@ CREATE TABLE `dp_cms_model` (
 DROP TABLE IF EXISTS `dp_cms_nav`;
 CREATE TABLE `dp_cms_nav` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tag` varchar(32) NOT NULL DEFAULT '' COMMENT '导航标识',
   `title` varchar(32) NOT NULL DEFAULT '' COMMENT '菜单标题',
   `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='导航表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='导航表';
 
 -- -----------------------------
 -- 表数据 `dp_cms_nav`
 -- -----------------------------
+INSERT INTO `dp_cms_nav` VALUES ('1', 'main_nav', '顶部导航', '1492345083', '1492345083', '1');
+INSERT INTO `dp_cms_nav` VALUES ('2', 'about_nav', '底部关于', '1492346685', '1492346685', '1');
+INSERT INTO `dp_cms_nav` VALUES ('3', 'support_nav', '服务与支持', '1492346715', '1492346715', '1');
 
 -- -----------------------------
 -- 表结构 `dp_cms_page`

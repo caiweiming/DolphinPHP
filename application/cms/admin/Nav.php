@@ -48,6 +48,7 @@ class Nav extends Admin
             ->setSearch(['title' => '标题'])// 设置搜索框
             ->addColumns([ // 批量添加数据列
                 ['id', 'ID'],
+                ['tag', '标识', 'text.edit'],
                 ['title', '标题', 'text.edit'],
                 ['create_time', '创建时间', 'datetime'],
                 ['update_time', '更新时间', 'datetime'],
@@ -59,7 +60,7 @@ class Nav extends Admin
             ->addRightButton('delete', ['data-tips' => '删除后无法恢复。'])// 批量添加右侧按钮
             ->addOrder('id,title,create_time,update_time')
             ->setRowList($data_list)// 设置表格数据
-            ->addValidate('Nav', 'title')
+            ->addValidate('Nav', 'tag,title')
             ->fetch(); // 渲染模板
     }
 
@@ -91,6 +92,7 @@ class Nav extends Admin
         // 显示添加页面
         return ZBuilder::make('form')
             ->addFormItems([
+                ['text', 'tag', '菜单标识', '由字母和下划线组成，如：main_nav'],
                 ['text', 'title', '菜单标题', '必填'],
                 ['radio', 'status', '立即启用', '', ['否', '是'], 1]
             ])
