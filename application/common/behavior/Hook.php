@@ -53,8 +53,8 @@ class Hook
 
         if ($hook_plugins) {
             foreach ($hook_plugins as $value) {
-                if (isset($hooks[$value->hook]) && isset($plugins[$value->plugin])) {
-                    \think\Hook::add($value->hook, get_plugin_class($value->plugin));
+                if (isset($hooks[$value['hook']]) && isset($plugins[$value['plugin']])) {
+                    \think\Hook::add($value['hook'], get_plugin_class($value['plugin']));
                 }
             }
         }
