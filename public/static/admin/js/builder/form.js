@@ -161,6 +161,9 @@ jQuery(document).ready(function() {
             // 创建标注
             create_mark(point);
         }
+        if(address.val()!=''){
+            ac.setInputValue(address.val())
+        }
     });
 
     // 图片裁剪
