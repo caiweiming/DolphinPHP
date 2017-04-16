@@ -360,6 +360,9 @@ class Index extends Admin
     public function setStatus($type = '', $record = [])
     {
         $ids        = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
+        if ((is_array($ids) && in_array(UID, $ids)) || $ids == UID) {
+            $this->error('禁止操作当前账号');
+        }
         $uid_delete = is_array($ids) ? '' : $ids;
         $ids        = array_map('get_nickname', (array)$ids);
         return parent::setStatus($type, ['user_'.$type, 'admin_user', $uid_delete, UID, implode('、', $ids)]);
@@ -374,6 +377,7 @@ class Index extends Admin
     public function quickEdit($record = [])
     {
         $id      = input('post.pk', '');
+        $id      == UID && $this->error('禁止操作当前账号');
         $field   = input('post.name', '');
         $value   = input('post.value', '');
         $config  = UserModel::where('id', $id)->value($field);
