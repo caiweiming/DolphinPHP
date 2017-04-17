@@ -486,9 +486,12 @@ class Builder extends ZBuilder
         }
 
         // 是否为弹出框方式
-        if ($pop) {
+        if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
-            $btn_attribute['href'] .= '?_pop=1';
+            $btn_attribute['href']  .= '?_pop=1';
+            if (is_array($pop)) {
+                $btn_attribute['data-layer'] = json_encode($pop);
+            }
         }
 
         $this->_vars['top_buttons'][] = $btn_attribute;
@@ -707,9 +710,12 @@ class Builder extends ZBuilder
         }
 
         // 是否为弹出框方式
-        if ($pop) {
+        if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
-            $btn_attribute['href'] .= '?_pop=1';
+            $btn_attribute['href']  .= '?_pop=1';
+            if (is_array($pop)) {
+                $btn_attribute['data-layer'] = json_encode($pop);
+            }
         }
 
         $this->_vars['right_buttons'][] = $btn_attribute;

@@ -256,14 +256,16 @@ jQuery(document).ready(function() {
 
     // 弹出框显示页面
     $('.pop').click(function () {
-        var $url = $(this).attr('href');
+        var $url   = $(this).attr('href');
         var $title = $(this).attr('title') || $(this).data('original-title');
-        layer.open({
-            type: 2,
-            title: $title,
-            area: ['80%', '90%'],
-            content: $url
-        });
+        var $layer = $(this).data('layer');
+        var $options = {type: 2, title: $title, area: ['80%', '90%'], content: $url};
+
+        if ($layer !== undefined) {
+            $.extend($options, $layer);
+        }
+
+        layer.open($options);
         return false;
     });
 });
