@@ -888,7 +888,7 @@ class Builder extends ZBuilder
 
     /**
      * 设置表格数据列表
-     * @param array $row_list 表格数据
+     * @param array|object $row_list 表格数据
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
