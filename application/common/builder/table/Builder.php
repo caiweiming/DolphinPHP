@@ -866,6 +866,9 @@ class Builder extends ZBuilder
             'class'   => $class
         ];
 
+        $args   = array_slice(func_get_args(), 6);
+        $column = array_merge($column, $args);
+
         $this->_vars['columns'][] = $column;
         return $this;
     }
@@ -1329,12 +1332,11 @@ class Builder extends ZBuilder
 //                            }
                             break;
                         case 'callback': // 调用回调方法
-                            if ($column['param'] == '') {
-                                $params = [$row[$column['name']]];
-                            } else if ($column['param'] === '__data__') {
-                                $params = [$row[$column['name']], $row];
-                            } else {
-                                $params = [$row[$column['name']], $column['param']];
+                            $params = array_merge([$row[$column['name']]], array_slice($column, 4));
+                            foreach ($params as &$param) {
+                                if ($param === '__data__') {
+                                    $param = $row;
+                                }
                             }
                             $row[$column['name']] = call_user_func_array($column['default'], $params);
                             break;
