@@ -1342,12 +1342,20 @@ class Builder extends ZBuilder
                             break;
                         case 'text':
                         default: // 默认
+                            // 设置默认值
                             if (!isset($row[$column['name']]) && !empty($column['default'])) {
                                 $row[$column['name']] = $column['default'];
                             }
-                            if (!empty($column['param'])) {
-                                if (isset($column['param'][$row[$column['name']]])) {
-                                    $row[$column['name']] = $column['param'][$row[$column['name']]];
+
+                            if (is_array($column['type']) && !empty($column['type'])) {
+                                if (isset($column['type'][$row[$column['name']]])) {
+                                    $row[$column['name']] = $column['type'][$row[$column['name']]];
+                                }
+                            } else {
+                                if (!empty($column['param'])) {
+                                    if (isset($column['param'][$row[$column['name']]])) {
+                                        $row[$column['name']] = $column['param'][$row[$column['name']]];
+                                    }
                                 }
                             }
                     }
