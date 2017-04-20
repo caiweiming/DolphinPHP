@@ -1332,7 +1332,11 @@ class Builder extends ZBuilder
 //                            }
                             break;
                         case 'callback': // 调用回调方法
-                            $params = array_merge([$row[$column['name']]], array_slice($column, 4));
+                            if (isset($row[$column['name']])) {
+                                $params = array_merge([$row[$column['name']]], array_slice($column, 4));
+                            } else {
+                                $params = array_slice($column, 4);
+                            }
                             foreach ($params as &$param) {
                                 if ($param === '__data__') {
                                     $param = $row;
