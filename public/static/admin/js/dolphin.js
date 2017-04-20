@@ -13,29 +13,32 @@ var Dolphin = function () {
             var msg, self   = jQuery(this), ajax_url = self.attr("href") || self.data("url");
             var target_form = self.attr("target-form");
             var text        = self.data('tips');
+            var title       = self.data('title') || '确定要执行该操作吗？';
+            var confirm_btn = self.data('confirm') || '确定';
+            var cancel_btn  = self.data('cancel') || '取消';
             var form        = jQuery('form[name=' + target_form + ']');
-            if (form.length == 0) {
+            if (form.length === 0) {
                 form = jQuery('.' + target_form);
             }
             var form_data   = form.serialize();
 
-            if ("submit" == self.attr("type") || ajax_url) {
+            if ("submit" === self.attr("type") || ajax_url) {
                 // 不存在“.target-form”元素则返回false
-                if (void 0 == form.get(0)) return false;
+                if (undefined === form.get(0)) return false;
                 // 节点标签名为FORM表单
-                if ("FORM" == form.get(0).nodeName) {
+                if ("FORM" === form.get(0).nodeName) {
                     ajax_url = ajax_url || form.get(0).action;
 
                     // 提交确认
                     if (self.hasClass('confirm')) {
                         swal({
-                            title: '确定要执行该操作吗？',
+                            title: title,
                             text: text || '',
                             type: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d26a5c',
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: confirm_btn,
+                            cancelButtonText: cancel_btn,
                             closeOnConfirm: true,
                             html: false
                         }, function () {
@@ -46,7 +49,7 @@ var Dolphin = function () {
                             jQuery.post(ajax_url, form_data).success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
-                                if (1 == res.code) {
+                                if (res.code) {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
@@ -54,12 +57,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data == '_close_pop' || res.data._close_pop) {
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data == '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -79,9 +82,9 @@ var Dolphin = function () {
                     } else {
                         self.attr("autocomplete", "off").prop("disabled", true);
                     }
-                } else if ("INPUT" == form.get(0).nodeName || "SELECT" == form.get(0).nodeName || "TEXTAREA" == form.get(0).nodeName) {
+                } else if ("INPUT" === form.get(0).nodeName || "SELECT" === form.get(0).nodeName || "TEXTAREA" === form.get(0).nodeName) {
                     // 如果是多选，则检查是否选择
-                    if (form.get(0).type == 'checkbox' && form_data == '') {
+                    if (form.get(0).type === 'checkbox' && form_data === '') {
                         Dolphin.notify('请选择要操作的数据', 'warning');
                         return false;
                     }
@@ -89,13 +92,13 @@ var Dolphin = function () {
                     // 提交确认
                     if (self.hasClass('confirm')) {
                         swal({
-                            title: '确定要执行该操作吗？',
+                            title: title,
                             text: text || '',
                             type: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d26a5c',
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: confirm_btn,
+                            cancelButtonText: cancel_btn,
                             closeOnConfirm: true,
                             html: false
                         }, function () {
@@ -106,7 +109,7 @@ var Dolphin = function () {
                             jQuery.post(ajax_url, form_data).success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
-                                if (1 == res.code) {
+                                if (res.code) {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
@@ -114,12 +117,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data == '_close_pop' || res.data._close_pop) {
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data == '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -142,13 +145,13 @@ var Dolphin = function () {
                 } else {
                     if (self.hasClass("confirm")) {
                         swal({
-                            title: '确定要执行该操作吗？',
+                            title: title,
                             text: text || '',
                             type: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d26a5c',
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: confirm_btn,
+                            cancelButtonText: cancel_btn,
                             closeOnConfirm: true,
                             html: false
                         }, function () {
@@ -160,7 +163,7 @@ var Dolphin = function () {
                             jQuery.post(ajax_url, form_data).success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
-                                if (1 == res.code) {
+                                if (res.code) {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
@@ -168,12 +171,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data == '_close_pop' || res.data._close_pop) {
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data == '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -202,7 +205,7 @@ var Dolphin = function () {
                     pageLoader('hide');
                     msg = res.msg;
 
-                    if (1 == res.code) {
+                    if (res.code) {
                         if (res.url && !self.hasClass("no-refresh")) {
                             msg += "， 页面即将自动跳转~";
                         }
@@ -210,12 +213,12 @@ var Dolphin = function () {
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 关闭弹出框
-                            if (res.data == '_close_pop' || res.data._close_pop) {
+                            if (res.data === '_close_pop' || res.data._close_pop) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data == '_parent_reload' || res.data._parent_reload) {
+                            if (res.data === '_parent_reload' || res.data._parent_reload) {
                                 parent.location.reload();return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -243,17 +246,19 @@ var Dolphin = function () {
     var ajaxGet = function () {
         jQuery(document).delegate('.ajax-get', 'click', function () {
             var msg, self = $(this), text = self.data('tips'), ajax_url = self.attr("href") || self.data("url");
-
+            var title       = self.data('title') || '确定要执行该操作吗？';
+            var confirm_btn = self.data('confirm') || '确定';
+            var cancel_btn  = self.data('cancel') || '取消';
             // 执行确认
             if (self.hasClass('confirm')) {
                 swal({
-                    title: '确定要执行该操作吗？',
+                    title: title,
                     text: text || '',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d26a5c',
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                    confirmButtonText: confirm_btn,
+                    cancelButtonText: cancel_btn,
                     closeOnConfirm: true,
                     html: false
                 }, function () {
@@ -264,7 +269,7 @@ var Dolphin = function () {
                     jQuery.get(ajax_url).success(function(res) {
                         pageLoader('hide');
                         msg = res.msg;
-                        if (1 == res.code) {
+                        if (res.code) {
                             if (res.url && !self.hasClass("no-refresh")) {
                                 msg += " 页面即将自动跳转~";
                             }
@@ -272,12 +277,12 @@ var Dolphin = function () {
                             setTimeout(function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                                 // 关闭弹出框
-                                if (res.data == '_close_pop' || res.data._close_pop) {
+                                if (res.data === '_close_pop' || res.data._close_pop) {
                                     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
                                 }
                                 // 刷新父窗口
-                                if (res.data == '_parent_reload' || res.data._parent_reload) {
+                                if (res.data === '_parent_reload' || res.data._parent_reload) {
                                     parent.location.reload();return false;
                                 }
                                 return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -300,7 +305,7 @@ var Dolphin = function () {
                 jQuery.get(ajax_url).success(function(res) {
                     pageLoader('hide');
                     msg = res.msg;
-                    if (1 == res.code) {
+                    if (res.code) {
                         if (res.url && !self.hasClass("no-refresh")) {
                             msg += " 页面即将自动跳转~";
                         }
@@ -308,12 +313,12 @@ var Dolphin = function () {
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 关闭弹出框
-                            if (res.data == '_close_pop' || res.data._close_pop) {
+                            if (res.data === '_close_pop' || res.data._close_pop) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data == '_parent_reload' || res.data._parent_reload) {
+                            if (res.data === '_parent_reload' || res.data._parent_reload) {
                                 parent.location.reload();return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -343,8 +348,11 @@ var Dolphin = function () {
             var target_form = self.attr("target-form");
             var form        = jQuery('form[name=' + target_form + ']');
             var form_data   = form.serialize() || [];
+            var title       = self.data('title') || '确定要执行该操作吗？';
+            var confirm_btn = self.data('confirm') || '确定';
+            var cancel_btn  = self.data('cancel') || '取消';
 
-            if (form.length == 0) {
+            if (form.length === 0) {
                 form = jQuery('.' + target_form + '[type=checkbox]:checked');
                 form.each(function () {
                     form_data.push($(this).val());
@@ -352,12 +360,12 @@ var Dolphin = function () {
                 form_data = form_data.join(',');
             }
 
-            if (form_data == '') {
+            if (form_data === '') {
                 Dolphin.notify('请选择要操作的数据', 'warning');
                 return false;
             }
 
-            if (url.indexOf('?') != -1) {
+            if (url.indexOf('?') !== -1) {
                 url += '&' + target_form + '=' + form_data;
             } else {
                 url += '?' + target_form + '=' + form_data;
@@ -366,13 +374,13 @@ var Dolphin = function () {
             // 执行确认
             if (self.hasClass('confirm')) {
                 swal({
-                    title: '确定要执行该操作吗？',
+                    title: title,
                     text: text || '',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d26a5c',
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                    confirmButtonText: confirm_btn,
+                    cancelButtonText: cancel_btn,
                     closeOnConfirm: true,
                     html: false
                 }, function () {
@@ -433,7 +441,7 @@ var Dolphin = function () {
         $type  = $type || 'info';
         $from  = $from || 'top';
         $align = $align || 'center';
-        $enter = $type == 'success' ? 'animated fadeInUp' : 'animated shake';
+        $enter = $type === 'success' ? 'animated fadeInUp' : 'animated shake';
 
         jQuery.notify({
             icon: $icon,
