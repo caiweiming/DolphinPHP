@@ -100,10 +100,10 @@ jQuery(document).ready(function() {
             success: function () {
                 var $curr_filter_content = '';
                 var $curr_filter = '';
-                if ($_filter != '') {
+                if ($_filter !== '') {
                     $curr_filter = $_filter.split('|');
                     var filed_index = $.inArray($filter, $curr_filter);
-                    if (filed_index != -1) {
+                    if (filed_index !== -1) {
                         $curr_filter_content = $_filter_content.split('|');
                         $curr_filter_content = $curr_filter_content[filed_index];
                         $curr_filter_content = $curr_filter_content.split(',');
@@ -111,7 +111,7 @@ jQuery(document).ready(function() {
                 }
                 // 获取数据
                 $.post(dolphin.get_filter_list, $data).success(function(res) {
-                    if (1 != res.code) {
+                    if (1 !== res.code) {
                         $('#filter-check-content').html(res.msg);
                         return false;
                     }
@@ -122,9 +122,13 @@ jQuery(document).ready(function() {
                     list += '</label></div></div>';
                     list += '<div class="filter-field-list">';
                     for(var key in res.list) {
+                        // 如果不是该对象自身直接创建的属性（也就是该属//性是原型中的属性），则跳过显示
+                        if (!res.list.hasOwnProperty(key)) {
+                            continue;
+                        }
                         list += '<div class="row" data-field="'+res.list[key]+'"><div class="col-sm-12"><label class="css-input css-checkbox css-checkbox-primary">';
                         list += '<input type="checkbox" ';
-                        if ($curr_filter_content != '' && $.inArray(key, $curr_filter_content) != -1) {
+                        if ($curr_filter_content !== '' && $.inArray(key, $curr_filter_content) !== -1) {
                             list += 'checked="" ';
                         }
                         list += 'value="'+ key +'" class="check-item"><span></span> '+res.list[key];
@@ -158,11 +162,12 @@ jQuery(document).ready(function() {
                 });
             },
             yes: function () {
+                var filed_index = -1;
                 if ($('#filter-check-content input[class=check-item]:checked').length == 0) {
                     // 没有选择筛选字段，则删除原先该字段的筛选
                     $_filter        = $_filter.split('|');
-                    var filed_index = $.inArray($filter, $_filter);
-                    if (filed_index != -1) {
+                    filed_index = $.inArray($filter, $_filter);
+                    if (filed_index !== -1) {
                         $_filter.splice(filed_index, 1);
                         $filter         = $_filter.join('|');
 
@@ -178,16 +183,18 @@ jQuery(document).ready(function() {
                     // 当前要筛选字段内容
                     var $fields = [];
                     $('#filter-check-content input[class=check-item]:checked').each(function () {
-                        $fields.push($(this).val())
+                        if ($(this).val() !== '') {
+                            $fields.push($(this).val())
+                        }
                     });
                     $fields = $fields.join(',');
 
-                    if ($_filter != '') {
+                    if ($_filter !== '') {
                         $_filter = $_filter.split('|');
-                        var filed_index = $.inArray($filter, $_filter);
+                        filed_index = $.inArray($filter, $_filter);
                         $_filter = $_filter.join('|');
 
-                        if (filed_index == -1) {
+                        if (filed_index === -1) {
                             $filter = $_filter + '|' + $filter;
                             $fields = $_filter_content + '|' + $fields;
                             $field_display = $_field_display + ',' + $field_display;
@@ -201,7 +208,22 @@ jQuery(document).ready(function() {
                     }
                 }
 
-                location.href = dolphin.curr_url + '?_filter='+ $filter + '&_filter_content=' + $fields + '&_field_display=' + $field_display;
+                var _curr_params = {
+                    _filter: $filter || '',
+                    _filter_content: $fields || '',
+                    _field_display: $field_display || ''
+                };
+
+                var params = {};
+
+                if ($.isEmptyObject(dolphin.curr_params)) {
+                    params = jQuery.param(_curr_params);
+                } else {
+                    $.extend(dolphin.curr_params, _curr_params);
+                    params = jQuery.param(dolphin.curr_params);
+                }
+
+                location.href = dolphin.curr_url + '?'+ params;
             }
         });
         return false;

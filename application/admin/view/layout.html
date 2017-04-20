@@ -106,6 +106,7 @@
             '_field_display': '{$Request.param._field_display ? $Request.param._field_display : (isset($_field_display) ? $_field_display : "")}',
             'get_filter_list': '{:url("admin/ajax/getFilterList")}',
             'curr_url': '{:url("", $Request.route)}',
+            'curr_params': {$Request.param|json_encode}
         };
     </script>
 </head>
