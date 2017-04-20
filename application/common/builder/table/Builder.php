@@ -489,7 +489,8 @@ class Builder extends ZBuilder
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
             $btn_attribute['href']  .= '?_pop=1';
-            if (is_array($pop)) {
+            if (is_array($pop) && !empty($pop)) {
+                $pop = array_merge(config('zbuilder.pop'), $pop);
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
         }
@@ -713,7 +714,8 @@ class Builder extends ZBuilder
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
             $btn_attribute['href']  .= '?_pop=1';
-            if (is_array($pop)) {
+            if (is_array($pop) && !empty($pop)) {
+                $pop = array_merge(config('zbuilder.pop'), $pop);
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
         }

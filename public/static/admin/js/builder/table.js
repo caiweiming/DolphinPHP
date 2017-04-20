@@ -320,13 +320,8 @@ jQuery(document).ready(function() {
         var $title = $(this).attr('title') || $(this).data('original-title');
         var $layer = $(this).data('layer');
         var $options = {
-            type: 2,
             title: $title,
-            area: ['80%', '90%'],
-            content: $url,
-            shadeClose: true,
-            isOutAnim: false,
-            anim: -1
+            content: $url
         };
 
         if ($layer !== undefined) {
