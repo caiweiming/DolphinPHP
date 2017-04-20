@@ -50,7 +50,7 @@
                             <div class="col-sm-12">
                                 {// 搜索框 }
                                 {notempty name="search"}
-                                <form class="pull-right search-bar" method="get" action="{$search.url}" role="form">
+                                <div class="pull-right search-bar">
                                     <input type="hidden" name="search_field" id="search-field" value="{php}echo input('param.search_field', '') == '' ? $search['field_all'] : input('param.search_field');{/php}">
                                     <div class="input-group">
                                         <div class="input-group-btn">
@@ -68,9 +68,9 @@
                                                 {/volist}
                                             </ul>
                                         </div>
-                                        <input type="text" class="form-control" value="{:input('param.keyword', '')}" name="keyword" placeholder="{$search.placeholder}">
+                                        <input type="text" class="form-control" value="{:input('param.keyword', '')}" data-url="{$search.url}" id="search-input" name="keyword" placeholder="{$search.placeholder}">
                                     </div>
-                                </form>
+                                </div>
                                 {/notempty}
 
                                 {// 顶部按钮 }

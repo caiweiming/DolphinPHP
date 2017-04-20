@@ -75,6 +75,27 @@ jQuery(document).ready(function() {
         $('#search-field').val(field);
         $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
     });
+    $('#search-input').on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            var $url = $(this).data('url');
+            var $filed = $('#search-field').val();
+            var $keyword = $(this).val();
+            var params = {};
+            var _curr_params = {
+                'search_field': $filed || '',
+                'keyword': $keyword || ''
+            };
+
+            if ($.isEmptyObject(dolphin.curr_params)) {
+                params = jQuery.param(_curr_params);
+            } else {
+                $.extend(dolphin.curr_params, _curr_params);
+                params = jQuery.param(dolphin.curr_params);
+            }
+
+            location.href = $url + '?'+ params;
+        }
+    });
 
     // 筛选
     $('.table-builder .field-filter').click(function () {

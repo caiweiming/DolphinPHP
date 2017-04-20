@@ -764,7 +764,7 @@ class Builder extends ZBuilder
                 'fields'      => $fields,
                 'field_all'   => empty($fields) ? '' : implode('|', array_keys($fields)),
                 'placeholder' => $placeholder != '' ? $placeholder : '请输入'. implode('/', $fields),
-                'url'         => $url == '' ? $this->request->url(true) : $url
+                'url'         => $url == '' ? $this->request->baseUrl(true) : $url
             ];
         }
         return $this;
