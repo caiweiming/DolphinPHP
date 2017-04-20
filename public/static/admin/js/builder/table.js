@@ -296,6 +296,24 @@ jQuery(document).ready(function() {
     $('.pagination-info input').click(function () {
         $(this).select();
     });
+    $('#go-page,#list-rows').on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            var params = {};
+            var _curr_params = {
+                'page': $('#go-page').val(),
+                'list_rows': $('#list-rows').val()
+            };
+
+            if ($.isEmptyObject(dolphin.curr_params)) {
+                params = jQuery.param(_curr_params);
+            } else {
+                $.extend(dolphin.curr_params, _curr_params);
+                params = jQuery.param(dolphin.curr_params);
+            }
+
+            location.href = dolphin.curr_url + '?'+ params;
+        }
+    });
 
     // 弹出框显示页面
     $('.pop').click(function () {

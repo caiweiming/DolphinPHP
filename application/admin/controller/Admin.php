@@ -78,14 +78,7 @@ class Admin extends Common
      */
     final protected function setPageParam()
     {
-        if (input('?get.list_rows') && input('get.list_rows') != '') {
-            $list_rows = input('get.list_rows');
-        } elseif (input('?param.list_rows') && input('param.list_rows') != '') {
-            $list_rows = input('param.list_rows');
-        } else {
-            $list_rows = config('list_rows');
-        }
-
+        $list_rows = input('?param.list_rows') ? input('param.list_rows') : config('list_rows');
         config('paginate.list_rows', $list_rows);
         config('paginate.query', input('get.'));
     }

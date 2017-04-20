@@ -192,12 +192,11 @@
                                     {/notempty}
                                     {notempty name="_page_info"}
                                     <div class="pagination-info pull-right">
-                                        <form action="" method="get">
-                                            <input type="text" class="form-control input-sm go-page" name="page" value="{:input('param.page', '1')}">
-                                            <input type="text" class="form-control input-sm nums" name="list_rows" value="{php}echo input('param.list_rows', '') == '' ? config('list_rows') : input('param.list_rows');{/php}">
-                                            <input type="submit" class="hidden">
-                                             / <strong>{$_page_info->lastPage()}</strong> 页，共 <strong>{$_page_info->total()}</strong> 条数据，每页显示数量
-                                        </form>
+                                        <div>
+                                            <input type="text" class="form-control input-sm go-page" id="go-page" name="page" value="{:input('param.page', '1')}">
+                                            <input type="text" class="form-control input-sm nums" id="list-rows" name="list_rows" value="{php}echo input('param.list_rows', '') == '' ? config('list_rows') : input('param.list_rows');{/php}">
+                                            / <strong>{$_page_info->lastPage()}</strong> 页，共 <strong>{$_page_info->total()}</strong> 条数据，每页显示数量
+                                        </div>
                                     </div>
                                     {/notempty}
                                 </div>
