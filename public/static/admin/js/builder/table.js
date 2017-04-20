@@ -319,7 +319,15 @@ jQuery(document).ready(function() {
         var $url   = $(this).attr('href');
         var $title = $(this).attr('title') || $(this).data('original-title');
         var $layer = $(this).data('layer');
-        var $options = {type: 2, title: $title, area: ['80%', '90%'], content: $url};
+        var $options = {
+            type: 2,
+            title: $title,
+            area: ['80%', '90%'],
+            content: $url,
+            shadeClose: true,
+            isOutAnim: false,
+            anim: -1
+        };
 
         if ($layer !== undefined) {
             $.extend($options, $layer);
