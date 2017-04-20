@@ -58,9 +58,22 @@ jQuery(document).ready(function() {
         }
     });
 
+    // 跳转链接
+    var goto = function (url, _curr_params) {
+        var params = {};
+        if ($.isEmptyObject(dolphin.curr_params)) {
+            params = jQuery.param(_curr_params);
+        } else {
+            $.extend(dolphin.curr_params, _curr_params);
+            params = jQuery.param(dolphin.curr_params);
+        }
+
+        location.href = url + '?'+ params;
+    };
+
     // 初始化搜索
     var search_field = dolphin.search_field;
-    if (search_field != '') {
+    if (search_field !== '') {
         $('.search-bar .dropdown-menu a').each(function () {
             var self = $(this);
             if (self.data('field') == search_field) {
@@ -80,20 +93,12 @@ jQuery(document).ready(function() {
             var $url = $(this).data('url');
             var $filed = $('#search-field').val();
             var $keyword = $(this).val();
-            var params = {};
             var _curr_params = {
                 'search_field': $filed || '',
                 'keyword': $keyword || ''
             };
 
-            if ($.isEmptyObject(dolphin.curr_params)) {
-                params = jQuery.param(_curr_params);
-            } else {
-                $.extend(dolphin.curr_params, _curr_params);
-                params = jQuery.param(dolphin.curr_params);
-            }
-
-            location.href = $url + '?'+ params;
+            goto($url, _curr_params);
         }
     });
 
@@ -235,16 +240,7 @@ jQuery(document).ready(function() {
                     _field_display: $field_display || ''
                 };
 
-                var params = {};
-
-                if ($.isEmptyObject(dolphin.curr_params)) {
-                    params = jQuery.param(_curr_params);
-                } else {
-                    $.extend(dolphin.curr_params, _curr_params);
-                    params = jQuery.param(dolphin.curr_params);
-                }
-
-                location.href = dolphin.curr_url + '?'+ params;
+                goto(dolphin.curr_url, _curr_params);
             }
         });
         return false;
@@ -298,21 +294,24 @@ jQuery(document).ready(function() {
     });
     $('#go-page,#list-rows').on('keyup', function (e) {
         if (e.keyCode === 13) {
-            var params = {};
             var _curr_params = {
                 'page': $('#go-page').val(),
                 'list_rows': $('#list-rows').val()
             };
 
-            if ($.isEmptyObject(dolphin.curr_params)) {
-                params = jQuery.param(_curr_params);
-            } else {
-                $.extend(dolphin.curr_params, _curr_params);
-                params = jQuery.param(dolphin.curr_params);
-            }
-
-            location.href = dolphin.curr_url + '?'+ params;
+            goto(dolphin.curr_url, _curr_params);
         }
+    });
+
+    // 时间段搜索
+    $('#btn-filter-time').click(function () {
+        var _curr_params = {
+            '_filter_time_from': $('#_filter_time_from').val(),
+            '_filter_time_to': $('#_filter_time_to').val(),
+            '_filter_time': $('#_filter_time').val()
+        };
+
+        goto(dolphin.curr_url, _curr_params);
     });
 
     // 弹出框显示页面
