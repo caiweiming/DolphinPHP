@@ -67,6 +67,7 @@
                                         <i class="fa fa-fw fa-calendar push-10-r"></i> {$document.create_time|time_tran}
                                     </td>
                                 </tr>
+                                {present name="document.tags"}
                                 <tr>
                                     <td>
                                         <i class="fa fa-fw fa-tags push-10-r"></i>
@@ -75,6 +76,7 @@
                                         {/volist}
                                     </td>
                                 </tr>
+                                {/present}
                                 </tbody>
                             </table>
                         </div>

@@ -47,7 +47,9 @@ class Document extends Common
         }
 
         $info = DocumentModel::getOne($id, $model, $map);
-        $info['tags'] = explode(',', $info['tags']);
+        if (isset($info['tags'])) {
+            $info['tags'] = explode(',', $info['tags']);
+        }
 
         $this->assign('document', $info);
         $this->assign('breadcrumb', $this->getBreadcrumb($info['cid']));
