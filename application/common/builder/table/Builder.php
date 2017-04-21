@@ -227,6 +227,7 @@ class Builder extends ZBuilder
             if (is_array($fields)) {
                 $this->_vars['filter_map'] = array_merge($this->_vars['filter_map'], $fields);
             } else {
+                $map = $this->buildFilterMap($map);
                 if (strpos($fields, ',')) {
                     $fields = explode(',', $fields);
                     foreach ($fields as $field) {
@@ -246,6 +247,36 @@ class Builder extends ZBuilder
             }
         }
         return $this;
+    }
+
+    /**
+     * 组合筛选条件
+     * @param string $map 筛选条件
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    private function buildFilterMap($map = '')
+    {
+        if (is_array($map)) return $map;
+
+        $_map = [];
+        $_filter = $this->request->param('_filter');
+        $_filter = explode('|', $_filter);
+        $_pos    = array_search($map, $_filter);
+        if ($_pos !== false) {
+            $_filter_content = $this->request->param('_filter_content');
+            $_filter_content = explode('|', $_filter_content);
+
+            if (strpos($map, '.')) {
+                $_field = explode('.', $map)[1];
+            } else {
+                $_field = $map;
+            }
+
+            $_map[$_field] = isset($_filter_content[$_pos]) ? ['in', $_filter_content[$_pos]] : ['eq', ''];
+        }
+
+        return $_map;
     }
 
     /**
