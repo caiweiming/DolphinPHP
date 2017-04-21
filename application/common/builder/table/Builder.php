@@ -489,10 +489,11 @@ class Builder extends ZBuilder
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
             $btn_attribute['href']  .= '?_pop=1';
+            $_pop = config('zbuilder.pop');
             if (is_array($pop) && !empty($pop)) {
-                $pop = array_merge(config('zbuilder.pop'), $pop);
-                $btn_attribute['data-layer'] = json_encode($pop);
+                $_pop = array_merge($_pop, $pop);
             }
+            $btn_attribute['data-layer'] = json_encode($_pop);
         }
 
         $this->_vars['top_buttons'][] = $btn_attribute;
@@ -714,10 +715,11 @@ class Builder extends ZBuilder
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
             $btn_attribute['href']  .= '?_pop=1';
+            $_pop = config('zbuilder.pop');
             if (is_array($pop) && !empty($pop)) {
-                $pop = array_merge(config('zbuilder.pop'), $pop);
-                $btn_attribute['data-layer'] = json_encode($pop);
+                $_pop = array_merge($_pop, $pop);
             }
+            $btn_attribute['data-layer'] = json_encode($_pop);
         }
 
         $this->_vars['right_buttons'][] = $btn_attribute;
