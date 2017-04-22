@@ -1401,14 +1401,16 @@ class Builder extends ZBuilder
                             $params = array_slice($column, 4);
                             $params = array_filter($params, function($v){return $v !== '';});
 
-                            if (isset($row[$column['name']])) {
+                            if (isset($row[$column['name']]) || array_key_exists($column['name'], $row)) {
                                 $params = array_merge([$row[$column['name']]], $params);
                             }
-                            foreach ($params as $key => &$param) {
-                                if ($param === '__data__') {
-                                    $param = $row;
+
+                            if (!empty($params)) {
+                                foreach ($params as $key => &$param) {
+                                    if ($param === '__data__') $param = $row;
                                 }
                             }
+
                             $row[$column['name']] = call_user_func_array($column['default'], $params);
                             break;
                         case 'text':
