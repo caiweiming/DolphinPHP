@@ -229,16 +229,22 @@ class Admin extends Common
 
             // 是否需要自动插入时间
             if ($form['auto_time'] != '') {
+                $now_time = $this->request->time();
                 foreach ($form['auto_time'] as $item) {
-                    $data[$item] = $this->request->time();
+                    if (strpos($item, '|')) {
+                        list($item, $format) = explode('|', $item);
+                        $data[$item] = date($format, $now_time);
+                    } else {
+                        $data[$item] = $form['format'] != '' ? date($form['format'], $now_time) : $now_time;
+                    }
                 }
             }
 
             // 插入数据
             if (Db::name($form['table'])->insert($data)) {
-                return $this->success('新增成功', cookie('__forward__'));
+                $this->success('新增成功', $form['go_back']);
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -278,16 +284,22 @@ class Admin extends Common
 
             // 是否需要自动插入时间
             if ($form['auto_time'] != '') {
+                $now_time = $this->request->time();
                 foreach ($form['auto_time'] as $item) {
-                    $data[$item] = $this->request->time();
+                    if (strpos($item, '|')) {
+                        list($item, $format) = explode('|', $item);
+                        $data[$item] = date($format, $now_time);
+                    } else {
+                        $data[$item] = $form['format'] != '' ? date($form['format'], $now_time) : $now_time;
+                    }
                 }
             }
 
             // 更新数据
-            if (Db::name($form['table'])->update($data)) {
-                return $this->success('编辑成功', cookie('__forward__'));
+            if (false !== Db::name($form['table'])->update($data)) {
+                $this->success('编辑成功', $form['go_back']);
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 

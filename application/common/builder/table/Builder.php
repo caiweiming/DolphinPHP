@@ -346,13 +346,13 @@ class Builder extends ZBuilder
      * @param string $table 表名
      * @param string $validate 验证器名
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
+     * @param string $format 时间格式
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoAdd($items = [], $table = '', $validate = '', $auto_time = '')
+    public function autoAdd($items = [], $table = '', $validate = '', $auto_time = '', $format = '')
     {
         if (!empty($items)) {
-            cookie('__forward__', $_SERVER['REQUEST_URI']);
             // 默认属性
             $btn_attribute = [
                 'title' => '新增',
@@ -376,7 +376,9 @@ class Builder extends ZBuilder
                 'items'     => $items,
                 'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
                 'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
-                'auto_time' => $auto_time
+                'auto_time' => $auto_time,
+                'format'    => $format,
+                'go_back'   => $_SERVER['REQUEST_URI']
             ];
 
             // 开发模式
@@ -574,13 +576,13 @@ class Builder extends ZBuilder
      * @param string $table 表名
      * @param string $validate 验证器名
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
+     * @param string $format 时间格式
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '')
+    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '')
     {
         if (!empty($items)) {
-            cookie('__forward__', $_SERVER['REQUEST_URI']);
             // 默认属性
             $btn_attribute = [
                 'title' => '编辑',
@@ -606,7 +608,9 @@ class Builder extends ZBuilder
                 'items'     => $items,
                 'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
                 'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
-                'auto_time' => $auto_time
+                'auto_time' => $auto_time,
+                'format'    => $format,
+                'go_back'   => $_SERVER['REQUEST_URI']
             ];
 
             // 开发模式
