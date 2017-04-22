@@ -1143,6 +1143,24 @@ class Builder extends ZBuilder
                             $button['href']
                         );
 
+                        // 替换其他字段值
+                        if (preg_match_all('/__(.*?)__/', $button['href'], $matches)) {
+                            // 要替换的字段名
+                            $replace_to = [];
+                            $pattern    = [];
+                            foreach ($matches[1] as $match) {
+                                if (isset($row[$match])) {
+                                    $pattern[]    = '/__'. $match .'__/i';
+                                    $replace_to[] = $row[$match];
+                                }
+                            }
+                            $button['href'] = preg_replace(
+                                $pattern,
+                                $replace_to,
+                                $button['href']
+                            );
+                        }
+
                         // 编译按钮属性
                         $button['attribute'] = $this->compileHtmlAttr($button);
                         $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
