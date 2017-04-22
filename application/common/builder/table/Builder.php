@@ -576,13 +576,13 @@ class Builder extends ZBuilder
      * @param string $table 表名
      * @param string $validate 验证器名
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
-     * @param string $format 时间格式
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '')
+    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '')
     {
         if (!empty($items)) {
+            cookie('__forward__', $_SERVER['REQUEST_URI']);
             // 默认属性
             $btn_attribute = [
                 'title' => '编辑',
@@ -608,9 +608,7 @@ class Builder extends ZBuilder
                 'items'     => $items,
                 'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
                 'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
-                'auto_time' => $auto_time,
-                'format'    => $format,
-                'go_back'   => $_SERVER['REQUEST_URI']
+                'auto_time' => $auto_time
             ];
 
             // 开发模式
@@ -1143,24 +1141,6 @@ class Builder extends ZBuilder
                             $button['href']
                         );
 
-                        // 替换其他字段值
-                        if (preg_match_all('/__(.*?)__/', $button['href'], $matches)) {
-                            // 要替换的字段名
-                            $replace_to = [];
-                            $pattern    = [];
-                            foreach ($matches[1] as $match) {
-                                if (isset($row[$match])) {
-                                    $pattern[]    = '/__'. $match .'__/i';
-                                    $replace_to[] = $row[$match];
-                                }
-                            }
-                            $button['href'] = preg_replace(
-                                $pattern,
-                                $replace_to,
-                                $button['href']
-                            );
-                        }
-
                         // 编译按钮属性
                         $button['attribute'] = $this->compileHtmlAttr($button);
                         $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
@@ -1398,12 +1378,13 @@ class Builder extends ZBuilder
 //                            }
                             break;
                         case 'callback': // 调用回调方法
+                            $params = array_slice($column, 4);
+                            $params = array_filter($params, function($v){return $v !== '';});
+
                             if (isset($row[$column['name']])) {
-                                $params = array_merge([$row[$column['name']]], array_slice($column, 4));
-                            } else {
-                                $params = array_slice($column, 4);
+                                $params = array_merge([$row[$column['name']]], $params);
                             }
-                            foreach ($params as &$param) {
+                            foreach ($params as $key => &$param) {
                                 if ($param === '__data__') {
                                     $param = $row;
                                 }
