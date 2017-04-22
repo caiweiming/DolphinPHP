@@ -67,6 +67,16 @@ class Builder extends ZBuilder
     private $_filter_options = [];
 
     /**
+     * @var array 列名
+     */
+    private $_field_name = [];
+
+    /**
+     * @var array 存储搜索框数据
+     */
+    private $_search = [];
+
+    /**
      * @var array 模板变量
      */
     private $_vars = [
@@ -795,11 +805,10 @@ class Builder extends ZBuilder
     public function setSearch($fields = [], $placeholder = '', $url = '')
     {
         if (!empty($fields)) {
-            $this->_vars['search'] = [
-                'fields'      => $fields,
-                'field_all'   => empty($fields) ? '' : implode('|', array_keys($fields)),
-                'placeholder' => $placeholder != '' ? $placeholder : '请输入'. implode('/', $fields),
-                'url'         => $url == '' ? $this->request->baseUrl(true) : $url
+            $this->_search = [
+                'fields'      => is_string($fields) ? explode(',', $fields) : $fields,
+                'placeholder' => $placeholder,
+                'url'         => $url,
             ];
         }
         return $this;
@@ -1535,6 +1544,24 @@ class Builder extends ZBuilder
                 $new_button .= "{$button['title']}</a>";
                 $button = $new_button;
             }
+        }
+
+        // 处理搜索框
+        if ($this->_search) {
+            $_temp_fields = [];
+            foreach ($this->_search['fields'] as $key => $field) {
+                if (is_numeric($key)) {
+                    $_temp_fields[$field] = isset($this->_field_name[$field]) ? $this->_field_name[$field] : '';
+                } else {
+                    $_temp_fields[$key]   = $field;
+                }
+            }
+            $this->_vars['search'] = [
+                'fields'      => $_temp_fields,
+                'field_all'   => implode('|', array_keys($_temp_fields)),
+                'placeholder' => $this->_search['placeholder'] != '' ? $this->_search['placeholder'] : '请输入'. implode('/', $_temp_fields),
+                'url'         => $this->_search['url'] == '' ? $this->request->baseUrl(true) : $this->_search['url']
+            ];
         }
 
         // 编译表格数据row_list的值
