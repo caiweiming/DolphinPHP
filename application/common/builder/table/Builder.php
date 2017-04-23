@@ -1227,15 +1227,23 @@ class Builder extends ZBuilder
                             }
                             break;
                         case 'status': // 状态
-                            switch ($row[$column['name']]) {
-                                case '0': // 禁用
-                                    $status_info = isset($column['param'][0]) ? $column['param'][0] : '禁用';
-                                    $row[$column['name']] = '<span class="label label-warning">'.$status_info.'</span>';
-                                    break;
-                                case '1': // 启用
-                                    $status_info = isset($column['param'][1]) ? $column['param'][1] : '启用';
-                                    $row[$column['name']] = '<span class="label label-success">'.$status_info.'</span>';
-                                    break;
+                            $status = $row[$column['name']];
+                            $list_status = !empty($column['param']) ? $column['param'] : ['禁用:warning', '启用:success'];
+
+                            if (isset($list_status[$status])) {
+                                switch ($status) {
+                                    case '0': $class = 'warning';break;
+                                    case '1': $class = 'success';break;
+                                    case '2': $class = 'primary';break;
+                                    case '3': $class = 'info';break;
+                                    default: $class  = 'default';
+                                }
+                                if (strpos($list_status[$status], ':')) {
+                                    list($label, $class) = explode(':', $list_status[$status]);
+                                } else {
+                                    $label = $list_status[$status];
+                                }
+                                $row[$column['name']] = '<span class="label label-'.$class.'">'.$label.'</span>';
                             }
                             break;
                         case 'yesno': // 是/否
