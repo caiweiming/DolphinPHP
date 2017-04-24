@@ -673,7 +673,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '编辑',
                     'icon'  => 'fa fa-pencil',
-                    'class' => 'btn btn-xs btn-default',
+                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
                     'href'  => url(
                         $this->_module.'/'.$this->_controller.'/edit',
                         [
@@ -691,7 +691,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '启用',
                     'icon'  => 'fa fa-check',
-                    'class' => 'btn btn-xs btn-default ajax-get confirm',
+                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
                     'href'  => url(
                         $this->_module.'/'.$this->_controller.'/enable',
                         [
@@ -708,7 +708,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '禁用',
                     'icon'  => 'fa fa-ban',
-                    'class' => 'btn btn-xs btn-default ajax-get confirm',
+                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
                     'href'  => url(
                         $this->_module.'/'.$this->_controller.'/disable',
                         [
@@ -725,7 +725,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '删除',
                     'icon'  => 'fa fa-times',
-                    'class' => 'btn btn-xs btn-default ajax-get confirm',
+                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
                     'href'  => url(
                         $this->_module.'/'.$this->_controller.'/delete',
                         [
@@ -742,7 +742,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '自定义按钮',
                     'icon'  => 'fa fa-smile-o',
-                    'class' => 'btn btn-xs btn-default',
+                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
                     'href'  => 'javascript:void(0);'
                 ];
                 break;
@@ -1163,6 +1163,15 @@ class Builder extends ZBuilder
 
                         // 编译按钮属性
                         $button['attribute'] = $this->compileHtmlAttr($button);
+                        if (config('zbuilder.right_button')['title']) {
+                            $row['right_button'] .= '<a '.$button['attribute'].'">';
+                            if (config('zbuilder.right_button')['icon']) {
+                                $row['right_button'] .= '<i class="'.$button['icon'].'"></i> ';
+                            }
+                            $row['right_button'] .= $button['title'].'</a> ';
+                        } else {
+                            $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
+                        }
                         $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
                     }
                     $row['right_button'] = '<div class="btn-group">'. $row['right_button'] .'</div>';
