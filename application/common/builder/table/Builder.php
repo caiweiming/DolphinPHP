@@ -1593,7 +1593,12 @@ class Builder extends ZBuilder
             $_temp_fields = [];
             foreach ($this->_search['fields'] as $key => $field) {
                 if (is_numeric($key)) {
-                    $_temp_fields[$field] = isset($this->_field_name[$field]) ? $this->_field_name[$field] : '';
+                    if (strpos($field, '.')) {
+                        $_field = explode('.', $field)[1];
+                    } else {
+                        $_field = $field;
+                    }
+                    $_temp_fields[$field] = isset($this->_field_name[$_field]) ? $this->_field_name[$_field] : '';
                 } else {
                     $_temp_fields[$key]   = $field;
                 }
