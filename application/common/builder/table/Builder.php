@@ -1172,7 +1172,6 @@ class Builder extends ZBuilder
                         } else {
                             $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
                         }
-                        $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
                     }
                     $row['right_button'] = '<div class="btn-group">'. $row['right_button'] .'</div>';
                 }
