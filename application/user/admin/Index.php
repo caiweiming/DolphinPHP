@@ -313,6 +313,10 @@ class Index extends Admin
             }
         }
 
+        $page_tips = isset($curr_access['page_tips']) ? $curr_access['page_tips'] : '';
+        $tips_type = isset($curr_access['tips_type']) ? $curr_access['tips_type'] : 'info';
+        $this->assign('page_tips', $page_tips);
+        $this->assign('tips_type', $tips_type);
         $this->assign('page_title', '数据授权');
         return $this->fetch();
     }

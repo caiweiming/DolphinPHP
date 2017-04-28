@@ -6,6 +6,12 @@
 {/block}
 
 {block name="content"}
+    {notempty name="page_tips"}
+    <div class="alert alert-{$tips_type|default='info'} alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p>{$page_tips}</p>
+    </div>
+    {/notempty}
     <div class="row">
         <div class="col-md-12">
             <div class="block">
