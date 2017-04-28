@@ -81,59 +81,6 @@
         ]
     },
     {
-        "name": "topthink/framework",
-        "version": "v5.0.7",
-        "version_normalized": "5.0.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/top-think/framework.git",
-            "reference": "bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://dl.composer-proxy.org/topthink/framework/bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3.zip",
-            "reference": "bcf64f19f4fadbff6c8503891689ff7e6f2fe9a3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0",
-            "topthink/think-installer": "~1.0"
-        },
-        "require-dev": {
-            "johnkary/phpunit-speedtrap": "^1.0",
-            "mikey179/vfsstream": "~1.6",
-            "phpdocumentor/reflection-docblock": "^2.0",
-            "phploc/phploc": "2.*",
-            "phpunit/phpunit": "4.8.*",
-            "sebastian/phpcpd": "2.*"
-        },
-        "time": "2017-02-25T02:51:57+00:00",
-        "type": "think-framework",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "think\\": "library/think"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "liu21st",
-                "email": "liu21st@gmail.com"
-            }
-        ],
-        "description": "the new thinkphp framework",
-        "homepage": "http://thinkphp.cn/",
-        "keywords": [
-            "framework",
-            "orm",
-            "thinkphp"
-        ]
-    },
-    {
         "name": "topthink/think-image",
         "version": "v1.0.7",
         "version_normalized": "1.0.7.0",
@@ -176,21 +123,74 @@
         "description": "The ThinkPHP5 Image Package"
     },
     {
-        "name": "topthink/think-helper",
-        "version": "v1.0.5",
-        "version_normalized": "1.0.5.0",
+        "name": "topthink/framework",
+        "version": "v5.0.8",
+        "version_normalized": "5.0.8.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/top-think/think-helper.git",
-            "reference": "ed64408cdc4cdbd390365ba0906d208b987af520"
+            "url": "https://github.com/top-think/framework.git",
+            "reference": "51adc8254de3b049096e51ca97c59989da678bf2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://dl.composer-proxy.org/topthink/think-helper/ed64408cdc4cdbd390365ba0906d208b987af520.zip",
-            "reference": "ed64408cdc4cdbd390365ba0906d208b987af520",
+            "url": "https://dl.composer-proxy.org/topthink/framework/51adc8254de3b049096e51ca97c59989da678bf2.zip",
+            "reference": "51adc8254de3b049096e51ca97c59989da678bf2",
             "shasum": ""
         },
-        "time": "2016-12-01T07:08:40+00:00",
+        "require": {
+            "php": ">=5.4.0",
+            "topthink/think-installer": "~1.0"
+        },
+        "require-dev": {
+            "johnkary/phpunit-speedtrap": "^1.0",
+            "mikey179/vfsstream": "~1.6",
+            "phpdocumentor/reflection-docblock": "^2.0",
+            "phploc/phploc": "2.*",
+            "phpunit/phpunit": "4.8.*",
+            "sebastian/phpcpd": "2.*"
+        },
+        "time": "2017-04-28T01:14:37+00:00",
+        "type": "think-framework",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "think\\": "library/think"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "liu21st",
+                "email": "liu21st@gmail.com"
+            }
+        ],
+        "description": "the new thinkphp framework",
+        "homepage": "http://thinkphp.cn/",
+        "keywords": [
+            "framework",
+            "orm",
+            "thinkphp"
+        ]
+    },
+    {
+        "name": "topthink/think-helper",
+        "version": "v1.0.6",
+        "version_normalized": "1.0.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/top-think/think-helper.git",
+            "reference": "0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://dl.composer-proxy.org/topthink/think-helper/0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f.zip",
+            "reference": "0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f",
+            "shasum": ""
+        },
+        "time": "2017-04-05T07:15:37+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

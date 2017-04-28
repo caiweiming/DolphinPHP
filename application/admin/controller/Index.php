@@ -116,9 +116,10 @@ class Index extends Admin
     public function checkUpdate()
     {
         $params = config('dolphin');
-        $params['domain'] = request()->domain();
-        $params['ip']     = $_SERVER['SERVER_ADDR'];
-        $params['php_os'] = PHP_OS;
+        $params['domain']  = request()->domain();
+        $params['website'] = config('web_site_title');
+        $params['ip']      = $_SERVER['SERVER_ADDR'];
+        $params['php_os']  = PHP_OS;
         $params['php_version'] = PHP_VERSION;
         $params['mysql_version'] = db()->query('select version() as version')[0]['version'];
         $params['server_software'] = $_SERVER['SERVER_SOFTWARE'];
