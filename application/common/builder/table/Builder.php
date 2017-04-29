@@ -117,9 +117,9 @@ class Builder extends ZBuilder
     public function _initialize()
     {
         $this->_module     = $this->request->module();
-        $this->_controller = $this->request->controller();
+        $this->_controller = parse_name($this->request->controller());
         $this->_action     = $this->request->action();
-        $this->_table_name = strtolower($this->_module.'_'.trim(preg_replace("/[A-Z]/", "_\\0", $this->_controller), "_"));
+        $this->_table_name = strtolower($this->_module.'_'.$this->_controller);
         $this->_template   = APP_PATH. 'common/builder/table/layout.html';
     }
 
