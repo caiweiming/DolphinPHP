@@ -918,6 +918,7 @@ class Builder extends ZBuilder
         $column = array_merge($column, $args);
 
         $this->_vars['columns'][] = $column;
+        $this->_field_name[$name] = $title;
         return $this;
     }
 
