@@ -93,10 +93,11 @@ class Role extends Model
     /**
      * 检查访问权限
      * @param int $id 需要检查的节点ID，默认检查当前操作节点
+     * @param bool $url 是否为节点url，默认为节点id
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
      */
-    public static function checkAuth($id = 0)
+    public static function checkAuth($id = 0, $url = false)
     {
         // 当前用户的角色
         $role = session('user_auth.role');
@@ -112,6 +113,7 @@ class Role extends Model
             $menu_auth = self::where('id', $role)->value('menu_auth');
             if ($menu_auth && $menu_auth != '') {
                 $menu_auth = json_decode($menu_auth, true);
+                $menu_auth = MenuModel::where('id', 'in', $menu_auth)->column('id,url_value');
             }
             // 非开发模式，缓存数据
             if (config('develop_mode') == 0) {
@@ -122,13 +124,13 @@ class Role extends Model
         // 检查权限
         if ($menu_auth) {
             if ($id !== 0) {
-                return in_array($id, $menu_auth);
+                return $url === false ? isset($menu_auth[$id]) : in_array($id, $menu_auth);
             }
             // 获取当前操作的id
             $location = MenuModel::getLocation();
             $action   = end($location);
 
-            return in_array($action['id'], $menu_auth);
+            return $url === false ? isset($menu_auth[$action['id']]) : in_array($action['url_value'], $menu_auth);
         }
 
         // 其他情况一律没有权限

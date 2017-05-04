@@ -12,6 +12,7 @@
 namespace app\common\builder\table;
 
 use app\common\builder\ZBuilder;
+use app\user\model\Role;
 use think\Cache;
 
 /**
@@ -418,9 +419,8 @@ class Builder extends ZBuilder
             } else {
                 $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
             }
-            $url_value      = strtolower($url_value);
-            $user_menu_auth = session('user_menu_auth');
-            if (!isset($user_menu_auth[$url_value])) {
+            $url_value = strtolower($url_value);
+            if (!Role::checkAuth($url_value, true)) {
                 return $this;
             }
         }
@@ -650,9 +650,8 @@ class Builder extends ZBuilder
             } else {
                 $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
             }
-            $url_value      = strtolower($url_value);
-            $user_menu_auth = session('user_menu_auth');
-            if (!isset($user_menu_auth[$url_value])) {
+            $url_value = strtolower($url_value);
+            if (!Role::checkAuth($url_value, true)) {
                 return $this;
             }
         }

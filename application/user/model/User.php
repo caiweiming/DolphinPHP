@@ -128,18 +128,14 @@ class User extends Model
         session('user_auth_sign', $this->dataAuthSign($auth));
 
         // 保存用户节点权限
-        $url_value = [];
         if ($user->role != 1) {
             $menu_auth = Db::name('admin_role')->where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
-            if ($menu_auth) {
-                $url_value = Db::name('admin_menu')->where('id', 'in', $menu_auth)->where('url_value', 'neq', '')->column('id', 'url_value');
-            } else {
+            if (!$menu_auth) {
                 $this->error = '未分配任何节点权限！';
                 return false;
             }
         }
-        session('user_menu_auth', $url_value);
 
         // 记住登录
         if ($rememberme) {
