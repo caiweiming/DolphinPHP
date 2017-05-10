@@ -107,6 +107,7 @@ jQuery(document).ready(function() {
         var self             = $(this),
             $field_display   = self.data('field-display'), // 当前表格字段显示的字段名，未必是数据库字段名
             $filter          = self.data('filter'), // 要筛选的字段
+            $_type           = self.data('type'), // 筛选方式
             $_filter         = dolphin._filter,
             $_filter_content = dolphin._filter_content,
             $_field_display  = dolphin._field_display,
@@ -120,6 +121,7 @@ jQuery(document).ready(function() {
         layer.open({
             type: 1,
             title: '<i class="fa fa-filter"></i> 筛选',
+            shadeClose: true,
             area: ['500px', '530px'],
             btn:['确定', '取消'],
             content: '<div class="block-content" id="filter-check-content"><i class="fa fa-cog fa-spin"></i> 正在读取...</div>',
@@ -143,22 +145,37 @@ jQuery(document).ready(function() {
                     }
 
                     var list = '<div class="row push-10"><div class="col-sm-12"><div class="input-group"><div class="input-group-addon"><i class="fa fa-search"></i></div><input class="js-field-search form-control" type="text" placeholder="查找要筛选的字段"></div></div></div>';
-                    list += '<div class="row"><div class="col-sm-12"><label class="css-input css-checkbox css-checkbox-primary">';
-                    list += '<input type="checkbox" id="filter-check-all"><span></span> 全选';
-                    list += '</label></div></div>';
+                    if ($_type === 'checkbox') {
+                        list += '<div class="row"><div class="col-sm-12"><label class="css-input css-checkbox css-checkbox-primary">';
+                        list += '<input type="checkbox" id="filter-check-all"><span></span> 全选';
+                        list += '</label></div></div>';
+                    }
                     list += '<div class="filter-field-list">';
                     for(var key in res.list) {
                         // 如果不是该对象自身直接创建的属性（也就是该属//性是原型中的属性），则跳过显示
                         if (!res.list.hasOwnProperty(key)) {
                             continue;
                         }
-                        list += '<div class="row" data-field="'+res.list[key]+'"><div class="col-sm-12"><label class="css-input css-checkbox css-checkbox-primary">';
-                        list += '<input type="checkbox" ';
-                        if ($curr_filter_content !== '' && $.inArray(key, $curr_filter_content) !== -1) {
-                            list += 'checked="" ';
+
+                        list += '<div class="row" data-field="'+res.list[key]+'"><div class="col-sm-12">';
+                        if ($_type === 'checkbox') {
+                            list += '<label class="css-input css-checkbox css-checkbox-primary">';
+                            list += '<input type="checkbox" ';
+                            if ($curr_filter_content !== '' && $.inArray(key, $curr_filter_content) !== -1) {
+                                list += 'checked ';
+                            }
+                            list += 'value="'+ key +'" class="check-item"><span></span> '+res.list[key];
+                            list += '</label>';
+                        } else {
+                            list += '<label class="css-input css-radio css-radio-primary">';
+                            list += '<input type="radio" name="_filter_'+$field_display+'" ';
+                            if ($curr_filter_content !== '' && $curr_filter_content == key) {
+                                list += 'checked ';
+                            }
+                            list += 'value="'+ key +'" class="check-item"><span></span> '+res.list[key];
+                            list += '</label>';
                         }
-                        list += 'value="'+ key +'" class="check-item"><span></span> '+res.list[key];
-                        list += '</label></div></div>';
+                        list += '</div></div>';
                     }
                     list += '</div>';
                     $('#filter-check-content').html(list);
@@ -233,7 +250,6 @@ jQuery(document).ready(function() {
                         }
                     }
                 }
-
                 var _curr_params = {
                     _filter: $filter || '',
                     _filter_content: $fields || '',

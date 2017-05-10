@@ -68,6 +68,11 @@ class Builder extends ZBuilder
     private $_filter_options = [];
 
     /**
+     * @var array 存储字段筛选类型
+     */
+    private $_filter_type = [];
+
+    /**
      * @var array 列名
      */
     private $_field_name = [];
@@ -185,10 +190,11 @@ class Builder extends ZBuilder
      * @param array|string $columns 表头筛选字段，多个以逗号隔开
      * @param array $options 选项，供有些字段值需要另外显示的，比如字段值是数字，但显示的时候是其他文字。
      * @param array $default 默认选项，['字段名' => '字段值,字段值...']
+     * @param string $type 筛选类型，默认为CheckBox，也可以是radio
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addFilter($columns = [], $options = [], $default = [])
+    public function addFilter($columns = [], $options = [], $default = [], $type = 'checkbox')
     {
         if (!empty($columns)) {
             $columns = is_array($columns) ? $columns : explode(',', $columns);
@@ -220,6 +226,10 @@ class Builder extends ZBuilder
                     $this->_vars['_filter'][]         = $filter;
                     $this->_vars['_filter_content'][] = is_array($content) ? implode(',', $content) : $content;
                 }
+            }
+            // 处理筛选类型
+            foreach ($columns as $column) {
+                $this->_filter_type[$column] = $type;
             }
         }
         return $this;
@@ -1502,6 +1512,7 @@ class Builder extends ZBuilder
                         list($table, $field) = explode('.', $value);
                         $filter_columns[$field] = [
                             'table'   => $table,
+                            'type'    => $this->_filter_type[$value],
                             'field'   => $field,
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$field]) ? $filter_maps[$field] : '',
@@ -1510,6 +1521,7 @@ class Builder extends ZBuilder
                     } else {
                         $filter_columns[$value] = [
                             'table'   => $this->_table_name,
+                            'type'    => $this->_filter_type[$value],
                             'field'   => $value,
                             'filter'  => $value,
                             'map'     => isset($filter_maps[$value]) ? $filter_maps[$value] : '',
@@ -1521,6 +1533,7 @@ class Builder extends ZBuilder
                         list($table, $field) = explode('.', $value);
                         $filter_columns[$key] = [
                             'table'   => $table,
+                            'type'    => $this->_filter_type[$value],
                             'field'   => $field,
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
@@ -1529,6 +1542,7 @@ class Builder extends ZBuilder
                     } else {
                         $filter_columns[$key] = [
                             'table'   => $value,
+                            'type'    => $this->_filter_type[$value],
                             'field'   => $key,
                             'filter'  => $value . '.' . $key,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
