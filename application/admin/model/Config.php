@@ -41,7 +41,11 @@ class Config extends Model
                     $result[$config['name']] = parse_attr($config['value']);
                     break;
                 case 'checkbox':
-                    $result[$config['name']] = explode(',', $config['value']);
+                    if ($config['value'] != '') {
+                        $result[$config['name']] = explode(',', $config['value']);
+                    } else {
+                        $result[$config['name']] = [];
+                    }
                     break;
                 default:
                     $result[$config['name']] = $config['value'];
