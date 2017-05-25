@@ -99,6 +99,8 @@ class Document extends ThinkModel
         // 处理自定义属性
         if (isset($data['flag'])) {
             $data['flag'] = implode(',', $data['flag']);
+        } else {
+            $data['flag'] = '';
         }
 
         // 验证基础内容
