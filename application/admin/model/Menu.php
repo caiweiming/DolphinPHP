@@ -105,6 +105,7 @@ class Menu extends Model
      */
     public static function getTopMenu($max = '', $cache_tag = '')
     {
+        $cache_tag .= '_role_'.session('user_auth.role');
         $menus = cache($cache_tag);
         if (!$menus) {
             // 非开发模式，只显示可以显示的菜单
@@ -147,7 +148,9 @@ class Menu extends Model
     {
         $module     = $module == '' ? request()->module() : $module;
         $controller = $controller == '' ? request()->controller() : $controller;
-        $menus      = cache('_sidebar_menus.' . $module . '_' . $controller);
+        $cache_tag  = strtolower('_sidebar_menus_' . $module . '_' . $controller).'_role_'.session('user_auth.role');
+        $menus      = cache($cache_tag);
+
         if (!$menus) {
             // 获取当前节点地址
             $location = self::getLocation($id);
@@ -179,7 +182,7 @@ class Menu extends Model
 
             // 非开发模式，缓存菜单
             if (config('develop_mode') == 0) {
-                cache('_sidebar_menus.' . $module . '_' . $controller, $menus);
+                cache($cache_tag, $menus);
             }
         }
         return $menus;
@@ -201,9 +204,9 @@ class Menu extends Model
         $action     = request()->action();
 
         if ($id != '') {
-            $cache_name = 'location.menu_'.$id;
+            $cache_name = 'location_menu_'.$id;
         } else {
-            $cache_name = 'location.'.$model.'_'.$controller.'_'.$action;
+            $cache_name = 'location_'.$model.'_'.$controller.'_'.$action;
         }
 
         $location = cache($cache_name);
