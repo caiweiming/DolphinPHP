@@ -61,13 +61,16 @@ if (!function_exists('get_thumb')) {
 if (!function_exists('get_avatar')) {
     /**
      * 获取用户头像路径
-     * @param int $id 附件id
+     * @param int $uid 用户id
      * @author 蔡伟明 <314013107@qq.com>
+     * @alter 小乌 <82950492@qq.com>
      * @return string
      */
-    function get_avatar($id = 0)
+    function get_avatar($uid = 0)
     {
-        $path = model('admin/attachment')->getFilePath($id);
+        $uid = $uid == 0 ? UID : $uid;
+        $avatar = Db::name('admin_user')->where('id', $uid)->value('avatar');
+        $path = model('admin/attachment')->getFilePath($avatar);
         if (!$path) {
             return config('public_static_path').'admin/img/avatar.jpg';
         }
@@ -298,11 +301,14 @@ if (!function_exists('hook')) {
     /**
      * 监听钩子
      * @param string $name 钩子名称
-     * @param array $params 参数
+     * @param mixed  $params 传入参数
+     * @param mixed  $extra  额外参数
+     * @param bool   $once   只获取一个有效返回值
      * @author 蔡伟明 <314013107@qq.com>
+     * @alter 小乌 <82950492@qq.com>
      */
-    function hook($name = '', $params = []) {
-        \think\Hook::listen($name, $params);
+    function hook($name = '', $params = null, $extra = null, $once = false) {
+        \think\Hook::listen($name, $params, $extra, $once);
     }
 }
 
@@ -521,7 +527,7 @@ if (!function_exists('format_linkage')) {
      * 格式化联动数据
      * @param array $data 数据
      * @author 蔡伟明 <314013107@qq.com>
-     * @return string
+     * @return array
      */
     function format_linkage($data = [])
     {
@@ -542,7 +548,7 @@ if (!function_exists('get_auth_node')) {
      * @param int $uid 用户id
      * @param string $group 权限分组，可以以点分开模型名称和分组名称，如user.group
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return array|bool
      */
     function get_auth_node($uid = 0, $group = '')
     {
@@ -557,7 +563,7 @@ if (!function_exists('check_auth_node')) {
      * @param string $group $group 权限分组，可以以点分开模型名称和分组名称，如user.group
      * @param int $node 需要检查的节点id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return bool
      */
     function check_auth_node($uid = 0, $group = '', $node = 0)
     {
@@ -1045,7 +1051,7 @@ if (!function_exists('packet_exists')) {
      * 查询数据包是否存在，即是否已经安装
      * @param string $name 数据包名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return string
+     * @return bool
      */
     function packet_exists($name = '')
     {
