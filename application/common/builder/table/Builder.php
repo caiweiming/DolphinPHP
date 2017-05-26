@@ -597,7 +597,7 @@ class Builder extends ZBuilder
             $btn_attribute = [
                 'title' => '编辑',
                 'icon'  => 'fa fa-pencil',
-                'class' => 'btn btn-xs btn-default',
+                'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
                 'href'  => url(
                     $this->_module.'/'.$this->_controller.'/edit',
                     ['id' => '__id__']
@@ -1378,22 +1378,25 @@ class Builder extends ZBuilder
                             break;
                         case 'avatar': // 头像
                             break;
+                        case 'img_url': // 外链图片
+                            $row[$column['name']] = '<div class="js-gallery"><a href="'.$row[$column['name']].'" class="img-link"><img class="image" src="'.$row[$column['name']].'"></a></div>';
+                            break;
                         case 'picture': // 单张图片
-                            $row[$column['name']] = '<a href="'.get_file_path($row[$column['name']]).'" target="_blank" title="'.get_file_name($row[$column['name']]).'"><img class="image" src="'.get_file_path($row[$column['name']]).'"></a>';
+                            $row[$column['name']] = '<div class="js-gallery"><a href="'.get_file_path($row[$column['name']]).'" class="img-link" title="'.get_file_name($row[$column['name']]).'"><img class="image" src="'.get_file_path($row[$column['name']]).'"></a></div>';
                             break;
                         case 'pictures': // 多张图片
                             if ($row[$column['name']] === '') {
                                 $row[$column['name']] = !empty($column['default']) ? $column['default'] : '暂无图片';
                             } else {
                                 $list_img = is_array($row[$column['name']]) ? $row[$column['name']] : explode(',', $row[$column['name']]);
-                                $imgs = '';
+                                $imgs = '<div class="js-gallery">';
                                 foreach ($list_img as $key => $img) {
                                     if ($column['param'] != '' && $key == $column['param']) {
                                         break;
                                     }
-                                    $imgs .= ' <a href="'.get_file_path($img).'" target="_blank" title="'.get_file_name($img).'"><img class="image" src="'.get_file_path($img).'"></a>';
+                                    $imgs .= ' <a href="'.get_file_path($img).'" class="img-link" title="'.get_file_name($img).'"><img class="image" src="'.get_file_path($img).'"></a>';
                                 }
-                                $row[$column['name']] = $imgs;
+                                $row[$column['name']] = $imgs.'</div>';
                             }
                             break;
                         case 'select': // 下拉框
