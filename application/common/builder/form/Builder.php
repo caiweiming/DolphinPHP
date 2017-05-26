@@ -652,10 +652,11 @@ class Builder extends ZBuilder
             $this->_is_group = true;
             foreach ($groups as &$group) {
                 foreach ($group as $key => $item) {
-                    $type = $item[0];
-                    $args = $item;
-                    array_shift($args);
-                    $group[$key] = call_user_func_array([$this, 'add'.ucfirst($type)], $args);
+                    $type = array_shift($item);
+                    if (strpos($type, ':')) {
+                        list($type, $this->_vars['_layout'][$item[0]]) = explode(':', $type);
+                    }
+                    $group[$key] = call_user_func_array([$this, 'add'.ucfirst($type)], $item);
                 }
             }
             $this->_is_group = false;
