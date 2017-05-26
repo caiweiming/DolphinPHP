@@ -70,7 +70,18 @@ var Dolphin = function () {
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
                                     tips(msg, 'danger');
-                                    self.attr("autocomplete", "on").prop("disabled", false);
+                                    setTimeout(function () {
+                                        // 关闭弹出框
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                            parent.layer.close(index);return false;
+                                        }
+                                        // 刷新父窗口
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                            parent.location.reload();return false;
+                                        }
+                                        self.attr("autocomplete", "on").prop("disabled", false);
+                                    }, 2000);
                                 }
                             }).fail(function () {
                                 pageLoader('hide');
@@ -130,7 +141,18 @@ var Dolphin = function () {
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
                                     tips(msg, 'danger');
-                                    self.attr("autocomplete", "on").prop("disabled", false);
+                                    setTimeout(function () {
+                                        // 关闭弹出框
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                            parent.layer.close(index);return false;
+                                        }
+                                        // 刷新父窗口
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                            parent.location.reload();return false;
+                                        }
+                                        self.attr("autocomplete", "on").prop("disabled", false);
+                                    }, 2000);
                                 }
                             }).fail(function () {
                                 pageLoader('hide');
@@ -184,7 +206,18 @@ var Dolphin = function () {
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
                                     tips(msg, 'danger');
-                                    self.attr("autocomplete", "on").prop("disabled", false);
+                                    setTimeout(function () {
+                                        // 关闭弹出框
+                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                            parent.layer.close(index);return false;
+                                        }
+                                        // 刷新父窗口
+                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                            parent.location.reload();return false;
+                                        }
+                                        self.attr("autocomplete", "on").prop("disabled", false);
+                                    }, 2000);
                                 }
                             }).fail(function () {
                                 pageLoader('hide');
@@ -226,7 +259,18 @@ var Dolphin = function () {
                     } else {
                         jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
                         tips(msg, 'danger');
-                        self.attr("autocomplete", "on").prop("disabled", false);
+                        setTimeout(function () {
+                            // 关闭弹出框
+                            if (res.data === '_close_pop' || res.data._close_pop) {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);return false;
+                            }
+                            // 刷新父窗口
+                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                parent.location.reload();return false;
+                            }
+                            self.attr("autocomplete", "on").prop("disabled", false);
+                        }, 2000);
                     }
                 }).fail(function () {
                     pageLoader('hide');
@@ -289,7 +333,18 @@ var Dolphin = function () {
                             }, 1500);
                         } else {
                             tips(msg, 'danger');
-                            self.attr("autocomplete", "on").prop("disabled", false);
+                            setTimeout(function () {
+                                // 关闭弹出框
+                                if (res.data === '_close_pop' || res.data._close_pop) {
+                                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                    parent.layer.close(index);return false;
+                                }
+                                // 刷新父窗口
+                                if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                    parent.location.reload();return false;
+                                }
+                                self.attr("autocomplete", "on").prop("disabled", false);
+                            }, 2000);
                         }
                     }).fail(function () {
                         pageLoader('hide');
@@ -325,7 +380,18 @@ var Dolphin = function () {
                         }, 1500);
                     } else {
                         tips(msg, 'danger');
-                        self.attr("autocomplete", "on").prop("disabled", false);
+                        setTimeout(function () {
+                            // 关闭弹出框
+                            if (res.data === '_close_pop' || res.data._close_pop) {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);return false;
+                            }
+                            // 刷新父窗口
+                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                parent.location.reload();return false;
+                            }
+                            self.attr("autocomplete", "on").prop("disabled", false);
+                        }, 2000);
                     }
                 }).fail(function () {
                     pageLoader('hide');
