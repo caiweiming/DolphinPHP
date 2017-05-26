@@ -62,7 +62,7 @@
 
     <!--页面css-->
     {block name="style"}{/block}
-    {notempty name="Think.get._pop"}
+    {notempty name="_pop"}
     <style>
         #page-container.sidebar-l.sidebar-o {
             padding-left: 0;
@@ -114,7 +114,7 @@
 <!-- Page Container -->
 <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
     <!-- Side Overlay-->
-    {empty name="Think.get._pop"}
+    {empty name="_pop"}
     {block name="aside"}
     <aside id="side-overlay">
         <!-- Side Overlay Scroll Container -->
@@ -141,7 +141,7 @@
     <!-- END Side Overlay -->
 
     <!-- Sidebar -->
-    {empty name="Think.get._pop"}
+    {empty name="_pop"}
     {block name="sidebar"}
     <nav id="sidebar">
         <!-- Sidebar Scroll Container -->
@@ -245,7 +245,7 @@
     <!-- END Sidebar -->
 
     <!-- Header -->
-    {empty name="Think.get._pop"}
+    {empty name="_pop"}
     {block name="header"}
     <header id="header-navbar" class="content-mini content-mini-full">
         <!-- Header Navigation Right -->
@@ -327,7 +327,7 @@
     <main id="main-container">
         <!-- Page Header -->
         {block name="page-header"}
-        {empty name="Think.get._pop"}
+        {empty name="_pop"}
         <div class="content bg-gray-lighter">
             <div class="row items-push">
                 <div class="col-sm-7">
@@ -363,7 +363,7 @@
     <!-- END Main Container -->
 
     <!-- Footer -->
-    {empty name="Think.get._pop"}
+    {empty name="_pop"}
     <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
         <div class="pull-right">
             Crafted with <i class="fa fa-heart text-city"></i> by <a class="font-w600" href="{:config('dolphin.company_website')}" target="_blank">{:config('dolphin.company_name')}</a>

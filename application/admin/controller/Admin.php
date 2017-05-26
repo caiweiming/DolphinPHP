@@ -36,7 +36,7 @@ class Admin extends Common
         defined('UID') or define('UID', $this->isLogin());
 
         // 检查权限
-        if (!RoleModel::checkAuth()) return $this->error('权限不足！');
+        if (!RoleModel::checkAuth()) $this->error('权限不足！');
 
         // 设置分页参数
         $this->setPageParam();
@@ -70,6 +70,9 @@ class Admin extends Common
             ZBuilder::make('aside')
                 ->addBlock('switch', '系统设置', $settings);
         }
+
+        // 输出弹出层参数
+        $this->assign('_pop', $this->request->param('_pop'));
     }
 
     /**

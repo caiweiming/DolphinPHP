@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="block">
-                {empty name="Think.get._pop"}
+                {empty name="_pop"}
                 {notempty name="tab_nav"}
                 <ul class="nav nav-tabs">
                     {volist name="tab_nav['tab_list']" id="tab"}
@@ -246,7 +246,7 @@
                                         </button>
                                         {php}endif;{/php}
 
-                                        {empty name="Think.get._pop"}
+                                        {empty name="_pop"}
                                         {php}if(isset($btn_hide) && !in_array('back', $btn_hide)):{/php}
                                         <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
                                             {$btn_title['back']|default='返回'}
