@@ -319,7 +319,7 @@ class Module extends Admin
         }
 
         // 获取模型菜单并导出
-        $fields = 'id,pid,title,icon,url_type,url_value,url_target,online_hide,sort';
+        $fields = 'id,pid,title,icon,url_type,url_value,url_target,online_hide,sort,status';
         $menus = MenuModel::getMenusByGroup($name, $fields);
         if (false === $this->buildMenuFile($menus, $name)) {
             return $this->error('模型菜单文件创建失败，请重新导出');
@@ -491,6 +491,7 @@ INFO;
                 'url_value'   => isset($menu['url_value']) ? $menu['url_value'] : '',
                 'url_target'  => isset($menu['url_target']) ? $menu['url_target'] : '_self',
                 'online_hide' => isset($menu['online_hide']) ? $menu['online_hide'] : 0,
+                'status'      => isset($menu['status']) ? $menu['status'] : 1
             ];
 
             $result = MenuModel::create($data);
