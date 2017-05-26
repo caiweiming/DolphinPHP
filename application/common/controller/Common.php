@@ -22,6 +22,7 @@ class Common extends Controller
     /**
      * 获取筛选条件
      * @author 蔡伟明 <314013107@qq.com>
+     * @alter 小乌 <82950492@qq.com>
      * @return array
      */
     final protected function getMap()
@@ -43,6 +44,10 @@ class Common extends Controller
 
         // 时间段搜索
         if ($filter_time != '' && $filter_time_from != '' && $filter_time_to != '') {
+            if ($filter_time_from == $filter_time_to) {
+                $filter_time_from .= ' 00:00:00';
+                $filter_time_to   .= ' 23:59:59';
+            }
             $map[$filter_time] = ['between time', [$filter_time_from, $filter_time_to]];
         }
 
