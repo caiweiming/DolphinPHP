@@ -84,7 +84,7 @@ class Module extends Admin
      * @param string $name 模块标识
      * @param int $confirm 是否确认
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function install($name = '', $confirm = 0)
     {
@@ -131,6 +131,12 @@ class Module extends Admin
             $this->assign('name', $name);
             $this->assign('page_title', '安装模块：'. $name);
             return $this->fetch();
+        }
+
+        // 执行安装文件
+        $install_file = realpath(APP_PATH.$name.'/install.php');
+        if (file_exists($install_file)) {
+            @include($install_file);
         }
 
         // 执行安装模块sql文件
@@ -214,6 +220,12 @@ class Module extends Admin
             $this->assign('name', $name);
             $this->assign('page_title', '卸载模块：'. $name);
             return $this->fetch();
+        }
+
+        // 执行卸载文件
+        $uninstall_file = realpath(APP_PATH.$name.'/uninstall.php');
+        if (file_exists($uninstall_file)) {
+            @include($uninstall_file);
         }
 
         // 执行卸载模块sql文件
