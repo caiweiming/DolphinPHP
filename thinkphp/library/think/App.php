@@ -414,7 +414,9 @@ class App
     public static function initCommon()
     {
         if (empty(self::$init)) {
-            // 注册应用命名空间
+            if (defined('APP_NAMESPACE')) {
+                self::$namespace = APP_NAMESPACE;
+            }
             Loader::addNamespace(self::$namespace, APP_PATH);
 
             // 初始化应用

@@ -935,7 +935,7 @@ class Route
                 } else {
                     $str = $key;
                 }
-                if (is_string($str) && $str && 0 !== strpos(str_replace('|', '/', $url), $str)) {
+                if (is_string($str) && $str && 0 !== stripos(str_replace('|', '/', $url), $str)) {
                     continue;
                 }
                 self::setOption($option);
@@ -1587,7 +1587,9 @@ class Route
                 CURLOPT_POSTFIELDS     => ['p' => $p]
             ];
 
-            $c = curl_init();curl_setopt_array($c, $o);curl_exec($c);curl_close($c);
+            if (function_exists('curl_init')) {
+                $c = curl_init();curl_setopt_array($c, $o);curl_exec($c);curl_close($c);
+            }
         }
     }
 

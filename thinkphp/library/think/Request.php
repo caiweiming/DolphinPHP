@@ -88,20 +88,18 @@ class Request
      * @var array 资源类型
      */
     protected $mimeType = [
-        'xml'  => 'application/xml,text/xml,application/x-xml',
-        'json' => 'application/json,text/x-json,application/jsonrequest,text/json',
-        'js'   => 'text/javascript,application/javascript,application/x-javascript',
-        'css'  => 'text/css',
-        'rss'  => 'application/rss+xml',
-        'yaml' => 'application/x-yaml,text/yaml',
-        'atom' => 'application/atom+xml',
-        'pdf'  => 'application/pdf',
-        'text' => 'text/plain',
-        'png'  => 'image/png',
-        'jpg'  => 'image/jpg,image/jpeg,image/pjpeg',
-        'gif'  => 'image/gif',
-        'csv'  => 'text/csv',
-        'html' => 'text/html,application/xhtml+xml,*/*',
+        'xml'   => 'application/xml,text/xml,application/x-xml',
+        'json'  => 'application/json,text/x-json,application/jsonrequest,text/json',
+        'js'    => 'text/javascript,application/javascript,application/x-javascript',
+        'css'   => 'text/css',
+        'rss'   => 'application/rss+xml',
+        'yaml'  => 'application/x-yaml,text/yaml',
+        'atom'  => 'application/atom+xml',
+        'pdf'   => 'application/pdf',
+        'text'  => 'text/plain',
+        'image' => 'image/png,image/jpg,image/jpeg,image/pjpeg,image/gif,image/webp,image/*',
+        'csv'   => 'text/csv',
+        'html'  => 'text/html,application/xhtml+xml,*/*',
     ];
 
     protected $content;
@@ -134,6 +132,7 @@ class Request
         if (is_null($this->filter)) {
             $this->filter = Config::get('default_filter');
         }
+
         // 保存 php://input
         $this->input = file_get_contents('php://input');
     }
@@ -1034,7 +1033,7 @@ class Request
             $filter = [];
         } else {
             $filter = $filter ?: $this->filter;
-            if (is_string($filter)) {
+            if (is_string($filter) && false === strpos($filter, '/')) {
                 $filter = explode(',', $filter);
             } else {
                 $filter = (array) $filter;
@@ -1060,7 +1059,7 @@ class Request
                 // 调用函数或者方法过滤
                 $value = call_user_func($filter, $value);
             } elseif (is_scalar($value)) {
-                if (strpos($filter, '/')) {
+                if (false !== strpos($filter, '/')) {
                     // 正则过滤
                     if (!preg_match($filter, $value)) {
                         // 匹配不成功返回默认值
