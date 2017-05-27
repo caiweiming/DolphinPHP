@@ -1103,3 +1103,37 @@ if (!function_exists('parse_name')) {
         }
     }
 }
+
+if (!function_exists('index_url')) {
+    /**
+     * 生成前台入口url
+     * @param string        $url 路由地址
+     * @param string|array  $vars 变量
+     * @param bool|string   $suffix 生成的URL后缀
+     * @param bool|string   $domain 域名
+     * @author 小乌 <82950492@qq.com>
+     * @return string
+     */
+    function index_url($url = '', $vars = '', $suffix = true, $domain = false) {
+        $url = url($url, $vars, $suffix, $domain);
+        $url = preg_replace('/^\/admin.php/', '/index.php', $url);
+        return $url;
+    }
+}
+
+if (!function_exists('admin_url')) {
+    /**
+     * 生成后台入口url
+     * @param string        $url 路由地址
+     * @param string|array  $vars 变量
+     * @param bool|string   $suffix 生成的URL后缀
+     * @param bool|string   $domain 域名
+     * @author 小乌 <82950492@qq.com>
+     * @return string
+     */
+    function admin_url($url = '', $vars = '', $suffix = true, $domain = false) {
+        $url = url($url, $vars, $suffix, $domain);
+        $url = preg_replace('/^\/index.php/', '/admin.php', $url);
+        return $url;
+    }
+}
