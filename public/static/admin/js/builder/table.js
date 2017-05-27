@@ -341,7 +341,9 @@ jQuery(document).ready(function() {
         };
 
         if ($layer !== undefined) {
-            $.extend($options, $layer);
+            $.extend($options, dolphin.layer, $layer);
+        } else {
+            $.extend($options, dolphin.layer);
         }
 
         layer.open($options);
