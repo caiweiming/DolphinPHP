@@ -971,4 +971,11 @@ jQuery(document).ready(function() {
             el.refresh();
         });
     });
+
+    // 关闭弹窗按钮
+    $('#close-pop').click(function () {
+        // 获取窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    });
 });
