@@ -49,7 +49,7 @@ class ZBuilder extends Common
      * @param string $type 构建器名称，'Form', 'Table', 'View' 或其他自定义构建器
      * @param string $action 动作
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return table\Builder|form\Builder|aside\Builder
      * @throws Exception
      */
     public static function make($type = '', $action = '')
