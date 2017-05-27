@@ -46,6 +46,7 @@
                 <div class="block-content tab-content">
                     <div class="tab-pane active">
                         {// 顶部筛选及搜索 }
+                        {$extra_html_toolbar_top|default=''}
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 {// 搜索框 }
@@ -98,6 +99,7 @@
                                 </div>
                             </div>
                         </div>
+                        {$extra_html_toolbar_bottom|default=''}
 
                         <div class="table-responsive">
                             <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
@@ -207,9 +209,6 @@
             </div>
         </div>
     </div>
-
-{// 额外HTML代码 }
-{$extra_html|default=''}
 {/block}
 
 {block name="style"}
