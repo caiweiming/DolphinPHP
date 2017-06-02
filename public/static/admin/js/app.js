@@ -215,7 +215,13 @@ var App = function() {
                 break;
             case 'sidebar_mini_toggle':
                 if ($windowW > 991) {
-                    $lPage.toggleClass('sidebar-mini');
+                    if ($lPage.hasClass('sidebar-mini')) {
+                        $lPage.removeClass('sidebar-mini');
+                        Cookies.remove('sidebarMini');
+                    } else {
+                        $lPage.addClass('sidebar-mini');
+                        Cookies.set('sidebarMini', 'true', { expires: 7 });
+                    }
                 }
                 break;
             case 'sidebar_mini_on':
