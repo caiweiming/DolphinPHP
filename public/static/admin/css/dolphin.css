@@ -263,6 +263,13 @@ div.tagsinput {
 .search-bar {
     width: 280px;
 }
+@media screen and (max-width: 425px){
+    .search-bar {
+        width: 100%;
+        margin-bottom: 10px;
+        float: none!important;
+    }
+}
 
 /* 菜单页面 */
 #menu_list {
@@ -462,4 +469,15 @@ table.treetable tr.branch {
 .col-md-12 > .form-btn-parent,
 .col-md-12 > .form-btn-parent > .form-btn{
     margin: 0;
+}
+
+.breadcrumb {
+    padding:10px 14px;
+}
+
+@media screen and (min-width: 768px){
+    /* 面包屑导航 */
+    .breadcrumb {
+        padding: 10px 30px;
+    }
 }

@@ -9,7 +9,7 @@
     <meta name="description" content="{:config('web_site_description')}">
     <meta name="author" content="caiweiming">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0">
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
@@ -329,24 +329,15 @@
         <!-- Page Header -->
         {block name="page-header"}
         {empty name="_pop"}
-        <div class="content bg-gray-lighter">
-            <div class="row items-push">
-                <div class="col-sm-7">
-                    <h1 class="page-heading">
-                        {$page_title|default=''}
-                    </h1>
-                </div>
-                <div class="col-sm-5 text-right hidden-xs">
-                    <ol class="breadcrumb push-10-t">
-                        <li><i class="fa fa-map-marker"></i></li>
-                        {notempty name="_location"}
-                        {volist name="_location" id="v"}
-                        <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{$v.url_value|url}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>
-                        {/volist}
-                        {/notempty}
-                    </ol>
-                </div>
-            </div>
+        <div class="bg-gray-lighter">
+            <ol class="breadcrumb">
+                <li><i class="fa fa-map-marker"></i></li>
+                {notempty name="_location"}
+                {volist name="_location" id="v"}
+                <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{$v.url_value|url}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>
+                {/volist}
+                {/notempty}
+            </ol>
         </div>
         {/empty}
         {/block}
