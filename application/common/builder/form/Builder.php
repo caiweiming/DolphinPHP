@@ -54,6 +54,7 @@ class Builder extends ZBuilder
         '_css_files'      => [],    // 需要加载的css（合并输出）
         '_layout'         => [],    // 布局参数
         'btn_extra'       => [],    // 额外按钮
+        'submit_confirm'  => false, // 提交确认
     ];
 
     /**
@@ -159,6 +160,17 @@ class Builder extends ZBuilder
                 $this->_vars['btn_title'][trim($btn)] = trim($title);
             }
         }
+        return $this;
+    }
+
+    /**
+     * 设置提交表单时显示确认框
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function submitConfirm()
+    {
+        $this->_vars['submit_confirm'] = true;
         return $this;
     }
 

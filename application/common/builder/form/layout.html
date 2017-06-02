@@ -241,7 +241,7 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-xs-12">
                                         {php}if(isset($btn_hide) && !in_array('submit', $btn_hide)):{/php}
-                                        <button class="btn btn-minw btn-primary {eq name="ajax_submit" value="true"}ajax-post{/eq}" target-form="form-builder" type="submit">
+                                        <button class="btn btn-minw btn-primary {$submit_confirm ?= 'confirm '}{$ajax_submit ?= 'ajax-post'}" target-form="form-builder" type="submit">
                                             {$btn_title['submit']|default='提交'}
                                         </button>
                                         {php}endif;{/php}
