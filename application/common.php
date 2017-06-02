@@ -1036,12 +1036,15 @@ if (!function_exists('execute_action')) {
 if (!function_exists('get_location')) {
     /**
      * 获取当前位置
+     * @param string $id 节点id，如果没有指定，则取当前节点id
+     * @param bool $del_last_url 是否删除最后一个节点的url地址
+     * @param bool $check 检查节点是否存在，不存在则抛出错误
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    function get_location()
+    function get_location($id = '', $del_last_url = false, $check = true)
     {
-        $location = model('admin/menu')->getLocation();
+        $location = model('admin/menu')->getLocation($id, $del_last_url, $check);
         return $location;
     }
 }

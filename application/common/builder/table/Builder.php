@@ -1631,9 +1631,11 @@ class Builder extends ZBuilder
 
         // 处理页面标题
         if ($this->_vars['page_title'] == '') {
-            $location = get_location();
-            $curr_location = end($location);
-            $this->_vars['page_title'] = $curr_location['title'];
+            $location = get_location('', false, false);
+            if ($location) {
+                $curr_location = end($location);
+                $this->_vars['page_title'] = $curr_location['title'];
+            }
         }
 
         // 处理是否有分页数据
