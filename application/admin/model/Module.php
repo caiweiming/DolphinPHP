@@ -141,33 +141,33 @@ class Module extends Model
                     $module['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                     $module['status_class'] = 'text-success';
                     $module['status_info'] = '<i class="fa fa-check"></i> 已启用';
-                    $module['bg_color'] = 'bg-success';
+                    $module['bg_color'] = 'success';
                     continue;
                 }
 
                 switch ($module['status']) {
                     case '-3': // 模块信息不完整
                         $module['title'] = '模块信息不完整';
-                        $module['bg_color'] = 'bg-danger';
+                        $module['bg_color'] = 'danger';
                         $module['status_class'] = 'text-danger';
                         $module['status_info'] = '<i class="fa fa-times"></i> 已损坏';
                         $module['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                         break;
                     case '-2': // 模块信息缺失
                         $module['title'] = '模块信息缺失';
-                        $module['bg_color'] = 'bg-danger';
+                        $module['bg_color'] = 'danger';
                         $module['status_class'] = 'text-danger';
                         $module['status_info'] = '<i class="fa fa-times"></i> 已损坏';
                         $module['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                         break;
                     case '-1': // 未安装
-                        $module['bg_color'] = 'bg-info';
+                        $module['bg_color'] = 'info';
                         $module['actions'] = '<a class="btn btn-sm btn-noborder btn-success" href="'.url('install', ['name' => $module['name']]).'">安装</a>';
                         $module['status_class'] = 'text-info';
                         $module['status_info'] = '<i class="fa fa-fw fa-th-large"></i> 未安装';
                         break;
                     case '0': // 禁用
-                        $module['bg_color'] = 'bg-warning';
+                        $module['bg_color'] = 'warning';
                         $module['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $module['id'], 'table' => 'admin_module']).'">启用</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-primary" href="'.url('export', ['name' => $module['name']]).'">导出</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger" href="'.url('uninstall', ['name' => $module['name']]).'">卸载</a> ';
@@ -175,7 +175,7 @@ class Module extends Model
                         $module['status_info'] = '<i class="fa fa-ban"></i> 已禁用';
                         break;
                     case '1': // 启用
-                        $module['bg_color'] = 'bg-success';
+                        $module['bg_color'] = 'success';
                         $module['actions'] = '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $module['id'], 'table' => 'admin_module']).'">禁用</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-primary" href="'.url('export', ['name' => $module['name']]).'">导出</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger" href="'.url('uninstall', ['name' => $module['name']]).'">卸载</a> ';

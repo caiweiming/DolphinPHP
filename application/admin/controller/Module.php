@@ -15,6 +15,7 @@ use app\admin\model\Module as ModuleModel;
 use app\admin\model\Plugin as PluginModel;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Action as ActionModel;
+use think\Cache;
 use util\Database;
 use util\Sql;
 use util\File;
@@ -32,10 +33,11 @@ class Module extends Admin
     /**
      * 模块首页
      * @param string $group 分组
+     * @param string $type 显示类型
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
-    public function index($group = 'local')
+    public function index($group = 'local', $type = '')
     {
         // 配置分组信息
         $list_group = ['local' => '本地模块'];
@@ -62,20 +64,26 @@ class Module extends Admin
                 $result = $ModuleModel->getAll($keyword, $status);
 
                 if ($result['modules'] === false) {
-                    return $this->error($ModuleModel->getError());
+                    $this->error($ModuleModel->getError());
                 }
+
+                $type_show = Cache::get('module_type_show');
+                $type_show = $type != '' ? $type : ($type_show == false ? 'block' : $type_show);
+                Cache::set('module_type_show', $type_show);
+                $type = $type_show == 'block' ? 'list' : 'block';
 
                 $this->assign('page_title', '模块管理');
                 $this->assign('modules', $result['modules']);
                 $this->assign('total', $result['total']);
                 $this->assign('tab_nav', ['tab_list' => $tab_list, 'curr_tab' => $group]);
+                $this->assign('type', $type);
                 return $this->fetch();
                 break;
             case 'online':
                 return '<h2>正在建设中...</h2>';
                 break;
             default:
-                return $this->error('非法操作');
+                $this->error('非法操作');
         }
     }
 
