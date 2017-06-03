@@ -78,7 +78,7 @@ div.tagsinput {
     margin-top: 5px;
 }
 .file-item .error,
-.file-item .success{
+.file-item .img-state{
     position: absolute;
     top: 4px;
     left: 4px;

@@ -6,6 +6,8 @@
 jQuery(document).ready(function() {
     // 文件上传集合
     var webuploader = [];
+    // 当前上传对象
+    var curr_uploader = {};
     // editordm编辑器集合
     var editormds   = {};
     // ueditor编辑器集合
@@ -433,6 +435,50 @@ jQuery(document).ready(function() {
         wangeditors[wangeditor_name].create();
     });
 
+    // 注册WebUploader事件，实现秒传
+    WebUploader.Uploader.register({
+        "before-send-file": "beforeSendFile" // 整个文件上传前
+    }, {
+        beforeSendFile:function(file){
+            var $li = $( '#'+file.id );
+            var deferred = WebUploader.Deferred();
+            var owner = this.owner;
+
+            owner.md5File(file).then(function(val){
+                $.ajax({
+                    type: "POST",
+                    url: dolphin.upload_check_url,
+                    data: {
+                        md5: val
+                    },
+                    cache: false,
+                    timeout: 10000, // 超时的话，只能认为该文件不曾上传过
+                    dataType: "json"
+                }).then(function(res, textStatus, jqXHR){
+                    if(res.code){
+                        // 已上传，触发上传完成事件，实现秒传
+                        deferred.reject();
+                        curr_uploader.trigger('uploadSuccess', file, res);
+                        curr_uploader.trigger('uploadComplete', file);
+                    }else{
+                        // 文件不存在，触发上传
+                        deferred.resolve();
+                        $li.find('.file-state').html('<span class="text-info">正在上传...</span>');
+                        $li.find('.img-state').html('<div class="bg-info">正在上传...</div>');
+                        $li.find('.progress').show();
+                    }
+                }, function(jqXHR, textStatus, errorThrown){
+                    // 任何形式的验证失败，都触发重新上传
+                    deferred.resolve();
+                    $li.find('.file-state').html('<span class="text-info">正在上传...</span>');
+                    $li.find('.img-state').html('<div class="bg-info">正在上传...</div>');
+                    $li.find('.progress').show();
+                });
+            });
+            return deferred.promise();
+        }
+    });
+
     // 文件上传
     $('.js-upload-file,.js-upload-files').each(function () {
         var $input_file       = $(this).find('input');
@@ -474,9 +520,10 @@ jQuery(document).ready(function() {
         // 当有文件添加进来的时候
         uploader.on( 'fileQueued', function( file ) {
             var $li = '<li id="' + file.id + '" class="list-group-item file-item">' +
+                '<span class="pull-right file-state"><span class="text-info"><i class="fa fa-sun-o fa-spin"></i> 正在读取文件信息...</span></span>' +
                 '<i class="fa fa-times-circle remove-file"></i> ' +
                 file.name +
-                '<div class="progress progress-mini remove-margin active"><div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div></div>'+
+                '<div class="progress progress-mini remove-margin active" style="display: none"><div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div></div>'+
                 '</li>';
 
             if ($multiple) {
@@ -486,6 +533,9 @@ jQuery(document).ready(function() {
                 // 清空原来的数据
                 $input_file.val('');
             }
+
+            // 设置当前上传对象
+            curr_uploader = uploader;
         });
 
         // 文件上传过程中创建进度条实时显示。
@@ -497,7 +547,7 @@ jQuery(document).ready(function() {
         // 文件上传成功
         uploader.on( 'uploadSuccess', function( file, response ) {
             var $li = $( '#'+file.id );
-            if (response.status == 1) {
+            if (response.code) {
                 if ($multiple) {
                     if ($input_file.val()) {
                         $input_file.val($input_file.val() + ',' + response.id);
@@ -510,13 +560,13 @@ jQuery(document).ready(function() {
                 }
             }
             // 加入提示信息
-            $('<span class="text-'+ response.class +' pull-right">'+ response.info +'</span>').prependTo( $li );
+            $li.find('.file-state').html('<span class="text-'+ response.class +'">'+ response.info +'</span>');
         });
 
         // 文件上传失败，显示上传出错。
         uploader.on( 'uploadError', function( file ) {
             var $li = $( '#'+file.id );
-            $('<span class="text-danger pull-right">上传失败</span>').prependTo( $li );
+            $li.find('.file-state').html('<span class="text-danger">服务器发生错误~</span>');
         });
 
         // 文件验证不通过
@@ -618,6 +668,10 @@ jQuery(document).ready(function() {
                     '</a>'+
                     '<div class="info">' + file.name + '</div>' +
                     '<i class="fa fa-times-circle remove-picture"></i>' +
+                    '<div class="progress progress-mini remove-margin active" style="display: none">' +
+                    '<div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>' +
+                    '</div>' +
+                    '<div class="file-state img-state"><div class="bg-info">正在读取...</div>' +
                     '</div>'
                 ),
                 $img = $li.find('img');
@@ -640,9 +694,8 @@ jQuery(document).ready(function() {
                 $img.attr( 'src', src );
             }, thumbnailWidth, thumbnailHeight );
 
-            // 创建进度条
-            $('<div class="progress progress-mini remove-margin active"><div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div></div>')
-                .appendTo( $li );
+            // 设置当前上传对象
+            curr_uploader = uploader;
         });
 
         // 文件上传过程中创建进度条实时显示。
@@ -655,7 +708,7 @@ jQuery(document).ready(function() {
         uploader.on( 'uploadSuccess', function( file, response ) {
             var $li = $( '#'+file.id );
 
-            if (response.status == 1) {
+            if (response.code) {
                 if ($multiple) {
                     if ($input_file.val()) {
                         $input_file.val($input_file.val() + ',' + response.id);
@@ -668,14 +721,14 @@ jQuery(document).ready(function() {
                 }
             }
 
-            $('<div class="'+response.class+'"></div>').text(response.info).appendTo( $li );
+            $li.find('.file-state').html('<div class="bg-'+response.class+'">'+response.info+'</div>');
             $li.find('a.img-link').attr('href', response.path);
         });
 
         // 文件上传失败，显示上传出错。
         uploader.on( 'uploadError', function( file ) {
             var $li = $( '#'+file.id );
-            $('<div class="text-danger">上传失败</div>').appendTo( $li );
+            $li.find('.file-state').html('<div class="bg-danger">服务器错误</div>');
         });
 
         // 文件验证不通过
