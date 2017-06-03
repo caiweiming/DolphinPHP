@@ -1228,8 +1228,12 @@ class Builder extends ZBuilder
                                         $url
                                     );
                                 }
+
+                                $url = $column['class'] == 'pop' ? $url.'?_pop=1' : $url;
+
                                 $row[$column['name']] = '<a href="'. $url .'"
                                     title="'. $row[$column['name']] .'"
+                                    class="'. $column['class'] .'"
                                     target="'.$target.'">'.$row[$column['name']].'</a>';
                             }
                             break;
