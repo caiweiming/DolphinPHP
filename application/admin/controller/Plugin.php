@@ -14,6 +14,7 @@ namespace app\admin\controller;
 use app\common\builder\ZBuilder;
 use app\admin\model\Plugin as PluginModel;
 use app\admin\model\HookPlugin as HookPluginModel;
+use think\Cache;
 use util\Sql;
 use think\Db;
 use think\Hook;
@@ -27,10 +28,11 @@ class Plugin extends Admin
     /**
      * 首页
      * @param string $group 分组
+     * @param string $type 显示类型
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
-    public function index($group = 'local')
+    public function index($group = 'local', $type = '')
     {
         // 配置分组信息
         $list_group = ['local' => '本地插件'];
@@ -57,13 +59,19 @@ class Plugin extends Admin
                 $result = $PluginModel->getAll($keyword, $status);
 
                 if ($result['plugins'] === false) {
-                    return $this->error($PluginModel->getError());
+                    $this->error($PluginModel->getError());
                 }
+
+                $type_show = Cache::get('plugin_type_show');
+                $type_show = $type != '' ? $type : ($type_show == false ? 'block' : $type_show);
+                Cache::set('plugin_type_show', $type_show);
+                $type = $type_show == 'block' ? 'list' : 'block';
 
                 $this->assign('page_title', '插件管理');
                 $this->assign('plugins', $result['plugins']);
                 $this->assign('total', $result['total']);
                 $this->assign('tab_nav', ['tab_list' => $tab_list, 'curr_tab' => $group]);
+                $this->assign('type', $type);
                 return $this->fetch();
                 break;
             case 'online':

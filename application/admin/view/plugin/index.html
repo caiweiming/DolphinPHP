@@ -14,16 +14,10 @@
                     <li class="pull-right">
                         <ul class="block-options push-10-t push-10-r">
                             <li>
+                                <a href="{:url('index', ['type' => $type])}"><i class="si si-{$type=='list' ? 'list' : 'grid'}"></i></a>
+                            </li>
+                            <li>
                                 <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
                             </li>
                         </ul>
                     </li>
@@ -75,10 +69,11 @@
                                 </div>
                             </div>
                             {/empty}
+                            {eq name="type" value="block"}
                             {volist name="plugins" id="plugin"}
                             <div class="col-sm-6 col-md-4 col-lg-3">
                                 <div class="block block-rounded">
-                                    <div class="block-content block-content-full text-center {$plugin.bg_color|default='bg-danger'} ribbon ribbon-bookmark ribbon-crystal">
+                                    <div class="block-content block-content-full text-center bg-{$plugin.bg_color|default='danger'} ribbon ribbon-bookmark ribbon-crystal">
                                         <div class="ribbon-box font-w600">{$plugin.version|default='无版本号'}</div>
                                         <div class="item item-2x item-circle bg-crystal-op push-20-t push-20 visibility-hidden" data-toggle="appear" data-offset="50" data-class="animated fadeIn">
                                             <i class="{$plugin.icon|default='fa fa-puzzle-piece'} text-white-op"></i>
@@ -105,6 +100,39 @@
                                 </div>
                             </div>
                             {/volist}
+                            {else/}
+                                {notempty name="plugins"}
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-builder table-hover table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>名称</th>
+                                                <th>图标</th>
+                                                <th>版本</th>
+                                                <th>作者</th>
+                                                <th>简介</th>
+                                                <th class="column-right_button">操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {volist name="plugins" id="plugin"}
+                                            <tr>
+                                                <td>{$plugin.title|default='无插件标题'}</td>
+                                                <td><i class="{$plugin.icon|default='fa fa-puzzle-piece'}"></i></td>
+                                                <td>{$plugin.version|default='无版本号'}</td>
+                                                <td><a href="{$plugin.author_url|default=''}" target="_blank">{$plugin.author|default=''}</a></td>
+                                                <td>{$plugin.description|default='暂无简介'}</td>
+                                                <td>{$plugin.actions}</td>
+                                            </tr>
+                                            {/volist}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {/notempty}
+                            {/eq}
+
                         </div>
                         <div class="data-table-toolbar">
                             <div class="row">

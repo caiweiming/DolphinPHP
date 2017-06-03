@@ -135,33 +135,33 @@ class Plugin extends Model
                 switch ($plugin['status']) {
                     case '-4': // 插件信息不完整
                         $plugin['title'] = '插件信息不完整';
-                        $plugin['bg_color'] = 'bg-danger';
+                        $plugin['bg_color'] = 'danger';
                         $plugin['status_class'] = 'text-danger';
                         $plugin['status_info'] = '<i class="fa fa-times"></i> 已损坏';
                         $plugin['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                         break;
                     case '-3': // 插件信息缺失
                         $plugin['title'] = '插件信息缺失';
-                        $plugin['bg_color'] = 'bg-danger';
+                        $plugin['bg_color'] = 'danger';
                         $plugin['status_class'] = 'text-danger';
                         $plugin['status_info'] = '<i class="fa fa-times"></i> 已损坏';
                         $plugin['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                         break;
                     case '-2': // 入口文件不存在
                         $plugin['title'] = '入口文件不存在';
-                        $plugin['bg_color'] = 'bg-danger';
+                        $plugin['bg_color'] = 'danger';
                         $plugin['status_class'] = 'text-danger';
                         $plugin['status_info'] = '<i class="fa fa-times"></i> 已损坏';
                         $plugin['actions'] = '<button class="btn btn-sm btn-noborder btn-danger" type="button" disabled>不可操作</button>';
                         break;
                     case '-1': // 未安装
-                        $plugin['bg_color'] = 'bg-info';
+                        $plugin['bg_color'] = 'info';
                         $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('install', ['name' => $plugin['name']]).'">安装</a>';
                         $plugin['status_class'] = 'text-info';
                         $plugin['status_info'] = '<i class="fa fa-fw fa-th-large"></i> 未安装';
                         break;
                     case '0': // 禁用
-                        $plugin['bg_color'] = 'bg-warning';
+                        $plugin['bg_color'] = 'warning';
                         $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $plugin['id'], 'table' => 'admin_plugin']).'">启用</a> ';
                         $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger ajax-get confirm" data-tips="如果包括数据库，将同时删除数据库！" href="'.url('uninstall', ['name' => $plugin['name']]).'">卸载</a> ';
                         if (isset($plugin['config']) && $plugin['config'] != '') {
@@ -174,7 +174,7 @@ class Plugin extends Model
                         $plugin['status_info'] = '<i class="fa fa-ban"></i> 已禁用';
                         break;
                     case '1': // 启用
-                        $plugin['bg_color'] = 'bg-success';
+                        $plugin['bg_color'] = 'success';
                         $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $plugin['id'], 'table' => 'admin_plugin']).'">禁用</a> ';
                         $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger ajax-get confirm" data-tips="如果包括数据库，将同时删除数据库！" href="'.url('uninstall', ['name' => $plugin['name']]).'">卸载</a> ';
                         if (isset($plugin['config']) && $plugin['config'] != '') {
