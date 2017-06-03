@@ -86,7 +86,9 @@ class System extends Admin
             $list_group = config('config_group');
 
             // 读取模型配置
-            $modules = ModuleModel::where('config', 'neq', '')->column('config,title,name', 'name');
+            $modules = ModuleModel::where('config', 'neq', '')
+                ->where('status', 1)
+                ->column('config,title,name', 'name');
             foreach ($modules as $name => $module) {
                 $list_group[$name] = $module['title'];
             }
