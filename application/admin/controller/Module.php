@@ -190,6 +190,10 @@ class Module extends Admin
         $allowField = ['name','title','icon','description','author','author_url','config','access','version','identifier','status'];
 
         if ($ModuleModel->allowField($allowField)->save()) {
+            // 复制静态资源目录
+            File::copy_dir(APP_PATH. $name. '/public', ROOT_PATH. 'public');
+            // 删除静态资源目录
+            File::del_dir(APP_PATH. $name. '/public');
             cache('modules', null);
             cache('module_all', null);
             // 记录行为
@@ -268,6 +272,10 @@ class Module extends Admin
 
         // 删除模块信息
         if (ModuleModel::where('name', $name)->delete()) {
+            // 复制静态资源目录
+            File::copy_dir(ROOT_PATH. 'public/static/'. $name, APP_PATH.$name.'/public/static/'. $name);
+            // 删除静态资源目录
+            File::del_dir(ROOT_PATH. 'public/static/'. $name);
             cache('modules', null);
             cache('module_all', null);
             // 记录行为
@@ -304,6 +312,8 @@ class Module extends Admin
 
         // 复制模块目录到导出目录
         File::copy_dir(APP_PATH. $name, $module_dir);
+        // 复制静态资源目录
+        File::copy_dir(ROOT_PATH. 'public/static/'. $name, $module_dir.'/public/static/'. $name);
 
         // 模块本地配置信息
         $module_info = ModuleModel::getInfoFromFile($name);

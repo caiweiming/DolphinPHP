@@ -14,7 +14,7 @@ class File {
         $dir = rtrim($dir,'/').'/';
         if(!is_dir($dir))
         {
-            if(mkdir($dir, 0700)==false)
+            if(mkdir($dir, 0700, true)==false)
             {
                 return false;
             }
