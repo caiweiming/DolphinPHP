@@ -436,48 +436,50 @@ jQuery(document).ready(function() {
     });
 
     // 注册WebUploader事件，实现秒传
-    WebUploader.Uploader.register({
-        "before-send-file": "beforeSendFile" // 整个文件上传前
-    }, {
-        beforeSendFile:function(file){
-            var $li = $( '#'+file.id );
-            var deferred = WebUploader.Deferred();
-            var owner = this.owner;
+    if (window.WebUploader) {
+        WebUploader.Uploader.register({
+            "before-send-file": "beforeSendFile" // 整个文件上传前
+        }, {
+            beforeSendFile:function(file){
+                var $li = $( '#'+file.id );
+                var deferred = WebUploader.Deferred();
+                var owner = this.owner;
 
-            owner.md5File(file).then(function(val){
-                $.ajax({
-                    type: "POST",
-                    url: dolphin.upload_check_url,
-                    data: {
-                        md5: val
-                    },
-                    cache: false,
-                    timeout: 10000, // 超时的话，只能认为该文件不曾上传过
-                    dataType: "json"
-                }).then(function(res, textStatus, jqXHR){
-                    if(res.code){
-                        // 已上传，触发上传完成事件，实现秒传
-                        deferred.reject();
-                        curr_uploader.trigger('uploadSuccess', file, res);
-                        curr_uploader.trigger('uploadComplete', file);
-                    }else{
-                        // 文件不存在，触发上传
+                owner.md5File(file).then(function(val){
+                    $.ajax({
+                        type: "POST",
+                        url: dolphin.upload_check_url,
+                        data: {
+                            md5: val
+                        },
+                        cache: false,
+                        timeout: 10000, // 超时的话，只能认为该文件不曾上传过
+                        dataType: "json"
+                    }).then(function(res, textStatus, jqXHR){
+                        if(res.code){
+                            // 已上传，触发上传完成事件，实现秒传
+                            deferred.reject();
+                            curr_uploader.trigger('uploadSuccess', file, res);
+                            curr_uploader.trigger('uploadComplete', file);
+                        }else{
+                            // 文件不存在，触发上传
+                            deferred.resolve();
+                            $li.find('.file-state').html('<span class="text-info">正在上传...</span>');
+                            $li.find('.img-state').html('<div class="bg-info">正在上传...</div>');
+                            $li.find('.progress').show();
+                        }
+                    }, function(jqXHR, textStatus, errorThrown){
+                        // 任何形式的验证失败，都触发重新上传
                         deferred.resolve();
                         $li.find('.file-state').html('<span class="text-info">正在上传...</span>');
                         $li.find('.img-state').html('<div class="bg-info">正在上传...</div>');
                         $li.find('.progress').show();
-                    }
-                }, function(jqXHR, textStatus, errorThrown){
-                    // 任何形式的验证失败，都触发重新上传
-                    deferred.resolve();
-                    $li.find('.file-state').html('<span class="text-info">正在上传...</span>');
-                    $li.find('.img-state').html('<div class="bg-info">正在上传...</div>');
-                    $li.find('.progress').show();
+                    });
                 });
-            });
-            return deferred.promise();
-        }
-    });
+                return deferred.promise();
+            }
+        });
+    }
 
     // 文件上传
     $('.js-upload-file,.js-upload-files').each(function () {
