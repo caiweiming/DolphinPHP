@@ -10,12 +10,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="block">
-                {empty name="_pop"}
                 {notempty name="tab_nav"}
                 <ul class="nav nav-tabs">
                     {volist name="tab_nav['tab_list']" id="tab"}
                     <li {eq name="tab_nav.curr_tab" value="$key"}class="active"{/eq}>
-                    <a href="{$tab.url}">{$tab.title|htmlspecialchars}</a>
+                    <a href="{$tab.url}{$_pop ?= '?_pop=1'}">{$tab.title|htmlspecialchars}</a>
                     </li>
                     {/volist}
                     <li class="pull-right">
@@ -30,6 +29,7 @@
                     </li>
                 </ul>
                 {else/}
+                {empty name="_pop"}
                 <div class="block-header bg-gray-lighter">
                     <ul class="block-options">
                         <li>
@@ -41,8 +41,8 @@
                     </ul>
                     <h3 class="block-title">{$page_title|default=""|htmlspecialchars}</h3>
                 </div>
-                {/notempty}
                 {/empty}
+                {/notempty}
                 <div class="block-content tab-content">
                     <div class="tab-pane active">
                         {// 顶部筛选及搜索 }
