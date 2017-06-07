@@ -1378,6 +1378,9 @@ class Builder extends ZBuilder
                             } else {
                                 $row[$column['name']] .= format_moment($timestamp, $format).'</a>';
                             }
+
+                            // 加载moment.js
+                            $this->_vars['_js_files'][] = 'moment_js';
                             break;
                         case 'avatar': // 头像
                             break;

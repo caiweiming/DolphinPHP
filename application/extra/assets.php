@@ -54,6 +54,9 @@ return [
         "__LIBS__/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js",
         "__LIBS__/bootstrap-datetimepicker/locale/zh-cn.js",
     ],
+    'moment_js' => [
+        "__LIBS__/bootstrap-datetimepicker/moment.min.js",
+    ],
     'datetimepicker_css' => [ // 日期时间选择
         "__LIBS__/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
     ],
