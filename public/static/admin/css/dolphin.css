@@ -21,6 +21,9 @@ h6,
 .css-input input + span {
     margin-top: -3px;
 }
+.push-35-r {
+    margin-right: 35px;
+}
 /* 后台logo */
 .logo, .logo-text {
     max-height: 34px;

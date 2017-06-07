@@ -115,9 +115,7 @@
 
                                     {volist name="columns" id="column"}
                                     <th class="column-{$column['name']} {$column.class|default=''}">
-                                        {// 字段标题}
-                                        {$column.title|default=''|htmlspecialchars}
-
+                                        <span class="pull-right">
                                         {// 排序功能}
                                         {php}if (isset($order_columns[$column['name']])): {/php}
                                             {php}
@@ -131,7 +129,7 @@
                                                     $_get = '?'.implode('&', $_get);
                                                 }
                                             {/php}
-                                            <a href="{$Request.baseUrl}{$_get}" class="pull-right" data-toggle="tooltip" data-original-title="排序">
+                                            <a href="{$Request.baseUrl}{$_get}" data-toggle="tooltip" data-original-title="排序">
                                                 {php}
                                                     if (input('param._order') == $order_columns[$column['name']]) {
                                                         echo input('param._by') == 'asc' ? '<i class="fa fa-caret-up"></i>' : '<i class="fa fa-caret-down"></i>';
@@ -149,8 +147,12 @@
                                                 $_field_display = request()->param('_field_display');
                                             }
                                         {/php}
-                                        <a href="javascript:void(0);" class="field-filter pull-right" data-filter="{$filter_columns[$column['name']]['filter']}" data-type="{$filter_columns[$column['name']]['type']}" data-options='{$filter_columns[$column["name"]]["options"]|default=""}' data-map='{$filter_columns[$column["name"]]["map"]|default=""}' data-field-display="{$column['name']}" data-field="{$filter_columns[$column['name']]['field']}" data-table="{$filter_columns[$column['name']]['table']}" data-toggle="tooltip" data-original-title="筛选"><i class="fa fa-filter {notin name='column.name' value='$_field_display'}text-muted{/notin}"></i></a>
+                                        <a href="javascript:void(0);" class="field-filter" data-filter="{$filter_columns[$column['name']]['filter']}" data-type="{$filter_columns[$column['name']]['type']}" data-options='{$filter_columns[$column["name"]]["options"]|default=""}' data-map='{$filter_columns[$column["name"]]["map"]|default=""}' data-field-display="{$column['name']}" data-field="{$filter_columns[$column['name']]['field']}" data-table="{$filter_columns[$column['name']]['table']}" data-toggle="tooltip" data-original-title="筛选"><i class="fa fa-filter {notin name='column.name' value='$_field_display'}text-muted{/notin}"></i></a>
                                         {php}endif;{/php}
+                                        </span>
+
+                                        {// 字段标题}
+                                        <span class="push-35-r">{$column.title|default=''|htmlspecialchars}</span>
                                     </th>
                                     {/volist}
                                 </tr>
