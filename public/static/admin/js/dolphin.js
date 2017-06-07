@@ -46,7 +46,7 @@ var Dolphin = function () {
                             self.attr("autocomplete", "off").prop("disabled", true);
 
                             // 发送ajax请求
-                            jQuery.post(ajax_url, form_data).success(function(res) {
+                            jQuery.post(ajax_url, form_data, {}, 'json').success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
                                 if (res.code) {
@@ -57,12 +57,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -72,12 +72,12 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     setTimeout(function () {
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
@@ -117,7 +117,7 @@ var Dolphin = function () {
                             self.attr("autocomplete", "off").prop("disabled", true);
 
                             // 发送ajax请求
-                            jQuery.post(ajax_url, form_data).success(function(res) {
+                            jQuery.post(ajax_url, form_data, {}, 'json').success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
                                 if (res.code) {
@@ -128,12 +128,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -143,12 +143,12 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     setTimeout(function () {
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
@@ -182,7 +182,7 @@ var Dolphin = function () {
                             form_data = form.find("input,select,textarea").serialize();
 
                             // 发送ajax请求
-                            jQuery.post(ajax_url, form_data).success(function(res) {
+                            jQuery.post(ajax_url, form_data, {}, 'json').success(function(res) {
                                 pageLoader('hide');
                                 msg = res.msg;
                                 if (res.code) {
@@ -193,12 +193,12 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -208,12 +208,12 @@ var Dolphin = function () {
                                     tips(msg, 'danger');
                                     setTimeout(function () {
                                         // 关闭弹出框
-                                        if (res.data === '_close_pop' || res.data._close_pop) {
+                                        if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
                                         // 刷新父窗口
-                                        if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                        if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                             parent.location.reload();return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
@@ -234,7 +234,7 @@ var Dolphin = function () {
 
                 // 直接发送ajax请求
                 pageLoader();
-                jQuery.post(ajax_url, form_data).success(function(res) {
+                jQuery.post(ajax_url, form_data, {}, 'json').success(function(res) {
                     pageLoader('hide');
                     msg = res.msg;
 
@@ -246,12 +246,12 @@ var Dolphin = function () {
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 关闭弹出框
-                            if (res.data === '_close_pop' || res.data._close_pop) {
+                            if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                            if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                 parent.location.reload();return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -261,12 +261,12 @@ var Dolphin = function () {
                         tips(msg, 'danger');
                         setTimeout(function () {
                             // 关闭弹出框
-                            if (res.data === '_close_pop' || res.data._close_pop) {
+                            if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                            if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                 parent.location.reload();return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
@@ -310,7 +310,7 @@ var Dolphin = function () {
                     self.attr("autocomplete", "off").prop("disabled", true);
 
                     // 发送ajax请求
-                    jQuery.get(ajax_url).success(function(res) {
+                    jQuery.get(ajax_url, {}, {}, 'json').success(function(res) {
                         pageLoader('hide');
                         msg = res.msg;
                         if (res.code) {
@@ -321,12 +321,12 @@ var Dolphin = function () {
                             setTimeout(function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                                 // 关闭弹出框
-                                if (res.data === '_close_pop' || res.data._close_pop) {
+                                if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
                                 }
                                 // 刷新父窗口
-                                if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                     parent.location.reload();return false;
                                 }
                                 return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -335,12 +335,12 @@ var Dolphin = function () {
                             tips(msg, 'danger');
                             setTimeout(function () {
                                 // 关闭弹出框
-                                if (res.data === '_close_pop' || res.data._close_pop) {
+                                if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
                                 }
                                 // 刷新父窗口
-                                if (res.data === '_parent_reload' || res.data._parent_reload) {
+                                if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                     parent.location.reload();return false;
                                 }
                                 self.attr("autocomplete", "on").prop("disabled", false);
@@ -357,7 +357,7 @@ var Dolphin = function () {
                 self.attr("autocomplete", "off").prop("disabled", true);
 
                 // 发送ajax请求
-                jQuery.get(ajax_url).success(function(res) {
+                jQuery.get(ajax_url, {}, {}, 'json').success(function(res) {
                     pageLoader('hide');
                     msg = res.msg;
                     if (res.code) {
@@ -368,12 +368,12 @@ var Dolphin = function () {
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 关闭弹出框
-                            if (res.data === '_close_pop' || res.data._close_pop) {
+                            if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                            if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                 parent.location.reload();return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
@@ -382,12 +382,12 @@ var Dolphin = function () {
                         tips(msg, 'danger');
                         setTimeout(function () {
                             // 关闭弹出框
-                            if (res.data === '_close_pop' || res.data._close_pop) {
+                            if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
                             // 刷新父窗口
-                            if (res.data === '_parent_reload' || res.data._parent_reload) {
+                            if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
                                 parent.location.reload();return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
@@ -477,8 +477,8 @@ var Dolphin = function () {
                 location.href = $('#nav-' + data.module_id).find('a').not('.nav-submenu').first().attr('href');
             } else {
                 $.post(dolphin.top_menu_url, data, function (res) {
-                    if (res != '') {
-                        if ($target == '_self') {
+                    if (res !== '') {
+                        if ($target === '_self') {
                             location.href = res;
                         } else {
                             window.open(res);
