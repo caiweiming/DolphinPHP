@@ -1119,7 +1119,7 @@ if (!function_exists('index_url')) {
      */
     function index_url($url = '', $vars = '', $suffix = true, $domain = false) {
         $url = url($url, $vars, $suffix, $domain);
-        $url = preg_replace('/^\/admin.php/', '/index.php', $url);
+        $url = preg_replace('/\/admin.php/', '/index.php', $url);
         return $url;
     }
 }
@@ -1136,7 +1136,7 @@ if (!function_exists('admin_url')) {
      */
     function admin_url($url = '', $vars = '', $suffix = true, $domain = false) {
         $url = url($url, $vars, $suffix, $domain);
-        $url = preg_replace('/^\/index.php/', '/admin.php', $url);
+        $url = preg_replace('/\/index.php/', '/admin.php', $url);
         return $url;
     }
 }
