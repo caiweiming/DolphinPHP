@@ -417,24 +417,6 @@ class Builder extends ZBuilder
      */
     public function addTopButton($type = '', $attribute = [], $pop = false)
     {
-        // 判断当前用户是否有权限，没有权限则不生成按钮
-        if (session('user_auth.role') != 1) {
-            if (isset($attribute['href']) && isset($attribute['href']) != '') {
-                preg_match('/admin\.php\/(.*)/', $attribute['href'], $match);
-                $url_value = explode('/', $match[1]);
-                if (strpos($url_value[2], '.')) {
-                    $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
-                }
-                $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
-            } else {
-                $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
-            }
-            $url_value = strtolower($url_value);
-            if (!Role::checkAuth($url_value, true)) {
-                return $this;
-            }
-        }
-
         // 按钮属性
         $btn_attribute = [];
 
@@ -536,6 +518,20 @@ class Builder extends ZBuilder
         // 合并自定义属性
         if ($attribute && is_array($attribute)) {
             $btn_attribute = array_merge($btn_attribute, $attribute);
+        }
+
+        // 判断当前用户是否有权限，没有权限则不生成按钮
+        if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
+            preg_match('/\/(index|admin)\.php\/(.*)/', $btn_attribute['href'], $match);
+            $url_value = explode('/', $match[2]);
+            if (strpos($url_value[2], '.')) {
+                $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+            }
+            $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
+            $url_value = strtolower($url_value);
+            if (!Role::checkAuth($url_value, true)) {
+                return $this;
+            }
         }
 
         // 是否为弹出框方式
@@ -646,24 +642,6 @@ class Builder extends ZBuilder
      */
     public function addRightButton($type = '', $attribute = [], $pop = false)
     {
-        // 判断当前用户是否有权限，没有权限则不生成按钮
-        if (session('user_auth.role') != 1) {
-            if (isset($attribute['href']) && isset($attribute['href']) != '') {
-                preg_match('/admin\.php\/(.*)/', $attribute['href'], $match);
-                $url_value = explode('/', $match[1]);
-                if (strpos($url_value[2], '.')) {
-                    $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
-                }
-                $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
-            } else {
-                $url_value = $this->_module.'/'.$this->_controller.'/'.$type;
-            }
-            $url_value = strtolower($url_value);
-            if (!Role::checkAuth($url_value, true)) {
-                return $this;
-            }
-        }
-
         // 按钮属性
         $btn_attribute = [];
 
@@ -761,6 +739,20 @@ class Builder extends ZBuilder
         // 合并自定义属性
         if ($attribute && is_array($attribute)) {
             $btn_attribute = array_merge($btn_attribute, $attribute);
+        }
+
+        // 判断当前用户是否有权限，没有权限则不生成按钮
+        if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
+            preg_match('/\/(index|admin)\.php\/(.*)/', $btn_attribute['href'], $match);
+            $url_value = explode('/', $match[2]);
+            if (strpos($url_value[2], '.')) {
+                $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+            }
+            $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
+            $url_value = strtolower($url_value);
+            if (!Role::checkAuth($url_value, true)) {
+                return $this;
+            }
         }
 
         // 是否为弹出框方式
