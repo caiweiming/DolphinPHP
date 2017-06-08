@@ -1140,3 +1140,18 @@ if (!function_exists('admin_url')) {
         return $url;
     }
 }
+
+if (!function_exists('htmlpurifier')) {
+    /**
+     * html安全过滤
+     * @param string $html 要过滤的内容
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function htmlpurifier($html = '') {
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        $clean_html = $purifier->purify($html);
+        return $clean_html;
+    }
+}
