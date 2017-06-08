@@ -212,7 +212,7 @@ class Admin extends Common
     public function add()
     {
         // 获取表单项
-        $cache_name = $this->request->module().'/'.$this->request->controller().'/add';
+        $cache_name = $this->request->module().'/'.parse_name($this->request->controller()).'/add';
         $cache_name = strtolower($cache_name);
         $form       = Cache::get($cache_name, []);
         if (!$form) {
@@ -267,7 +267,7 @@ class Admin extends Common
         if ($id === '') $this->error('参数错误');
 
         // 获取表单项
-        $cache_name = $this->request->module().'/'.$this->request->controller().'/edit';
+        $cache_name = $this->request->module().'/'.parse_name($this->request->controller()).'/edit';
         $cache_name = strtolower($cache_name);
         $form       = Cache::get($cache_name, []);
         if (!$form) {
