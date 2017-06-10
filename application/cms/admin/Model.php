@@ -103,7 +103,7 @@ class Model extends Admin
                     "module"      => "cms",
                     "pid"         => Db::name('admin_menu')->where($map)->value('id'),
                     "title"       => $data['title'],
-                    "url_type"    => "module",
+                    "url_type"    => "module_admin",
                     "url_value"   => "cms/content/{$data['name']}",
                     "url_target"  => "_self",
                     "icon"        => "fa fa-fw fa-list",

@@ -306,7 +306,7 @@
             {notempty name="_top_menus"}
             {volist name="_top_menus" id="menu"}
             <li class="hidden-xs hidden-sm {$menu['id'] == $_location[0]['id'] ?= 'active'}">
-                {eq name="menu.url_type" value="module"}
+                {eq name="menu.url_type" value="module_admin"}
                 <a href="javascript:void(0);" data-module-id="{$menu['id']}" data-module="{$menu['module']}" data-controller="{$menu['controller']}" target="{$menu['url_target']}" class="top-menu"><i class="{$menu.icon}"></i> {$menu.title}</a>
                 {else/}
                 <a href="{$menu['url_value']}" target="{$menu['url_target']}"><i class="{$menu.icon}"></i> {$menu.title}</a>
@@ -390,7 +390,7 @@
                         {notempty name="_top_menus_all"}
                         {volist name="_top_menus_all" id="menu"}
                         <div class="col-xs-6 col-sm-3">
-                            {eq name="menu.url_type" value="module"}
+                            {eq name="menu.url_type" value="module_admin"}
                             <a class="block block-rounded top-menu" href="javascript:void(0);" data-module-id="{$menu['id']}" data-module="{$menu['module']}" data-controller="{$menu['controller']}" target="{$menu['url_target']}">
                                 <div class="block-content text-white {$menu['id'] == $_location[0]['id'] ? 'bg-primary' : 'bg-primary-dark'}">
                                     <i class="{$menu.icon} fa-2x"></i>

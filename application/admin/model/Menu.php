@@ -121,11 +121,11 @@ class Menu extends Model
                     unset($menus[$key]);
                     continue;
                 }
-                if ($menu['url_value'] != '' && $menu['url_type'] == 'module') {
+                if ($menu['url_value'] != '' && ($menu['url_type'] == 'module_admin' || $menu['url_type'] == 'module_home')) {
                     $url = explode('/', $menu['url_value']);
                     $menu['controller'] = $url[1];
                     $menu['action']     = $url[2];
-                    $menu['url_value']  = url($menu['url_value']);
+                    $menu['url_value']  = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value']) : home_url($menu['url_value']);
                 }
             }
             // 非开发模式，缓存菜单
@@ -174,8 +174,8 @@ class Menu extends Model
                     unset($menus[$key]);
                     continue;
                 }
-                if ($menu['url_value'] != '' && $menu['url_type'] == 'module') {
-                    $menu['url_value']  = url($menu['url_value']);
+                if ($menu['url_value'] != '' && ($menu['url_type'] == 'module_admin' || $menu['url_type'] == 'module_home')) {
+                    $menu['url_value'] = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value']) : home_url($menu['url_value']);
                 }
             }
             $menus = Tree::toLayer($menus, $top_id, 2);

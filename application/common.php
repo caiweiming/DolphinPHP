@@ -1107,7 +1107,7 @@ if (!function_exists('parse_name')) {
     }
 }
 
-if (!function_exists('index_url')) {
+if (!function_exists('home_url')) {
     /**
      * 生成前台入口url
      * @param string        $url 路由地址
@@ -1117,7 +1117,7 @@ if (!function_exists('index_url')) {
      * @author 小乌 <82950492@qq.com>
      * @return string
      */
-    function index_url($url = '', $vars = '', $suffix = true, $domain = false) {
+    function home_url($url = '', $vars = '', $suffix = true, $domain = false) {
         $url = url($url, $vars, $suffix, $domain);
         $url = preg_replace('/\/admin.php/', '/index.php', $url);
         return $url;

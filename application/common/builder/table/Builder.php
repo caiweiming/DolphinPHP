@@ -11,6 +11,7 @@
 
 namespace app\common\builder\table;
 
+use app\admin\model\Menu;
 use app\common\builder\ZBuilder;
 use app\user\model\Role;
 use think\Cache;
@@ -389,7 +390,7 @@ class Builder extends ZBuilder
                 'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
                 'auto_time' => $auto_time,
                 'format'    => $format,
-                'go_back'   => $_SERVER['REQUEST_URI']
+                'go_back'   => $this->request->server('REQUEST_URI')
             ];
 
             // 开发模式
@@ -405,6 +406,20 @@ class Builder extends ZBuilder
             $this->_vars['top_buttons'][] = $btn_attribute;
         }
         return $this;
+    }
+
+    /**
+     * 获取默认url
+     * @param string $type 按钮类型：add/enable/disable/delete
+     * @param array $params 参数
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    private function getDefaultUrl($type = '', $params = [])
+    {
+        $url = $this->_module.'/'.$this->_controller.'/'.$type;
+        $url_type = Menu::where('url_value', $url)->value('url_type');
+        return $url_type == 'module_home' ? home_url($url, $params) : url($url, $params);
     }
 
     /**
@@ -437,10 +452,7 @@ class Builder extends ZBuilder
                     'title' => '新增',
                     'icon'  => 'fa fa-plus-circle',
                     'class' => 'btn btn-primary',
-                    'href'  => url(
-                        $this->_module.'/'.$this->_controller.'/add',
-                        ['plugin_name' => $plugin_name]
-                    ),
+                    'href'  => $this->getDefaultUrl($type, ['plugin_name' => $plugin_name])
                 ];
                 break;
 
@@ -452,10 +464,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-check-circle-o',
                     'class'       => 'btn btn-success ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => url(
-                        $this->_module.'/'.$this->_controller.'/enable',
-                        ['table' => $table, 'field' => $field]
-                    ),
+                    'href'        => $this->getDefaultUrl($type, ['table' => $table, 'field' => $field])
                 ];
                 break;
 
@@ -467,10 +476,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-ban',
                     'class'       => 'btn btn-warning ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => url(
-                        $this->_module.'/'.$this->_controller.'/disable',
-                        ['table' => $table, 'field' => $field]
-                    ),
+                    'href'        => $this->getDefaultUrl($type, ['table' => $table, 'field' => $field])
                 ];
                 break;
 
@@ -493,10 +499,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-times-circle-o',
                     'class'       => 'btn btn-danger ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => url(
-                        $this->_module.'/'.$this->_controller.'/delete',
-                        ['table' => $table]
-                    ),
+                    'href'        => $this->getDefaultUrl($type, ['table' => $table])
                 ];
                 break;
 
@@ -614,7 +617,7 @@ class Builder extends ZBuilder
                 'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
                 'auto_time' => $auto_time,
                 'format'    => $format,
-                'go_back'   => $_SERVER['REQUEST_URI']
+                'go_back'   => $this->request->server('REQUEST_URI')
             ];
 
             // 开发模式
@@ -659,13 +662,7 @@ class Builder extends ZBuilder
                     'title' => '编辑',
                     'icon'  => 'fa fa-pencil',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
-                    'href'  => url(
-                        $this->_module.'/'.$this->_controller.'/edit',
-                        [
-                            'id'          => '__id__',
-                            'plugin_name' => $plugin_name
-                        ]
-                    ),
+                    'href'  => $this->getDefaultUrl($type, ['id' => '__id__', 'plugin_name' => $plugin_name]),
                     'target' => '_self'
                 ];
                 break;
@@ -677,13 +674,7 @@ class Builder extends ZBuilder
                     'title' => '启用',
                     'icon'  => 'fa fa-check',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => url(
-                        $this->_module.'/'.$this->_controller.'/enable',
-                        [
-                            'ids'   => '__id__',
-                            'table' => $table
-                        ]
-                    ),
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
                 ];
                 break;
 
@@ -694,13 +685,7 @@ class Builder extends ZBuilder
                     'title' => '禁用',
                     'icon'  => 'fa fa-ban',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => url(
-                        $this->_module.'/'.$this->_controller.'/disable',
-                        [
-                            'ids'   => '__id__',
-                            'table' => $table
-                        ]
-                    ),
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
                 ];
                 break;
 
@@ -711,13 +696,7 @@ class Builder extends ZBuilder
                     'title' => '删除',
                     'icon'  => 'fa fa-times',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => url(
-                        $this->_module.'/'.$this->_controller.'/delete',
-                        [
-                            'ids'   => '__id__',
-                            'table' => $table
-                        ]
-                    ),
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
                 ];
                 break;
 

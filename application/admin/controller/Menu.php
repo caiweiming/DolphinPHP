@@ -96,7 +96,7 @@ class Menu extends Admin
             if(true !== $result) return $this->error($result);
 
             // 顶部节点url检查
-            if ($data['pid'] == 0 && $data['url_value'] == '' && $data['url_type'] == 'module') {
+            if ($data['pid'] == 0 && $data['url_value'] == '' && ($data['url_type'] == 'module_admin' || $data['url_type'] == 'module_home')) {
                 return $this->error('顶级节点的节点链接不能为空');
             }
 
@@ -118,7 +118,7 @@ class Menu extends Admin
             ->addFormItems([
                 ['select', 'pid', '所属节点', '所属上级节点', MenuModel::getMenuTree(0, '', $module), $pid],
                 ['text', 'title', '节点标题'],
-                ['radio', 'url_type', '链接类型', '', ['module' => '模块链接', 'link' => '普通链接'], 'module']
+                ['radio', 'url_type', '链接类型', '', ['module_admin' => '模块链接(后台)', 'module_home' => '模块链接(前台)', 'link' => '普通链接'], 'module_admin']
             ])
             ->addFormItem(
                 'text',
@@ -153,7 +153,7 @@ class Menu extends Admin
             if(true !== $result) return $this->error($result);
 
             // 顶部节点url检查
-            if ($data['pid'] == 0 && $data['url_value'] == '' && $data['url_type'] == 'module') {
+            if ($data['pid'] == 0 && $data['url_value'] == '' && ($data['url_type'] == 'module_admin' || $data['url_type'] == 'module_home')) {
                 return $this->error('顶级节点的节点链接不能为空');
             }
 
@@ -185,7 +185,7 @@ class Menu extends Admin
             ->addLinkage('module', '所属模块', '', ModuleModel::getModule(), '', url('ajax/getModuleMenus'), 'pid')
             ->addFormItem('select', 'pid', '所属节点', '所属上级节点', MenuModel::getMenuTree(0, '', $info['module']))
             ->addFormItem('text', 'title', '节点标题')
-            ->addFormItem('radio', 'url_type', '链接类型', '', ['module' => '模块链接', 'link' => '普通链接'], 'module')
+            ->addFormItem('radio', 'url_type', '链接类型', '', ['module_admin' => '模块链接(后台)', 'module_home' => '模块链接(前台)', 'link' => '普通链接'], 'module_admin')
             ->addFormItem(
                 'text',
                 'url_value',

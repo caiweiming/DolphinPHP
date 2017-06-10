@@ -555,7 +555,7 @@ INFO;
                 'module'      => $module,
                 'title'       => $menu['title'],
                 'icon'        => isset($menu['icon']) ? $menu['icon'] : 'fa fa-fw fa-puzzle-piece',
-                'url_type'    => isset($menu['url_type']) ? $menu['url_type'] : 'module',
+                'url_type'    => isset($menu['url_type']) ? $menu['url_type'] : 'module_admin',
                 'url_value'   => isset($menu['url_value']) ? $menu['url_value'] : '',
                 'url_target'  => isset($menu['url_target']) ? $menu['url_target'] : '_self',
                 'online_hide' => isset($menu['online_hide']) ? $menu['online_hide'] : 0,

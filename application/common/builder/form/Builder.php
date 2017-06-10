@@ -904,7 +904,7 @@ class Builder extends ZBuilder
      * @param string $table 表名
      * @param int $level 级别
      * @param string $default 默认值
-     * @param array $fields 字段名，默认为id,name,pid
+     * @param array|string $fields 字段名，默认为id,name,pid
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
