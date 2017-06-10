@@ -295,6 +295,44 @@ class Module extends Admin
     }
 
     /**
+     * 更新模块配置
+     * @param string $name 模块名
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function update($name = '')
+    {
+        $name == '' && $this->error('缺少模块名！');
+
+        $Module = ModuleModel::get(['name' => $name]);
+        !$Module && $this->error('模块不存在，或未安装');
+
+        // 模块配置信息
+        $module_info = ModuleModel::getInfoFromFile($name);
+        unset($module_info['name']);
+
+        // 检查是否有模块设置信息
+        if (isset($module_info['config']) && !empty($module_info['config'])) {
+            $module_info['config'] = json_encode(parse_config($module_info['config']));
+        } else {
+            $module_info['config'] = '';
+        }
+
+        // 检查是否有模块授权配置
+        if (isset($module_info['access']) && !empty($module_info['access'])) {
+            $module_info['access'] = json_encode($module_info['access']);
+        } else {
+            $module_info['access'] = '';
+        }
+
+        // 更新模块信息
+        if (false !== $Module->save($module_info)) {
+            $this->success('模块配置更新成功');
+        } else {
+            $this->error('模块配置更新失败，请重试');
+        }
+    }
+
+    /**
      * 导出模块
      * @param string $name 模块名
      * @author 蔡伟明 <314013107@qq.com>
