@@ -73,20 +73,23 @@ class Config
             if ($dispatch['type'] == 'module' && $module == '') {
                 header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
             }
-            if ($module != '' && $module != 'admin' && $module != 'common' && $module != 'index' && $module != 'extra') {
+
+            if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
                 // 修改默认访问控制器层
                 config('url_controller_layer', 'admin');
                 // 修改视图模板路径
                 config('template.view_path', APP_PATH. $module. '/view/admin/');
             }
+
             // 插件静态资源目录
             config('view_replace_str.__PLUGINS__', '/plugins');
         } else {
             if ($dispatch['type'] == 'module' && $module == 'admin') {
                 header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
             }
-            // 修改默认访问控制器层
-            if ($module != '' && $module != 'index') {
+
+            if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
+                // 修改默认访问控制器层
                 config('url_controller_layer', 'home');
             }
         }
