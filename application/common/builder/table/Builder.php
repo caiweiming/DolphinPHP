@@ -525,7 +525,7 @@ class Builder extends ZBuilder
 
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
-            preg_match('/\/(index|admin)\.php\/(.*)/', $btn_attribute['href'], $match);
+            preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
             $url_value = explode('/', $match[2]);
             if (strpos($url_value[2], '.')) {
                 $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
@@ -722,7 +722,7 @@ class Builder extends ZBuilder
 
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
-            preg_match('/\/(index|admin)\.php\/(.*)/', $btn_attribute['href'], $match);
+            preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
             $url_value = explode('/', $match[2]);
             if (strpos($url_value[2], '.')) {
                 $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));

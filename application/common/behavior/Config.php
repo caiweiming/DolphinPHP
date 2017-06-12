@@ -42,8 +42,9 @@ class Config
 
         // 获取入口目录
         $base_file = request()->baseFile();
-        $base_dir  = preg_replace(['/index.php$/', '/admin.php$/'], ['', ''], $base_file);
+        $base_dir  = substr($base_file, 0, strripos($base_file, '/') + 1);
         define('PUBLIC_PATH', $base_dir. 'public/');
+        define('ADMIN_FILE', substr($base_file, strripos($base_file, '/') + 1));
 
         // 视图输出字符串内容替换
         $view_replace_str = [
@@ -71,7 +72,7 @@ class Config
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
             if ($dispatch['type'] == 'module' && $module == '') {
-                header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
+                header("Location: ".$base_file.'/admin', true, 302);exit();
             }
 
             if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
@@ -85,7 +86,7 @@ class Config
             config('view_replace_str.__PLUGINS__', '/plugins');
         } else {
             if ($dispatch['type'] == 'module' && $module == 'admin') {
-                header("Location: ".$base_dir.'admin.php/admin', true, 302);exit();
+                header("Location: ".$base_dir.ADMIN_FILE.'/admin', true, 302);exit();
             }
 
             if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {

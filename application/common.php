@@ -1119,8 +1119,13 @@ if (!function_exists('home_url')) {
      */
     function home_url($url = '', $vars = '', $suffix = true, $domain = false) {
         $url = url($url, $vars, $suffix, $domain);
-        $url = preg_replace('/\/admin.php/', '/index.php', $url);
-        return $url;
+        if (defined('ENTRANCE') && ENTRANCE == 'admin') {
+            $base_file = request()->baseFile();
+            $base_file = substr($base_file, strripos($base_file, '/') + 1);
+            return preg_replace('/\/'.$base_file.'/', '/index.php', $url);
+        } else {
+            return $url;
+        }
     }
 }
 
@@ -1136,8 +1141,11 @@ if (!function_exists('admin_url')) {
      */
     function admin_url($url = '', $vars = '', $suffix = true, $domain = false) {
         $url = url($url, $vars, $suffix, $domain);
-        $url = preg_replace('/\/index.php/', '/admin.php', $url);
-        return $url;
+        if (defined('ENTRANCE') && ENTRANCE == 'admin') {
+            return $url;
+        } else {
+            return preg_replace('/\/index.php/', '/'.ADMIN_FILE, $url);
+        }
     }
 }
 
