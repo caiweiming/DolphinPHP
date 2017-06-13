@@ -349,4 +349,12 @@ jQuery(document).ready(function() {
         layer.open($options);
         return false;
     });
+
+    // 顶部下拉菜单
+    $('.select-change').change(function(){
+        var $url = $(this).find('option:selected').data('url');
+        if ($url) {
+            window.location.href = $url;
+        }
+    });
 });

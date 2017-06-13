@@ -84,6 +84,11 @@ class Builder extends ZBuilder
     private $_search = [];
 
     /**
+     * @var array 顶部下拉菜单默认选项集合
+     */
+    private $_select_list_default = [];
+
+    /**
      * @var array 模板变量
      */
     private $_vars = [
@@ -115,6 +120,7 @@ class Builder extends ZBuilder
         'validate'           => '',       // 快速编辑的验证器名
         '_js_files'          => [],       // js文件
         '_css_files'         => [],       // css文件
+        '_select_list'       => [],       // 顶部下拉菜单列表
     ];
 
     /**
@@ -167,6 +173,35 @@ class Builder extends ZBuilder
         if ($tips != '') {
             $this->_vars['page_tips'] = $tips;
             $this->_vars['tips_type'] = $type;
+        }
+        return $this;
+    }
+
+    /**
+     * 添加顶部下拉框
+     * @param string $name 表单名，即name值
+     * @param string $title 第一个下来菜单项标题，不写则不显示
+     * @param array $options 表单项内容，传递数组形式，如：array([2015] => '2015年', [2016] => '2016年')
+     * @param string $default 默认选项，初始化时，默认选中的菜单项
+     * @param string $ignore 生成url时，需要忽略的参数，用于有父子关系的下拉菜单，比如省份和地区，省份URL不应该带有地区参数的，
+     *                       所以可以在定义省份下拉菜单时，传入地区的下拉列表名，
+     *                       如需忽略多个参数，用逗号隔开
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function addTopSelect($name = '', $title = '', $options = [], $default = '', $ignore = '')
+    {
+        if ($name != '') {
+            $this->_vars['_select_list'][$name] = [
+                'name'    => $name,
+                'title'   => $title,
+                'options' => $options,
+                'ignore'  => $ignore,
+                'current' => '',
+            ];
+            if ($default != '') {
+                $this->_select_list_default[$name] = $default;
+            }
         }
         return $this;
     }
@@ -418,7 +453,8 @@ class Builder extends ZBuilder
     private function getDefaultUrl($type = '', $params = [])
     {
         $url = $this->_module.'/'.$this->_controller.'/'.$type;
-        $url_type = Menu::where('url_value', $url)->value('url_type');
+        $MenuModel = new Menu();
+        $url_type  = $MenuModel->where('url_value', $url)->value('url_type');
         return $url_type == 'module_home' ? home_url($url, $params) : url($url, $params);
     }
 
@@ -1578,6 +1614,89 @@ class Builder extends ZBuilder
                 }
                 $new_button .= "{$button['title']}</a>";
                 $button = $new_button;
+            }
+        }
+
+        // 编译顶部下拉菜单
+        if ($this->_vars['_select_list']) {
+            foreach ($this->_vars['_select_list'] as $name => &$select) {
+                // 当前url参数
+                $url_params = $this->request->param();
+
+                // 要搜索的字段
+                $select_field = $this->request->param('_select_field', '');
+                $select_field = $select_field != '' ? explode('|', $select_field) : [];
+
+                // 对应的值
+                $select_value = $this->request->param('_select_value', '');
+                $select_value = $select_value != '' ? explode('|', $select_value) : [];
+
+                // 合并默认值
+                if ($this->_select_list_default) {
+                    foreach ($this->_select_list_default as $field => $value) {
+                        if (!in_array($field, $select_field)) {
+                            array_push($select_field, $field);
+                            array_push($select_value, $value);
+                        }
+                    }
+                }
+
+                // 当前选中值
+                if (in_array($name, $select_field)) {
+                    $select['current'] = $select_value[array_search($name, $select_field)];
+                }
+
+                // 剔除要忽略的参数
+                if ($select['ignore'] !== '') {
+                    $ignores = explode(',', $select['ignore']);
+                    foreach ($ignores as $ignore) {
+                        if (array_search($ignore, $select_field) !== false) {
+                            $pos = array_search($ignore, $select_field);
+                            array_splice($select_field, $pos, 1);
+                            array_splice($select_value, $pos, 1);
+                        }
+                    }
+                }
+
+                // 生成除默认选项的下拉项的跳转url
+                if (!empty($select_field)) {
+                    if (!in_array($name, $select_field)) {
+                        array_push($select_field, $name);
+                    }
+                    $url_params['_select_field'] = implode('|', $select_field);
+                    foreach ($select['options'] as $key => $option) {
+                        $select_value[array_search($name, $select_field)] = $key;
+                        $url_params['_select_value'] = implode('|', $select_value);
+                        $select['url'][$key]   = url('').'?'.http_build_query($url_params);
+                    }
+                } else {
+                    $url_params['_select_field'] = $name;
+                    foreach ($select['options'] as $key => $option) {
+                        $url_params['_select_value'] = $key; // 添加下拉菜单项查询参数
+                        $select['url'][$key]   = url('').'?'.http_build_query($url_params);
+                    }
+                }
+
+                // 生成默认选项的url
+                if (isset($this->_select_list_default[$name])) {
+                    $url_params['_select_field'] = implode('|', $select_field);
+                    $select_value[array_search($name, $select_field)] = '_all';
+                    $url_params['_select_value'] = implode('|', $select_value);
+                } else {
+                    if (array_search($name, $select_field) !== false) {
+                        $pos = array_search($name, $select_field);
+                        unset($select_value[$pos]);
+                        unset($select_field[$pos]);
+                        if (empty($select_field)) {
+                            unset($url_params['_select_field']);
+                            unset($url_params['_select_value']);
+                        } else {
+                            $url_params['_select_field'] = implode('|', $select_field);
+                            $url_params['_select_value'] = implode('|', $select_value);
+                        }
+                    }
+                }
+                $select['default_url'] = url('').'?'.http_build_query($url_params);
             }
         }
 

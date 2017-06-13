@@ -34,12 +34,25 @@ class Common extends Controller
         $filter_time      = input('param._filter_time/s', '');
         $filter_time_from = input('param._filter_time_from/s', '');
         $filter_time_to   = input('param._filter_time_to/s', '');
+        $select_field     = input('param._select_field/s', '');
+        $select_value     = input('param._select_value/s', '');
 
         $map = [];
 
         // 搜索框搜索
         if ($search_field != '' && $keyword !== '') {
             $map[$search_field] = ['like', "%$keyword%"];
+        }
+
+        // 下拉筛选
+        if ($select_field != '') {
+            $select_field = array_filter(explode('|', $select_field), 'strlen');
+            $select_value = array_filter(explode('|', $select_value), 'strlen');
+            foreach ($select_field as $key => $item) {
+                if ($select_value[$key] != '_all') {
+                    $map[$item] = $select_value[$key];
+                }
+            }
         }
 
         // 时间段搜索
@@ -51,7 +64,7 @@ class Common extends Controller
             $map[$filter_time] = ['between time', [$filter_time_from, $filter_time_to]];
         }
 
-        // 下拉筛选
+        // 表头筛选
         if ($filter != '') {
             $filter         = array_filter(explode('|', $filter), 'strlen');
             $filter_content = array_filter(explode('|', $filter_content), 'strlen');
