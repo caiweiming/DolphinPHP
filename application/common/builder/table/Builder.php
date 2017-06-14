@@ -540,7 +540,7 @@ class Builder extends ZBuilder
                 break;
 
             // 自定义按钮
-            case 'custom':
+            default:
                 // 默认属性
                 $btn_attribute = [
                     'title'       => '定义按钮',
@@ -549,9 +549,6 @@ class Builder extends ZBuilder
                     'href'        => 'javascript:void(0);'
                 ];
                 break;
-
-            default:
-                $this->error('未知的按钮类型');
         }
 
         // 合并自定义属性
@@ -737,7 +734,7 @@ class Builder extends ZBuilder
                 break;
 
             // 自定义按钮
-            case 'custom':
+            default:
                 // 默认属性
                 $btn_attribute = [
                     'title' => '自定义按钮',
@@ -746,9 +743,6 @@ class Builder extends ZBuilder
                     'href'  => 'javascript:void(0);'
                 ];
                 break;
-
-            default:
-                $this->error('未知的按钮类型');
         }
 
         // 合并自定义属性
