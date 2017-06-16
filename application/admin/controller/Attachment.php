@@ -691,29 +691,4 @@ class Attachment extends Admin
         $id = input('post.pk', '');
         return parent::quickEdit(['attachment_edit', 'admin_attachment', 0, UID, $id]);
     }
-
-    /**
-     * 检查文件是否存在
-     * @param string $md5 文件md5
-     * @author 蔡伟明 <314013107@qq.com>
-     * @return \think\response\Json
-     */
-    public function check($md5 = '')
-    {
-        $md5 == '' && $this->error('参数错误');
-
-        // 判断附件是否已存在
-        if ($file_exists = AttachmentModel::get(['md5' => $md5])) {
-            $file_path = PUBLIC_PATH. $file_exists['path'];
-            return json([
-                'code'   => 1,
-                'info'   => '上传成功',
-                'class'  => 'success',
-                'id'     => $file_exists['id'],
-                'path'   => $file_path
-            ]);
-        } else {
-            $this->error('文件不存在');
-        }
-    }
 }

@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use app\common\controller\Common;
 use app\admin\model\Menu as MenuModel;
+use app\admin\model\Attachment as AttachmentModel;
 use think\Db;
 
 /**
@@ -173,5 +174,30 @@ class Ajax extends Common
             }
         }
         return $output;
+    }
+
+    /**
+     * 检查附件是否存在
+     * @param string $md5 文件md5
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return \think\response\Json
+     */
+    public function check($md5 = '')
+    {
+        $md5 == '' && $this->error('参数错误');
+
+        // 判断附件是否已存在
+        if ($file_exists = AttachmentModel::get(['md5' => $md5])) {
+            $file_path = PUBLIC_PATH. $file_exists['path'];
+            return json([
+                'code'   => 1,
+                'info'   => '上传成功',
+                'class'  => 'success',
+                'id'     => $file_exists['id'],
+                'path'   => $file_path
+            ]);
+        } else {
+            $this->error('文件不存在');
+        }
     }
 }
