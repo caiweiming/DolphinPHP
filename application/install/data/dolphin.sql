@@ -492,8 +492,8 @@ INSERT INTO `dp_admin_role` VALUES ('1', '0', '超级管理员', '系统默认�
 -- ----------------------------
 DROP TABLE IF EXISTS `dp_admin_user`;
 CREATE TABLE `dp_admin_user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户名',
-  `username` varchar(32) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
   `nickname` varchar(32) NOT NULL DEFAULT '' COMMENT '昵称',
   `password` varchar(96) NOT NULL DEFAULT '' COMMENT '密码',
   `email` varchar(64) NOT NULL DEFAULT '' COMMENT '邮箱地址',

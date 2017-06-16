@@ -46,7 +46,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="block-content">
-                            <form class="form-builder row form-horizontal" name="form-builder" action="{$post_url|default=''}" method="post">
+                            <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="post">
                                 {empty name="form_items"}
                                 <div class="form-empty">
                                     <p class="text-center text-muted empty-info">
@@ -238,7 +238,7 @@
                                         {/switch}
                                     {/volist}
                                 {/empty}
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-12 col-xs-12">
                                     <div class="col-xs-12">
                                         {php}if(isset($btn_hide) && !in_array('submit', $btn_hide)):{/php}
                                         <button class="btn btn-minw btn-primary {$submit_confirm ?= 'confirm '}{$ajax_submit ?= 'ajax-post'}" target-form="form-builder" type="submit">
