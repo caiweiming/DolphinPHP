@@ -126,7 +126,7 @@
                             <thead>
                                 <tr>
                                     {if (!$hide_checkbox)}
-                                    <th class="text-center" style="width: 70px;">
+                                    <th class="text-center" style="min-width: 70px;padding: 10px;">
                                         <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
                                             <input type="checkbox" id="check-all"><span></span>
                                         </label>
@@ -172,7 +172,7 @@
                                         </span>
 
                                         {// 字段标题}
-                                        <span class="push-35-r">{$column.title|default=''|htmlspecialchars}</span>
+                                        {$column.title|default=''|htmlspecialchars}
                                     </th>
                                     {/volist}
                                 </tr>
