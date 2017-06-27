@@ -37,7 +37,7 @@ function captcha($id = "", $config = [])
 function captcha_src($id = "")
 {
 //    return \think\Url::build('/captcha' . ($id ? "/{$id}" : ''));
-    $base_file = str_replace('admin.php', 'index.php', request()->baseFile());
+    $base_file = str_replace(ADMIN_FILE, 'index.php', request()->baseFile());
     return $base_file.'/captcha'.($id ? "/{$id}" : '').'.html';
 }
 
