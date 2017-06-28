@@ -1205,6 +1205,11 @@ class Builder extends ZBuilder
                         }
                     }
 
+                    // 如果需要显示编号
+                    if ($column['name'] == '__INDEX__') {
+                        $row[$column['name']] = $key + 1;
+                    }
+
                     // 备份原数据
                     if (isset($row[$column['name']])) {
                         $row['__'.$column['name'].'__'] = $row[$column['name']];
