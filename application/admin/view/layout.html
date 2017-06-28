@@ -114,7 +114,7 @@
 </head>
 <body>
 <!-- Page Container -->
-<div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed {$_COOKIE['sidebarMini'] == 'true' ?= 'sidebar-mini'}">
+<div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed {empty name="_pop"}{$_COOKIE['sidebarMini'] == 'true' ?= 'sidebar-mini'}{/empty}">
     <!-- Side Overlay-->
     {empty name="_pop"}
     {block name="aside"}
