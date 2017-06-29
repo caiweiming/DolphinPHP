@@ -1021,7 +1021,7 @@ jQuery(document).ready(function() {
     }
 
     // 切换分组时，重新初始化上传组件
-    $('#builder-form-group-tab a').click(function () {
+    $('.nav-tabs a').click(function () {
         $.each(webuploader, function(index, el){
             el.refresh();
         });
