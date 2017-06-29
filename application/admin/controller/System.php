@@ -132,6 +132,7 @@ class System extends Admin
                 // 模块配置
                 $module_info = ModuleModel::getInfoFromFile($group);
                 $config      = $module_info['config'];
+                $trigger     = isset($module_info['trigger']) ? $module_info['trigger'] : [];
 
                 // 数据库内的模块信息
                 $db_config = ModuleModel::where('name', $group)->value('config');
@@ -143,6 +144,7 @@ class System extends Admin
                     ->setTabNav($tab_list, $group)
                     ->addFormItems($config)
                     ->setFormdata($db_config) // 设置表格数据
+                    ->setTrigger($trigger) // 设置触发
                     ->fetch();
             }
         }
