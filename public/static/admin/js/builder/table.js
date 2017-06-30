@@ -331,7 +331,7 @@ jQuery(document).ready(function() {
     });
 
     // 弹出框显示页面
-    $('.pop').click(function () {
+    $('a.pop').click(function () {
         var $url   = $(this).attr('href');
         var $title = $(this).attr('title') || $(this).data('original-title');
         var $layer = $(this).data('layer');
