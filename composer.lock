@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "87aa2e18bcf5e1f0f66e178aceb3c16a",
+    "content-hash": "0f1a3530a154f6a245f95118f89a54df",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -55,16 +55,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.0.8",
+            "version": "v5.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "51adc8254de3b049096e51ca97c59989da678bf2"
+                "reference": "e428c43ec5138c989cfdb38ac300a964ad77f9cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://dl.composer-proxy.org/topthink/framework/51adc8254de3b049096e51ca97c59989da678bf2.zip",
-                "reference": "51adc8254de3b049096e51ca97c59989da678bf2",
+                "url": "https://files.phpcomposer.com/files/top-think/framework/e428c43ec5138c989cfdb38ac300a964ad77f9cb.zip",
+                "reference": "e428c43ec5138c989cfdb38ac300a964ad77f9cb",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2017-04-28T01:14:37+00:00"
+            "time": "2017-07-05T03:35:06+00:00"
         },
         {
             "name": "topthink/think-captcha",
@@ -218,16 +218,16 @@
         },
         {
             "name": "topthink/think-installer",
-            "version": "v1.0.11",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-installer.git",
-                "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d"
+                "reference": "1be326e68f63de4e95977ed50f46ae75f017556d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://dl.composer-proxy.org/topthink/think-installer/4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d.zip",
-                "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d",
+                "url": "https://files.phpcomposer.com/files/top-think/think-installer/1be326e68f63de4e95977ed50f46ae75f017556d.zip",
+                "reference": "1be326e68f63de4e95977ed50f46ae75f017556d",
                 "shasum": ""
             },
             "require": {
@@ -255,7 +255,7 @@
                     "email": "448901948@qq.com"
                 }
             ],
-            "time": "2016-12-01T09:08:45+00:00"
+            "time": "2017-05-27T06:58:09+00:00"
         }
     ],
     "packages-dev": [],

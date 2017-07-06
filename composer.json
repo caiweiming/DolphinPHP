@@ -22,13 +22,7 @@
         "topthink/think-image": "^1.0",
         "topthink/think-helper": "^1.0",
         "ezyang/htmlpurifier": "^4.9"
-    },  
-    "repositories": {
-      "packagist": {
-          "type": "composer",
-          "url": "https://packagist.composer-proxy.org"
-      }
-  },  
+    },
     "extra": {
         "think-path": "thinkphp"
     },

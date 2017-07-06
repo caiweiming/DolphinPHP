@@ -1170,7 +1170,7 @@ class Route
     private static function checkRule($rule, $route, $url, $pattern, $option, $depr)
     {
         // 检查完整规则定义
-        if (isset($pattern['__url__']) && !preg_match('/^' . $pattern['__url__'] . '/', str_replace('|', $depr, $url))) {
+        if (isset($pattern['__url__']) && !preg_match(0 === strpos($pattern['__url__'], '/') ? $pattern['__url__'] : '/^' . $pattern['__url__'] . '/', str_replace('|', $depr, $url))) {
             return false;
         }
         // 检查路由的参数分隔符
@@ -1360,7 +1360,7 @@ class Route
                         if (false === $result) {
                             return false;
                         }
-                    } elseif (!preg_match('/^' . $pattern[$name] . '$/', $m1[$key])) {
+                    } elseif (!preg_match(0 === strpos($pattern[$name], '/') ? $pattern[$name] : '/^' . $pattern[$name] . '$/', $m1[$key])) {
                         return false;
                     }
                 }
@@ -1458,6 +1458,10 @@ class Route
                 }
             }
             $request->bind($bind);
+        }
+
+        if (!empty($option['response'])) {
+            Hook::add('response_send', $option['response']);
         }
 
         // 解析额外参数
