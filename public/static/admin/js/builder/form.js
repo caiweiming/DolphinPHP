@@ -805,7 +805,7 @@ jQuery(document).ready(function() {
     // 格式文本
     $('.js-masked').each(function () {
         var $format = $(this).data('format') || '';
-        $(this).mask($format);
+        $(this).mask(String($format));
     });
 
     // 联动下拉框
