@@ -2,6 +2,9 @@
     <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
     <div class="col-sm-12">
         <div class="form-control-static">{$form[type].value|default=''|htmlspecialchars}</div>
+        {notempty name="form[type].hidden"}
+        <input type="hidden" name="{$form[type].name}" value='{$form[type].hidden|default=""}'>
+        {/notempty}
         {notempty name="form[type].tips"}
         <div class="help-block">{$form[type].tips|clear_js}</div>
         {/notempty}

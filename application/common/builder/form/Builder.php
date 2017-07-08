@@ -1212,11 +1212,12 @@ class Builder extends ZBuilder
      * @param string $title 标题
      * @param string $tips 提示
      * @param string $default 默认值
+     * @param string $hidden 需要提交的值
      * @param string $extra_class 额外css类
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addStatic($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
+    public function addStatic($name = '', $title = '', $tips = '', $default = '', $hidden = '', $extra_class = '')
     {
         $item = [
             'type'        => 'static',
@@ -1224,6 +1225,7 @@ class Builder extends ZBuilder
             'title'       => $title,
             'tips'        => $tips,
             'value'       => $default,
+            'hidden'      => $hidden === true ? $default : $hidden,
             'extra_class' => $extra_class,
         ];
 
