@@ -223,6 +223,7 @@ class Admin extends Common
         if ($this->request->isPost()) {
             // 表单数据
             $data = $this->request->post();
+            $_pop = $this->request->get('_pop');
 
             // 验证
             if ($form['validate'] != '') {
@@ -245,7 +246,11 @@ class Admin extends Common
 
             // 插入数据
             if (Db::name($form['table'])->insert($data)) {
-                $this->success('新增成功', $form['go_back']);
+                if ($_pop == 1) {
+                    $this->success('新增成功', null, '_parent_reload');
+                } else {
+                    $this->success('新增成功', $form['go_back']);
+                }
             } else {
                 $this->error('新增失败');
             }
@@ -278,6 +283,7 @@ class Admin extends Common
         if ($this->request->isPost()) {
             // 表单数据
             $data = $this->request->post();
+            $_pop = $this->request->get('_pop');
 
             // 验证
             if ($form['validate'] != '') {
@@ -300,7 +306,11 @@ class Admin extends Common
 
             // 更新数据
             if (false !== Db::name($form['table'])->update($data)) {
-                $this->success('编辑成功', $form['go_back']);
+                if ($_pop == 1) {
+                    $this->success('编辑成功', null, '_parent_reload');
+                } else {
+                    $this->success('编辑成功', $form['go_back']);
+                }
             } else {
                 $this->error('编辑失败');
             }

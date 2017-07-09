@@ -398,20 +398,21 @@ class Builder extends ZBuilder
      * @param string $validate 验证器名
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
      * @param string $format 时间格式
+     * @param bool $pop 弹窗显示
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoAdd($items = [], $table = '', $validate = '', $auto_time = '', $format = '')
+    public function autoAdd($items = [], $table = '', $validate = '', $auto_time = '', $format = '', $pop = false)
     {
         if (!empty($items)) {
             // 默认属性
             $btn_attribute = [
                 'title' => '新增',
                 'icon'  => 'fa fa-plus-circle',
-                'class' => 'btn btn-primary',
+                'class' => 'btn btn-primary'.($pop === true ? ' pop' : ''),
                 'href'  => url(
                     $this->_module.'/'.$this->_controller.'/add'
-                ),
+                ).($pop === true ? '?_pop=1' : ''),
             ];
 
             // 缓存名称
@@ -472,9 +473,6 @@ class Builder extends ZBuilder
      */
     public function addTopButton($type = '', $attribute = [], $pop = false)
     {
-        // 按钮属性
-        $btn_attribute = [];
-
         // 表单名，用于替换
         $table = isset($attribute['table']) ? $attribute['table'] : '__table__';
 
@@ -621,21 +619,22 @@ class Builder extends ZBuilder
      * @param string $validate 验证器名
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
      * @param string $format 时间格式
+     * @param bool $pop 弹窗显示
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '')
+    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '', $pop = false)
     {
         if (!empty($items)) {
             // 默认属性
             $btn_attribute = [
                 'title' => '编辑',
                 'icon'  => 'fa fa-pencil',
-                'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
+                'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].($pop === true ? ' pop' : ''),
                 'href'  => url(
                     $this->_module.'/'.$this->_controller.'/edit',
                     ['id' => '__id__']
-                ),
+                ).($pop === true ? '?_pop=1' : ''),
                 'target' => '_self'
             ];
 
