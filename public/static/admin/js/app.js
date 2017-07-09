@@ -970,11 +970,53 @@ var App = function() {
      */
     var uiHelperDatepicker = function(){
         // Init datepicker (with .js-datepicker and .input-daterange class)
-        jQuery('.js-datepicker').add('.input-daterange').datepicker({
-            weekStart: 1,
-            autoclose: true,
-            todayHighlight: true,
-            language: 'zh-CN'
+        jQuery('.js-datepicker').add('.input-daterange').each(function () {
+            var $datepicker = jQuery(this);
+            var $weekStart = $datepicker.data('week-start') || 1;
+            var $autoclose = $datepicker.data('autoclose') === undefined ? true : $datepicker.data('autoclose');
+            var $todayHighlight = $datepicker.data('today-highlight') === undefined ? true : $datepicker.data('today-highlight');
+            var $language = $datepicker.data('language') || 'zh-CN';
+            var $startDate = $datepicker.data('start-date') === undefined ? -Infinity : $datepicker.data('start-date');
+            var $endDate = $datepicker.data('end-date') === undefined ? Infinity : $datepicker.data('end-date');
+            var $startView = $datepicker.data('start-view') === undefined ? 0 : $datepicker.data('start-view');
+            var $minViewMode = $datepicker.data('min-view-mode') === undefined ? 0 : $datepicker.data('min-view-mode');
+            var $maxViewMode = $datepicker.data('max-view-mode') === undefined ? 4 : $datepicker.data('max-view-mode');
+            var $todayBtn = $datepicker.data('today-btn') === undefined ? false : $datepicker.data('today-btn');
+            var $clearBtn = $datepicker.data('clear-btn') === undefined ? false : $datepicker.data('clear-btn');
+            var $orientation = $datepicker.data('orientation') === undefined ? "auto" : $datepicker.data('orientation');
+            var $multidate = $datepicker.data('multidate') === undefined ? false : $datepicker.data('multidate');
+            var $multidateSeparator = $datepicker.data('multidate-separator') === undefined ? ',' : $datepicker.data('multidate-separator');
+            var $daysOfWeekDisabled = $datepicker.data('days-of-week-disabled') === undefined ? [] : $datepicker.data('days-of-week-disabled');
+            var $daysOfWeekHighlighted = $datepicker.data('days-of-week-highlighted') === undefined ? [] : $datepicker.data('days-of-week-highlighted');
+            var $calendarWeeks = $datepicker.data('calendar-weeks') === undefined ? false : $datepicker.data('calendar-weeks');
+            var $keyboardNavigation = $datepicker.data('keyboard-navigation') === undefined ? true : $datepicker.data('keyboard-navigation');
+            var $forceParse = $datepicker.data('force-parse') === undefined ? true : $datepicker.data('force-parse');
+            var $datesDisabled = $datepicker.data('dates-disabled') === undefined ? [] : $datepicker.data('dates-disabled');
+            var $toggleActive = $datepicker.data('toggle-active') === undefined ? false : $datepicker.data('toggle-active');
+
+            $datepicker.datepicker({
+                weekStart: $weekStart,
+                autoclose: $autoclose,
+                todayHighlight: $todayHighlight,
+                language: $language,
+                startDate: $startDate,
+                endDate: $endDate,
+                startView: $startView,
+                minViewMode: $minViewMode,
+                maxViewMode: $maxViewMode,
+                todayBtn: $todayBtn,
+                clearBtn: $clearBtn,
+                orientation: $orientation,
+                multidate: $multidate,
+                multidateSeparator: $multidateSeparator,
+                daysOfWeekDisabled: $daysOfWeekDisabled,
+                daysOfWeekHighlighted: $daysOfWeekHighlighted,
+                calendarWeeks: $calendarWeeks,
+                keyboardNavigation: $keyboardNavigation,
+                forceParse: $forceParse,
+                datesDisabled: $datesDisabled,
+                toggleActive: $toggleActive
+            });
         });
     };
 
