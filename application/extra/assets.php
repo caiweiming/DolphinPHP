@@ -66,6 +66,7 @@ return [
     ],
     'select2_js' => [ // 下拉框
         "__LIBS__/select2/select2.full.min.js",
+        "__LIBS__/select2/i18n/zh-CN.js",
     ],
     'select2_css' => [ // 下拉框
         "__LIBS__/select2/select2.min.css",
