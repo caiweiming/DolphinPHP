@@ -4,59 +4,61 @@
  *  Description: 表格构建器
  */
 jQuery(document).ready(function() {
-    // 快速编辑的url提交地址
-    $.fn.editable.defaults.url = dolphin.quick_edit_url;
-    // 值为空时显示的信息
-    $.fn.editable.defaults.emptytext = '空值';
-    // 提交时的额外参数
-    $.fn.editable.defaults.params = function (params) {
-        params.table    = $(this).data('table') || '';
-        params.type     = $(this).data('type') || '';
-        params.validate = dolphin.validate;
-        params.validate_fields = dolphin.validate_fields;
-        return params;
-    };
-    // 提交成功时的回调函数
-    $.fn.editable.defaults.success = function (res) {
-        if (res.code) {
-            Dolphin.notify(res.msg, 'success');
-        } else {
-            return res.msg;
-        }
-    };
-    // 提交失败时的回调函数
-    $.fn.editable.defaults.error = function(res) {
-        if(res.status === 500) {
-            return '服务器内部错误. 请稍后重试.';
-        } else {
-            return res.responseText;
-        }
-    };
+    if ($.fn.editable) {
+        // 快速编辑的url提交地址
+        $.fn.editable.defaults.url = dolphin.quick_edit_url;
+        // 值为空时显示的信息
+        $.fn.editable.defaults.emptytext = '空值';
+        // 提交时的额外参数
+        $.fn.editable.defaults.params = function (params) {
+            params.table    = $(this).data('table') || '';
+            params.type     = $(this).data('type') || '';
+            params.validate = dolphin.validate;
+            params.validate_fields = dolphin.validate_fields;
+            return params;
+        };
+        // 提交成功时的回调函数
+        $.fn.editable.defaults.success = function (res) {
+            if (res.code) {
+                Dolphin.notify(res.msg, 'success');
+            } else {
+                return res.msg;
+            }
+        };
+        // 提交失败时的回调函数
+        $.fn.editable.defaults.error = function(res) {
+            if(res.status === 500) {
+                return '服务器内部错误. 请稍后重试.';
+            } else {
+                return res.responseText;
+            }
+        };
 
-    // 可编辑单行文本
-    $('.text-edit').editable();
+        // 可编辑单行文本
+        $('.text-edit').editable();
 
-    // 可编辑多行文本
-    $('.textarea-edit').editable({
-        showbuttons: 'bottom'
-    });
+        // 可编辑多行文本
+        $('.textarea-edit').editable({
+            showbuttons: 'bottom'
+        });
 
-    // 下拉编辑
-    $('.select-edit').editable();
-    $('.select2-edit').editable({
-        select2: {
-            multiple: true,
-            tokenSeparators: [',', ' ']
-        }
-    });
+        // 下拉编辑
+        $('.select-edit').editable();
+        $('.select2-edit').editable({
+            select2: {
+                multiple: true,
+                tokenSeparators: [',', ' ']
+            }
+        });
 
-    // 日期时间
-    $('.combodate-edit').editable({
-        combodate: {
-            maxYear: 2036,
-            minuteStep: 1
-        }
-    });
+        // 日期时间
+        $('.combodate-edit').editable({
+            combodate: {
+                maxYear: 2036,
+                minuteStep: 1
+            }
+        });
+    }
 
     // 跳转链接
     var goto = function (url, _curr_params) {

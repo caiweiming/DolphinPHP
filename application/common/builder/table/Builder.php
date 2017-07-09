@@ -134,6 +134,10 @@ class Builder extends ZBuilder
         $this->_action     = $this->request->action();
         $this->_table_name = strtolower($this->_module.'_'.$this->_controller);
         $this->_template   = APP_PATH. 'common/builder/table/layout.html';
+
+        // 默认加载快速编辑所需js和css
+        $this->_vars['_js_files'][]  = 'editable_js';
+        $this->_vars['_css_files'][] = 'editable_css';
     }
 
     /**
@@ -1738,6 +1742,10 @@ class Builder extends ZBuilder
         if (!$this->_has_pages) {
             $this->_vars['pages'] = '';
         }
+
+        // 处理重复的js文件和css文件
+        $this->_vars['_js_files']  = array_unique($this->_vars['_js_files']);
+        $this->_vars['_css_files'] = array_unique($this->_vars['_css_files']);
     }
 
     /**

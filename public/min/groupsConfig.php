@@ -25,7 +25,6 @@ return [
         $core_path. "jquery.countTo.min.js",
         $core_path. "jquery.placeholder.min.js",
         $core_path. "js.cookie.min.js",
-        $libs_path. "bootstrap3-editable/js/bootstrap-editable.js",
         $libs_path. "magnific-popup/magnific-popup.min.js",
         $static_path. "admin/js/app.js",
         $static_path. "admin/js/dolphin.js",
@@ -34,7 +33,6 @@ return [
         $static_path. "admin/js/builder/table.js",
     ],
     'core_css' => [ // 默认加载
-        $libs_path. "bootstrap3-editable/css/bootstrap-editable.css",
         $libs_path. "magnific-popup/magnific-popup.min.css",
         $static_path. "admin/css/bootstrap.min.css",
         $static_path. "admin/css/oneui.css",
@@ -58,6 +56,9 @@ return [
         $libs_path. "bootstrap-datetimepicker/moment.min.js",
         $libs_path. "bootstrap-datetimepicker/bootstrap-datetimepicker.min.js",
         $libs_path. "bootstrap-datetimepicker/locale/zh-cn.js",
+    ],
+    'moment_js' => [
+        $libs_path. "bootstrap-datetimepicker/moment.min.js",
     ],
     'datetimepicker_css' => [ // 日期时间选择
         $libs_path. "bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"

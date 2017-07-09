@@ -20,7 +20,6 @@ return [
         "__ADMIN_JS__/core/jquery.countTo.min.js",
         "__ADMIN_JS__/core/jquery.placeholder.min.js",
         "__ADMIN_JS__/core/js.cookie.min.js",
-        "__LIBS__/bootstrap3-editable/js/bootstrap-editable.js",
         "__LIBS__/magnific-popup/magnific-popup.min.js",
         "__ADMIN_JS__/app.js",
         "__ADMIN_JS__/dolphin.js",
@@ -29,7 +28,6 @@ return [
         "__ADMIN_JS__/builder/table.js",
     ],
     'core_css' => [ // 默认加载
-        "__LIBS__/bootstrap3-editable/css/bootstrap-editable.css",
         "__LIBS__/magnific-popup/magnific-popup.min.css",
         "__ADMIN_CSS__/admin/css/bootstrap.min.css",
         "__ADMIN_CSS__/admin/css/oneui.css",
