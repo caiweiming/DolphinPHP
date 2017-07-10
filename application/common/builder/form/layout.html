@@ -7,6 +7,7 @@
         <p>{$page_tips}</p>
     </div>
     {/notempty}
+    {$extra_html_content_top|default=''}
     <div class="row">
         <div class="col-md-12">
             <div class="block">
@@ -46,6 +47,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="block-content">
+                            {$extra_html_form_top|default=''}
                             <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="post">
                                 {empty name="form_items"}
                                 <div class="form-empty">
@@ -261,6 +263,7 @@
                                     </div>
                                 </div>
                             </form>
+                            {$extra_html_form_bottom|default=''}
                         </div>
                     </div>
                 </div>
@@ -302,6 +305,7 @@
         </div>
     </div>
     {/notempty}
+    {$extra_html_content_bottom|default=''}
 {/block}
 
 {block name="style"}

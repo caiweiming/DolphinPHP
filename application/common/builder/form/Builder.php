@@ -1594,13 +1594,15 @@ class Builder extends ZBuilder
     /**
      * 设置额外HTML代码
      * @param string $extra_html 额外HTML代码
+     * @param string $tag 标记
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setExtraHtml($extra_html = '')
+    public function setExtraHtml($extra_html = '', $tag = '')
     {
         if ($extra_html != '') {
-            $this->_vars['extra_html'] = $extra_html;
+            $tag != '' && $tag = '_'.$tag;
+            $this->_vars['extra_html'.$tag] = $extra_html;
         }
         return $this;
     }
