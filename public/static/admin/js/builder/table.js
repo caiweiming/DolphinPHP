@@ -342,7 +342,27 @@ jQuery(document).ready(function() {
             content: $url
         };
 
+        // 处理各种回调方法
+        dolphin.layer.success = dolphin.layer.success ? window[dolphin.layer.success] : null;
+        dolphin.layer.yes     = dolphin.layer.yes ? window[dolphin.layer.yes] : null;
+        dolphin.layer.cancel  = dolphin.layer.cancel ? window[dolphin.layer.cancel] : null;
+        dolphin.layer.end     = dolphin.layer.end ? window[dolphin.layer.end] : null;
+        dolphin.layer.full    = dolphin.layer.full ? window[dolphin.layer.full] : null;
+        dolphin.layer.min     = dolphin.layer.min ? window[dolphin.layer.min] : null;
+        dolphin.layer.max     = dolphin.layer.max ? window[dolphin.layer.max] : null;
+        dolphin.layer.restore = dolphin.layer.restore ? window[dolphin.layer.restore] : null;
+
         if ($layer !== undefined) {
+            // 处理各种回调方法
+            $layer.success = $layer.success ? window[$layer.success] : dolphin.layer.success;
+            $layer.yes     = $layer.yes ? window[$layer.yes] : dolphin.layer.yes;
+            $layer.cancel  = $layer.cancel ? window[$layer.cancel] : dolphin.layer.cancel;
+            $layer.end     = $layer.end ? window[$layer.end] : dolphin.layer.end;
+            $layer.full    = $layer.full ? window[$layer.full] : dolphin.layer.full;
+            $layer.min     = $layer.min ? window[$layer.min] : dolphin.layer.min;
+            $layer.max     = $layer.max ? window[$layer.max] : dolphin.layer.max;
+            $layer.restore = $layer.restore ? window[$layer.restore] : dolphin.layer.restore;
+
             $.extend($options, dolphin.layer, $layer);
         } else {
             $.extend($options, dolphin.layer);
