@@ -75,11 +75,17 @@ jQuery(document).ready(function() {
 
     // 初始化搜索
     var search_field = dolphin.search_field;
+    var search_input_placeholder = $('#search-input').attr('placeholder');
     if (search_field !== '') {
         $('.search-bar .dropdown-menu a').each(function () {
             var self = $(this);
-            if (self.data('field') == search_field) {
+            if (self.data('field') === search_field) {
                 $('#search-btn').html(self.text() + ' <span class="caret"></span>');
+                if (self.text() === '搜索') {
+                    $('#search-input').attr('placeholder', search_input_placeholder);
+                } else {
+                    $('#search-input').attr('placeholder', '请输入'+self.text());
+                }
             }
         })
     }
@@ -89,6 +95,11 @@ jQuery(document).ready(function() {
         var field = $(this).data('field') || '';
         $('#search-field').val(field);
         $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        if ($(this).text() === '搜索') {
+            $('#search-input').attr('placeholder', search_input_placeholder);
+        } else {
+            $('#search-input').attr('placeholder', '请输入'+$(this).text());
+        }
     });
     $('#search-input').on('keyup', function (e) {
         if (e.keyCode === 13) {
