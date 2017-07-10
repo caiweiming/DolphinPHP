@@ -116,6 +116,9 @@ class Document extends Admin
                     case 'datetime':
                         $value['value'] = '';
                         break;
+                    case 'bmap':
+                        $value['level'] = $value['level'] == 0 ? 12 : $value['level'];
+                        break;
                 }
             }
 

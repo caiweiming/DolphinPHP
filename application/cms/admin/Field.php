@@ -100,6 +100,9 @@ class Field extends Admin
                 case 'number':
                     $data['type'] = 'text';
                     break;
+                case 'bmap':
+                    $data['level'] = !$data['level'] ? 12 : $data['level'];
+                    break;
             }
 
             if ($field = FieldModel::create($data)) {
@@ -143,7 +146,7 @@ class Field extends Admin
                 ['text', 'ajax_url', '异步请求地址', "如请求的地址是 <code>url('ajax/getCity')</code>，那么只需填写 <code>ajax/getCity</code>，或者直接填写以 <code>http</code>开头的url地址"],
                 ['text', 'next_items', '下一级联动下拉框的表单名', "与当前有关联的下级联动下拉框名，多个用逗号隔开，如：area,other"],
                 ['text', 'param', '请求参数名', "联动下拉框请求参数名，默认为配置名称"],
-                ['text', 'level', '级别', '需要显示的级别数量，默认为2', 2],
+                ['text', 'level', '级别', '如果类型为【快速联动下拉框】则表示需要显示的级别数量，默认为2。如果类型为【百度地图】，则表示地图默认缩放级别，建议设置为12', 2],
                 ['text', 'table', '表名', '要查询的表，里面必须含有id、name、pid三个字段，其中id和name字段可在下面重新定义'],
                 ['text', 'pid', '父级id字段名', '即表中的父级ID字段名，如果表中的主键字段名为pid则可不填写'],
                 ['text', 'key', '键字段名', '即表中的主键字段名，如果表中的主键字段名为id则可不填写'],
@@ -157,8 +160,9 @@ class Field extends Admin
                 ['text', 'sort', '排序', '', 100],
             ])
             ->setTrigger('type', 'linkage', 'ajax_url,next_items,param')
-            ->setTrigger('type', 'linkages', 'table,pid,level,key,option')
+            ->setTrigger('type', 'linkages', 'table,pid,key,option')
             ->setTrigger('type', 'bmap', 'ak')
+            ->setTrigger('type', 'linkages,bmap', 'level')
             ->setTrigger('type', 'masked,date,time,datetime', 'format')
             ->setTrigger('type', 'checkbox,radio,array,select,linkage,linkages', 'options')
             ->js('field')
@@ -191,6 +195,10 @@ class Field extends Admin
                 $data['level']  = $data['level']  == '' ? '2'    : $data['level'];
                 $data['option'] = $data['option'] == '' ? 'name' : $data['option'];
             }
+            // 如果是百度地图
+            if ($data['type'] == 'bmap') {
+                $data['level'] = !$data['level'] ? 12 : $data['level'];
+            }
 
             // 更新字段信息
             $FieldModel = new FieldModel();
@@ -221,7 +229,7 @@ class Field extends Admin
                 ['text', 'ajax_url', '异步请求地址', "如请求的地址是 <code>url('ajax/getCity')</code>，那么只需填写 <code>ajax/getCity</code>，或者直接填写以 <code>http</code>开头的url地址"],
                 ['text', 'next_items', '下一级联动下拉框的表单名', "与当前有关联的下级联动下拉框名，多个用逗号隔开，如：area,other"],
                 ['text', 'param', '请求参数名', "联动下拉框请求参数名，默认为配置名称"],
-                ['text', 'level', '级别', '需要显示的级别数量，默认为2'],
+                ['text', 'level', '级别', '如果类型为【快速联动下拉框】则表示需要显示的级别数量，默认为2。如果类型为【百度地图】，则表示地图默认缩放级别，建议设置为12'],
                 ['text', 'table', '表名', '要查询的表，里面必须含有id、name、pid三个字段，其中id和name字段可在下面重新定义'],
                 ['text', 'pid', '父级id字段名', '即表中的父级ID字段名，如果表中的主键字段名为pid则可不填写'],
                 ['text', 'key', '键字段名', '即表中的主键字段名，如果表中的主键字段名为id则可不填写'],
@@ -234,8 +242,9 @@ class Field extends Admin
                 ['text', 'sort', '排序'],
             ])
             ->setTrigger('type', 'linkage', 'ajax_url,next_items,param')
-            ->setTrigger('type', 'linkages', 'table,pid,level,key,option')
+            ->setTrigger('type', 'linkages', 'table,pid,key,option')
             ->setTrigger('type', 'bmap', 'ak')
+            ->setTrigger('type', 'linkages,bmap', 'level')
             ->setTrigger('type', 'masked,date,time,datetime', 'format')
             ->setTrigger('type', 'checkbox,radio,array,select,linkage,linkages', 'options')
             ->js('field')
