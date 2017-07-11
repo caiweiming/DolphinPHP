@@ -179,7 +179,7 @@
                             </thead>
                             <tbody>
                                 {volist name="row_list" id="row"}
-                                <tr>
+                                <tr class="{$row['_tr_class']|default=''}">
                                     {if (!$hide_checkbox)}
                                     <td class="text-center">
                                         <label class="css-input css-checkbox css-checkbox-primary">

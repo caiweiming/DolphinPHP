@@ -89,6 +89,11 @@ class Builder extends ZBuilder
     private $_select_list_default = [];
 
     /**
+     * @var array 行class
+     */
+    private $_tr_class = [];
+
+    /**
      * @var array 模板变量
      */
     private $_vars = [
@@ -1085,6 +1090,48 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 列class
+     * @param string $class class名
+     * @param mixed $field 字段名
+     * @param null $op 表达式
+     * @param null $condition 查询条件
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function addTrClass($class = '', $field, $op = null, $condition = null)
+    {
+        if ($class != '') {
+            if (is_callable($field)) {
+                $args = array_slice(func_get_args(), 2);
+                $this->_tr_class[$class][] = [$field, $args];
+            } elseif (!is_null($op)) {
+                $op = strtolower($op);
+                if (is_null($condition)) {
+                    $this->_tr_class[$class][] = [$field, 'eq', $op];
+                } else {
+                    switch ($op) {
+                        case '=':  $op = 'eq';  break;
+                        case '<>': $op = 'neq'; break;
+                        case '>':  $op = 'gt';  break;
+                        case '<':  $op = 'lt';  break;
+                        case '>=': $op = 'egt'; break;
+                        case '<=': $op = 'elt'; break;
+                        case 'in':
+                        case 'not in':
+                        case 'between':
+                        case 'not between':
+                            $condition = is_array($condition) ? $condition : explode(',', $condition); break;
+                    }
+
+                    $this->_tr_class[$class][] = [$field, $op, $condition];
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * 编译HTML属性
      * @param array $attr 要编译的数据
      * @author 蔡伟明 <314013107@qq.com>
@@ -1112,6 +1159,15 @@ class Builder extends ZBuilder
     private function compileRows()
     {
         foreach ($this->_vars['row_list'] as $key => &$row) {
+            // 处理行class
+            if ($this->_tr_class) {
+                $_tr_class = $this->parseTrClass($row);
+
+                if (!empty($_tr_class)) {
+                    $row['_tr_class'] = implode(' ', $_tr_class);
+                }
+            }
+
             // 编译右侧按钮
             if ($this->_vars['right_buttons']) {
                 // 默认给列添加个空的右侧按钮
@@ -1133,7 +1189,7 @@ class Builder extends ZBuilder
 
                         if ($_button_match) {
                             $row['right_button'] = $replace_right_button['content'];
-                            $_replace_button       = true;
+                            $_replace_button     = true;
                             break;
                         }
                     }
@@ -1479,6 +1535,87 @@ class Builder extends ZBuilder
                 }
             }
         }
+    }
+
+    /**
+     * 分析行class
+     * @param mixed $row 行数据
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    private function parseTrClass($row)
+    {
+        $_tr_class = [];
+        foreach ($this->_tr_class as $tr_class => $conditions) {
+            $match = true;
+            foreach ($conditions as $k => $condition) {
+                if (is_callable($condition[0])) {
+                    $params = array_merge([$row], $condition[1]);
+                    $match = call_user_func_array($condition[0], $params) ? $match : false;
+                    continue;
+                }
+                if (!isset($row[$condition[0]])) {
+                    $match = false; continue;
+                }
+                switch ($condition[1]) {
+                    case 'eq':
+                        if ($row[$condition[0]] != $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'neq':
+                        if ($row[$condition[0]] == $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'gt':
+                        if ($row[$condition[0]] <= $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'lt':
+                        if ($row[$condition[0]] >= $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'egt':
+                        if ($row[$condition[0]] < $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'elt':
+                        if ($row[$condition[0]] > $condition[2]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'in':
+                        if (!in_array($row[$condition[0]], $condition[2])) {
+                            $match = false;
+                        }
+                        break;
+                    case 'not in':
+                        if (in_array($row[$condition[0]], $condition[2])) {
+                            $match = false;
+                        }
+                        break;
+                    case 'between':
+                        if ($row[$condition[0]] < $condition[2][0] || $row[$condition[0]] > $condition[2][1]) {
+                            $match = false;
+                        }
+                        break;
+                    case 'not between':
+                        if ($row[$condition[0]] >= $condition[2][0] && $row[$condition[0]] <= $condition[2][1]) {
+                            $match = false;
+                        }
+                        break;
+                }
+            }
+            if ($match) {
+                $_tr_class[] = $tr_class;
+            }
+        }
+
+        return $_tr_class;
     }
 
     /**
