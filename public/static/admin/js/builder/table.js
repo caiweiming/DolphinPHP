@@ -61,8 +61,13 @@ jQuery(document).ready(function() {
     }
 
     // 跳转链接
-    var goto = function (url, _curr_params) {
+    var goto = function (url, _curr_params, remove_page) {
         var params = {};
+
+        if (remove_page && dolphin.curr_params['page'] !== undefined) {
+            delete dolphin.curr_params['page'];
+        }
+
         if ($.isEmptyObject(dolphin.curr_params)) {
             params = jQuery.param(_curr_params);
         } else {
@@ -111,7 +116,7 @@ jQuery(document).ready(function() {
                 'keyword': $keyword || ''
             };
 
-            goto($url, _curr_params);
+            goto($url, _curr_params, true);
         }
     });
 
@@ -269,7 +274,7 @@ jQuery(document).ready(function() {
                     _field_display: $field_display || ''
                 };
 
-                goto(dolphin.curr_url, _curr_params);
+                goto(dolphin.curr_url, _curr_params, true);
             }
         });
         return false;
@@ -321,10 +326,20 @@ jQuery(document).ready(function() {
     $('.pagination-info input').click(function () {
         $(this).select();
     });
-    $('#go-page,#list-rows').on('keyup', function (e) {
+    $('#go-page').on('keyup', function (e) {
         if (e.keyCode === 13) {
             var _curr_params = {
                 'page': $('#go-page').val(),
+                'list_rows': $('#list-rows').val()
+            };
+
+            goto(dolphin.curr_url, _curr_params);
+        }
+    });
+    $('#list-rows').on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            var _curr_params = {
+                'page': 1,
                 'list_rows': $('#list-rows').val()
             };
 
@@ -340,7 +355,7 @@ jQuery(document).ready(function() {
             '_filter_time': $('#_filter_time').val()
         };
 
-        goto(dolphin.curr_url, _curr_params);
+        goto(dolphin.curr_url, _curr_params, true);
     });
 
     // 弹出框显示页面
