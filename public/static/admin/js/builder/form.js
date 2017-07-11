@@ -563,12 +563,22 @@ jQuery(document).ready(function() {
             }
             // 加入提示信息
             $li.find('.file-state').html('<span class="text-'+ response.class +'">'+ response.info +'</span>');
+
+            // 文件上传成功后的自定义回调函数
+            if (window['dp_file_upload_success'] !== undefined) window['dp_file_upload_success']();
+            // 文件上传成功后的自定义回调函数
+            if (window['dp_file_upload_success_'+$input_file_name] !== undefined) window['dp_file_upload_success_'+$input_file_name]();
         });
 
         // 文件上传失败，显示上传出错。
         uploader.on( 'uploadError', function( file ) {
             var $li = $( '#'+file.id );
             $li.find('.file-state').html('<span class="text-danger">服务器发生错误~</span>');
+
+            // 文件上传出错后的自定义回调函数
+            if (window['dp_file_upload_error'] !== undefined) window['dp_file_upload_error']();
+            // 文件上传出错后的自定义回调函数
+            if (window['dp_file_upload_error_'+$input_file_name] !== undefined) window['dp_file_upload_error_'+$input_file_name]();
         });
 
         // 文件验证不通过
@@ -588,6 +598,11 @@ jQuery(document).ready(function() {
             setTimeout(function(){
                 $('#'+file.id).find('.progress').remove();
             }, 500);
+
+            // 文件上传完成后的自定义回调函数
+            if (window['dp_file_upload_complete'] !== undefined) window['dp_file_upload_complete']();
+            // 文件上传完成后的自定义回调函数
+            if (window['dp_file_upload_complete_'+$input_file_name] !== undefined) window['dp_file_upload_complete_'+$input_file_name]();
         });
 
         // 删除文件
@@ -725,12 +740,22 @@ jQuery(document).ready(function() {
 
             $li.find('.file-state').html('<div class="bg-'+response.class+'">'+response.info+'</div>');
             $li.find('a.img-link').attr('href', response.path);
+
+            // 文件上传成功后的自定义回调函数
+            if (window['dp_image_upload_success'] !== undefined) window['dp_image_upload_success']();
+            // 文件上传成功后的自定义回调函数
+            if (window['dp_image_upload_success_'+$input_file_name] !== undefined) window['dp_image_upload_success_'+$input_file_name]();
         });
 
         // 文件上传失败，显示上传出错。
         uploader.on( 'uploadError', function( file ) {
             var $li = $( '#'+file.id );
             $li.find('.file-state').html('<div class="bg-danger">服务器错误</div>');
+
+            // 文件上传出错后的自定义回调函数
+            if (window['dp_image_upload_error'] !== undefined) window['dp_image_upload_error']();
+            // 文件上传出错后的自定义回调函数
+            if (window['dp_image_upload_error_'+$input_file_name] !== undefined) window['dp_image_upload_error_'+$input_file_name]();
         });
 
         // 文件验证不通过
@@ -750,6 +775,11 @@ jQuery(document).ready(function() {
             setTimeout(function(){
                 $( '#'+file.id ).find('.progress').remove();
             }, 500);
+
+            // 文件上传完成后的自定义回调函数
+            if (window['dp_image_upload_complete'] !== undefined) window['dp_image_upload_complete']();
+            // 文件上传完成后的自定义回调函数
+            if (window['dp_image_upload_complete_'+$input_file_name] !== undefined) window['dp_image_upload_complete_'+$input_file_name]();
         });
 
         // 删除图片
