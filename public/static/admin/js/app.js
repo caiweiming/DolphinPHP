@@ -920,7 +920,7 @@ var App = function() {
                             processData : false,
                             contentType : false,
                             success : function(res) {
-                                if (res.status == 1) {
+                                if (res.code) {
                                     $summernote.summernote('insertImage', res.path);
                                 } else {
                                     Dolphin.notify(res.info, 'danger');
