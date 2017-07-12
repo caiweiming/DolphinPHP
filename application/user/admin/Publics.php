@@ -24,7 +24,7 @@ class Publics extends Common
     /**
      * 用户登录
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function signin()
     {

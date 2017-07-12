@@ -422,7 +422,6 @@ class App
             // 初始化应用
             $config       = self::init();
             self::$suffix = $config['class_suffix'];
-            Route::initInfo();
 
             // 应用调试模式
             self::$debug = Env::get('app_debug', Config::get('app_debug'));

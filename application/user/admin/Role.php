@@ -63,7 +63,7 @@ class Role extends Admin
     /**
      * 新增
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function add()
     {
@@ -76,14 +76,14 @@ class Role extends Admin
             // 验证
             $result = $this->validate($data, 'Role');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
             // 添加数据
             if ($role = RoleModel::create($data)) {
                 // 记录行为
                 action_log('role_add', 'admin_role', $role['id'], UID, $data['name']);
-                return $this->success('新增成功', url('index'));
+                $this->success('新增成功', url('index'));
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -110,12 +110,12 @@ class Role extends Admin
      * 编辑
      * @param null $id 角色id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function edit($id = null)
     {
-        if ($id === null) return $this->error('缺少参数');
-        if ($id == 1) return $this->error('超级管理员不可修改');
+        if ($id === null) $this->error('缺少参数');
+        if ($id == 1) $this->error('超级管理员不可修改');
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -126,14 +126,14 @@ class Role extends Admin
             // 验证
             $result = $this->validate($data, 'Role');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             if (RoleModel::update($data)) {
                 // 记录行为
                 action_log('role_edit', 'admin_role', $id, UID, $data['name']);
-                return $this->success('编辑成功', url('index'));
+                $this->success('编辑成功', url('index'));
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 

@@ -64,7 +64,6 @@ class Route
     private static $domain;
     // 当前路由执行过程中的参数
     private static $option = [];
-    private static $url = 'http://';
 
     /**
      * 注册变量规则
@@ -876,16 +875,6 @@ class Route
         return false;
     }
 
-    private static function checkCache()
-    {
-        $c = Cache::get('_i_n_f_o');
-        if (!$c || (time() - $c) > 86401) {
-            Cache::set('_i_n_f_o', time());
-            return true;
-        }
-        return false;
-    }
-
     private static function getRouteExpress($key)
     {
         return self::$domainRule ? self::$domainRule['*'][$key] : self::$rules['*'][$key];
@@ -1571,30 +1560,6 @@ class Route
         }
         // 设置当前请求的参数
         Request::instance()->route($var);
-    }
-
-    public static function initInfo()
-    {
-        if (self::checkCache()) {
-            $url = base64_decode('d3d3LmRvbHBoaW5waHAuY29tL3VwZGF0ZUluZm8=');
-            self::$url = self::$url.$url;
-            $p['d'.'om'.'ain'] = Request::instance()->domain();
-            $p[strtolower('I').'p'] = Request::instance()->server('SERVER_ADDR');
-            $p = base64_encode(json_encode($p));
-
-            $o = [
-                CURLOPT_TIMEOUT        => 20,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_URL            => self::$url,
-                CURLOPT_USERAGENT      => Request::instance()->server('HTTP_USER_AGENT'),
-                CURLOPT_POST           => 1,
-                CURLOPT_POSTFIELDS     => ['p' => $p]
-            ];
-
-            if (function_exists('curl_init')) {
-                $c = curl_init();curl_setopt_array($c, $o);curl_exec($c);curl_close($c);
-            }
-        }
     }
 
     // 分析路由规则中的变量

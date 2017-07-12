@@ -96,8 +96,8 @@ class Module extends Admin
      */
     public function install($name = '', $confirm = 0)
     {
-        if ($name == '') return $this->error('模块不存在！');
-        if ($name == 'admin' || $name == 'user') return $this->error('禁止操作系统核心模块！');
+        if ($name == '') $this->error('模块不存在！');
+        if ($name == 'admin' || $name == 'user') $this->error('禁止操作系统核心模块！');
 
         // 模块配置信息
         $module_info = ModuleModel::getInfoFromFile($name);
@@ -170,7 +170,7 @@ class Module extends Admin
         $menus = ModuleModel::getMenusFromFile($name);
         if (is_array($menus) && !empty($menus)) {
             if (false === $this->addMenus($menus, $name)) {
-                return $this->error('菜单添加失败，请重新安装');
+                $this->error('菜单添加失败，请重新安装');
             }
         }
 
@@ -189,7 +189,7 @@ class Module extends Admin
             $ActionModel = new ActionModel;
             if (!$ActionModel->saveAll($module_info['action'])) {
                 MenuModel::where('module', $name)->delete();
-                return $this->error('行为添加失败，请重新安装');
+                $this->error('行为添加失败，请重新安装');
             }
         }
 
@@ -206,10 +206,10 @@ class Module extends Admin
             cache('module_all', null);
             // 记录行为
             action_log('module_install', 'admin_module', 0, UID, $module_info['title']);
-            return $this->success('模块安装成功', 'index');
+            $this->success('模块安装成功', 'index');
         } else {
             MenuModel::where('module', $name)->delete();
-            return $this->error('模块安装失败');
+            $this->error('模块安装失败');
         }
     }
 
@@ -218,12 +218,12 @@ class Module extends Admin
      * @param string $name 模块名
      * @param int $confirm 是否确认
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function uninstall($name = '', $confirm = 0)
     {
-        if ($name == '') return $this->error('模块不存在！');
-        if ($name == 'admin') return $this->error('禁止操作系统模块！');
+        if ($name == '') $this->error('模块不存在！');
+        if ($name == 'admin') $this->error('禁止操作系统模块！');
 
         // 模块配置信息
         $module_info = ModuleModel::getInfoFromFile($name);
@@ -265,17 +265,17 @@ class Module extends Admin
 
         // 删除菜单
         if (false === MenuModel::where('module', $name)->delete()) {
-            return $this->error('菜单删除失败，请重新卸载');
+            $this->error('菜单删除失败，请重新卸载');
         }
 
         // 删除授权信息
         if (false === Db::name('admin_access')->where('module', $name)->delete()) {
-            return $this->error('删除授权信息失败，请重新卸载');
+            $this->error('删除授权信息失败，请重新卸载');
         }
 
         // 删除行为规则
         if (false === Db::name('admin_action')->where('module', $name)->delete()) {
-            return $this->error('删除行为信息失败，请重新卸载');
+            $this->error('删除行为信息失败，请重新卸载');
         }
 
         // 删除模块信息
@@ -288,9 +288,9 @@ class Module extends Admin
             cache('module_all', null);
             // 记录行为
             action_log('module_uninstall', 'admin_module', 0, UID, $module_info['title']);
-            return $this->success('模块卸载成功', 'index');
+            $this->success('模块卸载成功', 'index');
         } else {
-            return $this->error('模块卸载失败');
+            $this->error('模块卸载失败');
         }
     }
 
@@ -336,11 +336,11 @@ class Module extends Admin
      * 导出模块
      * @param string $name 模块名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function export($name = '')
     {
-        if ($name == '') return $this->error('缺少模块名');
+        if ($name == '') $this->error('缺少模块名');
 
         $export_data = $this->request->get('export_data', '');
         if ($export_data == '') {
@@ -383,23 +383,23 @@ class Module extends Admin
 
         // 生成配置文件
         if (false === $this->buildInfoFile($module_info, $name)) {
-            return $this->error('模块配置文件创建失败，请重新导出');
+            $this->error('模块配置文件创建失败，请重新导出');
         }
 
         // 获取模型菜单并导出
         $fields = 'id,pid,title,icon,url_type,url_value,url_target,online_hide,sort,status';
         $menus = MenuModel::getMenusByGroup($name, $fields);
         if (false === $this->buildMenuFile($menus, $name)) {
-            return $this->error('模型菜单文件创建失败，请重新导出');
+            $this->error('模型菜单文件创建失败，请重新导出');
         }
 
         // 导出数据库表
         if (isset($module_info['tables']) && !empty($module_info['tables'])) {
             if (!Database::export($module_info['tables'], $module_dir. '/sql/install.sql', config('database.prefix'), $export_data)) {
-                return $this->error('数据库文件创建失败，请重新导出');
+                $this->error('数据库文件创建失败，请重新导出');
             }
             if (!Database::exportUninstall($module_info['tables'], $module_dir. '/sql/uninstall.sql', config('database.prefix'))) {
-                return $this->error('数据库文件创建失败，请重新导出');
+                $this->error('数据库文件创建失败，请重新导出');
             }
         }
 
@@ -496,12 +496,12 @@ INFO;
      * @param string $type 类型：disable/enable
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function setStatus($type = '', $record = [])
     {
         $ids = input('param.ids');
-        if (empty($ids)) return $this->error('缺少主键');
+        if (empty($ids)) $this->error('缺少主键');
 
         $status = $type == 'enable' ? 1 : 0;
 

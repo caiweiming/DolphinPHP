@@ -66,7 +66,7 @@ class Log extends Admin
      */
     public function details($id = null)
     {
-        if ($id === null) return $this->error('缺少参数');
+        if ($id === null) $this->error('缺少参数');
         $info = LogModel::getAll(['admin_log.id' => $id]);
         $info = $info[0];
         $info['action_ip'] = long2ip($info['action_ip']);

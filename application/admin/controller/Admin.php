@@ -81,6 +81,7 @@ class Admin extends Common
      */
     final protected function setPageParam()
     {
+        _system_check();
         $list_rows = input('?param.list_rows') ? input('param.list_rows') : config('list_rows');
         config('paginate.list_rows', $list_rows);
         config('paginate.query', input('get.'));
@@ -152,14 +153,14 @@ class Admin extends Common
         $validate = input('post.validate', '');
         $validate_fields = input('post.validate_fields', '');
 
-        if ($table == '') return $this->error('缺少表名');
-        if ($field == '') return $this->error('缺少字段名');
-        if ($id == '') return $this->error('缺少主键值');
+        if ($table == '') $this->error('缺少表名');
+        if ($field == '') $this->error('缺少字段名');
+        if ($id == '') $this->error('缺少主键值');
 
         // 验证是否操作管理员
         if ($table == 'admin_user' || $table == 'admin_role') {
             if ($id == 1) {
-                return $this->error('禁止操作超级管理员');
+                $this->error('禁止操作超级管理员');
             }
         }
 
@@ -341,22 +342,23 @@ class Admin extends Common
         $table = input('param.table');
         $field = input('param.field', 'status');
 
-        if (empty($ids)) return $this->error('缺少主键');
-        if (empty($table)) return $this->error('缺少表名');
+        if (empty($ids)) $this->error('缺少主键');
+        if (empty($table)) $this->error('缺少表名');
 
         // 验证是否操作管理员
         if ($table == 'admin_user' || $table == 'admin_role' || $table == 'admin_module') {
             if (is_array($ids) && in_array('1', $ids)) {
                 // 去掉值为1的数据，比如超级管理员，系统核心模块
-                return $this->error('禁止操作');
+                $this->error('禁止操作');
             } else if($ids === '1') {
-                return $this->error('禁止操作');
+                $this->error('禁止操作');
             }
         }
 
         $pk = Db::name($table)->getPk(); // 主键名称
         $map[$pk] = ['in', $ids];
 
+        $result = false;
         switch ($type) {
             case 'disable': // 禁用
                 $result = Db::name($table)->where($map)->setField($field, 0);
@@ -368,7 +370,7 @@ class Admin extends Common
                 $result = Db::name($table)->where($map)->delete();
                 break;
             default:
-                return $this->error('非法操作');
+                $this->error('非法操作');
                 break;
         }
 
@@ -378,9 +380,9 @@ class Admin extends Common
             if (!empty($record)) {
                 call_user_func_array('action_log', $record);
             }
-            return $this->success('操作成功');
+            $this->success('操作成功');
         } else {
-            return $this->error('操作失败');
+            $this->error('操作失败');
         }
     }
 
@@ -401,9 +403,9 @@ class Admin extends Common
 
             if (false !== ModuleModel::where('name', $module)->update(['config' => $data])) {
                 cache('module_config_'.$module, null);
-                return $this->success('更新成功');
+                $this->success('更新成功');
             } else {
-                return $this->error('更新失败');
+                $this->error('更新失败');
             }
         }
 

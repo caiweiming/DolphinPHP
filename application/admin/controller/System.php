@@ -25,6 +25,7 @@ class System extends Admin
      * 系统设置
      * @param string $group 分组
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
      */
     public function index($group = 'base')
     {
@@ -70,7 +71,7 @@ class System extends Admin
             } else {
                 // 保存模块配置
                 if (false === ModuleModel::where('name', $group)->update(['config' => json_encode($data)])) {
-                    return $this->error('更新失败');
+                    $this->error('更新失败');
                 }
                 // 非开发模式，缓存数据
                 if (config('develop_mode') == 0) {
@@ -80,7 +81,7 @@ class System extends Admin
             cache('system_config', null);
             // 记录行为
             action_log('system_config_update', 'admin_config', 0, UID, "分组($group)");
-            return $this->success('更新成功', url('index', ['group' => $group]));
+            $this->success('更新成功', url('index', ['group' => $group]));
         } else {
             // 配置分组信息
             $list_group = config('config_group');

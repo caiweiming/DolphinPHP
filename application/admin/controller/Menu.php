@@ -34,6 +34,7 @@ class Menu extends Admin
         if ($this->request->isPost()) {
             $modules = $this->request->post('sort/a');
             if ($modules) {
+                $data = [];
                 foreach ($modules as $key => $module) {
                     $data[] = [
                         'id'   => $module,
@@ -42,9 +43,9 @@ class Menu extends Admin
                 }
                 $MenuModel = new MenuModel();
                 if (false !== $MenuModel->saveAll($data)) {
-                    return $this->success('保存成功');
+                    $this->success('保存成功');
                 } else {
-                    return $this->error('保存失败');
+                    $this->error('保存失败');
                 }
             }
         }
@@ -93,11 +94,11 @@ class Menu extends Admin
             // 验证
             $result = $this->validate($data, 'Menu');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             // 顶部节点url检查
             if ($data['pid'] == 0 && $data['url_value'] == '' && ($data['url_type'] == 'module_admin' || $data['url_type'] == 'module_home')) {
-                return $this->error('顶级节点的节点链接不能为空');
+                $this->error('顶级节点的节点链接不能为空');
             }
 
             if ($menu = MenuModel::create($data)) {
@@ -105,9 +106,9 @@ class Menu extends Admin
                 // 记录行为
                 $details = '所属模块('.$data['module'].'),所属节点ID('.$data['pid'].'),节点标题('.$data['title'].'),节点链接('.$data['url_value'].')';
                 action_log('menu_add', 'admin_menu', $menu['id'], UID, $details);
-                return $this->success('新增成功', cookie('__forward__'));
+                $this->success('新增成功', cookie('__forward__'));
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -141,7 +142,7 @@ class Menu extends Admin
      */
     public function edit($id = 0)
     {
-        if ($id === 0) return $this->error('缺少参数');
+        if ($id === 0) $this->error('缺少参数');
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -150,11 +151,11 @@ class Menu extends Admin
             // 验证
             $result = $this->validate($data, 'Menu');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             // 顶部节点url检查
             if ($data['pid'] == 0 && $data['url_value'] == '' && ($data['url_type'] == 'module_admin' || $data['url_type'] == 'module_home')) {
-                return $this->error('顶级节点的节点链接不能为空');
+                $this->error('顶级节点的节点链接不能为空');
             }
 
             // 验证是否更改所属模块，如果是，则该节点的所有子孙节点的模块都要修改
@@ -169,9 +170,9 @@ class Menu extends Admin
                 // 记录行为
                 $details = '节点ID('.$id.')';
                 action_log('menu_edit', 'admin_menu', $id, UID, $details);
-                return $this->success('编辑成功', cookie('__forward__'));
+                $this->success('编辑成功', cookie('__forward__'));
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
@@ -211,7 +212,7 @@ class Menu extends Admin
         $id = $this->request->param('id');
         $menu = MenuModel::where('id', $id)->find();
 
-        if ($menu['system_menu'] == '1')  return $this->error('系统节点，禁止删除');
+        if ($menu['system_menu'] == '1') $this->error('系统节点，禁止删除');
 
         // 获取该节点的所有后辈节点id
         $menu_childs = MenuModel::getChildsId($id);
@@ -225,9 +226,9 @@ class Menu extends Admin
             // 记录行为
             $details = '节点ID('.$id.'),节点标题('.$menu['title'].'),节点链接('.$menu['url_value'].')';
             action_log('menu_delete', 'admin_menu', $id, UID, $details);
-            return $this->success('删除成功');
+            $this->success('删除成功');
         } else {
-            return $this->error('删除失败');
+            $this->error('删除失败');
         }
     }
 
@@ -249,12 +250,12 @@ class Menu extends Admin
                     MenuModel::update($menu);
                 }
                 Cache::clear();
-                return $this->success('保存成功');
+                $this->success('保存成功');
             } else {
-                return $this->error('没有需要保存的节点');
+                $this->error('没有需要保存的节点');
             }
         }
-        return $this->error('非法请求');
+        $this->error('非法请求');
     }
 
     /**

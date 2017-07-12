@@ -74,15 +74,15 @@ class Hook extends Admin
 
             // 验证
             $result = $this->validate($data, 'Hook');
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             if ($hook = HookModel::create($data)) {
                 cache('hook_plugins', null);
                 // 记录行为
                 action_log('hook_add', 'admin_hook', $hook['id'], UID, $data['name']);
-                return $this->success('新增成功', 'index');
+                $this->success('新增成功', 'index');
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -101,14 +101,14 @@ class Hook extends Admin
      */
     public function edit($id = 0)
     {
-        if ($id === 0) return $this->error('参数错误');
+        if ($id === 0) $this->error('参数错误');
 
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
             // 验证
             $result = $this->validate($data, 'Hook');
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             if ($hook = HookModel::update($data)) {
                 // 调整插件顺序
@@ -118,9 +118,9 @@ class Hook extends Admin
                 cache('hook_plugins', null);
                 // 记录行为
                 action_log('hook_edit', 'admin_hook', $hook['id'], UID, $data['name']);
-                return $this->success('编辑成功', 'index');
+                $this->success('编辑成功', 'index');
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
@@ -146,7 +146,7 @@ class Hook extends Admin
      * 快速编辑（启用/禁用）
      * @param string $status 状态
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function quickEdit($status = '')
     {
@@ -155,7 +155,7 @@ class Hook extends Admin
         $hook_name = HookModel::where('id', $id)->value('name');
 
         if (false === HookPluginModel::where('hook', $hook_name)->setField('status', $status == 'true' ? 1 : 0)) {
-            return $this->error('操作失败，请重试');
+            $this->error('操作失败，请重试');
         }
         cache('hook_plugins', null);
         $details = $status == 'true' ? '启用钩子' : '禁用钩子';
@@ -166,7 +166,7 @@ class Hook extends Admin
      * 启用
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function enable($record = [])
     {
@@ -177,7 +177,7 @@ class Hook extends Admin
      * 禁用
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function disable($record = [])
     {
@@ -188,7 +188,7 @@ class Hook extends Admin
      * 删除钩子
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function delete($record = [])
     {
@@ -206,7 +206,7 @@ class Hook extends Admin
      * @param string $type 类型
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function setStatus($type = '', $record = [])
     {
@@ -214,7 +214,7 @@ class Hook extends Admin
         foreach ($ids as $id) {
             $hook_name = HookModel::where('id', $id)->value('name');
             if (false === HookPluginModel::where('hook', $hook_name)->setField('status', $type == 'enable' ? 1 : 0)) {
-                return $this->error('操作失败，请重试');
+                $this->error('操作失败，请重试');
             }
         }
         cache('hook_plugins', null);

@@ -87,14 +87,14 @@ class Index extends Admin
             // 验证
             $result = $this->validate($data, 'User');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             if ($user = UserModel::create($data)) {
                 // 记录行为
                 action_log('user_add', 'admin_user', $user['id'], UID);
-                return $this->success('新增成功', url('index'));
+                $this->success('新增成功', url('index'));
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -122,7 +122,7 @@ class Index extends Admin
      */
     public function edit($id = null)
     {
-        if ($id === null) return $this->error('缺少参数');
+        if ($id === null) $this->error('缺少参数');
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -130,18 +130,18 @@ class Index extends Admin
 
             // 禁止修改超级管理员的角色和状态
             if ($data['id'] == 1 && $data['role'] != 1) {
-                return $this->error('禁止修改超级管理员角色');
+                $this->error('禁止修改超级管理员角色');
             }
 
             // 禁止修改超级管理员的状态
             if ($data['id'] == 1 && $data['status'] != 1) {
-                return $this->error('禁止修改超级管理员状态');
+                $this->error('禁止修改超级管理员状态');
             }
 
             // 验证
             $result = $this->validate($data, 'User.update');
             // 验证失败 输出错误信息
-            if(true !== $result) return $this->error($result);
+            if(true !== $result) $this->error($result);
 
             // 如果没有填写密码，则不更新密码
             if ($data['password'] == '') {
@@ -151,9 +151,9 @@ class Index extends Admin
             if ($user = UserModel::update($data)) {
                 // 记录行为
                 action_log('user_edit', 'admin_user', $user['id'], UID, get_nickname($user['id']));
-                return $this->success('编辑成功', cookie('__forward__'));
+                $this->success('编辑成功', cookie('__forward__'));
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
@@ -187,7 +187,7 @@ class Index extends Admin
      */
     public function access($tab = '', $uid = 0)
     {
-        if ($uid === 0) return $this->error('缺少参数');
+        if ($uid === 0) $this->error('缺少参数');
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -199,7 +199,7 @@ class Index extends Admin
             $map['group']  = $group;
             $map['uid']    = $post['uid'];
             if (false === AccessModel::where($map)->delete()) {
-                return $this->error('清除旧授权失败');
+                $this->error('清除旧授权失败');
             }
 
             $data = [];
@@ -218,7 +218,7 @@ class Index extends Admin
                 // 添加新的授权
                 $AccessModel = new AccessModel;
                 if (!$AccessModel->saveAll($data)) {
-                    return $this->error('操作失败');
+                    $this->error('操作失败');
                 }
             }
 
@@ -226,7 +226,7 @@ class Index extends Admin
             $nids = !empty($nids) ? implode(',', $nids) : '无';
             $details = "模块($module)，分组($group)，授权节点ID($nids)";
             action_log('user_access', 'admin_user', $uid, UID, $details);
-            return $this->success('操作成功', 'index');
+            $this->success('操作成功', 'index');
         }
 
         // 获取所有授权配置信息

@@ -87,25 +87,25 @@ class Plugin extends Admin
     public function install($name = '')
     {
         $plug_name = trim($name);
-        if ($plug_name == '') return $this->error('插件不存在！');
+        if ($plug_name == '') $this->error('插件不存在！');
 
         $plugin_class = get_plugin_class($plug_name);
 
         if (!class_exists($plugin_class)) {
-            return $this->error('插件不存在！');
+            $this->error('插件不存在！');
         }
 
         // 实例化插件
         $plugin = new $plugin_class;
         // 插件预安装
         if(!$plugin->install()) {
-            return $this->error('插件预安装失败!原因：'. $plugin->getError());
+            $this->error('插件预安装失败!原因：'. $plugin->getError());
         }
 
         // 添加钩子
         if (isset($plugin->hooks) && !empty($plugin->hooks)) {
             if (!HookPluginModel::addHooks($plugin->hooks, $name)) {
-                return $this->error('安装插件钩子时出现错误，请重新安装');
+                $this->error('安装插件钩子时出现错误，请重新安装');
             }
             cache('hook_plugins', null);
         }
@@ -132,7 +132,7 @@ class Plugin extends Admin
         // 验证插件信息
         $result = $this->validate($plugin_info, 'Plugin');
         // 验证失败 输出错误信息
-        if(true !== $result) return $this->error($result);
+        if(true !== $result) $this->error($result);
 
         // 并入插件配置值
         $plugin_info['config'] = $plugin->getConfigValue();
@@ -140,9 +140,9 @@ class Plugin extends Admin
         // 将插件信息写入数据库
         if (PluginModel::create($plugin_info)) {
             cache('plugin_all', null);
-            return $this->success('插件安装成功');
+            $this->success('插件安装成功');
         } else {
-            return $this->error('插件安装失败');
+            $this->error('插件安装失败');
         }
     }
 
@@ -154,24 +154,24 @@ class Plugin extends Admin
     public function uninstall($name = '')
     {
         $plug_name = trim($name);
-        if ($plug_name == '') return $this->error('插件不存在！');
+        if ($plug_name == '') $this->error('插件不存在！');
 
         $class = get_plugin_class($plug_name);
         if (!class_exists($class)) {
-            return $this->error('插件不存在！');
+            $this->error('插件不存在！');
         }
 
         // 实例化插件
         $plugin = new $class;
         // 插件预卸
         if(!$plugin->uninstall()) {
-            return $this->error('插件预卸载失败!原因：'. $plugin->getError());
+            $this->error('插件预卸载失败!原因：'. $plugin->getError());
         }
 
         // 卸载插件自带钩子
         if (isset($plugin->hooks) && !empty($plugin->hooks)) {
             if (false === HookPluginModel::deleteHooks($plug_name)) {
-                return $this->error('卸载插件钩子时出现错误，请重新卸载');
+                $this->error('卸载插件钩子时出现错误，请重新卸载');
             }
             cache('hook_plugins', null);
         }
@@ -193,9 +193,9 @@ class Plugin extends Admin
         // 删除插件信息
         if (PluginModel::where('name', $plug_name)->delete()) {
             cache('plugin_all', null);
-            return $this->success('插件卸载成功');
+            $this->success('插件卸载成功');
         } else {
-            return $this->error('插件卸载失败');
+            $this->error('插件卸载失败');
         }
     }
 
@@ -203,6 +203,7 @@ class Plugin extends Admin
      * 插件管理
      * @param string $name 插件名
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
      */
     public function manage($name = '')
     {
@@ -216,7 +217,7 @@ class Plugin extends Admin
         // 加载系统的后台页面
         $class = get_plugin_class($name);
         if (!class_exists($class)) {
-            return $this->error($name.'插件不存在！');
+            $this->error($name.'插件不存在！');
         }
 
         // 实例化插件
@@ -230,7 +231,7 @@ class Plugin extends Admin
         }
 
         if (!plugin_model_exists($name)) {
-            return $this->error('插件: '.$name.' 缺少模型文件！');
+            $this->error('插件: '.$name.' 缺少模型文件！');
         }
 
         // 获取插件模型实例
@@ -281,7 +282,7 @@ class Plugin extends Admin
      * 插件新增方法
      * @param string $plugin_name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function add($plugin_name = '')
     {
@@ -300,29 +301,29 @@ class Plugin extends Admin
                 $plugin_validate = get_plugin_validate($plugin_name);
                 if (!$plugin_validate->check($data)) {
                     // 验证失败 输出错误信息
-                    return $this->error($plugin_validate->getError());
+                    $this->error($plugin_validate->getError());
                 }
             }
 
             // 实例化模型并添加数据
             $PluginModel = get_plugin_model($plugin_name);
             if ($PluginModel->data($data)->save()) {
-                return $this->success('新增成功', cookie('__forward__'));
+                $this->success('新增成功', cookie('__forward__'));
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
         // 获取插件模型
         $class = get_plugin_class($plugin_name);
         if (!class_exists($class)) {
-            return $this->error('插件不存在！');
+            $this->error('插件不存在！');
         }
 
         // 实例化插件
         $plugin = new $class;
         if (!isset($plugin->fields)) {
-            return $this->error('插件新增、编辑字段不存在！');
+            $this->error('插件新增、编辑字段不存在！');
         }
 
         // 使用ZBuilder快速创建表单
@@ -337,7 +338,7 @@ class Plugin extends Admin
      * @param string $id 数据id
      * @param string $plugin_name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function edit($id = '', $plugin_name = '')
     {
@@ -356,36 +357,36 @@ class Plugin extends Admin
                 $plugin_validate = get_plugin_validate($plugin_name);
                 if (!$plugin_validate->check($data)) {
                     // 验证失败 输出错误信息
-                    return $this->error($plugin_validate->getError());
+                    $this->error($plugin_validate->getError());
                 }
             }
 
             // 实例化模型并添加数据
             $PluginModel = get_plugin_model($plugin_name);
             if (false !== $PluginModel->isUpdate(true)->save($data)) {
-                return $this->success('编辑成功', cookie('__forward__'));
+                $this->success('编辑成功', cookie('__forward__'));
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
         // 获取插件类名
         $class = get_plugin_class($plugin_name);
         if (!class_exists($class)) {
-            return $this->error('插件不存在！');
+            $this->error('插件不存在！');
         }
 
         // 实例化插件
         $plugin = new $class;
         if (!isset($plugin->fields)) {
-            return $this->error('插件新增、编辑字段不存在！');
+            $this->error('插件新增、编辑字段不存在！');
         }
 
         // 获取数据
         $PluginModel = get_plugin_model($plugin_name);
         $info = $PluginModel->find($id);
         if (!$info) {
-            return $this->error('找不到数据！');
+            $this->error('找不到数据！');
         }
 
         // 使用ZBuilder快速创建表单
@@ -410,9 +411,9 @@ class Plugin extends Admin
             $data = json_encode($data);
 
             if (false !== PluginModel::where('name', $name)->update(['config' => $data])) {
-                return $this->success('更新成功', 'index');
+                $this->success('更新成功', 'index');
             } else {
-                return $this->error('更新失败');
+                $this->error('更新失败');
             }
         }
 
@@ -447,7 +448,7 @@ class Plugin extends Admin
     public function setStatus($type = '', $record = [])
     {
         $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        if (empty($ids)) return $this->error('缺少主键');
+        if (empty($ids)) $this->error('缺少主键');
 
         $plugins = PluginModel::where('id', 'in', $ids)->value('name');
         if ($plugins) {
@@ -481,7 +482,7 @@ class Plugin extends Admin
     /**
      * 执行插件内部方法
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @return mixed
      */
     public function execute()
     {
@@ -491,11 +492,11 @@ class Plugin extends Admin
         $params     = $this->request->except(['_plugin', '_controller', '_action'], 'param');
 
         if (empty($plugin) || empty($controller) || empty($action)) {
-            return $this->error('没有指定插件名称、控制器名称或操作名称');
+            $this->error('没有指定插件名称、控制器名称或操作名称');
         }
 
         if (!plugin_action_exists($plugin, $controller, $action)) {
-            return $this->error("找不到方法：{$plugin}/{$controller}/{$action}");
+            $this->error("找不到方法：{$plugin}/{$controller}/{$action}");
         }
         return plugin_action($plugin, $controller, $action, $params);
     }

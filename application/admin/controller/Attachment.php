@@ -88,10 +88,10 @@ class Attachment extends Admin
     {
         // 临时取消执行时间限制
         set_time_limit(0);
-        if ($dir == '')         return $this->error('没有指定上传目录');
-        if ($from == 'ueditor') return $this->ueditor();
-        if ($from == 'jcrop')   return $this->jcrop();
-        return $this->saveFile($dir, $from, $module);
+        if ($dir == '') $this->error('没有指定上传目录');
+        if ($from == 'ueditor') $this->ueditor();
+        if ($from == 'jcrop') $this->jcrop();
+        $this->saveFile($dir, $from, $module);
     }
 
     /**
@@ -655,7 +655,7 @@ class Attachment extends Admin
     public function delete($ids = '')
     {
         $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        if (empty($ids)) return $this->error('缺少主键');
+        if (empty($ids)) $this->error('缺少主键');
 
         $files_path = AttachmentModel::where('id', 'in', $ids)->column('path,thumb', 'id');
 
@@ -674,9 +674,9 @@ class Attachment extends Admin
             // 记录行为
             $ids = is_array($ids) ? implode(',', $ids) : $ids;
             action_log('attachment_delete', 'admin_attachment', 0, UID, $ids);
-            return $this->success('删除成功');
+            $this->success('删除成功');
         } else {
-            return $this->error('删除失败');
+            $this->error('删除失败');
         }
     }
 

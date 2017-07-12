@@ -85,9 +85,9 @@ class Index extends Admin
             if ($user = $UserModel->allowField(['nickname', 'email', 'password', 'mobile', 'avatar'])->update($data)) {
                 // 记录行为
                 action_log('user_edit', 'admin_user', UID, UID, get_nickname(UID));
-                return $this->success('编辑成功');
+                $this->success('编辑成功');
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 

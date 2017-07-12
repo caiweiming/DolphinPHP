@@ -24,12 +24,13 @@ class Packet extends Admin
      * 首页
      * @param string $group 分组
      * @author 蔡伟明 <314013107@qq.com>
-     * @return string|void
+     * @return mixed
      */
     public function index($group = 'local')
     {
         // 配置分组信息
         $list_group = ['local' => '本地数据包'];
+        $tab_list   = [];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);
@@ -44,7 +45,7 @@ class Packet extends Admin
         }
 
         if ($data_list === false) {
-            return $this->error($PacketModel->getError());
+            $this->error($PacketModel->getError());
         }
 
         // 自定义按钮
@@ -121,13 +122,13 @@ class Packet extends Admin
                     PacketModel::create($data);
                 }
             } else {
-                return $this->error('安装失败：'. $result);
+                $this->error('安装失败：'. $result);
             }
         }
         // 记录行为
         $packet_titles = PacketModel::where('name', 'in', $names)->column('title');
         action_log('packet_install', 'admin_packet', 0, UID, implode('、', $packet_titles));
-        return $this->success('安装成功');
+        $this->success('安装成功');
     }
 
     /**
@@ -147,6 +148,6 @@ class Packet extends Admin
             PacketModel::uninstall($name);
         }
 
-        return $this->success('卸载成功');
+        $this->success('卸载成功');
     }
 }
