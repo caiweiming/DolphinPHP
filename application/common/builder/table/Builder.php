@@ -382,15 +382,45 @@ class Builder extends ZBuilder
      * 替换右侧按钮
      * @param array $map 条件，格式为：['字段名' => '字段值', '字段名' => '字段值'....]
      * @param string $content 要替换的内容
+     * @param null $target 要替换的目标按钮
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function replaceRightButton($map = [], $content = '')
+    public function replaceRightButton($map = [], $content = '', $target = null)
     {
         if (!empty($map)) {
+            $maps   = [];
+            $target = is_string($target) ? explode(',', $target) : $target;
+            if (is_callable($map)) {
+                $maps[] = [$map, $content, $target];
+            } else {
+                foreach ($map as $key => $value) {
+                    if (is_array($value)) {
+                        $op = strtolower($value[0]);
+                        switch ($op) {
+                            case '=':  $op = 'eq';  break;
+                            case '<>': $op = 'neq'; break;
+                            case '>':  $op = 'gt';  break;
+                            case '<':  $op = 'lt';  break;
+                            case '>=': $op = 'egt'; break;
+                            case '<=': $op = 'elt'; break;
+                            case 'in':
+                            case 'not in':
+                            case 'between':
+                            case 'not between':
+                                $value[1] = is_array($value[1]) ? $value[1] : explode(',', $value[1]); break;
+                        }
+                        $maps[] = [$key, $op, $value[1]];
+                    } else {
+                        $maps[] = [$key, 'eq', $value];
+                    }
+                }
+            }
+
             $this->_replace_right_buttons[] = [
-                'map'     => $map,
-                'content' => $content
+                'maps'    => $maps,
+                'content' => $content,
+                'target'  => $target
             ];
         }
         return $this;
@@ -686,9 +716,6 @@ class Builder extends ZBuilder
      */
     public function addRightButton($type = '', $attribute = [], $pop = false)
     {
-        // 按钮属性
-        $btn_attribute = [];
-
         // 表单名，用于替换
         $table = isset($attribute['table']) ? $attribute['table'] : '__table__';
 
@@ -780,6 +807,9 @@ class Builder extends ZBuilder
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
         }
+
+        // 添加按钮标签
+        $btn_attribute['_tag'] = $type;
 
         $this->_vars['right_buttons'][] = $btn_attribute;
         return $this;
@@ -1175,75 +1205,82 @@ class Builder extends ZBuilder
                     $row['right_button'] = '';
                 }
 
-                // 如有替换右侧按钮，执行修改
-                $_replace_button = false;
-                if (!empty($this->_replace_right_buttons)) {
-                    foreach ($this->_replace_right_buttons as $replace_right_button) {
-                        // 是否能匹配到条件
-                        $_button_match = true;
-                        foreach ($replace_right_button['map'] as $field => $item) {
-                            if (isset($row[$field]) && $row[$field] != $item) {
-                                $_button_match = false;
+                foreach ($this->_vars['right_buttons'] as $index => $button) {
+                    // 处理按钮替换
+                    if (!empty($this->_replace_right_buttons)) {
+                        foreach ($this->_replace_right_buttons as $replace_right_button) {
+                            // 是否能匹配到条件
+                            $_button_match = true;
+                            foreach ($replace_right_button['maps'] as $condition) {
+                                if (is_callable($condition[0])) {
+                                    $_button_match = call_user_func($condition[0], $row) ? $_button_match : false;
+                                    continue;
+                                }
+                                if (!isset($row[$condition[0]])) {
+                                    $_button_match = false; continue;
+                                }
+                                $_button_match = $this->parseCondition($row, $condition) ? $_button_match : false;
                             }
-                        }
 
-                        if ($_button_match) {
-                            $row['right_button'] = $replace_right_button['content'];
-                            $_replace_button     = true;
-                            break;
-                        }
-                    }
-                }
-
-                // 没有替换按钮，则按常规解析按钮url
-                if (!$_replace_button) {
-                    foreach ($this->_vars['right_buttons'] as $button_type => $button) {
-                        // 处理主键变量值
-                        $button['href'] = preg_replace(
-                            '/__id__/i',
-                            $row[$this->_vars['primary_key']],
-                            $button['href']
-                        );
-
-                        // 处理表名变量值
-                        $button['href'] = preg_replace(
-                            '/__table__/i',
-                            $this->_table_name,
-                            $button['href']
-                        );
-
-                        // 替换其他字段值
-                        if (preg_match_all('/__(.*?)__/', $button['href'], $matches)) {
-                            // 要替换的字段名
-                            $replace_to = [];
-                            $pattern    = [];
-                            foreach ($matches[1] as $match) {
-                                if (isset($row[$match])) {
-                                    $pattern[]    = '/__'. $match .'__/i';
-                                    $replace_to[] = $row[$match];
+                            if ($_button_match) {
+                                if ($replace_right_button['target'] === null) {
+                                    $row['right_button'] = $replace_right_button['content'];
+                                    break(2);
+                                } else {
+                                    if (in_array($button['_tag'], $replace_right_button['target'])) {
+                                        $row['right_button'] .= $replace_right_button['content'];
+                                        continue(2);
+                                    }
                                 }
                             }
-                            $button['href'] = preg_replace(
-                                $pattern,
-                                $replace_to,
-                                $button['href']
-                            );
-                        }
-
-                        // 编译按钮属性
-                        $button['attribute'] = $this->compileHtmlAttr($button);
-                        if (config('zbuilder.right_button')['title']) {
-                            $row['right_button'] .= '<a '.$button['attribute'].'">';
-                            if (config('zbuilder.right_button')['icon']) {
-                                $row['right_button'] .= '<i class="'.$button['icon'].'"></i> ';
-                            }
-                            $row['right_button'] .= $button['title'].'</a> ';
-                        } else {
-                            $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
                         }
                     }
-                    $row['right_button'] = '<div class="btn-group">'. $row['right_button'] .'</div>';
+
+                    // 处理主键变量值
+                    $button['href'] = preg_replace(
+                        '/__id__/i',
+                        $row[$this->_vars['primary_key']],
+                        $button['href']
+                    );
+
+                    // 处理表名变量值
+                    $button['href'] = preg_replace(
+                        '/__table__/i',
+                        $this->_table_name,
+                        $button['href']
+                    );
+
+                    // 替换其他字段值
+                    if (preg_match_all('/__(.*?)__/', $button['href'], $matches)) {
+                        // 要替换的字段名
+                        $replace_to = [];
+                        $pattern    = [];
+                        foreach ($matches[1] as $match) {
+                            if (isset($row[$match])) {
+                                $pattern[]    = '/__'. $match .'__/i';
+                                $replace_to[] = $row[$match];
+                            }
+                        }
+                        $button['href'] = preg_replace(
+                            $pattern,
+                            $replace_to,
+                            $button['href']
+                        );
+                    }
+
+                    // 编译按钮属性
+                    $button['attribute'] = $this->compileHtmlAttr($button);
+                    if (config('zbuilder.right_button')['title']) {
+                        $row['right_button'] .= '<a '.$button['attribute'].'">';
+                        if (config('zbuilder.right_button')['icon']) {
+                            $row['right_button'] .= '<i class="'.$button['icon'].'"></i> ';
+                        }
+                        $row['right_button'] .= $button['title'].'</a> ';
+                    } else {
+                        $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
+                    }
                 }
+                $row['right_button'] = '<div class="btn-group">'. $row['right_button'] .'</div>';
             }
 
             // 编译单元格数据类型
@@ -1405,9 +1442,11 @@ class Builder extends ZBuilder
                         case 'time': // 时间
                             // 默认格式
                             $format = 'Y-m-d H:i';
-                            if ($column['type'] == 'date')     $format = 'Y-m-d';
-                            if ($column['type'] == 'datetime') $format = 'Y-m-d H:i';
-                            if ($column['type'] == 'time')     $format = 'H:i';
+                            switch ($column['type']) {
+                                case 'date': $format = 'Y-m-d';break;
+                                case 'datetime': $format = 'Y-m-d H:i';break;
+                                case 'time': $format = 'H:i';break;
+                            }
                             // 格式
                             $format = $column['param'] == '' ? $format : $column['param'];
                             if ($row[$column['name']] == '') {
@@ -1421,10 +1460,11 @@ class Builder extends ZBuilder
                         case 'time.edit': // 可编辑时间，默认发送的是格式化好的
                             // 默认格式
                             $format = 'YYYY-MM-DD HH:mm';
-                            if ($column['type'] == 'date.edit')     $format = 'YYYY-MM-DD';
-                            if ($column['type'] == 'datetime.edit') $format = 'YYYY-MM-DD HH:mm';
-                            if ($column['type'] == 'time.edit')     $format = 'HH:mm';
-
+                            switch ($column['type']) {
+                                case 'date.edit': $format = 'YYYY-MM-DD';break;
+                                case 'datetime.edit': $format = 'YYYY-MM-DD HH:mm';break;
+                                case 'time.edit': $format = 'HH:mm';break;
+                            }
                             // 格式
                             $format = $column['param'] == '' ? $format : $column['param'];
                             // 时间戳
@@ -1548,7 +1588,7 @@ class Builder extends ZBuilder
         $_tr_class = [];
         foreach ($this->_tr_class as $tr_class => $conditions) {
             $match = true;
-            foreach ($conditions as $k => $condition) {
+            foreach ($conditions as $condition) {
                 if (is_callable($condition[0])) {
                     $params = array_merge([$row], $condition[1]);
                     $match = call_user_func_array($condition[0], $params) ? $match : false;
@@ -1557,58 +1597,7 @@ class Builder extends ZBuilder
                 if (!isset($row[$condition[0]])) {
                     $match = false; continue;
                 }
-                switch ($condition[1]) {
-                    case 'eq':
-                        if ($row[$condition[0]] != $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'neq':
-                        if ($row[$condition[0]] == $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'gt':
-                        if ($row[$condition[0]] <= $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'lt':
-                        if ($row[$condition[0]] >= $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'egt':
-                        if ($row[$condition[0]] < $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'elt':
-                        if ($row[$condition[0]] > $condition[2]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'in':
-                        if (!in_array($row[$condition[0]], $condition[2])) {
-                            $match = false;
-                        }
-                        break;
-                    case 'not in':
-                        if (in_array($row[$condition[0]], $condition[2])) {
-                            $match = false;
-                        }
-                        break;
-                    case 'between':
-                        if ($row[$condition[0]] < $condition[2][0] || $row[$condition[0]] > $condition[2][1]) {
-                            $match = false;
-                        }
-                        break;
-                    case 'not between':
-                        if ($row[$condition[0]] >= $condition[2][0] && $row[$condition[0]] <= $condition[2][1]) {
-                            $match = false;
-                        }
-                        break;
-                }
+                $match = $this->parseCondition($row, $condition) ? $match : false;
             }
             if ($match) {
                 $_tr_class[] = $tr_class;
@@ -1616,6 +1605,51 @@ class Builder extends ZBuilder
         }
 
         return $_tr_class;
+    }
+
+    /**
+     * 分析条件
+     * @param mixed $row 行数据
+     * @param array $condition 对比条件
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool
+     */
+    private function parseCondition($row, $condition = [])
+    {
+        $match = true;
+        switch ($condition[1]) {
+            case 'eq':
+                $row[$condition[0]] != $condition[2] && $match = false;
+                break;
+            case 'neq':
+                $row[$condition[0]] == $condition[2] && $match = false;
+                break;
+            case 'gt':
+                $row[$condition[0]] <= $condition[2] && $match = false;
+                break;
+            case 'lt':
+                $row[$condition[0]] >= $condition[2] && $match = false;
+                break;
+            case 'egt':
+                $row[$condition[0]] < $condition[2] && $match = false;
+                break;
+            case 'elt':
+                $row[$condition[0]] > $condition[2] && $match = false;
+                break;
+            case 'in':
+                !in_array($row[$condition[0]], $condition[2]) && $match = false;
+                break;
+            case 'not in':
+                in_array($row[$condition[0]], $condition[2]) && $match = false;
+                break;
+            case 'between':
+                ($row[$condition[0]] < $condition[2][0] || $row[$condition[0]] > $condition[2][1]) && $match = false;
+                break;
+            case 'not between':
+                ($row[$condition[0]] >= $condition[2][0] && $row[$condition[0]] <= $condition[2][1]) && $match = false;
+                break;
+        }
+        return $match;
     }
 
     /**
