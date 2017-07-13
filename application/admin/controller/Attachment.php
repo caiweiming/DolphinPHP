@@ -82,16 +82,16 @@ class Attachment extends Admin
      * @param string $from 来源，wangeditor：wangEditor编辑器, ueditor:ueditor编辑器, editormd:editormd编辑器等
      * @param string $module 来自哪个模块
      * @author 蔡伟明 <314013107@qq.com>
-     * @return \think\response\Json|void
+     * @return mixed
      */
     public function upload($dir = '', $from = '', $module = '')
     {
         // 临时取消执行时间限制
         set_time_limit(0);
         if ($dir == '') $this->error('没有指定上传目录');
-        if ($from == 'ueditor') $this->ueditor();
-        if ($from == 'jcrop') $this->jcrop();
-        $this->saveFile($dir, $from, $module);
+        if ($from == 'ueditor') return $this->ueditor();
+        if ($from == 'jcrop') return $this->jcrop();
+        return $this->saveFile($dir, $from, $module);
     }
 
     /**
