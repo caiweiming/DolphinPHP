@@ -175,7 +175,7 @@ class Config extends Admin
                 $forward = $this->request->param('_pop') == 1 ? null : cookie('__forward__');
                 // 记录行为
                 action_log('config_edit', 'admin_config', $config['id'], UID, $details);
-                $this->success('编辑成功', $forward);
+                $this->success('编辑成功', $forward, '_parent_reload');
             } else {
                 $this->error('编辑失败');
             }
