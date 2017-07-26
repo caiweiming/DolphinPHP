@@ -120,6 +120,9 @@ class Attachment extends Admin
                 $file_input_name = 'upload';
                 $callback = $this->request->get('CKEditorFuncNum');
                 break;
+            case 'ueditor_scrawl':
+                return $this->saveScrawl();
+                break;
             default:
                 $file_input_name = 'file';
         }
@@ -338,9 +341,11 @@ class Attachment extends Admin
 
             /* 上传图片 */
             case 'uploadimage':
+                return $this->saveFile('images', 'ueditor');
+                break;
             /* 上传涂鸦 */
             case 'uploadscrawl':
-                return $this->saveFile('images', 'ueditor');
+                return $this->saveFile('images', 'ueditor_scrawl');
                 break;
 
             /* 上传视频 */
@@ -382,6 +387,52 @@ class Attachment extends Admin
             }
         } else {
             return json($result);
+        }
+    }
+
+    /**
+     * 保存涂鸦（ueditor）
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return \think\response\Json
+     */
+    private function saveScrawl()
+    {
+        $file         = $this->request->post('file');
+        $file_content = base64_decode($file);
+        $file_name    = md5($file) . '.jpg';
+        $dir          = config('upload_path') . DS . 'images' . DS . date('Ymd', $this->request->time());
+        $file_path    = $dir . DS . $file_name;
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        if (false === file_put_contents($file_path, $file_content)) {
+            return json(['state' => '涂鸦上传出错']);
+        }
+
+        $file = new File($file_path);
+        $file_info = [
+            'uid'    => session('user_auth.uid'),
+            'name'   => $file_name,
+            'mime'   => 'image/png',
+            'path'   => 'uploads/images/' . date('Ymd', $this->request->time()) . '/' . $file_name,
+            'ext'    => 'png',
+            'size'   => $file->getSize(),
+            'md5'    => $file->hash('md5'),
+            'sha1'   => $file->hash('sha1'),
+            'module' => $this->request->module()
+        ];
+
+        if ($file_add = AttachmentModel::create($file_info)) {
+            // 返回成功信息
+            return json([
+                "state" => "SUCCESS",          // 上传状态，上传成功时必须返回"SUCCESS"
+                "url"   => PUBLIC_PATH. $file_info['path'], // 返回的地址
+                "title" => $file_info['name'], // 附件名
+            ]);
+        } else {
+            return json(['state' => '涂鸦上传出错']);
         }
     }
 
