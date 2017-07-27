@@ -57,11 +57,7 @@ class Common extends Controller
 
         // 时间段搜索
         if ($filter_time != '' && $filter_time_from != '' && $filter_time_to != '') {
-            if ($filter_time_from == $filter_time_to) {
-                $filter_time_from .= ' 00:00:00';
-                $filter_time_to   .= ' 23:59:59';
-            }
-            $map[$filter_time] = ['between time', [$filter_time_from, $filter_time_to]];
+            $map[$filter_time] = ['between time', [$filter_time_from.' 00:00:00', $filter_time_to.' 23:59:59']];
         }
 
         // 表头筛选
