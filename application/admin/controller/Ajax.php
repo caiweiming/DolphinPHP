@@ -14,6 +14,7 @@ namespace app\admin\controller;
 use app\common\controller\Common;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Attachment as AttachmentModel;
+use think\Cache;
 use think\Db;
 
 /**
@@ -62,11 +63,20 @@ class Ajax extends Common
      * @param string $field 字段名
      * @param array $map 查询条件
      * @param string $options 选项，用于显示转换
+     * @param string $list 选项缓存列表名称
      * @author 蔡伟明 <314013107@qq.com>
      * @return \think\response\Json
      */
-    public function getFilterList($table = '', $field = '', $map = [], $options = '')
+    public function getFilterList($table = '', $field = '', $map = [], $options = '', $list = '')
     {
+        if ($list != '') {
+            $result = [
+                'code' => 1,
+                'msg'  => '请求成功',
+                'list' => Cache::get('_filter_list_'.$field)
+            ];
+            return json($result);
+        }
         if ($table == '') {
             return json(['code' => 0, 'msg' => '缺少表名']);
         }

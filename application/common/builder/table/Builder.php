@@ -68,6 +68,11 @@ class Builder extends ZBuilder
      */
     private $_filter_options = [];
 
+    /***
+     * @var array 存储字段筛选列表
+     */
+    private $_filter_list = [];
+
     /**
      * @var array 存储字段筛选类型
      */
@@ -275,6 +280,33 @@ class Builder extends ZBuilder
             // 处理筛选类型
             foreach ($columns as $column) {
                 $this->_filter_type[$column] = $type;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 添加表头筛选列表
+     * @param string $field 表头筛选字段
+     * @param array $list 需要显示的列表
+     * @param string $default 默认值，一维数组或逗号隔开的字符串
+     * @param string $type 筛选类型，默认为CheckBox，也可以是radio
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function addFilterList($field = '', $list = [], $default = '', $type = 'checkbox')
+    {
+        if ($field != '' && !empty($list)) {
+            $this->_vars['filter_columns'][] = $field;
+            $this->_filter_type[$field] = $type;
+            $this->_filter_list[$field] = '_filter_list_'.$field;
+            Cache::set('_filter_list_'.$field, $list);
+
+            // 处理默认选项和值
+            if ($default != '') {
+                $this->_vars['_field_display'][]  = $field;
+                $this->_vars['_filter'][]         = $field;
+                $this->_vars['_filter_content'][] = is_array($default) ? implode(',', $default) : $default;
             }
         }
         return $this;
@@ -1706,6 +1738,7 @@ class Builder extends ZBuilder
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$field]) ? $filter_maps[$field] : '',
                             'options' => isset($this->_filter_options[$value]) ? $this->_filter_options[$value] : '',
+                            'list'    => isset($this->_filter_list[$value]) ? $this->_filter_list[$value] : ''
                         ];
                     } else {
                         $filter_columns[$value] = [
@@ -1715,6 +1748,7 @@ class Builder extends ZBuilder
                             'filter'  => $value,
                             'map'     => isset($filter_maps[$value]) ? $filter_maps[$value] : '',
                             'options' => isset($this->_filter_options[$value]) ? $this->_filter_options[$value] : '',
+                            'list'    => isset($this->_filter_list[$value]) ? $this->_filter_list[$value] : ''
                         ];
                     }
                 } else {
@@ -1727,6 +1761,7 @@ class Builder extends ZBuilder
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
                             'options' => isset($this->_filter_options[$field]) ? $this->_filter_options[$field] : '',
+                            'list'    => isset($this->_filter_list[$field]) ? $this->_filter_list[$field] : ''
                         ];
                     } else {
                         $filter_columns[$key] = [
@@ -1736,6 +1771,7 @@ class Builder extends ZBuilder
                             'filter'  => $value . '.' . $key,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
                             'options' => isset($this->_filter_options[$key]) ? $this->_filter_options[$key] : '',
+                            'list'    => isset($this->_filter_list[$key]) ? $this->_filter_list[$key] : ''
                         ];
                     }
                 }

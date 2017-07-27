@@ -133,7 +133,8 @@ jQuery(document).ready(function() {
                 table: self.data('table') || '', // 数据表名
                 field: self.data('field') || '', // 数据库字段名
                 map: self.data('map') || '', // 筛选条件
-                options: self.data('options') || '' // 选项
+                options: self.data('options') || '', // 选项
+                list: self.data('list') || ''
             };
 
         layer.open({
