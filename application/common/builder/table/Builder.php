@@ -131,6 +131,7 @@ class Builder extends ZBuilder
         '_js_files'          => [],       // js文件
         '_css_files'         => [],       // css文件
         '_select_list'       => [],       // 顶部下拉菜单列表
+        '_filter_time'       => [],       // 时间段筛选
     ];
 
     /**
@@ -380,16 +381,22 @@ class Builder extends ZBuilder
     /**
      * 时间段过滤
      * @param string $field 字段名
+     * @param string $tips_start 开始日期提示
+     * @param string $tips_end 结束日期提示
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addTimeFilter($field = '')
+    public function addTimeFilter($field = '', $tips_start = '', $tips_end = '')
     {
         if ($field != '') {
             $this->_vars['_js_files'][]  = 'datepicker_js';
             $this->_vars['_css_files'][] = 'datepicker_css';
             $this->_vars['_js_init']     = json_encode(['datepicker']);
-            $this->_vars['_filter_time'] = $field;
+            $this->_vars['_filter_time'] = [
+                'field'      => $field,
+                'tips_start' => $tips_start = $tips_start == '' ? '开始日期' : $tips_start,
+                'tips_end'   => $tips_end   = $tips_end   == '' ? '结束日期' : $tips_end
+            ];
         }
         return $this;
     }
