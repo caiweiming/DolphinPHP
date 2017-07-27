@@ -120,92 +120,93 @@
                             </div>
                         </div>
                         {$extra_html_toolbar_bottom|default=''}
-
                         <div class="table-responsive">
+                            {$extra_html_table_top|default=''}
                             <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
-                            <thead>
-                                <tr>
-                                    {if (!$hide_checkbox)}
-                                    <th class="text-center" style="min-width: 70px;padding: 10px;">
-                                        <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
-                                            <input type="checkbox" id="check-all"><span></span>
-                                        </label>
-                                    </th>
-                                    {/if}
+                                <thead>
+                                    <tr>
+                                        {if (!$hide_checkbox)}
+                                        <th class="text-center" style="min-width: 70px;padding: 10px;">
+                                            <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
+                                                <input type="checkbox" id="check-all"><span></span>
+                                            </label>
+                                        </th>
+                                        {/if}
 
-                                    {volist name="columns" id="column"}
-                                    <th class="column-{$column['name']} {$column.class|default=''}">
-                                        <span class="pull-right">
-                                        {// 排序功能}
-                                        {php}if (isset($order_columns[$column['name']])): {/php}
-                                            {php}
-                                                $_by = input('param._by') == 'asc' ? 'desc' : 'asc';
-                                                $_param = array_merge(input('get.'), ['_by' => $_by, '_order' => $order_columns[$column['name']]]);
-                                                if ($_param) {
-                                                    $_get = [];
-                                                    foreach ($_param as $key => $value) {
-                                                        $_get[] = $key. '=' .$value;
-                                                    }
-                                                    $_get = '?'.implode('&', $_get);
-                                                }
-                                            {/php}
-                                            <a href="{$Request.baseUrl}{$_get}" data-toggle="tooltip" data-original-title="排序">
+                                        {volist name="columns" id="column"}
+                                        <th class="column-{$column['name']} {$column.class|default=''}">
+                                            <span class="pull-right">
+                                            {// 排序功能}
+                                            {php}if (isset($order_columns[$column['name']])): {/php}
                                                 {php}
-                                                    if (input('param._order') == $order_columns[$column['name']]) {
-                                                        echo input('param._by') == 'asc' ? '<i class="fa fa-caret-up"></i>' : '<i class="fa fa-caret-down"></i>';
-                                                    } else {
-                                                        echo '<i class="fa fa-sort text-muted"></i>';
+                                                    $_by = input('param._by') == 'asc' ? 'desc' : 'asc';
+                                                    $_param = array_merge(input('get.'), ['_by' => $_by, '_order' => $order_columns[$column['name']]]);
+                                                    if ($_param) {
+                                                        $_get = [];
+                                                        foreach ($_param as $key => $value) {
+                                                            $_get[] = $key. '=' .$value;
+                                                        }
+                                                        $_get = '?'.implode('&', $_get);
                                                     }
                                                 {/php}
-                                            </a>
-                                        {php}endif;{/php}
+                                                <a href="{$Request.baseUrl}{$_get}" data-toggle="tooltip" data-original-title="排序">
+                                                    {php}
+                                                        if (input('param._order') == $order_columns[$column['name']]) {
+                                                            echo input('param._by') == 'asc' ? '<i class="fa fa-caret-up"></i>' : '<i class="fa fa-caret-down"></i>';
+                                                        } else {
+                                                            echo '<i class="fa fa-sort text-muted"></i>';
+                                                        }
+                                                    {/php}
+                                                </a>
+                                            {php}endif;{/php}
 
-                                        {// 筛选功能}
-                                        {php}if (isset($filter_columns[$column['name']])): {/php}
-                                        {php}
-                                            if (!empty(request()->param('_field_display'))) {
-                                                $_field_display = request()->param('_field_display');
-                                            }
-                                        {/php}
-                                        <a href="javascript:void(0);" class="field-filter" data-filter="{$filter_columns[$column['name']]['filter']}" data-list="{$filter_columns[$column['name']]['list']}" data-type="{$filter_columns[$column['name']]['type']}" data-options='{$filter_columns[$column["name"]]["options"]|default=""}' data-map='{$filter_columns[$column["name"]]["map"]|default=""}' data-field-display="{$column['name']}" data-field="{$filter_columns[$column['name']]['field']}" data-table="{$filter_columns[$column['name']]['table']}" data-toggle="tooltip" data-original-title="筛选"><i class="fa fa-filter {notin name='column.name' value='$_field_display'}text-muted{/notin}"></i></a>
-                                        {php}endif;{/php}
-                                        </span>
+                                            {// 筛选功能}
+                                            {php}if (isset($filter_columns[$column['name']])): {/php}
+                                            {php}
+                                                if (!empty(request()->param('_field_display'))) {
+                                                    $_field_display = request()->param('_field_display');
+                                                }
+                                            {/php}
+                                            <a href="javascript:void(0);" class="field-filter" data-filter="{$filter_columns[$column['name']]['filter']}" data-list="{$filter_columns[$column['name']]['list']}" data-type="{$filter_columns[$column['name']]['type']}" data-options='{$filter_columns[$column["name"]]["options"]|default=""}' data-map='{$filter_columns[$column["name"]]["map"]|default=""}' data-field-display="{$column['name']}" data-field="{$filter_columns[$column['name']]['field']}" data-table="{$filter_columns[$column['name']]['table']}" data-toggle="tooltip" data-original-title="筛选"><i class="fa fa-filter {notin name='column.name' value='$_field_display'}text-muted{/notin}"></i></a>
+                                            {php}endif;{/php}
+                                            </span>
 
-                                        {// 字段标题}
-                                        {$column.title|default=''|htmlspecialchars}
-                                    </th>
+                                            {// 字段标题}
+                                            {$column.title|default=''|htmlspecialchars}
+                                        </th>
+                                        {/volist}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {volist name="row_list" id="row"}
+                                    <tr class="{$row['_tr_class']|default=''}">
+                                        {if (!$hide_checkbox)}
+                                        <td class="text-center">
+                                            <label class="css-input css-checkbox css-checkbox-primary">
+                                                <input class="ids" type="checkbox" name="ids[]" value="{$row['_primary_key_value']|default=''}"><span></span>
+                                            </label>
+                                        </td>
+                                        {/if}
+
+                                        {volist name="columns" id="column"}
+                                        <td class="{$column['class']|default=''}">
+                                            {$row[$column['name']]|default=''}
+                                        </td>
+                                        {/volist}
+                                    </tr>
                                     {/volist}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {volist name="row_list" id="row"}
-                                <tr class="{$row['_tr_class']|default=''}">
-                                    {if (!$hide_checkbox)}
-                                    <td class="text-center">
-                                        <label class="css-input css-checkbox css-checkbox-primary">
-                                            <input class="ids" type="checkbox" name="ids[]" value="{$row['_primary_key_value']|default=''}"><span></span>
-                                        </label>
-                                    </td>
-                                    {/if}
 
-                                    {volist name="columns" id="column"}
-                                    <td class="{$column['class']|default=''}">
-                                        {$row[$column['name']]|default=''}
-                                    </td>
-                                    {/volist}
-                                </tr>
-                                {/volist}
-
-                                {empty name="row_list"}
-                                <tr class="table-empty">
-                                    {php}$colspan = count($columns)+1{/php}
-                                    <td class="text-center empty-info" colspan="{$colspan}">
-                                        <i class="fa fa-database"></i> 暂无数据<br>
-                                    </td>
-                                </tr>
-                                {/empty}
-                            </tbody>
-                        </table>
+                                    {empty name="row_list"}
+                                    <tr class="table-empty">
+                                        {php}$colspan = count($columns)+1{/php}
+                                        <td class="text-center empty-info" colspan="{$colspan}">
+                                            <i class="fa fa-database"></i> 暂无数据<br>
+                                        </td>
+                                    </tr>
+                                    {/empty}
+                                </tbody>
+                            </table>
+                            {$extra_html_table_bottom|default=''}
                         </div>
                         <div class="data-table-toolbar">
                             <div class="row">
