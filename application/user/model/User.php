@@ -185,7 +185,7 @@ class User extends Model
                     $signin_token = $this->dataAuthSign($user->username.$user->id.$user->last_login_time);
                     if (cookie('signin_token') == $signin_token) {
                         // 自动登录
-                        $this->autoLogin($user, true);
+                        $this->autoLogin($user);
                         return $user->id;
                     }
                 }
