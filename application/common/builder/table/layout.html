@@ -103,7 +103,7 @@
                                     {/notempty}
 
                                     {// 时间段搜索}
-                                    {present name="_filter_time"}
+                                    {notempty name="_filter_time"}
                                     <div class="form-inline time-filter">
                                         <div class="time-filter">
                                             <div class="input-daterange input-group" data-date-format="yyyy-mm-dd">
@@ -115,7 +115,7 @@
                                             <button type="button" id="btn-filter-time" class="btn btn-default">确定</button>
                                         </div>
                                     </div>
-                                    {/present}
+                                    {/notempty}
                                 </div>
                             </div>
                         </div>
