@@ -42,6 +42,23 @@ if (!function_exists('get_file_path')) {
     }
 }
 
+if (!function_exists('get_files_path')) {
+    /**
+     * 批量获取附件路径
+     * @param array $ids 附件id
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    function get_files_path($ids = [])
+    {
+        $paths = model('admin/attachment')->getFilePath($ids);
+        if (!$paths) {
+            return [];
+        }
+        return $paths;
+    }
+}
+
 if (!function_exists('get_thumb')) {
     /**
      * 获取图片缩略图路径

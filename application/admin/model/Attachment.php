@@ -27,12 +27,20 @@ class Attachment extends Model
 
     /**
      * 根据附件id获取路径
-     * @param  string $id 附件id
-     * @return string     路径
+     * @param  string|array $id 附件id
+     * @return string|array     路径
      */
     public function getFilePath($id = '')
     {
-        return $this->where('id', $id)->value('path');
+        if (is_array($id)) {
+            $paths = $this->where('id', 'in', $id)->column('path');
+            foreach ($paths as $key => $path) {
+                $paths[$key] = PUBLIC_PATH.$path;
+            }
+            return $paths;
+        } else {
+            return $this->where('id', $id)->value('path');
+        }
     }
 
     /**
