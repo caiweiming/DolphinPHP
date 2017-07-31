@@ -237,6 +237,8 @@
                                                 {// wang编辑器 }
                                                 {include file="./application/common/builder/form/items/wangeditor.html" type='' /}
                                             {/case}
+                                            {default/}
+                                            {:extend_form_item($form, $_layout)}
                                         {/switch}
                                     {/volist}
                                 {/empty}
@@ -317,6 +319,12 @@
     <link rel="stylesheet" href="__MODULE_CSS__/{$vo}.css">
     {/volist}
 
+    {volist name="extend_css_list" id="vo"}
+        {volist name="vo.list" id="v"}
+        <link rel="stylesheet" href="__EXTEND_FORM__/{$vo.type}/{$v}">
+        {/volist}
+    {/volist}
+
     {// 额外CSS代码 }
     {$extra_css|default=''}
 {/block}
@@ -333,6 +341,12 @@
 
     {volist name="js_list" id="vo"}
     <script src="__MODULE_JS__/{$vo}.js"></script>
+    {/volist}
+
+    {volist name="extend_js_list" id="vo"}
+        {volist name="vo.list" id="v"}
+        <script src="__EXTEND_FORM__/{$vo.type}/{$v}"></script>
+        {/volist}
     {/volist}
 
     {// 额外JS代码 }

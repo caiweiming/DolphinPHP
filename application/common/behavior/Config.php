@@ -64,7 +64,9 @@ class Config
             // 前台JS目录
             '__HOME_JS__'   => PUBLIC_PATH. 'static/home/js',
             // 前台IMG目录
-            '__HOME_IMG__'  => PUBLIC_PATH. 'static/home/img'
+            '__HOME_IMG__'  => PUBLIC_PATH. 'static/home/img',
+            // 表单项扩展目录
+            '__EXTEND_FORM__' => $base_dir.'extend/form'
         ];
         config('view_replace_str', $view_replace_str);
 

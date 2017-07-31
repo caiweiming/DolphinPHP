@@ -12,6 +12,7 @@
 namespace app\common\builder\form;
 
 use app\common\builder\ZBuilder;
+use think\Exception;
 
 /**
  * 表单构建器
@@ -55,6 +56,8 @@ class Builder extends ZBuilder
         '_layout'         => [],    // 布局参数
         'btn_extra'       => [],    // 额外按钮
         'submit_confirm'  => false, // 提交确认
+        'extend_js_list'  => [],    // 扩展表单项js列表
+        'extend_css_list' => [],    // 扩展表单项css列表
     ];
 
     /**
@@ -1554,6 +1557,54 @@ class Builder extends ZBuilder
                 } else {
                     $this->loadMinify($item['type']);
                 }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 扩展额外表单项
+     * @param $methodName
+     * @param $argument
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     * @throws Exception
+     */
+    public function __call($methodName, $argument)
+    {
+        $type = strtolower(substr($methodName, 3));
+
+        if ($type != '') {
+            $class_name = 'form\\'.$type.'\\Builder';
+            if (!class_exists($class_name)) {
+                throw new Exception('类：'.$class_name.'不存在', 7001);
+            }
+
+            if (method_exists($class_name, 'item')) {
+                $class = new $class_name;
+                $form_item = call_user_func_array([$class, 'item'], $argument);
+                $form_item['type'] = $type;
+
+                if (!empty($class->js)) {
+                    $this->_vars['extend_js_list'][$type] = [
+                        'type' => $type,
+                        'list' => $class->js
+                    ];
+                }
+                if (!empty($class->css)) {
+                    $this->_vars['extend_css_list'][$type] = [
+                        'type' => $type,
+                        'list' => $class->css
+                    ];
+                }
+
+                if ($this->_is_group) {
+                    return $form_item;
+                }
+
+                $this->_vars['form_items'][] = $form_item;
+            } else {
+                throw new Exception('扩展表单项未定义item()方法', 7001);
             }
         }
         return $this;

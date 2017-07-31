@@ -187,6 +187,8 @@
                                 {// wang编辑器 }
                                 {include file="./application/common/builder/form/items/wangeditor.html" type="_group" /}
                             {/case}
+                            {default/}
+                            {:extend_form_item($form_group, $_layout)}
                         {/switch}
                     {/volist}
                 </div>

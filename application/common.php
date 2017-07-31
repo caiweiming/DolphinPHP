@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 use think\Db;
+use think\View;
 // 应用公共文件
 
 if (!function_exists('is_signin')) {
@@ -1189,5 +1190,30 @@ if (!function_exists('htmlpurifier')) {
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($html);
         return $clean_html;
+    }
+}
+
+if (!function_exists('extend_form_item')) {
+    /**
+     * 扩展表单项
+     * @param array $form 类型
+     * @param array $_layout 布局参数
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function extend_form_item($form = [], $_layout = []) {
+        if (!isset($form['type'])) return '';
+        if (!empty($_layout && isset($_layout[$form['name']]))) {
+            $form['_layout'] = $_layout[$form['name']];
+        }
+
+        $template = ROOT_PATH.'/extend/form/'.$form['type'].'/'.$form['type'].'.html';
+        if (file_exists($template)) {
+            $template_content = file_get_contents($template);
+            $view = new View();
+            return $view->display($template_content, array_merge($form, $_layout));
+        } else {
+            return '';
+        }
     }
 }
