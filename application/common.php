@@ -38,7 +38,7 @@ if (!function_exists('get_file_path')) {
         if (!$path) {
             return config('public_static_path').'admin/img/none.png';
         }
-        return PUBLIC_PATH. $path;
+        return $path;
     }
 }
 
@@ -52,10 +52,7 @@ if (!function_exists('get_files_path')) {
     function get_files_path($ids = [])
     {
         $paths = model('admin/attachment')->getFilePath($ids);
-        if (!$paths) {
-            return [];
-        }
-        return $paths;
+        return !$paths ? [] : $paths;
     }
 }
 
@@ -72,7 +69,7 @@ if (!function_exists('get_thumb')) {
         if (!$path) {
             return config('public_static_path').'admin/img/none.png';
         }
-        return PUBLIC_PATH. $path;
+        return $path;
     }
 }
 
@@ -92,7 +89,7 @@ if (!function_exists('get_avatar')) {
         if (!$path) {
             return config('public_static_path').'admin/img/avatar.jpg';
         }
-        return PUBLIC_PATH. $path;
+        return $path;
     }
 }
 
@@ -173,6 +170,21 @@ if (!function_exists('parse_attr')) {
             $value = $array;
         }
         return $value;
+    }
+}
+
+if (!function_exists('implode_attr')) {
+    /**
+     * 组合配置
+     * @param array $array 配置值
+     * @return string
+     */
+    function implode_attr($array = []) {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $result[] = $key.':'.$value;
+        }
+        return empty($result) ? '' : implode(PHP_EOL, $result);
     }
 }
 

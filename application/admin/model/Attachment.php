@@ -33,13 +33,27 @@ class Attachment extends Model
     public function getFilePath($id = '')
     {
         if (is_array($id)) {
-            $paths = $this->where('id', 'in', $id)->column('path');
-            foreach ($paths as $key => $path) {
-                $paths[$key] = PUBLIC_PATH.$path;
+            $data_list = $this->where('id', 'in', $id)->select();
+            $paths = [];
+            foreach ($data_list as $key => $value) {
+                if ($value['driver'] == 'local') {
+                    $paths[$key] = PUBLIC_PATH.$value['path'];
+                } else {
+                    $paths[$key] = $value['path'];
+                }
             }
             return $paths;
         } else {
-            return $this->where('id', $id)->value('path');
+            $data = $this->find($id);
+            if ($data) {
+                if ($data['driver'] == 'local') {
+                    return PUBLIC_PATH.$data['path'];
+                } else {
+                    return $data['path'];
+                }
+            } else {
+                return false;
+            }
         }
     }
 
@@ -51,9 +65,13 @@ class Attachment extends Model
      */
     public function getThumbPath($id = '')
     {
-        $result = $this->where('id', $id)->field('path,thumb')->find();
+        $result = $this->where('id', $id)->field('path,driver,thumb')->find();
         if ($result) {
-            return $result['thumb'] != '' ? $result['thumb'] : $result['path'];
+            if ($result['driver'] == 'local') {
+                return $result['thumb'] != '' ? PUBLIC_PATH.$result['thumb'] : PUBLIC_PATH.$result['path'];
+            } else {
+                return $result['thumb'] != '' ? $result['thumb'] : $result['path'];
+            }
         } else {
             return $result;
         }

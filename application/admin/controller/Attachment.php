@@ -15,6 +15,8 @@ use app\common\builder\ZBuilder;
 use app\admin\model\Attachment as AttachmentModel;
 use think\Image;
 use think\File;
+use think\Hook;
+use think\Db;
 
 /**
  * 附件控制器
@@ -35,27 +37,37 @@ class Attachment extends Admin
         $data_list = AttachmentModel::where($map)->order('sort asc,id desc')->paginate();
         foreach ($data_list as $key => &$value) {
             if (in_array($value['ext'], ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
-                $thumb = $value['thumb'] != '' ? $value['thumb'] : $value['path'];
-                $value['type'] = '<a class="img-link" href="'. PUBLIC_PATH . $value['path'].'"
+                if ($value['driver'] == 'local') {
+                    $thumb = $value['thumb'] != '' ? $value['thumb'] : $value['path'];
+                    $value['type'] = '<a class="img-link" href="'. PUBLIC_PATH . $value['path'].'"
                     data-toggle="tooltip"
                     title="点击查看大图"
                     target="_blank">
                     <img class="image" src="'. PUBLIC_PATH . $thumb.'"></a>';
+                } else {
+                    $value['type'] = '<a class="img-link" href="'. $value['path'].'"
+                    data-toggle="tooltip"
+                    title="点击查看大图"
+                    target="_blank">
+                    <img class="image" src="'. $value['path'].'"></a>';
+                }
             } else {
+                if ($value['driver'] == 'local') {
+                    $path = PUBLIC_PATH. $value['path'];
+                } else {
+                    $path = $value['path'];
+                }
                 if (is_file('.'.config('public_static_path').'admin/img/files/'.$value['ext'].'.png')) {
-                    $value['type'] = '<a href="'. PUBLIC_PATH. $value['path'].'"
+                    $value['type'] = '<a href="'. $path.'"
                         data-toggle="tooltip" title="点击下载">
                         <img class="image" src="'.config('public_static_path').'admin/img/files/'.$value['ext'].'.png"></a>';
                 } else {
-                    $value['type'] = '<a href="'. PUBLIC_PATH. $value['path'].'"
+                    $value['type'] = '<a href="'. $path.'"
                         data-toggle="tooltip" title="点击下载">
                         <img class="image" src="'.config('public_static_path').'admin/img/files/file.png"></a>';
                 }
             }
         }
-
-        // 分页数据
-        $page = $data_list->render();
 
         // 使用ZBuilder快速创建数据表格
         return ZBuilder::make('table')
@@ -65,6 +77,7 @@ class Attachment extends Admin
                 ['type', '类型', '', '', '', 'js-gallery'],
                 ['name', '名称'],
                 ['size', '大小', 'byte'],
+                ['driver', '上传驱动', parse_attr(Db::name('admin_config')->where('name', 'upload_driver')->value('options'))],
                 ['create_time', '上传时间', 'datetime'],
                 ['status', '状态', 'switch'],
                 ['right_button', '操作', 'btn']
@@ -72,7 +85,6 @@ class Attachment extends Admin
             ->addTopButtons('enable,disable,delete') // 批量添加顶部按钮
             ->addRightButtons('delete') // 批量添加右侧按钮
             ->setRowList($data_list) // 设置表格数据
-            ->setPages($page) // 设置分页数据
             ->fetch(); // 渲染模板
     }
 
@@ -112,6 +124,7 @@ class Attachment extends Admin
         $ext_limit = $ext_limit != '' ? parse_attr($ext_limit) : '';
 
         // 获取附件数据
+        $callback = '';
         switch ($from) {
             case 'editormd':
                 $file_input_name = 'editormd-image-file';
@@ -130,7 +143,11 @@ class Attachment extends Admin
 
         // 判断附件是否已存在
         if ($file_exists = AttachmentModel::get(['md5' => $file->hash('md5')])) {
-            $file_path = PUBLIC_PATH. $file_exists['path'];
+            if ($file_exists['driver'] == 'local') {
+                $file_path = PUBLIC_PATH. $file_exists['path'];
+            } else {
+                $file_path = $file_exists['path'];
+            }
             switch ($from) {
                 case 'wangeditor':
                     return $file_path;
@@ -220,6 +237,14 @@ class Attachment extends Admin
                         'class'  => 'danger',
                         'info'   => $error_msg
                     ]);
+            }
+        }
+
+        // 附件上传钩子，用于第三方文件上传扩展
+        if (config('upload_driver') != 'local') {
+            $hook_result = Hook::listen('upload_attachment', $file, ['from' => $from, 'module' => $module], true);
+            if (false !== $hook_result) {
+                return $hook_result;
             }
         }
 

@@ -198,7 +198,11 @@ class Ajax extends Common
 
         // 判断附件是否已存在
         if ($file_exists = AttachmentModel::get(['md5' => $md5])) {
-            $file_path = PUBLIC_PATH. $file_exists['path'];
+            if ($file_exists['driver'] == 'local') {
+                $file_path = PUBLIC_PATH.$file_exists['path'];
+            } else {
+                $file_path = $file_exists['path'];
+            }
             return json([
                 'code'   => 1,
                 'info'   => '上传成功',
