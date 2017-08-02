@@ -102,6 +102,10 @@ class Menu extends Admin
             }
 
             if ($menu = MenuModel::create($data)) {
+                // 自动创建子节点
+                if ($data['auto_create'] == 1 && !empty($data['child_node'])) {
+                    $this->createChildNode($data, $menu['id']);
+                }
                 Cache::clear();
                 // 记录行为
                 $details = '所属模块('.$data['module'].'),所属节点ID('.$data['pid'].'),节点标题('.$data['title'].'),节点链接('.$data['url_value'].')';
@@ -127,6 +131,8 @@ class Menu extends Admin
                 '节点链接',
                 "可留空，如果是模块链接，请填写<code>模块/控制器/操作</code>，如：<code>admin/menu/add</code>。如果是普通链接，则直接填写url地址，如：<code>http://www.dolphinphp.com</code>"
             )
+            ->addRadio('auto_create', '自动添加子节点', '选择【是】则自动添加下面选中的子节点', ['否', '是'], 0)
+            ->addCheckbox('child_node', '子节点', '仅上面选项为【是】时起作用', ['add' => '新增', 'edit' => '编辑', 'delete' => '删除', 'enable' => '启用', 'disable' => '禁用', 'quickedit' => '快速编辑'], 'add,edit,delete,enable,disable,quickedit')
             ->addRadio('url_target', '打开方式', '', ['_self' => '当前窗口', '_blank' => '新窗口'], '_self')
             ->addIcon('icon', '图标', '导航图标')
             ->addRadio('online_hide', '网站上线后隐藏', '关闭开发模式后，则隐藏该菜单节点', ['否', '是'], 0)
@@ -256,6 +262,51 @@ class Menu extends Admin
             }
         }
         $this->error('非法请求');
+    }
+
+    /**
+     * 添加子节点
+     * @param array $data 节点数据
+     * @param string $pid 父节点id
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    private function createChildNode($data = [], $pid = '')
+    {
+        $url_value  = substr($data['url_value'], 0, strrpos($data['url_value'], '/')).'/';
+        $child_node = [];
+        $data['pid'] = $pid;
+
+        foreach ($data['child_node'] as $item) {
+            switch ($item) {
+                case 'add':
+                    $data['title'] = '新增';
+                    break;
+                case 'edit':
+                    $data['title'] = '编辑';
+                    break;
+                case 'delete':
+                    $data['title'] = '删除';
+                    break;
+                case 'enable':
+                    $data['title'] = '启用';
+                    break;
+                case 'disable':
+                    $data['title'] = '禁用';
+                    break;
+                case 'quickedit':
+                    $data['title'] = '快速编辑';
+                    break;
+            }
+            $data['url_value']   = $url_value.$item;
+            $data['create_time'] = $this->request->time();
+            $data['update_time'] = $this->request->time();
+            $child_node[] = $data;
+        }
+
+        if ($child_node) {
+            $MenuModel = new MenuModel();
+            $MenuModel->insertAll($child_node);
+        }
     }
 
     /**
