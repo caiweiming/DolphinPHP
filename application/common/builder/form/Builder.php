@@ -1232,7 +1232,7 @@ class Builder extends ZBuilder
             'title'       => $title,
             'tips'        => $tips,
             'value'       => $default,
-            'hidden'      => $hidden === true ? $default : $hidden,
+            'hidden'      => $hidden === true ? ($default == '' ? true : $default) : $hidden,
             'extra_class' => $extra_class,
         ];
 
@@ -1901,6 +1901,9 @@ class Builder extends ZBuilder
                             } else {
                                 $group[$key]['value'] = '';
                             }
+                            if ($group[$key]['type'] == 'static' && $group[$key]['hidden'] != '') {
+                                $group[$key]['hidden'] = $this->_vars['form_data'][$value['name']];
+                            }
                         }
                     }
                 } else {
@@ -1918,6 +1921,9 @@ class Builder extends ZBuilder
                         } else {
                             $item['value'] = isset($item['value']) ? $item['value'] : '';
                         }
+                    }
+                    if ($item['type'] == 'static' && $item['hidden'] != '') {
+                        $item['hidden'] = $this->_vars['form_data'][$item['name']];
                     }
                 }
             }
