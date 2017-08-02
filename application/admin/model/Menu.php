@@ -114,7 +114,7 @@ class Menu extends Model
             }
             $map['status'] = 1;
             $map['pid']    = 0;
-            $menus = self::where($map)->order('sort,id')->limit($max)->column('id,pid,module,title,url_value,url_type,url_target,icon');
+            $menus = self::where($map)->order('sort,id')->limit($max)->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
             foreach ($menus as $key => &$menu) {
                 // 没有访问权限的节点不显示
                 if (!RoleModel::checkAuth($menu['id'])) {
@@ -125,7 +125,7 @@ class Menu extends Model
                     $url = explode('/', $menu['url_value']);
                     $menu['controller'] = $url[1];
                     $menu['action']     = $url[2];
-                    $menu['url_value']  = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value']) : home_url($menu['url_value']);
+                    $menu['url_value']  = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value'], $menu['params']) : home_url($menu['url_value'], $menu['params']);
                 }
             }
             // 非开发模式，缓存菜单
@@ -165,7 +165,7 @@ class Menu extends Model
             if (config('develop_mode') == 0) {
                 $map['online_hide'] = 0;
             }
-            $menus = self::where($map)->order('sort,id')->column('id,pid,module,title,url_value,url_type,url_target,icon');
+            $menus = self::where($map)->order('sort,id')->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
 
             // 解析模块链接
             foreach ($menus as $key => &$menu) {
@@ -175,7 +175,7 @@ class Menu extends Model
                     continue;
                 }
                 if ($menu['url_value'] != '' && ($menu['url_type'] == 'module_admin' || $menu['url_type'] == 'module_home')) {
-                    $menu['url_value'] = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value']) : home_url($menu['url_value']);
+                    $menu['url_value'] = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value'], $menu['params']) : home_url($menu['url_value'], $menu['params']);
                 }
             }
             $menus = Tree::toLayer($menus, $top_id, 2);

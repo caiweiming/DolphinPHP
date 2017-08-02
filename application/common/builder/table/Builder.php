@@ -533,8 +533,18 @@ class Builder extends ZBuilder
     {
         $url = $this->_module.'/'.$this->_controller.'/'.$type;
         $MenuModel = new Menu();
-        $url_type  = $MenuModel->where('url_value', $url)->value('url_type');
-        return $url_type == 'module_home' ? home_url($url, $params) : url($url, $params);
+        $menu  = $MenuModel->where('url_value', $url)->find();
+        if ($menu['params'] != '') {
+            $url_params = explode('&', trim($menu['params'], '&'));
+            if (!empty($url_params)) {
+                foreach ($url_params as $item) {
+                    list($key, $value) = explode('=', $item);
+                    $params[$key] = $value;
+                }
+            }
+        }
+
+        return $menu['url_type'] == 'module_home' ? home_url($url, $params) : url($url, $params);
     }
 
     /**
