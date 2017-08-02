@@ -50,6 +50,7 @@ class Builder extends ZBuilder
         'field_triggers'  => [],    // 需要触发的表单项名
         'field_hide'      => '',    // 需要隐藏的表单项
         'field_values'    => '',    // 触发表单项的值
+        'field_clear'     => [],    // 字段清除
         '_js_files'       => [],    // 需要加载的js（合并输出）
         '_js_init'        => [],    // 初始化的js（合并输出）
         '_css_files'      => [],    // 需要加载的css（合并输出）
@@ -205,10 +206,11 @@ class Builder extends ZBuilder
      * @param string $trigger 需要触发的表单项名，目前支持select（单选类型）、text、radio三种
      * @param string $values 触发的值
      * @param string $show 触发后要显示的表单项名，目前不支持普通联动、范围、拖动排序、静态文本
+     * @param bool $clear 是否清除值
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setTrigger($trigger = '', $values = '', $show = '')
+    public function setTrigger($trigger = '', $values = '', $show = '', $clear = true)
     {
         if (!empty($trigger)) {
             if (is_array($trigger)) {
@@ -216,11 +218,13 @@ class Builder extends ZBuilder
                     $this->_vars['field_hide']   .= $item[2].',';
                     $this->_vars['field_values'] .= $item[1].',';
                     $this->_vars['field_triggers'][$item[0]][] = [(string)$item[1], $item[2]];
+                    $this->_vars['field_clear'][$item[0]] = isset($item[3]) ? ($item[3] === true ? 1 : 0) : 1;
                 }
             } else {
                 $this->_vars['field_hide']   .= $show.',';
                 $this->_vars['field_values'] .= (string)$values.',';
                 $this->_vars['field_triggers'][$trigger][] = [(string)$values, $show];
+                $this->_vars['field_clear'][$trigger] = $clear === true ? 1 : 0;
             }
         }
         return $this;
@@ -1964,6 +1968,7 @@ class Builder extends ZBuilder
             $this->_vars['field_values'] = array_filter($this->_vars['field_values'], 'strlen');
             $this->_vars['field_values'] = implode(',', array_unique($this->_vars['field_values']));
         }
+        $this->_vars['field_clear'] = json_encode($this->_vars['field_clear']);
 
         // 处理js和css合并的参数
         if (!empty($this->_vars['_js_files'])) {

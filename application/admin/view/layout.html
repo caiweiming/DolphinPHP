@@ -104,6 +104,7 @@
             '_filter': '{$Request.param._filter ? $Request.param._filter : (isset($_filter) ? $_filter : "")}',
             '_filter_content': '{$Request.param._filter_content == '' ? (isset($_filter_content) ? $_filter_content : "") : $Request.param._filter_content}',
             '_field_display': '{$Request.param._field_display ? $Request.param._field_display : (isset($_field_display) ? $_field_display : "")}',
+            '_field_clear': {$field_clear},
             'get_filter_list': '{:url("admin/ajax/getFilterList")}',
             'curr_url': '{:url("", $Request.route)}',
             'curr_params': {$Request.param|json_encode},

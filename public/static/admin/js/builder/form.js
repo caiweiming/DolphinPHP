@@ -990,43 +990,45 @@ jQuery(document).ready(function() {
                                 continue;
                             }
 
-                            if ($.type(ueditors) == 'object' && ueditors[$targets[item]] != undefined) {
-                                // 清除百度编辑器内容
-                                ueditors[$targets[item]].ready(function(){
-                                    ueditors[$targets[item]].execCommand("cleardoc");
-                                });
-                            } else if ($.type(wangeditors) == 'object' && wangeditors[$targets[item]] != undefined) {
-                                // 清除wang编辑器内容
-                                wangeditors[$targets[item]].clear();
-                            } else if ($.type(editormds) == 'object' && editormds[$targets[item]] != undefined) {
-                                // 清除markdown编辑器内容
-                                if (init) {
-                                    continue;
-                                } else {
-                                    editormds[$targets[item]].clear();
-                                }
-                            }
-
                             // 隐藏表单项
                             var $form_item = $('#form_group_'+$targets[item]).addClass('form_group_hide');
 
-                            // 清除表单内容
-                            if ($form_item.find("[name='"+$targets[item]+"']").attr('type') == 'radio') {
-                                $form_item.find("[name='"+$targets[item]+"']:checked").prop('checked', false).trigger("change");
-                            } else if ($form_item.find("[name='"+$targets[item]+"[]']").attr('type') == 'checkbox') {
-                                $form_item.find("[name='"+$targets[item]+"[]']:checked").prop('checked', false).trigger("change");
-                            } else if ($form_item.find("[name='"+$targets[item]+"']").attr('data-ext') != undefined) {
-                                $form_item.find("[name='"+$targets[item]+"']").val(null);
-                            } else {
-                                $form_item.find("[name^='"+$targets[item]+"']").val(null).trigger("change");
-                            }
+                            if (dolphin._field_clear[trigger] !== undefined && dolphin._field_clear[trigger] === 1) {
+                                if ($.type(ueditors) == 'object' && ueditors[$targets[item]] != undefined) {
+                                    // 清除百度编辑器内容
+                                    ueditors[$targets[item]].ready(function(){
+                                        ueditors[$targets[item]].execCommand("cleardoc");
+                                    });
+                                } else if ($.type(wangeditors) == 'object' && wangeditors[$targets[item]] != undefined) {
+                                    // 清除wang编辑器内容
+                                    wangeditors[$targets[item]].clear();
+                                } else if ($.type(editormds) == 'object' && editormds[$targets[item]] != undefined) {
+                                    // 清除markdown编辑器内容
+                                    if (init) {
+                                        continue;
+                                    } else {
+                                        editormds[$targets[item]].clear();
+                                    }
+                                }
 
-                            // 清除上传文件
-                            $form_item.find('#file_list_'+$targets[item]).empty();
+                                // 清除表单内容
+                                if ($form_item.find("[name='"+$targets[item]+"']").attr('type') == 'radio') {
+                                    $form_item.find("[name='"+$targets[item]+"']:checked").prop('checked', false).trigger("change");
+                                } else if ($form_item.find("[name='"+$targets[item]+"[]']").attr('type') == 'checkbox') {
+                                    $form_item.find("[name='"+$targets[item]+"[]']:checked").prop('checked', false).trigger("change");
+                                } else if ($form_item.find("[name='"+$targets[item]+"']").attr('data-ext') != undefined) {
+                                    $form_item.find("[name='"+$targets[item]+"']").val(null);
+                                } else {
+                                    $form_item.find("[name^='"+$targets[item]+"']").val(null).trigger("change");
+                                }
 
-                            // 清空标签
-                            if ($form_item.find('.js-tags-input').length) {
-                                $form_item.find('.js-tags-input').importTags('');
+                                // 清除上传文件
+                                $form_item.find('#file_list_'+$targets[item]).empty();
+
+                                // 清空标签
+                                if ($form_item.find('.js-tags-input').length) {
+                                    $form_item.find('.js-tags-input').importTags('');
+                                }
                             }
                         }
                     }
