@@ -1968,7 +1968,6 @@ class Builder extends ZBuilder
             $this->_vars['field_values'] = array_filter($this->_vars['field_values'], 'strlen');
             $this->_vars['field_values'] = implode(',', array_unique($this->_vars['field_values']));
         }
-        $this->_vars['field_clear'] = json_encode($this->_vars['field_clear']);
 
         // 处理js和css合并的参数
         if (!empty($this->_vars['_js_files'])) {
