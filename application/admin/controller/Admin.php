@@ -35,6 +35,9 @@ class Admin extends Common
         // 判断是否登录，并定义用户ID常量
         defined('UID') or define('UID', $this->isLogin());
 
+        // 设置当前角色菜单节点权限
+        role_auth();
+
         // 检查权限
         if (!RoleModel::checkAuth()) $this->error('权限不足！');
 

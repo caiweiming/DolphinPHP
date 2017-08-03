@@ -83,7 +83,6 @@ if (!function_exists('get_avatar')) {
      */
     function get_avatar($uid = 0)
     {
-        $uid = $uid == 0 ? UID : $uid;
         $avatar = Db::name('admin_user')->where('id', $uid)->value('avatar');
         $path = model('admin/attachment')->getFilePath($avatar);
         if (!$path) {
@@ -1244,5 +1243,15 @@ if (!function_exists('extend_form_item')) {
         } else {
             return '';
         }
+    }
+}
+
+if (!function_exists('role_auth')) {
+    /**
+     * 读取当前用户权限
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    function role_auth() {
+        session('role_menu_auth', model('user/role')->roleAuth());
     }
 }

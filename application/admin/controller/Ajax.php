@@ -170,6 +170,7 @@ class Ajax extends Common
      */
     public function getSidebarMenu($module_id = '', $module = '', $controller = '')
     {
+        role_auth();
         $menus = MenuModel::getSidebarMenu($module_id, $module, $controller);
 
         $output = '';

@@ -129,6 +129,7 @@ class Role extends Admin
             if(true !== $result) $this->error($result);
 
             if (RoleModel::update($data)) {
+                role_auth();
                 // 记录行为
                 action_log('role_edit', 'admin_role', $id, UID, $data['name']);
                 $this->success('编辑成功', url('index'));

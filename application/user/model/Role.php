@@ -108,18 +108,7 @@ class Role extends Model
         }
 
         // 获取当前用户的权限
-        $menu_auth = cache('role_menu_auth_'.$role);
-        if (!$menu_auth) {
-            $menu_auth = self::where('id', $role)->value('menu_auth');
-            if ($menu_auth && $menu_auth != '') {
-                $menu_auth = json_decode($menu_auth, true);
-                $menu_auth = MenuModel::where('id', 'in', $menu_auth)->column('id,url_value');
-            }
-            // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
-                cache('role_menu_auth_'.$role, $menu_auth);
-            }
-        }
+        $menu_auth = session('role_menu_auth');
 
         // 检查权限
         if ($menu_auth) {
@@ -135,5 +124,25 @@ class Role extends Model
 
         // 其他情况一律没有权限
         return false;
+    }
+
+    /**
+     * 读取当前角色权限
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    public function roleAuth()
+    {
+        $menu_auth = cache('role_menu_auth_'.session('user_auth.role'));
+        if (!$menu_auth) {
+            $menu_auth = self::where('id', session('user_auth.role'))->value('menu_auth');
+            $menu_auth = json_decode($menu_auth, true);
+            $menu_auth = MenuModel::where('id', 'in', $menu_auth)->column('id,url_value');
+        }
+        // 非开发模式，缓存数据
+        if (config('develop_mode') == 0) {
+            cache('role_menu_auth_'.session('user_auth.role'), $menu_auth);
+        }
+        return $menu_auth;
     }
 }
