@@ -1743,6 +1743,7 @@ class Builder extends ZBuilder
     {
         if ($value != '') {
             $this->_vars['_method'] = $value;
+            $this->_vars['ajax_submit'] = strtolower($value) == 'get' ? false : true;
         }
         return $this;
     }
