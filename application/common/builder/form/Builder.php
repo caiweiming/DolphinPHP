@@ -59,6 +59,7 @@ class Builder extends ZBuilder
         'submit_confirm'  => false, // 提交确认
         'extend_js_list'  => [],    // 扩展表单项js列表
         'extend_css_list' => [],    // 扩展表单项css列表
+        '_method'         => 'post',// 表单提交方式
     ];
 
     /**
@@ -1728,6 +1729,20 @@ class Builder extends ZBuilder
     {
         if ($files_name != '') {
             $this->loadFile('css', $files_name);
+        }
+        return $this;
+    }
+
+    /**
+     * 设置表单提交方式
+     * @param string $value 提交方式
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function method($value = '')
+    {
+        if ($value != '') {
+            $this->_vars['_method'] = $value;
         }
         return $this;
     }

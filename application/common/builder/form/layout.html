@@ -48,7 +48,7 @@
                     <div class="tab-pane active">
                         <div class="block-content">
                             {$extra_html_form_top|default=''}
-                            <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="post">
+                            <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="{$_method}">
                                 {empty name="form_items"}
                                 <div class="form-empty">
                                     <p class="text-center text-muted empty-info">
