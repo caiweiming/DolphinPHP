@@ -286,6 +286,7 @@ CREATE TABLE `dp_admin_menu` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `system_menu` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否为系统菜单，系统菜单不可删除',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
+  `params` varchar(255) NOT NULL DEFAULT '' COMMENT '参数',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=214 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
