@@ -104,6 +104,7 @@ class Menu extends Admin
             if ($menu = MenuModel::create($data)) {
                 // 自动创建子节点
                 if ($data['auto_create'] == 1 && !empty($data['child_node'])) {
+                    unset($data['icon']);
                     unset($data['params']);
                     $this->createChildNode($data, $menu['id']);
                 }
