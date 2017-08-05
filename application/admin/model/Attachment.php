@@ -44,7 +44,7 @@ class Attachment extends Model
             }
             return $paths;
         } else {
-            $data = $this->find($id);
+            $data = $this->where('id', $id)->find();
             if ($data) {
                 if ($data['driver'] == 'local') {
                     return PUBLIC_PATH.$data['path'];
