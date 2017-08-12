@@ -1618,6 +1618,10 @@ class Builder extends ZBuilder
                                     if (isset($column['param'][$row[$column['name']]])) {
                                         $row[$column['name']] = $column['param'][$row[$column['name']]];
                                     }
+                                } else {
+                                    if (isset($row[$column['name']]) && $row[$column['name']] == '' && $column['default'] != '') {
+                                        $row[$column['name']] = $column['default'];
+                                    }
                                 }
                             }
                     }
