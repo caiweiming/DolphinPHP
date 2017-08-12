@@ -478,6 +478,42 @@ if (!function_exists('format_time')) {
     }
 }
 
+if (!function_exists('format_date')) {
+    /**
+     * 使用bootstrap-datepicker插件的时间格式来格式化时间戳
+     * @param null $time 时间戳
+     * @param string $format bootstrap-datepicker插件的时间格式 https://bootstrap-datepicker.readthedocs.io/en/stable/options.html#format
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return false|string
+     */
+    function format_date($time = null, $format='yyyy-mm-dd') {
+        $format_map = [
+            'yyyy' => 'Y',
+            'yy'   => 'y',
+            'MM'   => 'F',
+            'M'    => 'M',
+            'mm'   => 'm',
+            'm'    => 'n',
+            'DD'   => 'l',
+            'D'    => 'D',
+            'dd'   => 'd',
+            'd'    => 'j',
+        ];
+
+        // 提取格式
+        preg_match_all('/([a-zA-Z]+)/', $format, $matches);
+        $replace = [];
+        foreach ($matches[1] as $match) {
+            $replace[] = isset($format_map[$match]) ? $format_map[$match] : '';
+        }
+
+        // 替换成date函数支持的格式
+        $format = str_replace($matches[1], $replace, $format);
+        $time = $time === null ? time() : intval($time);
+        return date($format, $time);
+    }
+}
+
 if (!function_exists('format_moment')) {
     /**
      * 使用momentjs的时间格式来格式化时间戳

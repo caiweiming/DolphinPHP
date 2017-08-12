@@ -1912,10 +1912,39 @@ class Builder extends ZBuilder
                 if ($item['type'] == 'group') {
                     foreach ($item['options'] as &$group) {
                         foreach ($group as $key => $value) {
-                            if (isset($this->_vars['form_data'][$value['name']])) {
-                                $group[$key]['value'] = $this->_vars['form_data'][$value['name']];
-                            } else {
-                                $group[$key]['value'] = '';
+                            // 针对日期范围特殊处理
+                            switch ($value['type']) {
+                                case 'daterange':
+                                    if ($value['name_from'] == $value['name_to']) {
+                                        list($group[$key]['value_from'], $group[$key]['value_to']) = $this->_vars['form_data'][$value['id']];
+                                    } else {
+                                        $group[$key]['value_from'] = $this->_vars['form_data'][$value['name_from']];
+                                        $group[$key]['value_to']   = $this->_vars['form_data'][$value['name_to']];
+                                    }
+                                    break;
+                                case 'datetime':
+                                case 'date':
+                                case 'time':
+                                    if (isset($this->_vars['form_data'][$value['name']])) {
+                                        $group[$key]['value'] = $this->_vars['form_data'][$value['name']];
+                                    } else {
+                                        $group[$key]['value'] = isset($value['value']) ? $value['value'] : '';
+                                    }
+
+                                    if (is_numeric($group[$key]['value'])) {
+                                        if ($value['type'] == 'datetime' || $value['type'] == 'time') {
+                                            $group[$key]['value'] = format_moment($group[$key]['value'], $value['format']);
+                                        } else {
+                                            $group[$key]['value'] = format_date($group[$key]['value'], $value['format']);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    if (isset($this->_vars['form_data'][$value['name']])) {
+                                        $group[$key]['value'] = $this->_vars['form_data'][$value['name']];
+                                    } else {
+                                        $group[$key]['value'] = '';
+                                    }
                             }
                             if ($group[$key]['type'] == 'static' && $group[$key]['hidden'] != '') {
                                 $group[$key]['hidden'] = $this->_vars['form_data'][$value['name']];
@@ -1924,19 +1953,39 @@ class Builder extends ZBuilder
                     }
                 } else {
                     // 针对日期范围特殊处理
-                    if ($item['type'] == 'daterange') {
-                        if ($item['name_from'] == $item['name_to']) {
-                            list($item['value_from'], $item['value_to']) = $this->_vars['form_data'][$item['id']];
-                        } else {
-                            $item['value_from'] = $this->_vars['form_data'][$item['name_from']];
-                            $item['value_to']   = $this->_vars['form_data'][$item['name_to']];
-                        }
-                    } else {
-                        if (isset($this->_vars['form_data'][$item['name']])) {
-                            $item['value'] = $this->_vars['form_data'][$item['name']];
-                        } else {
-                            $item['value'] = isset($item['value']) ? $item['value'] : '';
-                        }
+                    switch ($item['type']) {
+                        case 'daterange':
+                            if ($item['name_from'] == $item['name_to']) {
+                                list($item['value_from'], $item['value_to']) = $this->_vars['form_data'][$item['id']];
+                            } else {
+                                $item['value_from'] = $this->_vars['form_data'][$item['name_from']];
+                                $item['value_to']   = $this->_vars['form_data'][$item['name_to']];
+                            }
+                            break;
+                        case 'datetime':
+                        case 'date':
+                        case 'time':
+                            if (isset($this->_vars['form_data'][$item['name']])) {
+                                $item['value'] = $this->_vars['form_data'][$item['name']];
+                            } else {
+                                $item['value'] = isset($item['value']) ? $item['value'] : '';
+                            }
+
+                            if (is_numeric($item['value'])) {
+                                if ($item['type'] == 'datetime' || $item['type'] == 'time') {
+                                    $item['value'] = format_moment($item['value'], $item['format']);
+                                } else {
+                                    $item['value'] = format_date($item['value'], $item['format']);
+                                }
+                            }
+                            break;
+                        default:
+                            if (isset($this->_vars['form_data'][$item['name']])) {
+                                $item['value'] = $this->_vars['form_data'][$item['name']];
+                            } else {
+                                $item['value'] = isset($item['value']) ? $item['value'] : '';
+                            }
+
                     }
                     if ($item['type'] == 'static' && $item['hidden'] != '') {
                         $item['hidden'] = $this->_vars['form_data'][$item['name']];
