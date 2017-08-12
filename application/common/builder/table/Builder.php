@@ -1592,10 +1592,11 @@ class Builder extends ZBuilder
                             break;
                         case 'select': // 下拉框
                             if ($column['default']) {
-                                $prepend = isset($column['default'][$row[$column['name']]]) ? $column['default'][$row[$column['name']]] : '';
+                                $prepend = isset($column['default'][$row[$column['name']]]) ? $column['default'][$row[$column['name']]] : '无对应值';
+                                $class   = $prepend == '无对应值' ? 'select-edit text-danger' : 'select-edit';
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
                                 $row[$column['name']] = '<a href="javascript:void(0);" 
-                                    class="select-edit" 
+                                    class="'.$class.'"
                                     data-table="'.$_table_name.'" 
                                     data-type="select" 
                                     data-value="'.$row[$column['name']].'" 
