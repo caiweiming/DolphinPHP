@@ -107,9 +107,9 @@
                                     <div class="form-inline time-filter">
                                         <div class="time-filter">
                                             <div class="input-daterange input-group" data-date-format="yyyy-mm-dd">
-                                                <input class="form-control" type="text" id="_filter_time_from" name="_filter_time_from" value="{$Request.get._filter_time_from|default=''}" placeholder="{$_filter_time.tips_start}">
+                                                <input class="form-control" type="text" id="_filter_time_from" name="_filter_time_from" value="{$Request.get._filter_time_from ? $Request.get._filter_time_from : $_filter_time.date_start}" placeholder="{$_filter_time.tips_start}">
                                                 <span class="input-group-addon"><i class="fa fa-chevron-right"></i></span>
-                                                <input class="form-control" type="text" id="_filter_time_to" name="_filter_time_to" value="{$Request.get._filter_time_to|default=''}" placeholder="{$_filter_time.tips_end}">
+                                                <input class="form-control" type="text" id="_filter_time_to" name="_filter_time_to" value="{$Request.get._filter_time_to ? $Request.get._filter_time_to : $_filter_time.date_end}" placeholder="{$_filter_time.tips_end}">
                                             </div>
                                             <input type="hidden" id="_filter_time" name="_filter_time" value="{$_filter_time.field}">
                                             <button type="button" id="btn-filter-time" class="btn btn-default">确定</button>

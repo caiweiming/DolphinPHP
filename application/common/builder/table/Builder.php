@@ -381,21 +381,52 @@ class Builder extends ZBuilder
     /**
      * 时间段过滤
      * @param string $field 字段名
-     * @param string $tips_start 开始日期提示
-     * @param string $tips_end 结束日期提示
+     * @param string|array $date 默认的开始日期和结束日期
+     * @param string|array $tips 开始日期和结束日期的提示
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addTimeFilter($field = '', $tips_start = '', $tips_end = '')
+    public function addTimeFilter($field = '', $date = '', $tips = '')
     {
         if ($field != '') {
+            $date_start = '';
+            $date_end   = '';
+            $tips_start = '开始日期';
+            $tips_end   = '结束日期';
+
+            if (!empty($date)) {
+                if (!is_array($date)) {
+                    if (strpos($date, ',')) {
+                        list($date_start, $date_end) = explode(',', $date);
+                    } else {
+                        $date_start = $date_end = $date;
+                    }
+                } else {
+                    list($date_start, $date_end) = $date;
+                }
+            }
+
+            if (!empty($tips)) {
+                if (!is_array($tips)) {
+                    if (strpos($tips, ',')) {
+                        list($tips_start, $tips_end) = explode(',', $tips);
+                    } else {
+                        $tips_start = $tips_end = $tips;
+                    }
+                } else {
+                    list($tips_start, $tips_end) = $tips;
+                }
+            }
+
             $this->_vars['_js_files'][]  = 'datepicker_js';
             $this->_vars['_css_files'][] = 'datepicker_css';
             $this->_vars['_js_init']     = json_encode(['datepicker']);
             $this->_vars['_filter_time'] = [
                 'field'      => $field,
-                'tips_start' => $tips_start = $tips_start == '' ? '开始日期' : $tips_start,
-                'tips_end'   => $tips_end   = $tips_end   == '' ? '结束日期' : $tips_end
+                'tips_start' => $tips_start,
+                'tips_end'   => $tips_end,
+                'date_start' => $date_start,
+                'date_end'   => $date_end,
             ];
         }
         return $this;
