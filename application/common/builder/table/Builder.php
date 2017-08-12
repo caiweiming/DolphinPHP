@@ -501,7 +501,7 @@ class Builder extends ZBuilder
             $form = [
                 'items'     => $items,
                 'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
-                'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
+                'validate'  => $validate === true ? ucfirst($this->_controller) : $validate,
                 'auto_time' => $auto_time,
                 'format'    => $format,
                 'go_back'   => $this->request->server('REQUEST_URI')
@@ -734,7 +734,7 @@ class Builder extends ZBuilder
             $form = [
                 'items'     => $items,
                 'table'     => $table == '' ? strtolower($this->_module . '_' . $this->_controller) : $table,
-                'validate'  => $validate == true ? ucfirst($this->_controller) : $validate,
+                'validate'  => $validate === true ? ucfirst($this->_controller) : $validate,
                 'auto_time' => $auto_time,
                 'format'    => $format,
                 'go_back'   => $this->request->server('REQUEST_URI')
