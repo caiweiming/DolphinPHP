@@ -225,7 +225,7 @@ class Plugin extends Admin
 
         // 获取后台字段信息，并分析
         if (isset($plugin->admin)) {
-            $admin = $this->parseAdmin($plugin->admin, $name);
+            $admin = $this->parseAdmin($plugin->admin);
         } else {
             $admin = $this->parseAdmin();
         }
@@ -249,7 +249,6 @@ class Plugin extends Admin
             ->setTableName($admin['table_name'])
             ->setSearch($admin['search_field'], $admin['search_title']) // 设置搜索框
             ->addOrder($admin['order'])
-            ->addFilter($admin['filter'])
             ->addTopButton('back', [
                 'title' => '返回插件列表',
                 'icon'  => 'fa fa-reply',
@@ -269,6 +268,18 @@ class Plugin extends Admin
                 foreach ($admin['custom_right_buttons'] as $custom) {
                     $builder->addRightButton('custom', $custom);
                 }
+            }
+
+            // 表头筛选
+            if (is_array($admin['filter'])) {
+                foreach ($admin['filter'] as $column => $params) {
+                    $options = isset($params[0]) ? $params[0] : [];
+                    $default = isset($params[1]) ? $params[1] : [];
+                    $type    = isset($params[2]) ? $params[2] : 'checkbox';
+                    $builder->addFilter($column, $options, $default, $type);
+                }
+            } else {
+                $builder->addFilter($admin['filter']);
             }
 
         return $builder
