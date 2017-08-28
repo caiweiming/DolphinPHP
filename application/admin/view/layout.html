@@ -74,6 +74,9 @@
     {/notempty}
     <!-- END Stylesheets -->
 
+    <!--插件css钩子-->
+    {:hook('page_plugin_css')}
+
     <!--自定义css-->
     <link rel="stylesheet" href="__ADMIN_CSS__/custom.css">
     <script>
@@ -463,6 +466,9 @@
 
 <!--页面js-->
 {block name="script"}{/block}
+
+<!--插件js钩子-->
+{:hook('page_plugin_js')}
 
 {// 额外HTML代码 }
 {$extra_html|default=''}
