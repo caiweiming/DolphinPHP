@@ -1,7 +1,7 @@
 {extend name="$_admin_base_layout" /}
 
 {block name="style"}
-<link href="__LIBS__/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
+<link href="__LIBS__/jstree/themes/default/style.min.css" rel="stylesheet" />
 {/block}
 
 {block name="content"}
@@ -33,7 +33,7 @@
                     </li>
                 </ul>
 
-                <form action="{:url('')}" name="form-builder" method="post" class="form-horizontal form-builder">
+                <form name="form-builder" id="form" class="form-horizontal form-builder">
                     <input type="hidden" name="id" value="{$info.id}">
                     <div class="block-content tab-content">
                         <div class="tab-pane fade in active push-20" id="tab1">
@@ -68,54 +68,23 @@
                             </div>
                         </div>
                         <div class="tab-pane fade auth-node" id="tab2">
-                            {notempty name="menus"}
-                            {volist name="menus" id="menu"}
-                            <div class="block block-bordered">
-                                <div class="block-header bg-gray-lighter auth-node-top">
-                                    <label class="css-input css-checkbox css-checkbox-primary">
-                                        <input type="checkbox" name="menu_auth[]" value="{$menu.id}" class="js-check-all-node" {in name="$menu['id']" value="$info['menu_auth']"}checked{/in}><span></span> <i class="{$menu.icon}"></i> {$menu.title}
-                                    </label>
-                                </div>
-                                <div class="block-content">
-                                    {notempty name="menu.child"}
-                                    {volist name="menu.child" id="submenu"}
-                                    <div class="auth-node-parent">
-                                        <div>
-                                            <label class="css-input css-checkbox css-checkbox-primary">
-                                                <input type="checkbox" name="menu_auth[]" data-parent-id="{$menu['id']}" value="{$submenu.id}" class="js-check-all-group" {in name="$submenu['id']" value="$info['menu_auth']"}checked{/in}><span></span> <i class="{$submenu.icon}"></i> {$submenu.title}
-                                            </label>
-                                        </div>
-                                        {notempty name="submenu.child"}
-                                        <div class="auth-node-child">
-                                            {php}foreach ($submenu['child'] as $submenu2):{/php}
-                                            <div class="auth-node-row">
-                                                <label class="css-input css-checkbox css-checkbox-primary">
-                                                    <input type="checkbox" name="menu_auth[]" data-parent-id="{$submenu['id']}" value="{$submenu2.id}" class="js-check-all-row" {in name="$submenu2['id']" value="$info['menu_auth']"}checked{/in}><span></span> <i class="{$submenu2.icon}"></i> {$submenu2.title}
-                                                </label>
-
-                                                {notempty name="$submenu2.child"}
-                                                <div class="auth-node-child">
-                                                    {php}foreach ($submenu2['child'] as $submenu3):{/php}
-                                                    <label class="css-input css-checkbox css-checkbox-primary push-10-r">
-                                                        <input type="checkbox" name="menu_auth[]" data-parent-id="{$submenu2['id']}" value="{$submenu3.id}" {in name="$submenu3['id']" value="$info['menu_auth']"}checked{/in}><span></span> {$submenu3.title}
-                                                    </label>
-                                                    {php}endforeach;{/php}
-                                                </div>
-                                                {/notempty}
-                                            </div>
-                                            {php}endforeach;{/php}
-                                        </div>
-                                        {/notempty}
+                            <div class="row data-table-toolbar">
+                                <div class="col-sm-12">
+                                    <div class="toolbar-btn-action">
+                                        <button title="全选" type="button" class="btn btn-info" id="check-all"><i class="fa fa-check-circle-o"></i> 全选</button>
+                                        <button title="取消全选" type="button" class="btn btn-danger" id="uncheck-all"><i class="fa fa-ban"></i> 取消全选</button>
+                                        <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>
+                                        <button title="收起所有节点" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有节点</button>
+                                        <span class="form-inline">
+                                        <input class="form-control" id="search-input" type="text" value="" placeholder="输入关键字搜索">
+                                    </span>
                                     </div>
-                                    {/volist}
-                                    {/notempty}
                                 </div>
                             </div>
-                            {/volist}
-                            {/notempty}
+                            <div id="jstree" class="push">{$menus|default=''}</div>
                         </div>
                         <div class="push-20">
-                            <button class="btn btn-minw btn-primary ajax-post" target-form="form-builder" type="submit">
+                            <button class="btn btn-minw btn-primary" type="submit">
                                 确定
                             </button>
                             <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
@@ -130,35 +99,67 @@
 {/block}
 
 {block name="script"}
+<script src="__LIBS__/jstree/jstree.min.js"></script>
 <script>
     $(document).ready(function(){
-        // 全选或反选
-        $('.js-check-all-node').change(function () {
-            $(this).closest('.block').find('.block-content input:checkbox').prop('checked',this.checked);
-        });
-        $('.js-check-all-group').change(function () {
-            $(this).closest('.auth-node-parent').find('.auth-node-child input:checkbox').prop('checked',this.checked);
-        });
-        $('.js-check-all-row').change(function () {
-            $(this).closest('.auth-node-row').find('.auth-node-child input:checkbox').prop('checked',this.checked);
+        $('#jstree').jstree({
+            plugins: ["checkbox", "search"],
+            "checkbox" : {
+                "keep_selected_style" : false,
+                "three_state" : false,
+                "cascade" : 'down+up'
+            },
+            "search" : {
+                'show_only_matches' : true,
+                'show_only_matches_children' : true
+            }
         });
 
-        // 自动选中父节点
-        var check_parent = function (id) {
-            var self = $('input:checkbox[value="'+id+'"]');
-            var pid = self.data('parent-id') || '';
-            self.prop('checked', true);
+        var to = false;
+        $('#search-input').keyup(function () {
+            if(to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#search-input').val();
+                $('#jstree').jstree(true).search(v);
+            }, 250);
+        });
+        // 全选
+        $('#check-all').click(function () {
+            $('#jstree').jstree(true).check_all();
+        });
+        // 取消全选
+        $('#uncheck-all').click(function () {
+            $('#jstree').jstree(true).uncheck_all();
+        });
+        // 展开所有
+        $('#expand-all').click(function () {
+            $('#jstree').jstree(true).open_all();
+        });
+        // 收起所有
+        $('#collapse-all').click(function () {
+            $('#jstree').jstree(true).close_all();
+        });
 
-            if (pid == '') {
-                return false;
+        // 提交表单
+        $('#form').submit(function () {
+            var form_data = $(this).serialize();
+            var auth_node = $('#jstree').jstree(true).get_checked();
+            if (auth_node.length) {
+                form_data += '&menu_auth='+auth_node.join(',');
             }
-            check_parent(pid);
-        };
-        $('input[name="menu_auth[]"]').change(function () {
-            if (this.checked) {
-                var $parnet_id = $(this).data('parent-id') || '';
-                check_parent($parnet_id);
-            }
+            $.post("{:url('')}", form_data).success(function (res) {
+                if (res.code) {
+                    Dolphin.notify(res.msg, 'success');
+                    setTimeout(function () {
+                        location.href = res.url;
+                    }, 1500);
+                } else {
+                    Dolphin.notify(res.msg, 'danger');
+                }
+            }).fail(function () {
+                Dolphin.notify('服务器发生错误~', 'danger');
+            });
+            return false;
         });
     });
 </script>

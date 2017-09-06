@@ -72,6 +72,8 @@ class Role extends Admin
             $data = $this->request->post();
             if (!isset($data['menu_auth'])) {
                 $data['menu_auth'] = [];
+            } else {
+                $data['menu_auth'] = explode(',', $data['menu_auth']);
             }
             // 验证
             $result = $this->validate($data, 'Role');
@@ -93,6 +95,7 @@ class Role extends Admin
             $modules = Db::name('admin_module')->where('status', 1)->column('name');
             $menus = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
             $menus = Tree::toLayer($menus);
+            $menus = $this->buildJsTree($menus);
 
             // 非开发模式，缓存菜单
             if (config('develop_mode') == 0) {
@@ -122,6 +125,8 @@ class Role extends Admin
             $data = $this->request->post();
             if (!isset($data['menu_auth'])) {
                 $data['menu_auth'] = [];
+            } else {
+                $data['menu_auth'] = explode(',', $data['menu_auth']);
             }
             // 验证
             $result = $this->validate($data, 'Role');
@@ -143,12 +148,46 @@ class Role extends Admin
         $role_list  = RoleModel::getTree($id, '顶级角色');
         $modules    = Db::name('admin_module')->where('status', 1)->column('name');
         $menus      = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
+        $menus      = Tree::toLayer($menus);
+        $menus      = $this->buildJsTree($menus, $info);
 
         $this->assign('page_title', '编辑');
         $this->assign('role_list', $role_list);
-        $this->assign('menus', Tree::toLayer($menus));
+        $this->assign('menus', $menus);
         $this->assign('info', $info);
         return $this->fetch('edit');
+    }
+
+    /**
+     * 构建jstree代码
+     * @param array $menus 菜单节点
+     * @param array $user 用户信息
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    private function buildJsTree($menus = [], $user = [])
+    {
+        $result = '';
+        if (!empty($menus)) {
+            $option = [
+                'opened'   => true,
+                'selected' => false,
+                'icon'     => '',
+            ];
+            foreach ($menus as $menu) {
+                $option['icon'] = $menu['icon'];
+                if (isset($user['menu_auth'])) {
+                    $option['selected'] = in_array($menu['id'], $user['menu_auth']) ? true : false;
+                }
+                if (isset($menu['child'])) {
+                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].$this->buildJsTree($menu['child'], $user).'</li>';
+                } else {
+                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].'</li>';
+                }
+            }
+        }
+
+        return '<ul>'.$result.'</ul>';
     }
 
     /**
