@@ -65,7 +65,9 @@ class Common extends Controller
             $filter         = array_filter(explode('|', $filter), 'strlen');
             $filter_content = array_filter(explode('|', $filter_content), 'strlen');
             foreach ($filter as $key => $item) {
-                $map[$item] = ['in', $filter_content[$key]];
+                if (isset($filter_content[$key])) {
+                    $map[$item] = ['in', $filter_content[$key]];
+                }
             }
         }
         return $map;
