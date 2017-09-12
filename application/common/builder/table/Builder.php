@@ -928,10 +928,11 @@ class Builder extends ZBuilder
      * @param array $fields 参与搜索的字段
      * @param string $placeholder 提示符
      * @param string $url 提交地址
+     * @param null $search_button 提交按钮
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setSearch($fields = [], $placeholder = '', $url = '')
+    public function setSearch($fields = [], $placeholder = '', $url = '', $search_button = null)
     {
         if (!empty($fields)) {
             $this->_search = [
@@ -940,7 +941,7 @@ class Builder extends ZBuilder
                 'url'         => $url,
             ];
 
-            $this->_vars['search_button'] = config('zbuilder.search_button');
+            $this->_vars['search_button'] = $search_button !== null ? $search_button : config('zbuilder.search_button');
         }
         return $this;
     }
