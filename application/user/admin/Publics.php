@@ -67,7 +67,21 @@ class Publics extends Common
                 $this->error($UserModel->getError());
             }
         } else {
-            return is_signin() ? $this->redirect('admin/index/index') : $this->fetch();
+            $hook_result = Hook::listen('signin_sso');
+            if (!empty($hook_result) && true !== $hook_result[0]) {
+                if (isset($hook_result[0]['url'])) {
+                    $this->redirect($hook_result[0]['url']);
+                }
+                if (isset($hook_result[0]['error'])) {
+                    $this->error($hook_result[0]['error']);
+                }
+            }
+
+            if (is_signin()) {
+                $this->redirect('admin/index/index');
+            } else {
+                return $this->fetch();
+            }
         }
     }
 
@@ -77,10 +91,20 @@ class Publics extends Common
      */
     public function signout()
     {
+        $hook_result = Hook::listen('signout_sso');
+        if (!empty($hook_result) && true !== $hook_result[0]) {
+            if (isset($hook_result[0]['url'])) {
+                $this->redirect($hook_result[0]['url']);
+            }
+            if (isset($hook_result[0]['error'])) {
+                $this->error($hook_result[0]['error']);
+            }
+        }
+
         session(null);
         cookie('uid', null);
         cookie('signin_token', null);
 
-        return $this->redirect('signin');
+        $this->redirect('signin');
     }
 }

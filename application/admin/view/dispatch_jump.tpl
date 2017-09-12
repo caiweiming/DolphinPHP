@@ -17,8 +17,8 @@
     <!-- Stylesheets -->
     <!-- Bootstrap and OneUI CSS framework -->
     <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css">
-    <link rel="stylesheet" id="css-main" href="__ADMIN_CSS__/oneui.css">
-    <link rel="stylesheet" id="css-main" href="__ADMIN_CSS__/dolphin.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/oneui.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css">
     <!-- END Stylesheets -->
 </head>
 <body>

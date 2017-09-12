@@ -19,6 +19,7 @@ use app\admin\model\Module as ModuleModel;
 use app\admin\model\Access as AccessModel;
 use util\Tree;
 use think\Db;
+use think\Hook;
 
 /**
  * 用户默认控制器
@@ -90,6 +91,7 @@ class Index extends Admin
             if(true !== $result) $this->error($result);
 
             if ($user = UserModel::create($data)) {
+                Hook::listen('user_add', $user);
                 // 记录行为
                 action_log('user_add', 'admin_user', $user['id'], UID);
                 $this->success('新增成功', url('index'));
@@ -148,7 +150,9 @@ class Index extends Admin
                 unset($data['password']);
             }
 
-            if ($user = UserModel::update($data)) {
+            if (UserModel::update($data)) {
+                $user = UserModel::get($data['id']);
+                Hook::listen('user_edit', $user);
                 // 记录行为
                 action_log('user_edit', 'admin_user', $user['id'], UID, get_nickname($user['id']));
                 $this->success('编辑成功', cookie('__forward__'));
@@ -323,34 +327,37 @@ class Index extends Admin
 
     /**
      * 删除用户
-     * @param array $record 行为日志
+     * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function delete($record = [])
+    public function delete($ids = [])
     {
+        Hook::listen('user_delete', $ids);
         return $this->setStatus('delete');
     }
 
     /**
      * 启用用户
-     * @param array $record 行为日志
+     * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function enable($record = [])
+    public function enable($ids = [])
     {
+        Hook::listen('user_enable', $ids);
         return $this->setStatus('enable');
     }
 
     /**
      * 禁用用户
-     * @param array $record 行为日志
+     * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function disable($record = [])
+    public function disable($ids = [])
     {
+        Hook::listen('user_disable', $ids);
         return $this->setStatus('disable');
     }
 

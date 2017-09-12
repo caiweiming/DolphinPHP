@@ -1291,3 +1291,22 @@ if (!function_exists('role_auth')) {
         session('role_menu_auth', model('user/role')->roleAuth());
     }
 }
+
+if (!function_exists('get_server_ip')) {
+    /**
+     * 获取服务器端IP地址
+     * @return array|false|string
+     */
+    function get_server_ip(){
+        if(isset($_SERVER)){
+            if($_SERVER['SERVER_ADDR']){
+                $server_ip = $_SERVER['SERVER_ADDR'];
+            }else{
+                $server_ip = $_SERVER['LOCAL_ADDR'];
+            }
+        }else{
+            $server_ip = getenv('SERVER_ADDR');
+        }
+        return $server_ip;
+    }
+}
