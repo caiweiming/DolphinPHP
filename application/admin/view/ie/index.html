@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>页面提示 - {:config('web_site_title')}</title>
+    <link rel=stylesheet type=text/css href="https://wx.gtimg.com/pay/css/common/common.css?v=20170117">
+    <link rel=stylesheet type=text/css href="https://wx.gtimg.com/pay/css/error/error.css?v=20151125">
+    <script src="https://wx.gtimg.com/third/jquery/jquery-1.7.min.js"></script>
+</head>
+<body class="browser-tips no-nav no-topbar">
+<div class="container wrap">
+    <div class="container-bd">
+        <div class="page-msg mini">
+            <div class="inner">
+                <div class="msg-ico"><i class="ico-msg-s warn"></i></div>
+                <div class="msg-cnt">
+                    <p>温馨提示：在IE浏览器环境下浏览本系统体验不够友好，建议您使用下方的浏览器访问本系统。</p>
+                </div>
+            </div>
+        </div>
+        <div class="browser-list">
+            <a class="browser-item chrome" href="http://xiazai.sogou.com/detail/34/0/6262355089742005676.html?uID=04583CB73B70900A0000000057318502&amp;w=2295" target="_blank">
+                <i class="icon-browser"></i>
+                <p class="browser-name">Chrome浏览器</p>
+            </a>
+            <a class="browser-item qq" href="http://browser.qq.com/" target="_blank">
+                <i class="icon-browser"></i>
+                <p class="browser-name">QQ浏览器</p>
+            </a>
+            <a class="browser-item sogou" href="http://ie.sogou.com/" target="_blank">
+                <i class="icon-browser"></i>
+                <p class="browser-name">搜狗浏览器</p>
+            </a>
+            <a class="browser-item firefox" href="http://www.firefox.com.cn/?igfox" target="_blank">
+                <i class="icon-browser"></i>
+                <p class="browser-name">Firefox浏览器</p>
+            </a>
+        </div>
+        <div class="browser-more">
+            <div class="browser-text">如果你正在使用的是双核浏览器，比如QQ浏览器、搜狗浏览器、猎豹浏览器、世界之窗浏览器、傲游浏览器、360浏览器等，可以使用浏览器的极速模式来继续访问本系统。<a id="access" href="javascript:void(0);">查看详情</a>
+            </div>
+            <div id="tips" class="browser-step" style="display: block;">
+                <ul>
+                    <li>方法一，点击浏览器顶部地址栏右侧的浏览器兼容模式图标，<img alt="" src="https://wx.gtimg.com/pay/img/error/ie_s.png">或<img alt="" src="https://wx.gtimg.com/pay/img/error/ie_mode.png">，切换到极速模式
+                        <p class="demo"><img alt="" src="https://wx.gtimg.com/pay/img/error/pic_ie01.png"></p>
+                    </li>
+                    <li>方法二，在当前页面中，点击鼠标右键，选择“切换到极速模式”
+                        <p class="demo"><img alt="" src="https://wx.gtimg.com/pay/img/error/pic_ie02.png"></p>
+                    </li>
+                    <li>方法三，在浏览器菜单栏中选择工具选项，打开“兼容性视图设置”，把设置框底部的“在兼容性视图显示”三个勾选框去掉
+                        <p class="demo"><img alt="" src="https://wx.gtimg.com/pay/img/error/pic_ie03.png"></p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function(){
+        var tips = document.getElementById("tips");
+        var access = document.getElementById("access");
+        var isShow = true;
+        access.onclick = function(){
+            if(!isShow){
+                tips.style.display = "block";
+                isShow = true;
+            }else{
+                tips.style.display = "none";
+                isShow = false;
+            }
+        }
+    })();
+</script>
+</body>
+</html>

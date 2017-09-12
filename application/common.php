@@ -1310,3 +1310,20 @@ if (!function_exists('get_server_ip')) {
         return $server_ip;
     }
 }
+
+if (!function_exists('get_browser_type')) {
+    /**
+     * 获取浏览器类型
+     * @return string
+     */
+    function get_browser_type(){
+        $agent = $_SERVER["HTTP_USER_AGENT"];
+        if(strpos($agent,'MSIE') !== false || strpos($agent,'rv:11.0')) return "ie";
+        if(strpos($agent,'Firefox') !== false) return "firefox";
+        if(strpos($agent,'Chrome') !== false) return "chrome";
+        if(strpos($agent,'Opera') !== false) return 'opera';
+        if((strpos($agent,'Chrome') == false) && strpos($agent,'Safari') !== false) return 'safari';
+        if(false!==strpos($_SERVER['HTTP_USER_AGENT'],'360SE')) return '360SE';
+        return 'unknown';
+    }
+}
