@@ -56,11 +56,11 @@
                                     <div class="input-group">
                                         <div class="input-group-btn">
                                             <button class="btn btn-default" id="search-btn" data-toggle="dropdown" type="button" aria-expanded="false">
-                                                搜索 <span class="caret"></span>
+                                                不限 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a tabindex="-1" href="javascript:void(0)" data-field="{$search.field_all}">搜索</a>
+                                                    <a tabindex="-1" href="javascript:void(0)" data-field="{$search.field_all}">不限</a>
                                                 </li>
                                                 {volist name="search.fields" id="field"}
                                                 <li>
@@ -69,7 +69,11 @@
                                                 {/volist}
                                             </ul>
                                         </div>
-                                        <input type="text" class="form-control" value="{:input('param.keyword', '')}" data-url="{$search.url}" id="search-input" name="keyword" placeholder="{$search.placeholder}">
+                                        <div {$search_button ?= 'class="input-group"'}>
+                                            <input type="text" class="form-control" value="{:input('param.keyword', '')}" data-url="{$search.url}" id="search-input" name="keyword" placeholder="{$search.placeholder}">
+                                            {$search_button ?= '<span class="input-group-btn"><button class="btn btn-default" id="search-submit-btn" type="button">'.($search_button === true ? "搜索" : $search_button).'</button></span>'}
+                                        </div>
+
                                     </div>
                                 </div>
                                 {/notempty}

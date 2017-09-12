@@ -36,5 +36,8 @@ return [
         'size' => 'xs',
         // 按钮样式：default/primary/success/info/warning/danger
         'style' => 'default'
-    ]
+    ],
+
+    // 搜索框
+    'search_button' => false
 ];

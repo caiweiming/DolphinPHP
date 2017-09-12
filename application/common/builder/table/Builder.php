@@ -119,6 +119,7 @@ class Builder extends ZBuilder
         'top_buttons'        => [],       // 顶部栏按钮
         'right_buttons'      => [],       // 表格右侧按钮
         'search'             => [],       // 搜索参数
+        'search_button'      => false,    // 搜索按钮
         'columns'            => [],       // 表格列集合
         'pages'              => '',       // 分页数据
         'row_list'           => [],       // 表格数据列表
@@ -938,6 +939,8 @@ class Builder extends ZBuilder
                 'placeholder' => $placeholder,
                 'url'         => $url,
             ];
+
+            $this->_vars['search_button'] = config('zbuilder.search_button');
         }
         return $this;
     }
