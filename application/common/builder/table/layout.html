@@ -194,7 +194,11 @@
 
                                         {volist name="columns" id="column"}
                                         <td class="{$column['class']|default=''}">
-                                            {$row[$column['name']]|default=''}
+                                            {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
+                                                {$row[$column['name']]|default=''}
+                                            {php}else:{/php}
+                                                {$row[$column['name'].'__'.$column['type']]|default=''}
+                                            {php}endif;{/php}
                                         </td>
                                         {/volist}
                                     </tr>

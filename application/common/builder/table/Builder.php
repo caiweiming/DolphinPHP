@@ -1095,7 +1095,7 @@ class Builder extends ZBuilder
 
     /**
      * 将表格数据转换为纯数组
-     * @param $row_list
+     * @param array|object $row_list
      * @author 蔡伟明 <314013107@qq.com>
      * @return array
      */
@@ -1451,7 +1451,7 @@ class Builder extends ZBuilder
 
                                 $url = $column['class'] == 'pop' ? $url.'?_pop=1' : $url;
 
-                                $row[$column['name']] = '<a href="'. $url .'"
+                                $row[$column['name'].'__'.$column['type']] = '<a href="'. $url .'"
                                     title="'. $row[$column['name']] .'"
                                     class="'. $column['class'] .'"
                                     target="'.$target.'">'.$row[$column['name']].'</a>';
@@ -1460,10 +1460,10 @@ class Builder extends ZBuilder
                         case 'switch': // 开关
                             switch ($row[$column['name']]) {
                                 case '0': // 关闭
-                                    $row[$column['name']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
                                     break;
                                 case '1': // 开启
-                                    $row[$column['name']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
                                     break;
                             }
                             break;
@@ -1484,21 +1484,21 @@ class Builder extends ZBuilder
                                 } else {
                                     $label = $list_status[$status];
                                 }
-                                $row[$column['name']] = '<span class="label label-'.$class.'">'.$label.'</span>';
+                                $row[$column['name'].'__'.$column['type']] = '<span class="label label-'.$class.'">'.$label.'</span>';
                             }
                             break;
                         case 'yesno': // 是/否
                             switch ($row[$column['name']]) {
                                 case '0': // 否
-                                    $row[$column['name']] = '<i class="fa fa-ban text-danger"></i>';
+                                    $row[$column['name'].'__'.$column['type']] = '<i class="fa fa-ban text-danger"></i>';
                                     break;
                                 case '1': // 是
-                                    $row[$column['name']] = '<i class="fa fa-check text-success"></i>';
+                                    $row[$column['name'].'__'.$column['type']] = '<i class="fa fa-check text-success"></i>';
                                     break;
                             }
                             break;
                         case 'text.edit': // 可编辑的单行文本
-                            $row[$column['name']] = '<a href="javascript:void(0);" 
+                            $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
                                 data-table="'.$_table_name.'" 
@@ -1507,7 +1507,7 @@ class Builder extends ZBuilder
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
                             break;
                         case 'textarea.edit': // 可编辑的多行文本
-                            $row[$column['name']] = '<a href="javascript:void(0);" 
+                            $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="textarea-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
                                 data-table="'.$_table_name.'" 
@@ -1517,7 +1517,7 @@ class Builder extends ZBuilder
                             break;
                         case 'password': // 密码框
                             $column['param'] = $column['param'] != '' ? $column['param'] : $column['name'];
-                            $row[$column['name']] = '<a href="javascript:void(0);" 
+                            $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
                                 data-table="'.$_table_name.'" 
@@ -1532,7 +1532,7 @@ class Builder extends ZBuilder
                         case 'number': // 数字
                         case 'range': // 范围
                             $column['param'] = $column['param'] != '' ? $column['param'] : $column['name'];
-                            $row[$column['name']] = '<a href="javascript:void(0);" 
+                            $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
                                 data-table="'.$_table_name.'" 
@@ -1543,16 +1543,16 @@ class Builder extends ZBuilder
                             break;
                         case 'icon': // 图标
                             if ($row[$column['name']] === '') {
-                                $row[$column['name']] = '<i class="'.$column['default'].'"></i>';
+                                $row[$column['name'].'__'.$column['type']] = '<i class="'.$column['default'].'"></i>';
                             } else {
-                                $row[$column['name']] = '<i class="'.$row[$column['name']].'"></i>';
+                                $row[$column['name'].'__'.$column['type']] = '<i class="'.$row[$column['name']].'"></i>';
                             }
                             break;
                         case 'byte': // 字节
                             if ($row[$column['name']] === '') {
-                                $row[$column['name']] = $column['default'];
+                                $row[$column['name'].'__'.$column['type']] = $column['default'];
                             } else {
-                                $row[$column['name']] = format_bytes($row[$column['name']], $column['param']);
+                                $row[$column['name'].'__'.$column['type']] = format_bytes($row[$column['name']], $column['param']);
                             }
                             break;
                         case 'date': // 日期
@@ -1568,9 +1568,9 @@ class Builder extends ZBuilder
                             // 格式
                             $format = $column['param'] == '' ? $format : $column['param'];
                             if ($row[$column['name']] == '') {
-                                $row[$column['name']] = $column['default'];
+                                $row[$column['name'].'__'.$column['type']] = $column['default'];
                             } else {
-                                $row[$column['name']] = format_time($row[$column['name']], $format);
+                                $row[$column['name'].'__'.$column['type']] = format_time($row[$column['name']], $format);
                             }
                             break;
                         case 'date.edit': // 可编辑日期时间，默认发送的是格式化好的
@@ -1587,7 +1587,7 @@ class Builder extends ZBuilder
                             $format = $column['param'] == '' ? $format : $column['param'];
                             // 时间戳
                             $timestamp = $row[$column['name']];
-                            $row[$column['name']] = '<a href="javascript:void(0);" 
+                            $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="combodate-edit" 
                                 data-format="'.$format.'" 
                                 data-name="'.$_name.'" 
@@ -1597,9 +1597,9 @@ class Builder extends ZBuilder
                                 data-type="combodate" 
                                 data-pk="'.$row['_primary_key_value'].'">';
                             if ($row[$column['name']] == '') {
-                                $row[$column['name']] .= $column['default'].'</a>';
+                                $row[$column['name'].'__'.$column['type']] .= $column['default'].'</a>';
                             } else {
-                                $row[$column['name']] .= format_moment($timestamp, $format).'</a>';
+                                $row[$column['name'].'__'.$column['type']] .= format_moment($timestamp, $format).'</a>';
                             }
 
                             // 加载moment.js
@@ -1608,14 +1608,14 @@ class Builder extends ZBuilder
                         case 'avatar': // 头像
                             break;
                         case 'img_url': // 外链图片
-                            $row[$column['name']] = '<div class="js-gallery"><a href="'.$row[$column['name']].'" class="img-link"><img class="image" src="'.$row[$column['name']].'"></a></div>';
+                            $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><a href="'.$row[$column['name']].'" class="img-link"><img class="image" src="'.$row[$column['name']].'"></a></div>';
                             break;
                         case 'picture': // 单张图片
-                            $row[$column['name']] = '<div class="js-gallery"><a href="'.get_file_path($row[$column['name']]).'" class="img-link" title="'.get_file_name($row[$column['name']]).'"><img class="image" src="'.get_file_path($row[$column['name']]).'"></a></div>';
+                            $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><a href="'.get_file_path($row[$column['name']]).'" class="img-link" title="'.get_file_name($row[$column['name']]).'"><img class="image" src="'.get_file_path($row[$column['name']]).'"></a></div>';
                             break;
                         case 'pictures': // 多张图片
                             if ($row[$column['name']] === '') {
-                                $row[$column['name']] = !empty($column['default']) ? $column['default'] : '暂无图片';
+                                $row[$column['name'].'__'.$column['type']] = !empty($column['default']) ? $column['default'] : '暂无图片';
                             } else {
                                 $list_img = is_array($row[$column['name']]) ? $row[$column['name']] : explode(',', $row[$column['name']]);
                                 $imgs = '<div class="js-gallery">';
@@ -1625,7 +1625,7 @@ class Builder extends ZBuilder
                                     }
                                     $imgs .= ' <a href="'.get_file_path($img).'" class="img-link" title="'.get_file_name($img).'"><img class="image" src="'.get_file_path($img).'"></a>';
                                 }
-                                $row[$column['name']] = $imgs.'</div>';
+                                $row[$column['name'].'__'.$column['type']] = $imgs.'</div>';
                             }
                             break;
                         case 'select': // 下拉框
@@ -1633,7 +1633,7 @@ class Builder extends ZBuilder
                                 $prepend = isset($column['default'][$row[$column['name']]]) ? $column['default'][$row[$column['name']]] : '无对应值';
                                 $class   = $prepend == '无对应值' ? 'select-edit text-danger' : 'select-edit';
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
-                                $row[$column['name']] = '<a href="javascript:void(0);" 
+                                $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                     class="'.$class.'"
                                     data-table="'.$_table_name.'" 
                                     data-type="select" 
@@ -1646,7 +1646,7 @@ class Builder extends ZBuilder
                         case 'select2': // tag编辑(有BUG)
 //                            if ($column['default']) {
 //                                $source = json_encode($column['default']);
-//                                $row[$column['name']] = '<a href="javascript:void(0);"
+//                                $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);"
 //                                    class="select2-edit"
 //                                    data-table="'.$this->_table_name.'"
 //                                    data-value="'.$row[$column['name']].'"
@@ -1670,7 +1670,7 @@ class Builder extends ZBuilder
                                 }
                             }
 
-                            $row[$column['name']] = call_user_func_array($column['default'], $params);
+                            $row[$column['name'].'__'.$column['type']] = call_user_func_array($column['default'], $params);
                             break;
                         case 'text':
                         default: // 默认
