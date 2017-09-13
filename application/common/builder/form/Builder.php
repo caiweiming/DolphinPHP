@@ -78,6 +78,23 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 模板变量赋值
+     * @param mixed $name 要显示的模板变量
+     * @param string $value 变量的值
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function assign($name, $value = '')
+    {
+        if (is_array($name)) {
+            $this->_vars = array_merge($this->_vars, $name);
+        } else {
+            $this->_vars[$name] = $value;
+        }
+        return $this;
+    }
+
+    /**
      * 设置页面标题
      * @param string $title 页面标题
      * @author 蔡伟明 <314013107@qq.com>
@@ -2007,7 +2024,7 @@ class Builder extends ZBuilder
     public function fetch($template = '', $vars = [], $replace = [], $config = [])
     {
         if (!empty($vars)) {
-            $this->_vars['form_data'] = $vars;
+            $this->_vars['form_data'] = array_merge($this->_vars['form_data'], $vars);
         }
 
         // 设置表单值
