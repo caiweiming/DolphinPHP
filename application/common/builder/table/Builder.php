@@ -1072,19 +1072,45 @@ class Builder extends ZBuilder
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setRowList($row_list = [])
+    public function setRowList($row_list = null)
     {
-        if (!empty($row_list)) {
-            if (is_array($row_list) && !empty($row_list)) {
-                $this->_vars['row_list'] = $row_list;
-            } elseif (is_object($row_list) && !$row_list->isEmpty()) {
-                $this->_vars['row_list']   = is_object(current($row_list->getIterator())) ? $row_list : $row_list->all();
+        if ($row_list !== null) {
+            $this->_vars['row_list'] = $this->toArray($row_list);
+            if (is_object($row_list) && !$row_list->isEmpty()) {
                 $this->_vars['_page_info'] = $row_list;
                 // 设置分页
                 $this->setPages($row_list->render());
             }
         }
         return $this;
+    }
+
+    /**
+     * 将表格数据转换为纯数组
+     * @param $row_list
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    private function toArray($row_list)
+    {
+        if (is_array($row_list)) {
+            if (empty($row_list)) return [];
+            if (is_object($row_list[0])) {
+                $items = [];
+                foreach ($row_list as $key => $value) {
+                    $items[$key] = $value->toArray();
+                }
+                return $items;
+            }
+            return $row_list;
+        }
+
+        if ($row_list->isEmpty()) return [];
+
+        if (is_object(current($row_list->getIterator()))) {
+            return $row_list->toArray()['data'];
+        }
+        return $row_list->all();
     }
 
     /**
