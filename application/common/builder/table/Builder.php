@@ -1082,6 +1082,14 @@ class Builder extends ZBuilder
                 $this->setPages($row_list->render());
             }
         }
+        if (empty($this->_vars['row_list'])) {
+            $params = $this->request->param();
+            if (isset($params['page'])) {
+                unset($params['page']);
+                $url = url($this->_module.'/'.$this->_controller.'/'.$this->_action).'?'.http_build_query($params);
+                $this->redirect($url);
+            }
+        }
         return $this;
     }
 
