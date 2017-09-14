@@ -458,8 +458,8 @@ class Plugin extends Admin
      */
     public function setStatus($type = '', $record = [])
     {
-        $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        if (empty($ids)) $this->error('缺少主键');
+        $ids = input('param.ids');
+        empty($ids) && $this->error('缺少主键');
 
         $plugins = PluginModel::where('id', 'in', $ids)->value('name');
         if ($plugins) {

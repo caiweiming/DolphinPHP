@@ -162,7 +162,7 @@ class Plugin extends Model
                         break;
                     case '0': // 禁用
                         $plugin['bg_color'] = 'warning';
-                        $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $plugin['id'], 'table' => 'admin_plugin']).'">启用</a> ';
+                        $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $plugin['id']]).'">启用</a> ';
                         $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger ajax-get confirm" data-tips="如果包括数据库，将同时删除数据库！" href="'.url('uninstall', ['name' => $plugin['name']]).'">卸载</a> ';
                         if (isset($plugin['config']) && $plugin['config'] != '') {
                             $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-info" href="'.url('config', ['name' => $plugin['name']]).'">设置</a> ';
@@ -175,7 +175,7 @@ class Plugin extends Model
                         break;
                     case '1': // 启用
                         $plugin['bg_color'] = 'success';
-                        $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $plugin['id'], 'table' => 'admin_plugin']).'">禁用</a> ';
+                        $plugin['actions'] = '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $plugin['id']]).'">禁用</a> ';
                         $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger ajax-get confirm" data-tips="如果包括数据库，将同时删除数据库！" href="'.url('uninstall', ['name' => $plugin['name']]).'">卸载</a> ';
                         if (isset($plugin['config']) && $plugin['config'] != '') {
                             $plugin['actions'] .= '<a class="btn btn-sm btn-noborder btn-info" href="'.url('config', ['name' => $plugin['name']]).'">设置</a> ';

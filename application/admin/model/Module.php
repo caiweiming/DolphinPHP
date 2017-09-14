@@ -168,7 +168,7 @@ class Module extends Model
                         break;
                     case '0': // 禁用
                         $module['bg_color'] = 'warning';
-                        $module['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $module['id'], 'table' => 'admin_module']).'">启用</a> ';
+                        $module['actions'] = '<a class="btn btn-sm btn-noborder btn-success ajax-get confirm" href="'.url('enable', ['ids' => $module['id']]).'">启用</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-primary" href="'.url('export', ['name' => $module['name']]).'">导出</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger" href="'.url('uninstall', ['name' => $module['name']]).'">卸载</a> ';
                         $module['status_class'] = 'text-warning';
@@ -177,7 +177,7 @@ class Module extends Model
                     case '1': // 启用
                         $module['bg_color'] = 'success';
                         $module['actions'] = '<a class="btn btn-sm btn-noborder btn-info ajax-get confirm" href="'.url('update', ['name' => $module['name']]).'">更新</a> ';
-                        $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $module['id'], 'table' => 'admin_module']).'">禁用</a> ';
+                        $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-warning ajax-get confirm" href="'.url('disable', ['ids' => $module['id']]).'">禁用</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-primary" href="'.url('export', ['name' => $module['name']]).'">导出</a> ';
                         $module['actions'] .= '<a class="btn btn-sm btn-noborder btn-danger" href="'.url('uninstall', ['name' => $module['name']]).'">卸载</a> ';
                         $module['status_class'] = 'text-success';
