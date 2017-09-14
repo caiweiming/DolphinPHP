@@ -218,6 +218,9 @@ class Builder extends ZBuilder
             if ($default != '') {
                 $this->_select_list_default[$name] = $default;
             }
+            $this->_vars['_js_files'][]  = 'select2_js';
+            $this->_vars['_css_files'][] = 'select2_css';
+            $this->_vars['_js_init'][]   = 'select2';
         }
         return $this;
     }
@@ -421,7 +424,7 @@ class Builder extends ZBuilder
 
             $this->_vars['_js_files'][]  = 'datepicker_js';
             $this->_vars['_css_files'][] = 'datepicker_css';
-            $this->_vars['_js_init']     = json_encode(['datepicker']);
+            $this->_vars['_js_init'][]   = 'datepicker';
             $this->_vars['_filter_time'] = [
                 'field'      => $field,
                 'tips_start' => $tips_start,
@@ -2040,9 +2043,20 @@ class Builder extends ZBuilder
             $this->_vars['pages'] = '';
         }
 
-        // 处理重复的js文件和css文件
-        $this->_vars['_js_files']  = array_unique($this->_vars['_js_files']);
-        $this->_vars['_css_files'] = array_unique($this->_vars['_css_files']);
+        // 处理js和css合并的参数
+        if (!empty($this->_vars['_js_files'])) {
+            $this->_vars['_js_files'] = array_unique($this->_vars['_js_files']);
+            sort($this->_vars['_js_files']);
+        }
+        if (!empty($this->_vars['_css_files'])) {
+            $this->_vars['_css_files'] = array_unique($this->_vars['_css_files']);
+            sort($this->_vars['_css_files']);
+        }
+        if (!empty($this->_vars['_js_init'])) {
+            $this->_vars['_js_init'] = array_unique($this->_vars['_js_init']);
+            sort($this->_vars['_js_init']);
+            $this->_vars['_js_init'] = json_encode($this->_vars['_js_init']);
+        }
     }
 
     /**
@@ -2061,6 +2075,10 @@ class Builder extends ZBuilder
 
         if ($template != '') {
             $this->_template = $template;
+        }
+
+        if (!empty($vars)) {
+            $this->_vars = array_merge($this->_vars, $vars);
         }
 
         // 实例化视图并渲染
