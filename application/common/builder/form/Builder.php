@@ -1608,16 +1608,10 @@ class Builder extends ZBuilder
                 $form_item['type'] = $type;
 
                 if (!empty($class->js)) {
-                    $this->_vars['extend_js_list'][$type] = [
-                        'type' => $type,
-                        'list' => $class->js
-                    ];
+                    $this->_vars['extend_js_list'][$type] = $this->parseUrl($class->js, $type);
                 }
                 if (!empty($class->css)) {
-                    $this->_vars['extend_css_list'][$type] = [
-                        'type' => $type,
-                        'list' => $class->css
-                    ];
+                    $this->_vars['extend_css_list'][$type] = $this->parseUrl($class->css, $type);
                 }
 
                 if ($this->_is_group) {
@@ -1630,6 +1624,23 @@ class Builder extends ZBuilder
             }
         }
         return $this;
+    }
+
+    /**
+     * 解析扩展表单项资源url
+     * @param array $urls 资源url
+     * @param string $type 表单项类型名称
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    private function parseUrl($urls = [], $type = '')
+    {
+        foreach ($urls as $key => $item) {
+            if (!preg_match('/__.*?__/', $item)) {
+                $urls[$key] = '__EXTEND_FORM__/'.$type.'/'.$item;
+            }
+        }
+        return $urls;
     }
 
     /**

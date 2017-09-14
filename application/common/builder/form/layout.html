@@ -320,8 +320,8 @@
     {/volist}
 
     {volist name="extend_css_list" id="vo"}
-        {volist name="vo.list" id="v"}
-        <link rel="stylesheet" href="__EXTEND_FORM__/{$vo.type}/{$v}">
+        {volist name="vo" id="v"}
+        <link rel="stylesheet" href="{$v}">
         {/volist}
     {/volist}
 
@@ -344,8 +344,8 @@
     {/volist}
 
     {volist name="extend_js_list" id="vo"}
-        {volist name="vo.list" id="v"}
-        <script src="__EXTEND_FORM__/{$vo.type}/{$v}"></script>
+        {volist name="vo" id="v"}
+        <script src="{$v}"></script>
         {/volist}
     {/volist}
 
