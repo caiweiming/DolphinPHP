@@ -501,20 +501,20 @@ INFO;
     public function setStatus($type = '', $record = [])
     {
         $ids = input('param.ids');
-        if (empty($ids)) $this->error('缺少主键');
+        empty($ids) && $this->error('缺少主键');
+
+        $module = ModuleModel::where('id', $ids)->find();
+        $module['system_module'] == 1 && $this->error('禁止操作系统内置模块');
 
         $status = $type == 'enable' ? 1 : 0;
 
         // 将模块对应的菜单禁用或启用
-        $name = ModuleModel::where('id', $ids)->value('name');
         $map = [
-            'pid' => 0,
-            'module' => $name
+            'pid'    => 0,
+            'module' => $module['name']
         ];
         MenuModel::where($map)->setField('status', $status);
-
-        $module_title = ModuleModel::where('id', $ids)->value('title');
-        return parent::setStatus($type, ['module_'.$type, 'admin_module', 0, UID, $module_title]);
+        return parent::setStatus($type, ['module_'.$type, 'admin_module', 0, UID, $module['title']]);
     }
 
     /**

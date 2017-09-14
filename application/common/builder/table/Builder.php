@@ -593,7 +593,7 @@ class Builder extends ZBuilder
     public function addTopButton($type = '', $attribute = [], $pop = false)
     {
         // 表单名，用于替换
-        $table = isset($attribute['table']) ? $attribute['table'] : '__table__';
+        $table_token = isset($attribute['table']) ? $this->createTableToken($attribute['table']) : '__table__';
 
         // 自定义字段
         $field = isset($attribute['field']) ? $attribute['field'] : '';
@@ -621,7 +621,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-check-circle-o',
                     'class'       => 'btn btn-success ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => $this->getDefaultUrl($type, ['table' => $table, 'field' => $field])
+                    'href'        => $this->getDefaultUrl($type, ['_t' => $table_token, 'field' => $field])
                 ];
                 break;
 
@@ -633,7 +633,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-ban',
                     'class'       => 'btn btn-warning ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => $this->getDefaultUrl($type, ['table' => $table, 'field' => $field])
+                    'href'        => $this->getDefaultUrl($type, ['_t' => $table_token, 'field' => $field])
                 ];
                 break;
 
@@ -656,7 +656,7 @@ class Builder extends ZBuilder
                     'icon'        => 'fa fa-times-circle-o',
                     'class'       => 'btn btn-danger ajax-post confirm',
                     'target-form' => 'ids',
-                    'href'        => $this->getDefaultUrl($type, ['table' => $table])
+                    'href'        => $this->getDefaultUrl($type, ['_t' => $table_token])
                 ];
                 break;
 
@@ -791,6 +791,26 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 创建表名Token
+     * @param string $table 表名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool|string
+     */
+    private function createTableToken($table = '')
+    {
+        $data = [
+            'table'      => $table,
+            'module'     => $this->_module,
+            'controller' => $this->_controller,
+            'action'     => $this->_action,
+        ];
+
+        $table_token = substr(sha1($this->_module.'-'.$this->_controller.'-'.$this->_action.'-'.$table), 0, 8);
+        session($table_token, $data);
+        return $table_token;
+    }
+
+    /**
      * 添加一个右侧按钮
      * @param string $type 按钮类型：edit/enable/disable/delete/custom
      * @param array $attribute 按钮属性
@@ -801,7 +821,7 @@ class Builder extends ZBuilder
     public function addRightButton($type = '', $attribute = [], $pop = false)
     {
         // 表单名，用于替换
-        $table = isset($attribute['table']) ? $attribute['table'] : '__table__';
+        $table_token = isset($attribute['table']) ? $this->createTableToken($attribute['table']) : '__table__';
 
         // 这个专门为插件准备的属性，是插件名称
         $plugin_name = isset($attribute['plugin_name']) ? $attribute['plugin_name'] : $this->_plugin_name;
@@ -826,7 +846,7 @@ class Builder extends ZBuilder
                     'title' => '启用',
                     'icon'  => 'fa fa-check',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
                 ];
                 break;
 
@@ -837,7 +857,7 @@ class Builder extends ZBuilder
                     'title' => '禁用',
                     'icon'  => 'fa fa-ban',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
                 ];
                 break;
 
@@ -848,7 +868,7 @@ class Builder extends ZBuilder
                     'title' => '删除',
                     'icon'  => 'fa fa-times',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', 'table' => $table])
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
                 ];
                 break;
 
@@ -1365,11 +1385,13 @@ class Builder extends ZBuilder
                     );
 
                     // 处理表名变量值
-                    $button['href'] = preg_replace(
-                        '/__table__/i',
-                        $this->_table_name,
-                        $button['href']
-                    );
+                    if (strpos($button['href'], '__table__') !== false) {
+                        $button['href'] = preg_replace(
+                            '/__table__/i',
+                            $this->createTableToken($this->_table_name),
+                            $button['href']
+                        );
+                    }
 
                     // 替换其他字段值
                     if (preg_match_all('/__(.*?)__/', $button['href'], $matches)) {
@@ -1445,11 +1467,7 @@ class Builder extends ZBuilder
                                         $pattern[] = '/__'. $match .'__/i';
                                         $replace_to[] = $row[$match];
                                     }
-                                    $url = preg_replace(
-                                        $pattern,
-                                        $replace_to,
-                                        $url
-                                    );
+                                    $url = preg_replace($pattern, $replace_to, $url);
                                 }
 
                                 $url = $column['class'] == 'pop' ? $url.'?_pop=1' : $url;
@@ -1463,10 +1481,10 @@ class Builder extends ZBuilder
                         case 'switch': // 开关
                             switch ($row[$column['name']]) {
                                 case '0': // 关闭
-                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
                                     break;
                                 case '1': // 开启
-                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->_table_name.'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
                                     break;
                             }
                             break;
@@ -1504,7 +1522,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$_table_name.'" 
+                                data-table="'.$this->createTableToken($_table_name).'" 
                                 data-type="text" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1513,7 +1531,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="textarea-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$_table_name.'" 
+                                data-table="'.$this->createTableToken($_table_name).'" 
                                 data-type="textarea" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1523,7 +1541,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$_table_name.'" 
+                                data-table="'.$this->createTableToken($_table_name).'" 
                                 data-type="password" 
                                 data-value="" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1538,7 +1556,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$_table_name.'" 
+                                data-table="'.$this->createTableToken($_table_name).'" 
                                 data-type="'.$column['type'].'" 
                                 data-value="'.$row[$column['name']].'" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1596,7 +1614,7 @@ class Builder extends ZBuilder
                                 data-name="'.$_name.'" 
                                 data-template="'.$format.'" 
                                 data-callback="" 
-                                data-table="'.$_table_name.'" 
+                                data-table="'.$this->createTableToken($_table_name).'" 
                                 data-type="combodate" 
                                 data-pk="'.$row['_primary_key_value'].'">';
                             if ($row[$column['name']] == '') {
@@ -1638,7 +1656,7 @@ class Builder extends ZBuilder
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
                                 $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                     class="'.$class.'"
-                                    data-table="'.$_table_name.'" 
+                                    data-table="'.$this->createTableToken($_table_name).'" 
                                     data-type="select" 
                                     data-value="'.$row[$column['name']].'" 
                                     data-source=\''.$source.'\' 
@@ -1904,11 +1922,13 @@ class Builder extends ZBuilder
         if ($this->_vars['top_buttons']) {
             foreach ($this->_vars['top_buttons'] as &$button) {
                 // 处理表名变量值
-                $button['href'] = preg_replace(
-                    '/__table__/i',
-                    $this->_table_name,
-                    $button['href']
-                );
+                if (strpos($button['href'], '__table__')) {
+                    $button['href'] = preg_replace(
+                        '/__table__/i',
+                        $this->createTableToken($this->_table_name),
+                        $button['href']
+                    );
+                }
 
                 $button['attribute'] = $this->compileHtmlAttr($button);
                 $new_button = "<a {$button['attribute']}>";

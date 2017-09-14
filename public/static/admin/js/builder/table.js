@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
         $.fn.editable.defaults.emptytext = '空值';
         // 提交时的额外参数
         $.fn.editable.defaults.params = function (params) {
-            params.table    = $(this).data('table') || '';
+            params._t       = $(this).data('table') || '';
             params.type     = $(this).data('type') || '';
             params.validate = dolphin.validate;
             params.validate_fields = dolphin.validate_fields;
@@ -311,10 +311,10 @@ jQuery(document).ready(function() {
         var $switch = $(this);
         var $data = {
             value: $switch.prop('checked'),
-            table: $switch.data('table') || '',
+            _t: $switch.data('table') || '',
             name: $switch.data('field') || '',
             type: 'switch',
-            pk: $switch.data('id') || '',
+            pk: $switch.data('id') || ''
         };
 
         // 发送ajax请求

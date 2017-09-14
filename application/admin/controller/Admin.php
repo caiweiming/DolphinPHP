@@ -18,6 +18,7 @@ use app\admin\model\Module as ModuleModel;
 use app\user\model\Role as RoleModel;
 use think\Cache;
 use think\Db;
+use think\Loader;
 use think\helper\Hash;
 
 /**
@@ -81,6 +82,38 @@ class Admin extends Common
 
         // 输出弹出层参数
         $this->assign('_pop', $this->request->param('_pop'));
+    }
+
+    /**
+     * 获取当前操作模型
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return object|\think\db\Query
+     */
+    final protected function getCurrModel()
+    {
+        $table_token = input('param._t');
+        $module      = $this->request->module();
+        $controller  = parse_name($this->request->controller());
+
+        try {
+            $Model = Loader::model($module.'/'.$controller);
+        } catch (\Exception $e) {
+            if (!session('?'.$table_token)) {
+                $this->error('参数错误');
+            }
+
+            $table_data = session($table_token);
+            $table      = $table_data['table'];
+            empty($table) && $this->error('缺少表名');
+
+            if ($table_data['module'] != $module || $table_data['controller'] != $controller) {
+                $this->error('非法操作');
+            }
+
+            $Model = Db::name($table);
+        }
+
+        return $Model;
     }
 
     /**
@@ -149,27 +182,30 @@ class Admin extends Common
      * 快速编辑
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
      */
     public function quickEdit($record = [])
     {
-        $field = input('post.name', '');
-        $value = input('post.value', '');
-        $table = input('post.table', '');
-        $type  = input('post.type', '');
-        $id    = input('post.pk', '');
-        $validate = input('post.validate', '');
+        $field           = input('post.name', '');
+        $value           = input('post.value', '');
+        $type            = input('post.type', '');
+        $id              = input('post.pk', '');
+        $validate        = input('post.validate', '');
         $validate_fields = input('post.validate_fields', '');
 
-        if ($table == '') $this->error('缺少表名');
-        if ($field == '') $this->error('缺少字段名');
-        if ($id == '') $this->error('缺少主键值');
+        $field == '' && $this->error('缺少字段名');
+        $id    == '' && $this->error('缺少主键值');
+
+        $Model = $this->getCurrModel();
+        $protect_table = [
+            '__ADMIN_USER__',
+            '__ADMIN_ROLE__',
+            config('database.prefix').'admin_user',
+            config('database.prefix').'admin_role',
+        ];
 
         // 验证是否操作管理员
-        if ($table == 'admin_user' || $table == 'admin_role') {
-            if ($id == 1) {
-                $this->error('禁止操作超级管理员');
-            }
+        if (in_array($Model->getTable(), $protect_table) && $id == 1) {
+            $this->error('禁止操作超级管理员');
         }
 
         // 验证器
@@ -197,8 +233,8 @@ class Admin extends Common
         }
 
         // 主键名
-        $pk     = Db::name($table)->getPk();
-        $result = Db::name($table)->where($pk, $id)->setField($field, $value);
+        $pk     = $Model->getPk();
+        $result = $Model->where($pk, $id)->setField($field, $value);
 
         cache('hook_plugins', null);
         cache('system_config', null);
@@ -347,35 +383,40 @@ class Admin extends Common
     public function setStatus($type = '', $record = [])
     {
         $ids   = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        $table = input('param.table');
+        $ids   = (array)$ids;
         $field = input('param.field', 'status');
 
-        if (empty($ids)) $this->error('缺少主键');
-        if (empty($table)) $this->error('缺少表名');
+        empty($ids) && $this->error('缺少主键');
 
-        // 验证是否操作管理员
-        if ($table == 'admin_user' || $table == 'admin_role' || $table == 'admin_module') {
-            if (is_array($ids) && in_array('1', $ids)) {
-                // 去掉值为1的数据，比如超级管理员，系统核心模块
-                $this->error('禁止操作');
-            } else if($ids === '1') {
-                $this->error('禁止操作');
-            }
+        $Model = $this->getCurrModel();
+        $protect_table = [
+            '__ADMIN_USER__',
+            '__ADMIN_ROLE__',
+            '__ADMIN_MODULE__',
+            config('database.prefix').'admin_user',
+            config('database.prefix').'admin_role',
+            config('database.prefix').'admin_module',
+        ];
+
+        // 禁止操作核心表的主要数据
+        if (in_array($Model->getTable(), $protect_table) && in_array('1', $ids)) {
+            $this->error('禁止操作');
         }
 
-        $pk = Db::name($table)->getPk(); // 主键名称
+        // 主键名称
+        $pk = $Model->getPk();
         $map[$pk] = ['in', $ids];
 
         $result = false;
         switch ($type) {
             case 'disable': // 禁用
-                $result = Db::name($table)->where($map)->setField($field, 0);
+                $result = $Model->where($map)->setField($field, 0);
                 break;
             case 'enable': // 启用
-                $result = Db::name($table)->where($map)->setField($field, 1);
+                $result = $Model->where($map)->setField($field, 1);
                 break;
             case 'delete': // 删除
-                $result = Db::name($table)->where($map)->delete();
+                $result = $Model->where($map)->delete();
                 break;
             default:
                 $this->error('非法操作');
