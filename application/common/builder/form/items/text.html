@@ -9,7 +9,7 @@
         <span class="input-group-addon">{$form[type].group.0|clear_js}</span>
         {/notempty}
 
-        <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="请输入{$form[type].title}" {$form[type].extra_attr|default=''}>
+        <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="{$form[type].placeholder}" {$form[type].extra_attr|default=''}>
 
         {notempty name="form[type].group.1"}
         <span class="input-group-addon">{$form[type].group.1|clear_js}</span>

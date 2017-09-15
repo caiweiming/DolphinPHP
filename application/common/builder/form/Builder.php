@@ -1029,6 +1029,11 @@ class Builder extends ZBuilder
      */
     public function addNumber($name = '', $title = '', $tips = '', $default = '', $min = '', $max = '', $step = '', $extra_attr = '', $extra_class = '')
     {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+
         $item = [
             'type'        => 'number',
             'name'        => $name,
@@ -1040,6 +1045,7 @@ class Builder extends ZBuilder
             'step'        => $step,
             'extra_class' => $extra_class,
             'extra_attr'  => $extra_attr,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
         ];
 
         if ($this->_is_group) {
@@ -1063,6 +1069,11 @@ class Builder extends ZBuilder
      */
     public function addPassword($name = '', $title = '', $tips = '', $default = '', $extra_attr = '', $extra_class = '')
     {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+
         $item = [
             'type'        => 'password',
             'name'        => $name,
@@ -1071,6 +1082,7 @@ class Builder extends ZBuilder
             'value'       => $default,
             'extra_class' => $extra_class,
             'extra_attr'  => $extra_attr,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
         ];
 
         if ($this->_is_group) {
@@ -1170,10 +1182,17 @@ class Builder extends ZBuilder
     public function addSelect($name = '', $title = '', $tips = '', $options = [], $default = '', $extra_attr = '', $extra_class = '')
     {
         $type = 'select';
+
         if ($extra_attr != '') {
             if (in_array('multiple', explode(' ', $extra_attr))) {
                 $type = 'select2';
             }
+        }
+
+        $placeholder = $type == 'select' ? '请选择一项' : '请选择一项或多项';
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
         }
 
         $item = [
@@ -1185,6 +1204,7 @@ class Builder extends ZBuilder
             'value'       => $default,
             'extra_class' => $extra_class,
             'extra_attr'  => $extra_attr,
+            'placeholder' => $placeholder,
         ];
 
         if ($this->_is_group) {
@@ -1375,6 +1395,11 @@ class Builder extends ZBuilder
      */
     public function addText($name = '', $title = '', $tips = '', $default = '', $group = [], $extra_attr = '', $extra_class = '')
     {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+
         $item = [
             'type'        => 'text',
             'name'        => $name,
@@ -1384,6 +1409,7 @@ class Builder extends ZBuilder
             'group'       => $group,
             'extra_class' => $extra_class,
             'extra_attr'  => $extra_attr,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
         ];
 
         if ($this->_is_group) {
@@ -1407,6 +1433,11 @@ class Builder extends ZBuilder
      */
     public function addTextarea($name = '', $title = '', $tips = '', $default = '', $extra_attr = '', $extra_class = '')
     {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+
         $item = [
             'type'        => 'textarea',
             'name'        => $name,
@@ -1415,6 +1446,7 @@ class Builder extends ZBuilder
             'value'       => $default,
             'extra_class' => $extra_class,
             'extra_attr'  => $extra_attr,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
         ];
 
         if ($this->_is_group) {
