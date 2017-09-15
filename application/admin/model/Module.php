@@ -61,7 +61,7 @@ class Module extends Model
             }
 
             // 不读取模块信息的目录
-            $except_module = ['common', 'admin', 'index', 'extra', 'user', 'install'];
+            $except_module = config('system.except_module');
             // 正常模块(包括已安装和未安装)
             $dirs = array_diff($dirs, $except_module);
 
