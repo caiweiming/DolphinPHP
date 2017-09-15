@@ -279,4 +279,34 @@ class Menu extends Model
         }
         return $ids;
     }
+
+    /**
+     * 获取所有父节点id
+     * @param int $id 节点id
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    public static function getParentsId($id = 0)
+    {
+        $pid  = self::where('id', $id)->value('pid');
+        $pids = [];
+        if ($pid != 0) {
+            $pids[] = $pid;
+            $pids = array_merge($pids, self::getParentsId($pid));
+        }
+        return $pids;
+    }
+
+    /**
+     * 根据节点id获取上下级的所有id
+     * @param int $id 节点id
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    public static function getLinkIds($id = 0)
+    {
+        $childs  = self::getChildsId($id);
+        $parents = self::getParentsId($id);
+        return array_merge((array)(int)$id, $childs, $parents);
+    }
 }

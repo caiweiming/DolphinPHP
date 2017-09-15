@@ -14,6 +14,7 @@ namespace app\admin\controller;
 use app\common\builder\ZBuilder;
 use app\admin\model\Module as ModuleModel;
 use app\admin\model\Menu as MenuModel;
+use app\user\model\Role as RoleModel;
 use think\Cache;
 
 /**
@@ -108,6 +109,10 @@ class Menu extends Admin
                     unset($data['params']);
                     $this->createChildNode($data, $menu['id']);
                 }
+                // 添加角色权限
+                if (isset($data['role'])) {
+                    $this->setRoleMenu($menu['id'], $data['role']);
+                }
                 Cache::clear();
                 // 记录行为
                 $details = '所属模块('.$data['module'].'),所属节点ID('.$data['pid'].'),节点标题('.$data['title'].'),节点链接('.$data['url_value'].')';
@@ -134,6 +139,7 @@ class Menu extends Admin
                 "可留空，如果是模块链接，请填写<code>模块/控制器/操作</code>，如：<code>admin/menu/add</code>。如果是普通链接，则直接填写url地址，如：<code>http://www.dolphinphp.com</code>"
             )
             ->addText('params', '参数', '如：a=1&b=2')
+            ->addSelect('role', '角色', '除超级管理员外，拥有该节点权限的角色', RoleModel::where('id', 'neq', 1)->column('id,name'), '', 'multiple')
             ->addRadio('auto_create', '自动添加子节点', '选择【是】则自动添加指定的子节点', ['否', '是'], 0)
             ->addCheckbox('child_node', '子节点', '仅上面选项为【是】时起作用', ['add' => '新增', 'edit' => '编辑', 'delete' => '删除', 'enable' => '启用', 'disable' => '禁用', 'quickedit' => '快速编辑'], 'add,edit,delete,enable,disable,quickedit')
             ->addRadio('url_target', '打开方式', '', ['_self' => '当前窗口', '_blank' => '新窗口'], '_self')
@@ -168,6 +174,9 @@ class Menu extends Admin
                 $this->error('顶级节点的节点链接不能为空');
             }
 
+            // 设置角色权限
+            $this->setRoleMenu($data['id'], isset($data['role']) ? $data['role'] : []);
+
             // 验证是否更改所属模块，如果是，则该节点的所有子孙节点的模块都要修改
             $map['id'] = $data['id'];
             $map['module'] = $data['module'];
@@ -188,6 +197,8 @@ class Menu extends Admin
 
         // 获取数据
         $info = MenuModel::get($id);
+        // 拥有该节点权限的角色
+        $info['role'] = RoleModel::getRoleWithMenu($id);
 
         // 使用ZBuilder快速创建表单
         return ZBuilder::make('form')
@@ -204,12 +215,94 @@ class Menu extends Admin
                 "可留空，如果是模块链接，请填写<code>模块/控制器/操作</code>，如：<code>admin/menu/add</code>。如果是普通链接，则直接填写url地址，如：<code>http://www.dolphinphp.com</code>"
             )
             ->addText('params', '参数', '如：a=1&b=2')
+            ->addSelect('role', '角色', '除超级管理员外，拥有该节点权限的角色', RoleModel::where('id', 'neq', 1)->column('id,name'), '', 'multiple')
             ->addRadio('url_target', '打开方式', '', ['_self' => '当前窗口', '_blank' => '新窗口'], '_self')
             ->addIcon('icon', '图标', '导航图标')
             ->addRadio('online_hide', '网站上线后隐藏', '关闭开发模式后，则隐藏该菜单节点', ['否', '是'])
             ->addText('sort', '排序', '', 100)
             ->setFormData($info)
             ->fetch();
+    }
+
+    /**
+     * 设置角色权限
+     * @param string $role_id 角色id
+     * @param array $roles 角色id
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    private function setRoleMenu($role_id = '', $roles = [])
+    {
+        $RoleModel = new RoleModel();
+
+        // 该节点的所有子节点，包括本身节点
+        $menu_child   = MenuModel::getChildsId($role_id);
+        $menu_child[] = (int)$role_id;
+        // 该节点的所有上下级节点
+        $menu_all = MenuModel::getLinkIds($role_id);
+        $menu_all = array_map('strval', $menu_all);
+
+        if (!empty($roles)) {
+            // 拥有该节点的所有角色id及节点权限
+            $role_menu_auth = RoleModel::getRoleWithMenu($role_id, true);
+            // 已有该节点权限的角色id
+            $role_exists = array_keys($role_menu_auth);
+            // 新节点权限的角色
+            $role_new = $roles;
+            // 原有权限角色差集
+            $role_diff = array_diff($role_exists, $role_new);
+            // 新权限角色差集
+            $role_diff_new = array_diff($role_new, $role_exists);
+            // 新节点角色权限
+            $role_new_auth = RoleModel::getAuthWithRole($roles);
+
+            // 删除原先角色的该节点权限
+            if ($role_diff) {
+                $role_del_auth = [];
+                foreach ($role_diff as $role) {
+                    $auth     = json_decode($role_menu_auth[$role], true);
+                    $auth_new = array_diff($auth, $menu_child);
+                    $role_del_auth[] = [
+                        'id'        => $role,
+                        'menu_auth' => array_values($auth_new)
+                    ];
+                }
+                if ($role_del_auth) {
+                    $RoleModel->saveAll($role_del_auth);
+                }
+            }
+
+            // 新增权限角色
+            if ($role_diff_new) {
+                $role_update_auth = [];
+                foreach ($role_new_auth as $role => $auth) {
+                    $auth = json_decode($auth, true);
+                    if (in_array($role, $role_diff_new)) {
+                        $auth = array_unique(array_merge($auth, $menu_all));
+                    }
+                    $role_update_auth[] = [
+                        'id'        => $role,
+                        'menu_auth' => array_values($auth)
+                    ];
+                }
+                if ($role_update_auth) {
+                    $RoleModel->saveAll($role_update_auth);
+                }
+            }
+        } else {
+            $role_menu_auth = RoleModel::getRoleWithMenu($role_id, true);
+            $role_del_auth  = [];
+            foreach ($role_menu_auth as $role => $auth) {
+                $auth     = json_decode($auth, true);
+                $auth_new = array_diff($auth, $menu_child);
+                $role_del_auth[] = [
+                    'id'        => $role,
+                    'menu_auth' => array_values($auth_new)
+                ];
+            }
+            if ($role_del_auth) {
+                $RoleModel->saveAll($role_del_auth);
+            }
+        }
     }
 
     /**

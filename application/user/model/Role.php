@@ -145,4 +145,31 @@ class Role extends Model
         }
         return $menu_auth;
     }
+
+    /**
+     * 根据节点id获取所有角色id和权限
+     * @param string $menu_id 节点id
+     * @param bool $menu_auth 是否返回所有节点权限
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    public static function getRoleWithMenu($menu_id = '', $menu_auth = false)
+    {
+        if ($menu_auth) {
+            return self::where('menu_auth', 'like', '%"'.$menu_id.'"%')->column('id,menu_auth');
+        } else {
+            return self::where('menu_auth', 'like', '%"'.$menu_id.'"%')->column('id');
+        }
+    }
+
+    /**
+     * 根据角色id获取权限
+     * @param array $role 角色id
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return array
+     */
+    public static function getAuthWithRole($role = [])
+    {
+        return self::where('id', 'in', $role)->column('id,menu_auth');
+    }
 }
