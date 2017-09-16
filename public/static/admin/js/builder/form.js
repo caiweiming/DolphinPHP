@@ -685,6 +685,7 @@ jQuery(document).ready(function() {
                     '</a>'+
                     '<div class="info">' + file.name + '</div>' +
                     '<i class="fa fa-times-circle remove-picture"></i>' +
+                    ($multiple ? '<i class="fa fa-fw fa-arrows move-picture"></i>' : '') +
                     '<div class="progress progress-mini remove-margin active" style="display: none">' +
                     '<div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>' +
                     '</div>' +
@@ -740,6 +741,10 @@ jQuery(document).ready(function() {
 
             $li.find('.file-state').html('<div class="bg-'+response.class+'">'+response.info+'</div>');
             $li.find('a.img-link').attr('href', response.path);
+
+            setTimeout(function () {
+                $li.find('.file-state').remove();
+            }, 1500);
 
             // 文件上传成功后的自定义回调函数
             if (window['dp_image_upload_success'] !== undefined) window['dp_image_upload_success']();
@@ -815,6 +820,21 @@ jQuery(document).ready(function() {
 
         // 将上传实例存起来
         webuploader.push(uploader);
+
+        // 如果是多图上传，则实例化拖拽
+        if ($multiple) {
+            $file_list.sortable({
+                connectWith: ".uploader-list",
+                handle: '.move-picture',
+                stop: function () {
+                    var ids = [];
+                    $file_list.find('.remove-picture').each(function () {
+                        ids.push($(this).data('id'));
+                    });
+                    $input_file.val(ids.join(','));
+                }
+            }).disableSelection();
+        }
     });
 
     // 排序

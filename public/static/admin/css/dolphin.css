@@ -71,10 +71,27 @@ div.tagsinput {
     font-size: 18px;
     color: #CA4949;
     cursor: pointer;
+    display: none;
     z-index: 5;
 }
 .file-item.thumbnail .remove-picture:hover{
     color: #EC6969;
+}
+.file-item.thumbnail .move-picture{
+    background: gainsboro;
+    padding: 2px;
+    cursor: move;
+    color: #ABABAB;
+    position: absolute;
+    left: -6px;
+    top: -5px;
+    border-radius: 50%;
+    display: none;
+    z-index: 5;
+}
+.file-item.thumbnail:hover .remove-picture,
+.file-item.thumbnail:hover .move-picture{
+    display: block;
 }
 .file-item .progress.progress-xs{
     margin-bottom: 5px;

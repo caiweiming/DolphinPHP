@@ -1886,10 +1886,11 @@ class Builder extends ZBuilder
                     $this->_vars['_js_files'][] = 'editormd_js';
                     $this->_vars['_editormd']   = '1';
                     break;
+                case 'images':
+                    $this->_vars['_js_files'][]  = 'jqueryui_js';
                 case 'file':
                 case 'files':
                 case 'image':
-                case 'images':
                     $this->_vars['_js_files'][]  = 'webuploader_js';
                     $this->_vars['_css_files'][] = 'webuploader_css';
                     break;

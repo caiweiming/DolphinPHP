@@ -130,5 +130,8 @@ return [
     ],
     'summernote_css' => [ // summernote编辑器
         "__LIBS__/summernote/summernote.min.css",
+    ],
+    'jqueryui_js' => [ // jqueryui
+        "__LIBS__/jquery-ui/jquery-ui.min.js",
     ]
 ];

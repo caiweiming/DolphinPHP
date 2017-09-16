@@ -134,5 +134,8 @@ return [
     ],
     'summernote_css' => [ // summernote编辑器
         $libs_path. "summernote/summernote.min.css",
+    ],
+    'jqueryui_js' => [ // jqueryui
+        $libs_path. "jquery-ui/jquery-ui.min.js",
     ]
 ];
