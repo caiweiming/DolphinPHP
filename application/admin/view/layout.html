@@ -132,7 +132,7 @@
                     <i class="fa fa-times"></i>
                 </button>
                 <span>
-                    <img class="img-avatar img-avatar32" src="__ADMIN_IMG__/avatar.jpg" alt="">
+                    <img class="img-avatar img-avatar32" src="{$Think.session.user_auth.uid|get_avatar}" alt="">
                     <span class="font-w600 push-10-l">{:session('user_auth.username')}</span>
                 </span>
             </div>
@@ -259,7 +259,7 @@
             <li>
                 <div class="btn-group">
                     <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                        <img src="{$Think.session.user_auth.avatar|get_avatar}" alt="{:session('user_auth.username')}">
+                        <img src="{$Think.session.user_auth.uid|get_avatar}" alt="{:session('user_auth.username')}">
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
