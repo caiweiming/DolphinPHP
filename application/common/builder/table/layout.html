@@ -205,12 +205,14 @@
                                     {/volist}
 
                                     {empty name="row_list"}
+                                    {notempty name="empty_tips"}
                                     <tr class="table-empty">
                                         {php}$colspan = count($columns)+1{/php}
                                         <td class="text-center empty-info" colspan="{$colspan}">
-                                            <i class="fa fa-database"></i> 暂无数据<br>
+                                            <i class="fa fa-database"></i> {$empty_tips}<br>
                                         </td>
                                     </tr>
+                                    {/notempty}
                                     {/empty}
                                 </tbody>
                             </table>

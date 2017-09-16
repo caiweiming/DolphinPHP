@@ -60,6 +60,7 @@ class Builder extends ZBuilder
         'extend_js_list'  => [],    // 扩展表单项js列表
         'extend_css_list' => [],    // 扩展表单项css列表
         '_method'         => 'post',// 表单提交方式
+        'empty_tips'      => '暂无数据',// 没有表单项时的提示信息
     ];
 
     /**

@@ -133,6 +133,7 @@ class Builder extends ZBuilder
         '_css_files'         => [],       // css文件
         '_select_list'       => [],       // 顶部下拉菜单列表
         '_filter_time'       => [],       // 时间段筛选
+        'empty_tips'         => '暂无数据', // 没有数据时的提示信息
     ];
 
     /**
@@ -150,6 +151,23 @@ class Builder extends ZBuilder
         // 默认加载快速编辑所需js和css
         $this->_vars['_js_files'][]  = 'editable_js';
         $this->_vars['_css_files'][] = 'editable_css';
+    }
+
+    /**
+     * 模板变量赋值
+     * @param mixed $name 要显示的模板变量
+     * @param string $value 变量的值
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function assign($name, $value = '')
+    {
+        if (is_array($name)) {
+            $this->_vars = array_merge($this->_vars, $name);
+        } else {
+            $this->_vars[$name] = $value;
+        }
+        return $this;
     }
 
     /**
