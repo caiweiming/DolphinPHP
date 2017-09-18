@@ -36,7 +36,7 @@ class Attachment extends Admin
         // 数据列表
         $data_list = AttachmentModel::where($map)->order('sort asc,id desc')->paginate();
         foreach ($data_list as $key => &$value) {
-            if (in_array($value['ext'], ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
+            if (in_array(strtolower($value['ext']), ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
                 if ($value['driver'] == 'local') {
                     $thumb = $value['thumb'] != '' ? $value['thumb'] : $value['path'];
                     $value['type'] = '<a class="img-link" href="'. PUBLIC_PATH . $value['path'].'"
