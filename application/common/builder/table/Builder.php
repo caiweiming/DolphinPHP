@@ -99,6 +99,11 @@ class Builder extends ZBuilder
     private $_tr_class = [];
 
     /**
+     * @var int 前缀模式:0-不含表前缀，1-含表前缀，2-使用模型
+     */
+    private $_prefix = 1;
+
+    /**
      * @var array 模板变量
      */
     private $_vars = [
@@ -611,7 +616,15 @@ class Builder extends ZBuilder
     public function addTopButton($type = '', $attribute = [], $pop = false)
     {
         // 表单名，用于替换
-        $table_token = isset($attribute['table']) ? $this->createTableToken($attribute['table']) : '__table__';
+        if (isset($attribute['table'])) {
+            if (isset($attribute['prefix'])) {
+                $table_token = $this->createTableToken($attribute['table'], $attribute['prefix']);
+            } else {
+                $table_token = $this->createTableToken($attribute['table'], $this->_prefix);
+            }
+        } else {
+            $table_token = '__table__';
+        }
 
         // 自定义字段
         $field = isset($attribute['field']) ? $attribute['field'] : '';
@@ -811,13 +824,15 @@ class Builder extends ZBuilder
     /**
      * 创建表名Token
      * @param string $table 表名
+     * @param int $prefix 前缀类型：0使用Db类(不添加表前缀)，1使用Db类(添加表前缀)，2使用模型
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool|string
      */
-    private function createTableToken($table = '')
+    private function createTableToken($table = '', $prefix = 1)
     {
         $data = [
-            'table'      => $table,
+            'table'      => $table, // 表名或模型名
+            'prefix'     => $prefix,
             'module'     => $this->_module,
             'controller' => $this->_controller,
             'action'     => $this->_action,
@@ -839,7 +854,15 @@ class Builder extends ZBuilder
     public function addRightButton($type = '', $attribute = [], $pop = false)
     {
         // 表单名，用于替换
-        $table_token = isset($attribute['table']) ? $this->createTableToken($attribute['table']) : '__table__';
+        if (isset($attribute['table'])) {
+            if (isset($attribute['prefix'])) {
+                $table_token = $this->createTableToken($attribute['table'], $attribute['prefix']);
+            } else {
+                $table_token = $this->createTableToken($attribute['table'], $this->_prefix);
+            }
+        } else {
+            $table_token = '__table__';
+        }
 
         // 这个专门为插件准备的属性，是插件名称
         $plugin_name = isset($attribute['plugin_name']) ? $attribute['plugin_name'] : $this->_plugin_name;
@@ -1035,14 +1058,24 @@ class Builder extends ZBuilder
 
     /**
      * 设置数据库表名
-     * @param string $table 数据库表名，不含前缀
+     * @param string $table 数据库表名，不含前缀，如果为true则使用模型方式
+     * @param int $prefix 前缀类型：0使用Db类(不添加表前缀)，1使用Db类(添加表前缀)，2使用模型
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setTableName($table = '')
+    public function setTableName($table = '', $prefix = 1)
     {
-        if ($table != '') {
-            $this->_table_name = $table;
+        if ($table === true) {
+            $this->_prefix     = 2;
+            $this->_table_name = strtolower($this->_module.'/'.$this->_controller);
+        } else {
+            $this->_prefix = $prefix === true ? 2 : $prefix;
+
+            if ($this->_prefix == 2) {
+                $this->_table_name = strpos($table, '/') ? $table : strtolower($this->_module.'/'.$table);
+            } else {
+                $this->_table_name = $table;
+            }
         }
         return $this;
     }
@@ -1074,13 +1107,27 @@ class Builder extends ZBuilder
      */
     public function addColumn($name = '', $title = '', $type = '', $default = '', $param = '', $class = '')
     {
+        $field = $name;
+        $table = $this->_table_name;
+
+        // 判断是否有字段别名
+        if (strpos($name, '|')) {
+            list($name, $field) = explode('|', $name);
+            // 判断是否有表名
+            if (strpos($field, '.')) {
+                list($table, $field) = explode('.', $field);
+            }
+        }
+
         $column = [
             'name'    => $name,
             'title'   => $title,
             'type'    => $type,
             'default' => $default,
             'param'   => $param,
-            'class'   => $class
+            'class'   => $class,
+            'field'   => $field,
+            'table'   => $table,
         ];
 
         $args   = array_slice(func_get_args(), 6);
@@ -1406,7 +1453,7 @@ class Builder extends ZBuilder
                     if (strpos($button['href'], '__table__') !== false) {
                         $button['href'] = preg_replace(
                             '/__table__/i',
-                            $this->createTableToken($this->_table_name),
+                            $this->createTableToken($this->_table_name, $this->_prefix),
                             $button['href']
                         );
                     }
@@ -1450,17 +1497,8 @@ class Builder extends ZBuilder
                 $row['_primary_key_value'] = isset($row[$this->_vars['primary_key']]) ? $row[$this->_vars['primary_key']] : '';
 
                 foreach ($this->_vars['columns'] as $column) {
-                    $_name       = $column['name'];
-                    $_table_name = $this->_table_name;
-
-                    // 判断是否有字段别名
-                    if (strpos($column['name'], '|')) {
-                        list($column['name'], $_name) = explode('|', $column['name']);
-                        // 判断是否有表名
-                        if (strpos($_name, '.')) {
-                            list($_table_name, $_name) = explode('.', $_name);
-                        }
-                    }
+                    $_name       = $column['field'];
+                    $_table_name = $column['table'];
 
                     // 如果需要显示编号
                     if ($column['name'] == '__INDEX__') {
@@ -1482,7 +1520,7 @@ class Builder extends ZBuilder
                                 $target     = $column['param'] == '' ? '_self' : $column['param'];
                                 if (preg_match_all('/__(.*?)__/', $column['default'], $matches)) {
                                     foreach ($matches[1] as $match) {
-                                        $pattern[] = '/__'. $match .'__/i';
+                                        $pattern[]    = '/__'. $match .'__/i';
                                         $replace_to[] = $row[$match];
                                     }
                                     $url = preg_replace($pattern, $replace_to, $url);
@@ -1499,10 +1537,10 @@ class Builder extends ZBuilder
                         case 'switch': // 开关
                             switch ($row[$column['name']]) {
                                 case '0': // 关闭
-                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name, $this->_prefix).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'"><span></span></label>';
                                     break;
                                 case '1': // 开启
-                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
+                                    $row[$column['name'].'__'.$column['type']] = '<label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" data-table="'.$this->createTableToken($this->_table_name, $this->_prefix).'" data-id="'.$row['_primary_key_value'].'" data-field="'.$column['name'].'" checked=""><span></span></label>';
                                     break;
                             }
                             break;
@@ -1540,7 +1578,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name).'" 
+                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                 data-type="text" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1549,7 +1587,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="textarea-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name).'" 
+                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                 data-type="textarea" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1559,7 +1597,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name).'" 
+                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                 data-type="password" 
                                 data-value="" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1574,7 +1612,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name).'" 
+                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                 data-type="'.$column['type'].'" 
                                 data-value="'.$row[$column['name']].'" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1632,7 +1670,7 @@ class Builder extends ZBuilder
                                 data-name="'.$_name.'" 
                                 data-template="'.$format.'" 
                                 data-callback="" 
-                                data-table="'.$this->createTableToken($_table_name).'" 
+                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                 data-type="combodate" 
                                 data-pk="'.$row['_primary_key_value'].'">';
                             if ($row[$column['name']] == '') {
@@ -1674,7 +1712,7 @@ class Builder extends ZBuilder
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
                                 $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                     class="'.$class.'"
-                                    data-table="'.$this->createTableToken($_table_name).'" 
+                                    data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
                                     data-type="select" 
                                     data-value="'.$row[$column['name']].'" 
                                     data-source=\''.$source.'\' 
@@ -1696,6 +1734,8 @@ class Builder extends ZBuilder
 //                            }
                             break;
                         case 'callback': // 调用回调方法
+                            unset($column['field']);
+                            unset($column['table']);
                             $params = array_slice($column, 4);
                             $params = array_filter($params, function($v){return $v !== '';});
 
@@ -1943,7 +1983,7 @@ class Builder extends ZBuilder
                 if (strpos($button['href'], '__table__')) {
                     $button['href'] = preg_replace(
                         '/__table__/i',
-                        $this->createTableToken($this->_table_name),
+                        $this->createTableToken($this->_table_name, $this->_prefix),
                         $button['href']
                     );
                 }

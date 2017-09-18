@@ -91,26 +91,32 @@ class Admin extends Common
      */
     final protected function getCurrModel()
     {
-        $table_token = input('param._t');
+        $table_token = input('param._t', '');
         $module      = $this->request->module();
         $controller  = parse_name($this->request->controller());
 
-        try {
-            $Model = Loader::model($module.'/'.$controller);
-        } catch (\Exception $e) {
-            if (!session('?'.$table_token)) {
-                $this->error('参数错误');
+        $table_token == '' && $this->error('缺少参数');
+        !session('?'.$table_token) && $this->error('参数错误');
+
+        $table_data = session($table_token);
+        $table      = $table_data['table'];
+
+        $Model = null;
+        if ($table_data['prefix'] == 2) {
+            // 使用模型
+            try {
+                $Model = Loader::model($table);
+            } catch (\Exception $e) {
+                $this->error('找不到模型：'.$table);
             }
-
-            $table_data = session($table_token);
-            $table      = $table_data['table'];
-            empty($table) && $this->error('缺少表名');
-
+        } else {
+            // 使用DB类
+            $table == '' && $this->error('缺少表名');
             if ($table_data['module'] != $module || $table_data['controller'] != $controller) {
                 $this->error('非法操作');
             }
 
-            $Model = Db::name($table);
+            $Model = $table_data['prefix'] == 0 ? Db::table($table) : Db::name($table);
         }
 
         return $Model;
