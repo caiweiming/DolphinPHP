@@ -1191,7 +1191,7 @@ class Builder extends ZBuilder
     {
         if (is_array($row_list)) {
             if (empty($row_list)) return [];
-            if (is_object($row_list[0])) {
+            if (is_object(current($row_list))) {
                 $items = [];
                 foreach ($row_list as $key => $value) {
                     $items[$key] = $value->toArray();

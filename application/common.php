@@ -1267,7 +1267,7 @@ if (!function_exists('extend_form_item')) {
      */
     function extend_form_item($form = [], $_layout = []) {
         if (!isset($form['type'])) return '';
-        if (!empty($_layout && isset($_layout[$form['name']]))) {
+        if (!empty($_layout) && isset($_layout[$form['name']])) {
             $form['_layout'] = $_layout[$form['name']];
         }
 
