@@ -28,16 +28,17 @@ class Attachment extends Model
     /**
      * 根据附件id获取路径
      * @param  string|array $id 附件id
+     * @param  int $type 类型：0-补全目录，1-直接返回数据库记录的地址
      * @return string|array     路径
      */
-    public function getFilePath($id = '')
+    public function getFilePath($id = '', $type = 0)
     {
         if (is_array($id)) {
             $data_list = $this->where('id', 'in', $id)->select();
             $paths = [];
             foreach ($data_list as $key => $value) {
                 if ($value['driver'] == 'local') {
-                    $paths[$key] = PUBLIC_PATH.$value['path'];
+                    $paths[$key] = ($type == 0 ? PUBLIC_PATH : '').$value['path'];
                 } else {
                     $paths[$key] = $value['path'];
                 }
@@ -47,7 +48,7 @@ class Attachment extends Model
             $data = $this->where('id', $id)->find();
             if ($data) {
                 if ($data['driver'] == 'local') {
-                    return PUBLIC_PATH.$data['path'];
+                    return ($type == 0 ? PUBLIC_PATH : '').$data['path'];
                 } else {
                     return $data['path'];
                 }

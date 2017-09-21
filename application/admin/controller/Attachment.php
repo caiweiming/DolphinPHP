@@ -644,7 +644,7 @@ class Attachment extends Admin
      */
     private function create_water($file = '')
     {
-        $path = model('admin/attachment')->getFilePath(config('upload_thumb_water_pic'));
+        $path = model('admin/attachment')->getFilePath(config('upload_thumb_water_pic'), 1);
         $thumb_water_pic = realpath(ROOT_PATH . 'public/' . $path);
 
         // 读取图片
