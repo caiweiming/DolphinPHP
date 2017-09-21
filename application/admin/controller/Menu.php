@@ -485,27 +485,52 @@ class Menu extends Admin
      * 启用节点
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return void
      */
     public function enable($record = [])
     {
         $id      = input('param.ids');
         $menu    = MenuModel::where('id', $id)->find();
         $details = '节点ID('.$id.'),节点标题('.$menu['title'].'),节点链接('.$menu['url_value'].')';
-        return $this->setStatus('enable', ['menu_enable', 'admin_menu', $id, UID, $details]);
+        $this->setStatus('enable', ['menu_enable', 'admin_menu', $id, UID, $details]);
     }
 
     /**
      * 禁用节点
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return void
      */
     public function disable($record = [])
     {
         $id      = input('param.ids');
         $menu    = MenuModel::where('id', $id)->find();
         $details = '节点ID('.$id.'),节点标题('.$menu['title'].'),节点链接('.$menu['url_value'].')';
-        return $this->setStatus('disable', ['menu_disable', 'admin_menu', $id, UID, $details]);
+        $this->setStatus('disable', ['menu_disable', 'admin_menu', $id, UID, $details]);
+    }
+
+    /**
+     * 设置状态
+     * @param string $type 类型
+     * @param array $record 行为日志
+     * @author 小乌 <82950492@qq.com>
+     * @return void
+     */
+    public function setStatus($type = '', $record = [])
+    {
+        $id = input('param.ids');
+
+        $status = $type == 'enable' ? 1 : 0;
+
+        if (false !== MenuModel::where('id', $id)->setField('status', $status)) {
+            Cache::clear();
+            // 记录行为日志
+            if (!empty($record)) {
+                call_user_func_array('action_log', $record);
+            }
+            $this->success('操作成功');
+        } else {
+            $this->error('操作失败');
+        }
     }
 }
