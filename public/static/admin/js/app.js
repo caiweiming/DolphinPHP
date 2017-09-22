@@ -1089,9 +1089,13 @@ var App = function() {
      */
     var uiHelperSelect2 = function(){
         // Init Select2 (with .js-select2 class)
-        jQuery('.js-select2').select2({
-            width: "100%", //设置下拉框的宽度
-            language: "zh-CN"
+        jQuery('.js-select2').each(function () {
+            var $select2 = jQuery(this);
+            var $width = $select2.data('width') || '100%';
+            $select2.select2({
+                width: $width, //设置下拉框的宽度
+                language: "zh-CN"
+            });
         });
     };
 
