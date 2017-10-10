@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
         var $switch = $(this);
         var $data = {
             value: $switch.prop('checked'),
-            table: $switch.data('table') || '',
+            _t: $switch.data('table') || '',
             name: $switch.data('field') || '',
             type: 'switch',
             pk: $switch.data('id') || ''
@@ -19,12 +19,12 @@ jQuery(document).ready(function() {
         Dolphin.loading();
         $.post(dolphin.aside_edit_url, $data).success(function(res) {
             Dolphin.loading('hide');
-            if (1 != res.code) {
+            if (res.code) {
+                Dolphin.notify(res.msg, 'success');
+            } else {
                 Dolphin.notify(res.msg, 'danger');
                 $switch.prop('checked', !$data.status);
                 return false;
-            } else {
-                Dolphin.notify(res.msg, 'success');
             }
         }).fail(function () {
             Dolphin.loading('hide');

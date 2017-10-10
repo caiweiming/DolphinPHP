@@ -66,12 +66,21 @@ class Admin extends Common
             // 获取面包屑导航
             $this->assign('_location', MenuModel::getLocation('', true));
             // 构建侧栏
+            $data = [
+                'table'      => 'admin_config', // 表名或模型名
+                'prefix'     => 1,
+                'module'     => 'admin',
+                'controller' => 'system',
+                'action'     => 'quickedit',
+            ];
+            $table_token = substr(sha1('_aside'), 0, 8);
+            session($table_token, $data);
             $settings = [
                 [
                     'title'   => '站点开关',
                     'tips'    => '站点关闭后将不能访问',
                     'checked' => Db::name('admin_config')->where('id', 1)->value('value'),
-                    'table'   => 'admin_config',
+                    'table'   => $table_token,
                     'id'      => 1,
                     'field'   => 'value'
                 ]
