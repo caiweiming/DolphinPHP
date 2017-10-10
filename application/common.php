@@ -11,6 +11,8 @@
 
 use think\Db;
 use think\View;
+use app\user\model\User;
+
 // 应用公共文件
 
 if (!function_exists('is_signin')) {
@@ -21,7 +23,49 @@ if (!function_exists('is_signin')) {
      */
     function is_signin()
     {
-        return model('user/user')->isLogin();
+        $user = session('user_auth');
+        if (empty($user)) {
+            // 判断是否记住登录
+            if (cookie('?uid') && cookie('?signin_token')) {
+                $UserModel = new User();
+                $user = $UserModel::get(cookie('uid'));
+                if ($user) {
+                    $signin_token = data_auth_sign($user['username'].$user['id'].$user['last_login_time']);
+                    if (cookie('signin_token') == $signin_token) {
+                        // 自动登录
+                        $UserModel->autoLogin($user);
+                        return $user['id'];
+                    }
+                }
+            };
+            return 0;
+        }else{
+            return session('user_auth_sign') == data_auth_sign($user) ? $user['uid'] : 0;
+        }
+    }
+}
+
+if (!function_exists('data_auth_sign')) {
+    /**
+     * 数据签名认证
+     * @param array $data 被认证的数据
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function data_auth_sign($data = [])
+    {
+        // 数据类型检测
+        if(!is_array($data)){
+            $data = (array)$data;
+        }
+
+        // 排序
+        ksort($data);
+        // url编码并生成query字符串
+        $code = http_build_query($data);
+        // 生成签名
+        $sign = sha1($code);
+        return $sign;
     }
 }
 

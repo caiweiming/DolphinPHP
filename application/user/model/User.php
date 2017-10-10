@@ -82,14 +82,14 @@ class User extends Model
                 $this->error = '禁止访问，原因：用户所在角色禁止访问后台！';
                 return false;
             }
-            if (!Hash::check((string)$password, $user->password)) {
+            if (!Hash::check((string)$password, $user['password'])) {
                 $this->error = '密码错误！';
             } else {
-                $uid = $user->id;
+                $uid = $user['id'];
 
                 // 更新登录信息
-                $user->last_login_time = request()->time();
-                $user->last_login_ip   = get_client_ip(1);
+                $user['last_login_time'] = request()->time();
+                $user['last_login_ip']   = get_client_ip(1);
                 if ($user->save()) {
                     // 自动登录
                     return $this->autoLogin($this::get($uid), $rememberme);
@@ -125,13 +125,15 @@ class User extends Model
             'last_login_ip'   => get_client_ip(1),
         );
         session('user_auth', $auth);
-        session('user_auth_sign', $this->dataAuthSign($auth));
+        session('user_auth_sign', data_auth_sign($auth));
 
         // 保存用户节点权限
         if ($user->role != 1) {
             $menu_auth = Db::name('admin_role')->where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
             if (!$menu_auth) {
+                session('user_auth', null);
+                session('user_auth_sign', null);
                 $this->error = '未分配任何节点权限！';
                 return false;
             }
@@ -141,58 +143,9 @@ class User extends Model
         if ($rememberme) {
             $signin_token = $user->username.$user->id.$user->last_login_time;
             cookie('uid', $user->id, 24 * 3600 * 7);
-            cookie('signin_token', $this->dataAuthSign($signin_token), 24 * 3600 * 7);
+            cookie('signin_token', data_auth_sign($signin_token), 24 * 3600 * 7);
         }
 
         return $user->id;
-    }
-
-    /**
-     * 数据签名认证
-     * @param array $data 被认证的数据
-     * @author 蔡伟明 <314013107@qq.com>
-     * @return string 签名
-     */
-    public function dataAuthSign($data = [])
-    {
-        // 数据类型检测
-        if(!is_array($data)){
-            $data = (array)$data;
-        }
-
-        // 排序
-        ksort($data);
-        // url编码并生成query字符串
-        $code = http_build_query($data);
-        // 生成签名
-        $sign = sha1($code);
-        return $sign;
-    }
-
-    /**
-     * 判断是否登录
-     * @author 蔡伟明 <314013107@qq.com>
-     * @return int 0或用户id
-     */
-    public function isLogin()
-    {
-        $user = session('user_auth');
-        if (empty($user)) {
-            // 判断是否记住登录
-            if (cookie('?uid') && cookie('?signin_token')) {
-                $user = $this::get(cookie('uid'));
-                if ($user) {
-                    $signin_token = $this->dataAuthSign($user->username.$user->id.$user->last_login_time);
-                    if (cookie('signin_token') == $signin_token) {
-                        // 自动登录
-                        $this->autoLogin($user);
-                        return $user->id;
-                    }
-                }
-            };
-            return 0;
-        }else{
-            return session('user_auth_sign') == $this->dataAuthSign($user) ? $user['uid'] : 0;
-        }
     }
 }
