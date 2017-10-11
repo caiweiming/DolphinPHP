@@ -547,6 +547,13 @@ class Builder extends ZBuilder
                 ).($pop === true ? '?_pop=1' : ''),
             ];
 
+            // 判断当前用户是否有权限，没有权限则不生成按钮
+            if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http' && $btn_attribute['href'] != 'javascript:history.back(-1);') {
+                if ($this->checkButtonAuth($btn_attribute) === false) {
+                    return $this;
+                }
+            }
+
             // 缓存名称
             $cache_name = strtolower($this->_module.'/'.$this->_controller.'/add');
 
@@ -710,14 +717,7 @@ class Builder extends ZBuilder
 
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http' && $btn_attribute['href'] != 'javascript:history.back(-1);') {
-            preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
-            $url_value = explode('/', $match[2]);
-            if (strpos($url_value[2], '.')) {
-                $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
-            }
-            $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
-            $url_value = strtolower($url_value);
-            if (!Role::checkAuth($url_value, true)) {
+            if ($this->checkButtonAuth($btn_attribute) === false) {
                 return $this;
             }
         }
@@ -733,6 +733,24 @@ class Builder extends ZBuilder
 
         $this->_vars['top_buttons'][] = $btn_attribute;
         return $this;
+    }
+
+    /**
+     * 检查是否有按钮权限
+     * @param array $btn_attribute 按钮属性
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool
+     */
+    private function checkButtonAuth($btn_attribute = [])
+    {
+        preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
+        $url_value = explode('/', $match[2]);
+        if (strpos($url_value[2], '.')) {
+            $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+        }
+        $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
+        $url_value = strtolower($url_value);
+        return Role::checkAuth($url_value, true);
     }
 
     /**
@@ -787,6 +805,13 @@ class Builder extends ZBuilder
                 ).($pop === true ? '?_pop=1' : ''),
                 'target' => '_self'
             ];
+
+            // 判断当前用户是否有权限，没有权限则不生成按钮
+            if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
+                if ($this->checkButtonAuth($btn_attribute) === false) {
+                    return $this;
+                }
+            }
 
             // 缓存名称
             $cache_name = strtolower($this->_module.'/'.$this->_controller.'/edit');
@@ -932,14 +957,7 @@ class Builder extends ZBuilder
 
         // 判断当前用户是否有权限，没有权限则不生成按钮
         if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
-            preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
-            $url_value = explode('/', $match[2]);
-            if (strpos($url_value[2], '.')) {
-                $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
-            }
-            $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
-            $url_value = strtolower($url_value);
-            if (!Role::checkAuth($url_value, true)) {
+            if ($this->checkButtonAuth($btn_attribute) === false) {
                 return $this;
             }
         }
