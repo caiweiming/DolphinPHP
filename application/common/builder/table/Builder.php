@@ -104,6 +104,16 @@ class Builder extends ZBuilder
     private $_prefix = 1;
 
     /**
+     * @var mixed 表格原始数据
+     */
+    private $data;
+
+    /**
+     * @var array 使用原始数据的字段
+     */
+    protected $rawField = [];
+
+    /**
      * @var array 模板变量
      */
     private $_vars = [
@@ -1181,6 +1191,9 @@ class Builder extends ZBuilder
     public function setRowList($row_list = null)
     {
         if ($row_list !== null) {
+            // 原始表格数据
+            $this->data = $row_list;
+            // 转为数组后的表格数据
             $this->_vars['row_list'] = $this->toArray($row_list);
             if (is_object($row_list) && !$row_list->isEmpty()) {
                 $this->_vars['_page_info'] = $row_list;
@@ -1201,7 +1214,7 @@ class Builder extends ZBuilder
 
     /**
      * 将表格数据转换为纯数组
-     * @param array|object $row_list
+     * @param array|object $row_list 数据
      * @author 蔡伟明 <314013107@qq.com>
      * @return array
      */
@@ -1225,6 +1238,43 @@ class Builder extends ZBuilder
             return $row_list->toArray()['data'];
         }
         return $row_list->all();
+    }
+
+    /**
+     * 获取原始数据
+     * @param string $index 索引
+     * @param string $field 字段名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    private function getData($index = '', $field = '')
+    {
+        if (is_object($this->data) && is_object(current($this->data->getIterator()))) {
+            try {
+                $result = $this->data[$index]->getData($field);
+            } catch (\Exception $e) {
+                $result = $this->data[$index][$field];
+            }
+            return $result;
+        } else {
+            return $this->data[$index][$field];
+        }
+    }
+
+    /**
+     * 设置需要使用原始数据的字段
+     * @param string|array $field 字段名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function raw($field = '')
+    {
+        if (is_array($field)) {
+            $this->rawField = array_merge($this->rawField, $field);
+        } else {
+            $this->rawField = array_merge($this->rawField, explode(',', $field));
+        }
+        return $this;
     }
 
     /**
@@ -1522,6 +1572,8 @@ class Builder extends ZBuilder
                     if ($column['name'] == '__INDEX__') {
                         $row[$column['name']] = $key + 1;
                     }
+
+                    $row[$column['name']] = in_array($column['name'], $this->rawField) ? $this->getData($key, $column['name']) : (isset($row[$column['name']]) ? $row[$column['name']] : '');
 
                     // 备份原数据
                     if (isset($row[$column['name']])) {

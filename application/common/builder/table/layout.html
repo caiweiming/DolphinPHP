@@ -90,7 +90,7 @@
                                     {notempty name="_select_list"}
                                     <div class="form-inline" style="display: inline-block;">
                                         {volist name="_select_list" id="item"}
-                                        <select class="js-select2 form-control select-change select-search" data-width="auto" id="select-{$item.name}">
+                                        <select class="js-select2 form-control select-change select-search" data-width="resolve" id="select-{$item.name}">
                                             {notempty name="item.title"}
                                             <option value="" data-url="{$item.default_url}">{$item.title|default=''}</option>
                                             {/notempty}
