@@ -76,7 +76,7 @@
                                         <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>
                                         <button title="收起所有节点" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有节点</button>
                                         <span class="form-inline">
-                                        <input class="form-control" id="search-input" type="text" value="" placeholder="输入关键字搜索">
+                                        <input class="form-control" id="search-auth" onkeydown="if(event.keyCode === 13){return false;}" type="text" value="" placeholder="输入关键字搜索">
                                     </span>
                                     </div>
                                 </div>
@@ -116,10 +116,10 @@
         });
 
         var to = false;
-        $('#search-input').keyup(function () {
+        $('#search-auth').keyup(function (event) {
             if(to) { clearTimeout(to); }
             to = setTimeout(function () {
-                var v = $('#search-input').val();
+                var v = $('#search-auth').val();
                 $('#jstree').jstree(true).search(v);
             }, 250);
         });
