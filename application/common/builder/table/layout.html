@@ -229,7 +229,7 @@
                                     <div class="pagination-info pull-right">
                                         <div>
                                             <input type="text" class="form-control input-sm go-page" id="go-page" name="page" value="{:input('param.page', '1')}">
-                                            <input type="text" class="form-control input-sm nums" id="list-rows" name="list_rows" value="{php}echo input('param.list_rows', '') == '' ? config('list_rows') : input('param.list_rows');{/php}">
+                                            <input type="text" class="form-control input-sm nums" id="list-rows" name="list_rows" value="{php}echo input('param.list_rows', '') == '' ? $_page_info->listRows() : input('param.list_rows');{/php}">
                                             / <strong>{$_page_info->lastPage()}</strong> 页，共 <strong>{$_page_info->total()}</strong> 条数据，每页显示数量
                                         </div>
                                     </div>
