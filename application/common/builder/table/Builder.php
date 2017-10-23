@@ -337,8 +337,8 @@ class Builder extends ZBuilder
         if ($field != '' && !empty($list)) {
             $this->_vars['filter_columns'][] = $field;
             $this->_filter_type[$field] = $type;
-            $this->_filter_list[$field] = '_filter_list_'.$field;
-            Cache::set('_filter_list_'.$field, $list);
+            $this->_filter_list[$field] = md5('_filter_list_'.$this->_module.'_'.$this->_controller.'_'.$this->_action.'_'.$field);
+            Cache::set($this->_filter_list[$field], $list);
 
             // 处理默认选项和值
             if ($default != '') {

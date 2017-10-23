@@ -73,7 +73,7 @@ class Ajax extends Common
             $result = [
                 'code' => 1,
                 'msg'  => '请求成功',
-                'list' => Cache::get('_filter_list_'.$field)
+                'list' => Cache::get($list)
             ];
             return json($result);
         }
