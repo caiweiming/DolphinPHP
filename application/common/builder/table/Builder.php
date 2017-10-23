@@ -901,6 +901,8 @@ class Builder extends ZBuilder
 
         // 这个专门为插件准备的属性，是插件名称
         $plugin_name = isset($attribute['plugin_name']) ? $attribute['plugin_name'] : $this->_plugin_name;
+        // 自定义字段名
+        $field = isset($attribute['field']) ? $attribute['field'] : '';
 
         switch ($type) {
             // 编辑按钮
@@ -922,7 +924,7 @@ class Builder extends ZBuilder
                     'title' => '启用',
                     'icon'  => 'fa fa-check',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token, 'field' => $field])
                 ];
                 break;
 
@@ -933,7 +935,7 @@ class Builder extends ZBuilder
                     'title' => '禁用',
                     'icon'  => 'fa fa-ban',
                     'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
-                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
+                    'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token, 'field' => $field])
                 ];
                 break;
 
