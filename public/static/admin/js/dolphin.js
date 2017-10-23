@@ -83,9 +83,9 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
                                 }
-                            }).fail(function () {
+                            }).fail(function (res) {
                                 pageLoader('hide');
-                                tips('服务器发生错误~', 'danger');
+                                tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                                 self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
@@ -154,9 +154,9 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
                                 }
-                            }).fail(function () {
+                            }).fail(function (res) {
                                 pageLoader('hide');
-                                tips('服务器发生错误~', 'danger');
+                                tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                                 self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
@@ -219,9 +219,9 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
                                 }
-                            }).fail(function () {
+                            }).fail(function (res) {
                                 pageLoader('hide');
-                                tips('服务器发生错误~', 'danger');
+                                tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                                 self.attr("autocomplete", "on").prop("disabled", false);
                             });
                         });
@@ -272,9 +272,9 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                         }, 2000);
                     }
-                }).fail(function () {
+                }).fail(function (res) {
                     pageLoader('hide');
-                    tips('服务器发生错误~', 'danger');
+                    tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                     self.attr("autocomplete", "on").prop("disabled", false);
                 });
             }
@@ -346,9 +346,9 @@ var Dolphin = function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                             }, 2000);
                         }
-                    }).fail(function () {
+                    }).fail(function (res) {
                         pageLoader('hide');
-                        tips('服务器发生错误~', 'danger');
+                        tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                         self.attr("autocomplete", "on").prop("disabled", false);
                     });
                 });
@@ -393,9 +393,9 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                         }, 2000);
                     }
-                }).fail(function () {
+                }).fail(function (res) {
                     pageLoader('hide');
-                    tips('服务器发生错误~', 'danger');
+                    tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                     self.attr("autocomplete", "on").prop("disabled", false);
                 });
             }
@@ -486,8 +486,8 @@ var Dolphin = function () {
                     } else {
                         tips('无任何节点权限', 'danger');
                     }
-                }).fail(function () {
-                    tips('服务器发生错误~', 'danger');
+                }).fail(function (res) {
+                    tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                 });
             }
             return false;

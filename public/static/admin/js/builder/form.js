@@ -288,9 +288,9 @@ jQuery(document).ready(function() {
                                 Dolphin.notify('上传失败，请重新上传', 'warning');
                             }
                         }
-                    }).fail(function() {
+                    }).fail(function(res) {
                         Dolphin.loading('hide');
-                        Dolphin.notify('服务器错误~', 'danger');
+                        Dolphin.notify($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                     });
                     $jcrop_file.val('');
                 } else {
@@ -341,9 +341,9 @@ jQuery(document).ready(function() {
                         Dolphin.notify(res.msg, 'danger');
                     }
                 })
-                .fail(function() {
+                .fail(function(res) {
                     Dolphin.loading('hide');
-                    Dolphin.notify('请求失败', 'danger');
+                    Dolphin.notify($(res.responseText).find('h1').text() || '请求失败~', 'danger');
                 });
             } else {
                 Dolphin.notify('请选择要裁剪的大小', 'warning');
@@ -898,9 +898,9 @@ jQuery(document).ready(function() {
                     Dolphin.notify(res.msg, 'danger');
                 }
             })
-            .fail(function() {
+            .fail(function(res) {
                 Dolphin.loading('hide');
-                Dolphin.notify('数据请求失败', 'danger');
+                Dolphin.notify($(res.responseText).find('h1').text() || '数据请求失败~', 'danger');
             });
         }
     });
@@ -961,9 +961,9 @@ jQuery(document).ready(function() {
                     Dolphin.notify(res.msg, 'danger');
                 }
             })
-            .fail(function() {
+            .fail(function(res) {
                 Dolphin.loading('hide');
-                Dolphin.notify('数据请求失败', 'danger');
+                Dolphin.notify($(res.responseText).find('h1').text() || '数据请求失败~', 'danger');
             });
         }
     });

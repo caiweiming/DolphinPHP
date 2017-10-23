@@ -26,9 +26,9 @@ jQuery(document).ready(function() {
                 $switch.prop('checked', !$data.status);
                 return false;
             }
-        }).fail(function () {
+        }).fail(function (res) {
             Dolphin.loading('hide');
-            Dolphin.notify('服务器发生错误~', 'danger');
+            Dolphin.notify($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
         });
     });
 });

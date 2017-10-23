@@ -230,8 +230,8 @@ jQuery(document).ready(function() {
                             $searchItems.show().removeClass('field-show');
                         }
                     });
-                }).fail(function () {
-                    Dolphin.notify('服务器发生错误~', 'danger');
+                }).fail(function (res) {
+                    Dolphin.notify($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
                 });
             },
             yes: function () {
@@ -321,16 +321,16 @@ jQuery(document).ready(function() {
         Dolphin.loading();
         $.post(dolphin.quick_edit_url, $data).success(function(res) {
             Dolphin.loading('hide');
-            if (1 != res.code) {
+            if (res.code) {
+                Dolphin.notify(res.msg, 'success');
+            } else {
                 Dolphin.notify(res.msg, 'danger');
                 $switch.prop('checked', !$data.status);
                 return false;
-            } else {
-                Dolphin.notify(res.msg, 'success');
             }
-        }).fail(function () {
+        }).fail(function (res) {
             Dolphin.loading('hide');
-            Dolphin.notify('服务器发生错误~', 'danger');
+            Dolphin.notify($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');
         });
     });
 
