@@ -139,7 +139,9 @@
 
                                         {volist name="columns" id="column"}
                                         <th class="column-{$column['name']} {$column.class|default=''}">
-                                            <span class="pull-right">
+                                            {// 字段标题}
+                                            {$column.title|default=''|htmlspecialchars}
+                                            <span>
                                             {// 排序功能}
                                             {php}if (isset($order_columns[$column['name']])): {/php}
                                                 {php}
@@ -174,9 +176,6 @@
                                             <a href="javascript:void(0);" class="field-filter" data-filter="{$filter_columns[$column['name']]['filter']}" data-list="{$filter_columns[$column['name']]['list']}" data-type="{$filter_columns[$column['name']]['type']}" data-options='{$filter_columns[$column["name"]]["options"]|default=""}' data-map='{$filter_columns[$column["name"]]["map"]|default=""}' data-field-display="{$column['name']}" data-field="{$filter_columns[$column['name']]['field']}" data-table="{$filter_columns[$column['name']]['table']}" data-toggle="tooltip" data-original-title="筛选"><i class="fa fa-filter {notin name='column.name' value='$_field_display'}text-muted{/notin}"></i></a>
                                             {php}endif;{/php}
                                             </span>
-
-                                            {// 字段标题}
-                                            {$column.title|default=''|htmlspecialchars}
                                         </th>
                                         {/volist}
                                     </tr>

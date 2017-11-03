@@ -235,7 +235,6 @@ div.tagsinput {
 .table > tbody > tr > th,
 .table > tfoot > tr > th {
     font-family: "Microsoft Yahei", "Source Sans Pro", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    padding-right: 50px;
     white-space: nowrap;
 }
 .table > thead > tr > th > .pull-right {
