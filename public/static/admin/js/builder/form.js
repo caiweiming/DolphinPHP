@@ -837,6 +837,15 @@ jQuery(document).ready(function() {
         }
     });
 
+    // 图片相册
+    $('.gallery-list').magnificPopup({
+        delegate: 'a.img-link',
+        type: 'image',
+        gallery: {
+            enabled: true
+        }
+    });
+
     // 排序
     $('.nestable').each(function () {
         $(this).nestable({maxDepth:1}).on('change', function(){

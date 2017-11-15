@@ -679,6 +679,35 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 添加图片相册
+     * @param string $name 表单项名
+     * @param string $title 标题
+     * @param string $tips 提示
+     * @param string $default 默认值
+     * @param string $extra_class 额外css类名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    public function addGallery($name = '', $title = '', $tips = '', $default = '', $extra_class = '')
+    {
+        $item = [
+            'type'        => 'gallery',
+            'name'        => $name,
+            'title'       => $title,
+            'tips'        => $tips,
+            'value'       => $default,
+            'extra_class' => $extra_class,
+        ];
+
+        if ($this->_is_group) {
+            return $item;
+        }
+
+        $this->_vars['form_items'][] = $item;
+        return $this;
+    }
+
+    /**
      * 添加分组
      * @param array $groups 分组数据
      * @author 蔡伟明 <314013107@qq.com>
