@@ -798,17 +798,21 @@ class Builder extends ZBuilder
      * @param string $auto_time 自动添加时间，默认有两个create_time和update_time
      * @param string $format 时间格式
      * @param bool $pop 弹窗显示
+     * @param array $extra 额外参数，设置按钮样式
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '', $pop = false)
+    public function autoEdit($items = [], $table = '', $validate = '', $auto_time = '', $format = '', $pop = false, $extra = [])
     {
         if (!empty($items)) {
+            // 按钮样式
+            $btn_style = array_merge(config('zbuilder.right_button'), $extra);
+
             // 默认属性
             $btn_attribute = [
                 'title' => '编辑',
                 'icon'  => 'fa fa-pencil',
-                'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].($pop === true ? ' pop' : ''),
+                'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'].($pop === true ? ' pop' : ''),
                 'href'  => url(
                     $this->_module.'/'.$this->_controller.'/edit',
                     ['id' => '__id__']
@@ -883,10 +887,11 @@ class Builder extends ZBuilder
      * @param string $type 按钮类型：edit/enable/disable/delete/custom
      * @param array $attribute 按钮属性
      * @param bool $pop 是否使用弹出框形式
+     * @param array $extra 扩展参数，设置按钮样式
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addRightButton($type = '', $attribute = [], $pop = false)
+    public function addRightButton($type = '', $attribute = [], $pop = false, $extra = [])
     {
         // 表单名，用于替换
         if (isset($attribute['table'])) {
@@ -904,6 +909,9 @@ class Builder extends ZBuilder
         // 自定义字段名
         $field = isset($attribute['field']) ? $attribute['field'] : '';
 
+        // 按钮样式
+        $btn_style = array_merge(config('zbuilder.right_button'), $extra);
+
         switch ($type) {
             // 编辑按钮
             case 'edit':
@@ -911,7 +919,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '编辑',
                     'icon'  => 'fa fa-pencil',
-                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
+                    'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'],
                     'href'  => $this->getDefaultUrl($type, ['id' => '__id__', 'plugin_name' => $plugin_name]),
                     'target' => '_self'
                 ];
@@ -923,7 +931,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '启用',
                     'icon'  => 'fa fa-check',
-                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
+                    'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'].' ajax-get confirm',
                     'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token, 'field' => $field])
                 ];
                 break;
@@ -934,7 +942,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '禁用',
                     'icon'  => 'fa fa-ban',
-                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
+                    'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'].' ajax-get confirm',
                     'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token, 'field' => $field])
                 ];
                 break;
@@ -945,7 +953,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '删除',
                     'icon'  => 'fa fa-times',
-                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'].' ajax-get confirm',
+                    'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'].' ajax-get confirm',
                     'href'  => $this->getDefaultUrl($type, ['ids' => '__id__', '_t' => $table_token])
                 ];
                 break;
@@ -956,7 +964,7 @@ class Builder extends ZBuilder
                 $btn_attribute = [
                     'title' => '自定义按钮',
                     'icon'  => 'fa fa-smile-o',
-                    'class' => 'btn btn-'.config('zbuilder.right_button')['size'].' btn-'.config('zbuilder.right_button')['style'],
+                    'class' => 'btn btn-'.$btn_style['size'].' btn-'.$btn_style['style'],
                     'href'  => 'javascript:void(0);'
                 ];
                 break;
@@ -982,6 +990,9 @@ class Builder extends ZBuilder
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
         }
+
+        // 添加按钮样式
+        $btn_attribute['_style'] = $btn_style;
 
         // 添加按钮标签
         $btn_attribute['_tag'] = $type;
@@ -1546,11 +1557,13 @@ class Builder extends ZBuilder
                         );
                     }
 
+                    $button_style = $button['_style'];
+                    unset($button['_style']);
                     // 编译按钮属性
                     $button['attribute'] = $this->compileHtmlAttr($button);
-                    if (config('zbuilder.right_button')['title']) {
+                    if ($button_style['title']) {
                         $row['right_button'] .= '<a '.$button['attribute'].'">';
-                        if (config('zbuilder.right_button')['icon']) {
+                        if ($button_style['icon']) {
                             $row['right_button'] .= '<i class="'.$button['icon'].'"></i> ';
                         }
                         $row['right_button'] .= $button['title'].'</a> ';
