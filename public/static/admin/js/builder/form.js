@@ -523,8 +523,9 @@ jQuery(document).ready(function() {
         uploader.on( 'fileQueued', function( file ) {
             var $li = '<li id="' + file.id + '" class="list-group-item file-item">' +
                 '<span class="pull-right file-state"><span class="text-info"><i class="fa fa-sun-o fa-spin"></i> 正在读取文件信息...</span></span>' +
-                '<i class="fa fa-times-circle remove-file"></i> ' +
+                '<i class="fa fa-file"></i> ' +
                 file.name +
+                ' [<a href="javascript:void(0);" class="download-file">下载</a>] [<a href="javascript:void(0);" class="remove-file">删除</a>]' +
                 '<div class="progress progress-mini remove-margin active" style="display: none"><div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div></div>'+
                 '</li>';
 
@@ -563,6 +564,8 @@ jQuery(document).ready(function() {
             }
             // 加入提示信息
             $li.find('.file-state').html('<span class="text-'+ response.class +'">'+ response.info +'</span>');
+            // 添加下载链接
+            $li.find('.download-file').attr('href', response.path);
 
             // 文件上传成功后的自定义回调函数
             if (window['dp_file_upload_success'] !== undefined) window['dp_file_upload_success']();

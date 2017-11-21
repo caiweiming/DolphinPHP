@@ -4,7 +4,9 @@
         <ul class="list-group uploader-list" id="file_list_{$form[type].name}">
             {notempty name="form[type].value"}
                 {volist name="form[type]['value']|explode=',',###" id="vo"}
-                <li class="list-group-item file-item"><i class="fa fa-times-circle remove-file" data-id="{$vo}"></i> {$vo|get_file_name}</li>
+                <li class="list-group-item file-item"><i class="fa fa-file"></i> {$vo|get_file_name} [<a
+                        href="{$vo|get_file_path}" class="download-file">下载</a>]  [<a
+                        href="javascript:void(0);" class="remove-file" data-id="{$vo}">删除</a>]</li>
                 {/volist}
             {/notempty}
         </ul>
