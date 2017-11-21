@@ -279,6 +279,60 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 添加单个档案文件
+     * @param string $name 表单项名
+     * @param string $title 标题
+     * @param string $tips 提示
+     * @param string $extra_class 额外css类名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    public function addArchive($name = '', $title = '', $tips = '', $extra_class = '')
+    {
+        $item = [
+            'type'        => 'archive',
+            'name'        => $name,
+            'title'       => $title,
+            'tips'        => $tips,
+            'extra_class' => $extra_class,
+        ];
+
+        if ($this->_is_group) {
+            return $item;
+        }
+
+        $this->_vars['form_items'][] = $item;
+        return $this;
+    }
+
+    /**
+     * 添加多个档案文件
+     * @param string $name 表单项名
+     * @param string $title 标题
+     * @param string $tips 提示
+     * @param string $extra_class 额外css类名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    public function addArchives($name = '', $title = '', $tips = '', $extra_class = '')
+    {
+        $item = [
+            'type'        => 'archives',
+            'name'        => $name,
+            'title'       => $title,
+            'tips'        => $tips,
+            'extra_class' => $extra_class,
+        ];
+
+        if ($this->_is_group) {
+            return $item;
+        }
+
+        $this->_vars['form_items'][] = $item;
+        return $this;
+    }
+
+    /**
      * 添加百度地图
      * @param string $name 表单项名
      * @param string $title 标题

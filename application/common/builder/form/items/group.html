@@ -13,6 +13,16 @@
                 <div class="tab-pane row {eq name="items_key" value="1"}active{/eq}" id="tab-{$items_key}" >
                     {volist name="items" id="form_group"}
                         {switch name="form_group.type"}
+                            {case value="archive"}
+                                {// 档案文件 }
+                                {include file="./application/common/builder/form/items/archive.html" type='_group' /}
+                            {/case}
+
+                            {case value="archives"}
+                                {// 多个档案文件 }
+                                {include file="./application/common/builder/form/items/archives.html" type='_group' /}
+                            {/case}
+
                             {case value="bmap"}
                                 {// 百度地图 }
                                 {include file="./application/common/builder/form/items/bmap.html" type="_group" /}

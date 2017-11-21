@@ -1,0 +1,14 @@
+<div class="form-group col-md-{$_layout[$form[type].name]|default='12'} col-xs-12 {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
+    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
+    <div class="col-sm-12">
+        <ul class="list-group uploader-list" id="file_list_{$form[type].name}">
+            {notempty name="form[type].value"}
+            <li class="list-group-item file-item"><i class="fa fa-file"></i> {$form[type].value|get_file_name} [<a
+                    href="{$form[type].value|get_file_path}" class="download-file">下载</a>]</li>
+            {/notempty}
+        </ul>
+        {notempty name="form[type].tips"}
+        <div class="help-block">{$form[type].tips|clear_js}</div>
+        {/notempty}
+    </div>
+</div>

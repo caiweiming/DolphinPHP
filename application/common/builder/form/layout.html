@@ -60,6 +60,16 @@
                                 {else /}
                                     {volist name="form_items" id="form"}
                                         {switch name="form.type"}
+                                            {case value="archive"}
+                                                {// 档案文件 }
+                                                {include file="./application/common/builder/form/items/archive.html" type='' /}
+                                            {/case}
+
+                                            {case value="archives"}
+                                                {// 多个档案文件 }
+                                                {include file="./application/common/builder/form/items/archives.html" type='' /}
+                                            {/case}
+
                                             {case value="bmap"}
                                                 {// 百度地图 }
                                                 {include file="./application/common/builder/form/items/bmap.html" type='' /}
