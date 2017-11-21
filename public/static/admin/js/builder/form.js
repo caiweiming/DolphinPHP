@@ -841,12 +841,14 @@ jQuery(document).ready(function() {
     });
 
     // 图片相册
-    $('.gallery-list').magnificPopup({
-        delegate: 'a.img-link',
-        type: 'image',
-        gallery: {
-            enabled: true
-        }
+    $('.gallery-list').each(function () {
+        $(this).magnificPopup({
+            delegate: 'a.img-link',
+            type: 'image',
+            gallery: {
+                enabled: true
+            }
+        });
     });
 
     // 排序
