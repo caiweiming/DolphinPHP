@@ -792,24 +792,16 @@ jQuery(document).ready(function() {
 
         // 删除图片
         $file_list.delegate('.remove-picture', 'click', function(){
+            $(this).closest('.file-item').remove();
             if ($multiple) {
-                var id = $(this).data('id'),
-                    ids = $input_file.val().split(',');
-
-                if (id) {
-                    for (var i = 0; i < ids.length; i++) {
-                        if (ids[i] == id) {
-                            ids.splice(i, 1);
-                            break;
-                        }
-                    }
-                    $input_file.val(ids.join(','));
-                }
+                var ids = [];
+                $file_list.find('.remove-picture').each(function () {
+                    ids.push($(this).data('id'));
+                });
+                $input_file.val(ids.join(','));
             } else {
                 $input_file.val('');
             }
-
-            $(this).closest('.file-item').remove();
         });
 
         // 查看大图
