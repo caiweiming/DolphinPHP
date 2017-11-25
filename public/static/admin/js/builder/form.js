@@ -144,7 +144,6 @@ jQuery(document).ready(function() {
             var curr_point = map_point.val().split(',');
             point_lng = curr_point[0];
             point_lat = curr_point[1];
-            map_level = 16;
         } else if(address.val() != '') {
             local.search(address.val());
         } else {
