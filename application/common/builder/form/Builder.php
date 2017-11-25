@@ -2084,6 +2084,8 @@ class Builder extends ZBuilder
                                         }
                                     }
                                     break;
+                                case 'bmap':
+                                    $group[$key]['address'] = $this->_vars['form_data'][$value['name'].'_address'];
                                 default:
                                     if (isset($this->_vars['form_data'][$value['name']])) {
                                         $group[$key]['value'] = $this->_vars['form_data'][$value['name']];
@@ -2124,6 +2126,8 @@ class Builder extends ZBuilder
                                 }
                             }
                             break;
+                        case 'bmap':
+                            $item['address'] = $this->_vars['form_data'][$item['name'].'_address'];
                         default:
                             if (isset($this->_vars['form_data'][$item['name']])) {
                                 $item['value'] = $this->_vars['form_data'][$item['name']];
