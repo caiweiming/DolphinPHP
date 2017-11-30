@@ -753,14 +753,16 @@ class Builder extends ZBuilder
      */
     private function checkButtonAuth($btn_attribute = [])
     {
-        preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match);
-        $url_value = explode('/', $match[2]);
-        if (strpos($url_value[2], '.')) {
-            $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+        if (preg_match('/\/(index.php|'.ADMIN_FILE.')\/(.*)/', $btn_attribute['href'], $match)) {
+            $url_value = explode('/', $match[2]);
+            if (strpos($url_value[2], '.')) {
+                $url_value[2] = substr($url_value[2], 0, strpos($url_value[2], '.'));
+            }
+            $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
+            $url_value = strtolower($url_value);
+            return Role::checkAuth($url_value, true);
         }
-        $url_value = $url_value[0].'/'.$url_value[1].'/'.$url_value[2];
-        $url_value = strtolower($url_value);
-        return Role::checkAuth($url_value, true);
+        return true;
     }
 
     /**
