@@ -1547,9 +1547,10 @@ class Builder extends ZBuilder
                         $replace_to = [];
                         $pattern    = [];
                         foreach ($matches[1] as $match) {
+                            $replace = in_array($match, $this->rawField) ? $this->getData($key, $match) : (isset($row[$match]) ? $row[$match] : '');
                             if (isset($row[$match])) {
                                 $pattern[]    = '/__'. $match .'__/i';
-                                $replace_to[] = $row[$match];
+                                $replace_to[] = $replace;
                             }
                         }
                         $button['href'] = preg_replace(
