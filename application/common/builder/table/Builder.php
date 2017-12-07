@@ -1151,7 +1151,7 @@ class Builder extends ZBuilder
     public function addColumn($name = '', $title = '', $type = '', $default = '', $param = '', $class = '')
     {
         $field = $name;
-        $table = $this->_table_name;
+        $table = '';
 
         // 判断是否有字段别名
         if (strpos($name, '|')) {
@@ -1666,7 +1666,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                 data-type="text" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1675,7 +1675,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="textarea-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                 data-type="textarea" 
                                 data-pk="'.$row['_primary_key_value'].'" 
                                 data-name="'.$_name.'">'.$row[$column['name']].'</a>';
@@ -1685,7 +1685,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                 data-type="password" 
                                 data-value="" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1700,7 +1700,7 @@ class Builder extends ZBuilder
                             $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                 class="text-edit" 
                                 data-placeholder="请输入'.$column['title'].'" 
-                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                 data-type="'.$column['type'].'" 
                                 data-value="'.$row[$column['name']].'" 
                                 data-pk="'.$row['_primary_key_value'].'" 
@@ -1758,7 +1758,7 @@ class Builder extends ZBuilder
                                 data-name="'.$_name.'" 
                                 data-template="'.$format.'" 
                                 data-callback="" 
-                                data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                 data-type="combodate" 
                                 data-pk="'.$row['_primary_key_value'].'">';
                             if ($row[$column['name']] == '') {
@@ -1800,7 +1800,7 @@ class Builder extends ZBuilder
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
                                 $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                     class="'.$class.'"
-                                    data-table="'.$this->createTableToken($_table_name, $this->_prefix).'" 
+                                    data-table="'.$this->createTableToken($_table_name == '' ? $this->_table_name : $_table_name, $this->_prefix).'" 
                                     data-type="select" 
                                     data-value="'.$row[$column['name']].'" 
                                     data-source=\''.$source.'\' 
