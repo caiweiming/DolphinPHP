@@ -998,76 +998,79 @@ if (!function_exists('action_log')) {
      */
     function action_log($action = null, $model = null, $record_id = '', $user_id = null, $details = '')
     {
-        // 参数检查
-        if(empty($action) || empty($model)){
-            return '参数不能为空';
-        }
-        if(empty($user_id)){
-            $user_id = is_signin();
-        }
-        if (strpos($action, '.')) {
-            list($module, $action) = explode('.', $action);
-        } else {
-            $module = request()->module();
-        }
-
-        // 查询行为,判断是否执行
-        $action_info = model('admin/action')->where('module', $module)->getByName($action);
-        if($action_info['status'] != 1){
-            return '该行为被禁用或删除';
-        }
-
-        // 插入行为日志
-        $data = [
-            'action_id'   => $action_info['id'],
-            'user_id'     => $user_id,
-            'action_ip'   => get_client_ip(1),
-            'model'       => $model,
-            'record_id'   => $record_id,
-            'create_time' => request()->time()
-        ];
-
-        // 解析日志规则,生成日志备注
-        if(!empty($action_info['log'])){
-            if(preg_match_all('/\[(\S+?)\]/', $action_info['log'], $match)){
-                $log = [
-                    'user'    => $user_id,
-                    'record'  => $record_id,
-                    'model'   => $model,
-                    'time'    => request()->time(),
-                    'data'    => ['user' => $user_id, 'model' => $model, 'record' => $record_id, 'time' => request()->time()],
-                    'details' => $details
-                ];
-
-                $replace = [];
-                foreach ($match[1] as $value){
-                    $param = explode('|', $value);
-                    if(isset($param[1])){
-                        $replace[] = call_user_func($param[1], $log[$param[0]]);
-                    }else{
-                        $replace[] = $log[$param[0]];
-                    }
-                }
-
-                $data['remark'] = str_replace($match[0], $replace, $action_info['log']);
-            }else{
-                $data['remark'] = $action_info['log'];
+        // 判断是否开启系统日志功能
+        if (config('system_log')) {
+            // 参数检查
+            if(empty($action) || empty($model)){
+                return '参数不能为空';
             }
-        }else{
-            // 未定义日志规则，记录操作url
-            $data['remark'] = '操作url：'.$_SERVER['REQUEST_URI'];
-        }
+            if(empty($user_id)){
+                $user_id = is_signin();
+            }
+            if (strpos($action, '.')) {
+                list($module, $action) = explode('.', $action);
+            } else {
+                $module = request()->module();
+            }
 
-        // 保存日志
-        model('admin/log')->insert($data);
+            // 查询行为,判断是否执行
+            $action_info = model('admin/action')->where('module', $module)->getByName($action);
+            if($action_info['status'] != 1){
+                return '该行为被禁用或删除';
+            }
 
-        if(!empty($action_info['rule'])){
-            // 解析行为
-            $rules = parse_action($action, $user_id);
-            // 执行行为
-            $res = execute_action($rules, $action_info['id'], $user_id);
-            if (!$res) {
-                return '执行行为失败';
+            // 插入行为日志
+            $data = [
+                'action_id'   => $action_info['id'],
+                'user_id'     => $user_id,
+                'action_ip'   => get_client_ip(1),
+                'model'       => $model,
+                'record_id'   => $record_id,
+                'create_time' => request()->time()
+            ];
+
+            // 解析日志规则,生成日志备注
+            if(!empty($action_info['log'])){
+                if(preg_match_all('/\[(\S+?)\]/', $action_info['log'], $match)){
+                    $log = [
+                        'user'    => $user_id,
+                        'record'  => $record_id,
+                        'model'   => $model,
+                        'time'    => request()->time(),
+                        'data'    => ['user' => $user_id, 'model' => $model, 'record' => $record_id, 'time' => request()->time()],
+                        'details' => $details
+                    ];
+
+                    $replace = [];
+                    foreach ($match[1] as $value){
+                        $param = explode('|', $value);
+                        if(isset($param[1])){
+                            $replace[] = call_user_func($param[1], $log[$param[0]]);
+                        }else{
+                            $replace[] = $log[$param[0]];
+                        }
+                    }
+
+                    $data['remark'] = str_replace($match[0], $replace, $action_info['log']);
+                }else{
+                    $data['remark'] = $action_info['log'];
+                }
+            }else{
+                // 未定义日志规则，记录操作url
+                $data['remark'] = '操作url：'.$_SERVER['REQUEST_URI'];
+            }
+
+            // 保存日志
+            model('admin/log')->insert($data);
+
+            if(!empty($action_info['rule'])){
+                // 解析行为
+                $rules = parse_action($action, $user_id);
+                // 执行行为
+                $res = execute_action($rules, $action_info['id'], $user_id);
+                if (!$res) {
+                    return '执行行为失败';
+                }
             }
         }
 
