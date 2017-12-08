@@ -25,7 +25,9 @@
             <div class="block-content tab-content">
                 <div class="tab-pane active">
                     <div class="block-content">
-                        <form class="form-horizontal form-builder" action="{:url('install', ['name' => $name, 'confirm' => 1])}" method="get">
+                        <form class="form-horizontal form-builder" action="{:url('install')}" method="get">
+                            <input type="hidden" name="name" value="{$name|default=''}">
+                            <input type="hidden" name="confirm" value="1">
                             <div class="form-group">
                                 <h4 class="col-xs-12 push-10">模块依赖检查</h4>
                                 <div class="col-sm-5">
