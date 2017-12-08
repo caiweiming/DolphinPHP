@@ -619,6 +619,10 @@ class Builder extends ZBuilder
             }
         }
 
+        if (!empty($params) && config('url_common_param')) {
+            $params = array_filter($params, function($v){return $v !== '';});
+        }
+
         return $menu['url_type'] == 'module_home' ? home_url($url, $params) : url($url, $params);
     }
 
