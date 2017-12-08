@@ -1794,8 +1794,8 @@ class Builder extends ZBuilder
                             } else {
                                 $list_img = is_array($row[$column['name']]) ? $row[$column['name']] : explode(',', $row[$column['name']]);
                                 $imgs = '<div class="js-gallery">';
-                                foreach ($list_img as $key => $img) {
-                                    if ($column['param'] != '' && $key == $column['param']) {
+                                foreach ($list_img as $k => $img) {
+                                    if ($column['param'] != '' && $k == $column['param']) {
                                         break;
                                     }
                                     $imgs .= ' <a href="'.get_file_path($img).'" class="img-link" title="'.get_file_name($img).'"><img class="image" src="'.get_file_path($img).'"></a>';
@@ -1842,7 +1842,7 @@ class Builder extends ZBuilder
                             }
 
                             if (!empty($params)) {
-                                foreach ($params as $key => &$param) {
+                                foreach ($params as &$param) {
                                     if ($param === '__data__') $param = $row;
                                 }
                             }
