@@ -735,7 +735,7 @@ class Builder extends ZBuilder
         // 是否为弹出框方式
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
-            $btn_attribute['href']  .= '?_pop=1';
+            $btn_attribute['href']  .= (strpos($btn_attribute['href'], '?') ? '&' : '?').'_pop=1';
             if (is_array($pop) && !empty($pop)) {
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
@@ -818,10 +818,15 @@ class Builder extends ZBuilder
                 'href'  => url(
                     $this->_module.'/'.$this->_controller.'/edit',
                     ['id' => '__id__']
-                ).($pop === true ? '?_pop=1' : ''),
+                ),
                 'target' => '_self',
                 '_style' => $btn_style
             ];
+
+            // 是否弹窗显示
+            if ($pop === true) {
+                $btn_attribute['href'] .= (strpos($btn_attribute['href'], '?') ? '&' : '?').'_pop=1';
+            }
 
             // 判断当前用户是否有权限，没有权限则不生成按钮
             if (session('user_auth.role') != 1 && substr($btn_attribute['href'], 0, 4) != 'http') {
@@ -988,7 +993,7 @@ class Builder extends ZBuilder
         // 是否为弹出框方式
         if ($pop !== false) {
             $btn_attribute['class'] .= ' pop';
-            $btn_attribute['href']  .= '?_pop=1';
+            $btn_attribute['href']  .= (strpos($btn_attribute['href'], '?') ? '&' : '?').'_pop=1';
             if (is_array($pop) && !empty($pop)) {
                 $btn_attribute['data-layer'] = json_encode($pop);
             }
@@ -1615,7 +1620,7 @@ class Builder extends ZBuilder
                                     $url = preg_replace($pattern, $replace_to, $url);
                                 }
 
-                                $url = $column['class'] == 'pop' ? $url.'?_pop=1' : $url;
+                                $url = $column['class'] == 'pop' ? $url.(strpos($url, '?') ? '&' : '?').'_pop=1' : $url;
 
                                 $row[$column['name'].'__'.$column['type']] = '<a href="'. $url .'"
                                     title="'. $row[$column['name']] .'"
