@@ -356,7 +356,7 @@ class Attachment extends Admin
      */
     private function ueditor(){
         $action      = $this->request->get('action');
-        $config_file = './public/static/libs/ueditor/php/config.json';
+        $config_file = './static/libs/ueditor/php/config.json';
         $config      = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($config_file)), true);
         switch ($action) {
             /* 获取配置信息 */
