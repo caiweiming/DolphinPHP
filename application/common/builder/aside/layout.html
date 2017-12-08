@@ -19,9 +19,9 @@
                 {notempty name="con"}
                 {volist name="con" id="_block"}
                     {switch name="_block.type"}
-                        {include file="./application/common/builder/aside/blocks/recent.html" /}
-                        {include file="./application/common/builder/aside/blocks/online.html" /}
-                        {include file="./application/common/builder/aside/blocks/switch.html" /}
+                        {include file="../application/common/builder/aside/blocks/recent.html" /}
+                        {include file="../application/common/builder/aside/blocks/online.html" /}
+                        {include file="../application/common/builder/aside/blocks/switch.html" /}
                     {/switch}
                 {/volist}
                 {/notempty}
@@ -34,9 +34,9 @@
         <div class="block-content">
             {volist name="aside.blocks" id="_block"}
                 {switch name="_block.type"}
-                    {include file="./application/common/builder/aside/blocks/recent.html" /}
-                    {include file="./application/common/builder/aside/blocks/online.html" /}
-                    {include file="./application/common/builder/aside/blocks/switch.html" /}
+                    {include file="../application/common/builder/aside/blocks/recent.html" /}
+                    {include file="../application/common/builder/aside/blocks/online.html" /}
+                    {include file="../application/common/builder/aside/blocks/switch.html" /}
                     {case value="html"}
                         {$_block.title|default=''}
                     {/case}

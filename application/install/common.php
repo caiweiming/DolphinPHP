@@ -64,15 +64,15 @@ function check_env(){
  */
 function check_dirfile(){
     $items = array(
-        array('dir',  '可写', 'check', './application'),
-        array('dir',  '可写', 'check', './data'),
-        array('dir',  '可写', 'check', './export'),
-        array('dir',  '可写', 'check', './packet'),
-        array('dir',  '可写', 'check', './plugins'),
-        array('dir',  '可写', 'check', './public/static'),
-        array('dir',  '可写', 'check', './public/uploads'),
-        array('dir',  '可写', 'check', './runtime'),
-        array('dir',  '可写', 'check', './store'),
+        array('dir',  '可写', 'check', '../application'),
+        array('dir',  '可写', 'check', '../data'),
+        array('dir',  '可写', 'check', '../export'),
+        array('dir',  '可写', 'check', '../packet'),
+        array('dir',  '可写', 'check', '../plugins'),
+        array('dir',  '可写', 'check', './static'),
+        array('dir',  '可写', 'check', './uploads'),
+        array('dir',  '可写', 'check', '../runtime'),
+        array('dir',  '可写', 'check', '../store'),
     );
 
     foreach ($items as &$val) {

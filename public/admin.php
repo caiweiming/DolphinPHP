@@ -20,15 +20,32 @@ if (version_compare(PHP_VERSION, '5.5', '<')) {
 // [ 应用入口文件 ]
 
 // 定义应用目录
-define('APP_PATH', __DIR__ . '/application/');
-
-// 定义后台入口文件
-define('ADMIN_FILE', 'admin.php');
+define('APP_PATH', __DIR__ . '/../application/');
 
 // 检查是否安装
-if(!is_file('./data/install.lock')){
+if(!is_file('../data/install.lock')){
     define('BIND_MODULE', 'install');
 }
 
+// 定义入口为admin
+define('ENTRANCE', 'admin');
+
+// +----------------------------------------------------------------------
+// | 后台默认为关闭路由
+// | 如果需要开启路由功能，请注释下面三句
+// +----------------------------------------------------------------------
+// 加载框架基础文件
+require '../thinkphp/base.php';
+
+// 关闭路由
+\think\App::route(false);
+
+// 执行应用
+\think\App::run()->send();
+
+// +----------------------------------------------------------------------
+// | 默认为关闭路由
+// | 如果需要开启路由，请取消以下注释
+// +----------------------------------------------------------------------
 // 加载框架引导文件
-require './thinkphp/start.php';
+// require './thinkphp/start.php';

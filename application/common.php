@@ -1318,7 +1318,7 @@ if (!function_exists('extend_form_item')) {
             $form['_layout'] = $_layout[$form['name']];
         }
 
-        $template = ROOT_PATH.'/extend/form/'.$form['type'].'/'.$form['type'].'.html';
+        $template = './extend/form/'.$form['type'].'/'.$form['type'].'.html';
         if (file_exists($template)) {
             $template_content = file_get_contents($template);
             $view = new View();

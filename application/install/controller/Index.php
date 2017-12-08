@@ -29,7 +29,7 @@ class Index extends Controller
     protected function _initialize() {
         $base_file = $this->request->baseFile();
         $base_dir  = rtrim($base_file, 'index.php');
-        $this->assign('static_dir', $base_dir. 'public/static/');
+        $this->assign('static_dir', $base_dir. 'static/');
     }
 
     /**
@@ -183,7 +183,7 @@ class Index extends Controller
             $this->error('安装出错，请重新安装！', $this->request->baseFile());
         } else {
             // 写入安装锁定文件(只能在最后一步写入锁定文件，因为锁定文件写入后安装模块将无法访问)
-            file_put_contents('./data/install.lock', 'lock');
+            file_put_contents('../data/install.lock', 'lock');
             session('step', null);
             session('error', null);
             session('reinstall', null);

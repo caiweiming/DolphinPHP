@@ -819,7 +819,8 @@ class Builder extends ZBuilder
                     $this->_module.'/'.$this->_controller.'/edit',
                     ['id' => '__id__']
                 ).($pop === true ? '?_pop=1' : ''),
-                'target' => '_self'
+                'target' => '_self',
+                '_style' => $btn_style
             ];
 
             // 判断当前用户是否有权限，没有权限则不生成按钮
