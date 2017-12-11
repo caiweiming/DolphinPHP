@@ -744,10 +744,6 @@ jQuery(document).ready(function() {
             $li.find('.file-state').html('<div class="bg-'+response.class+'">'+response.info+'</div>');
             $li.find('a.img-link').attr('href', response.path);
 
-            setTimeout(function () {
-                $li.find('.file-state').remove();
-            }, 1500);
-
             // 文件上传成功后的自定义回调函数
             if (window['dp_image_upload_success'] !== undefined) window['dp_image_upload_success']();
             // 文件上传成功后的自定义回调函数
