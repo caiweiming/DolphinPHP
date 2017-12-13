@@ -214,9 +214,13 @@ class Attachment extends Admin
         if ($file->getMime() == 'text/x-php' || $file->getMime() == 'text/html') {
             $error_msg = '禁止上传非法文件！';
         }
-        if (!in_array($file_ext, $ext_limit)) {
+        if (preg_grep("/php/i", $ext_limit)) {
+            $error_msg = '禁止上传非法文件！';
+        }
+        if (!preg_grep("/$file_ext/i", $ext_limit)) {
             $error_msg = '附件类型不正确！';
         }
+
         if ($error_msg != '') {
             switch ($from) {
                 case 'wangeditor':
@@ -335,13 +339,13 @@ class Attachment extends Admin
                     return "error|".$file->getError();
                     break;
                 case 'ueditor':
-                    return json(['state' => '上传失败']);
+                    return json(['state' => $file->getError()]);
                     break;
                 case 'editormd':
-                    return json(["success" => 0, "message" => '上传失败']);
+                    return json(["success" => 0, "message" => $file->getError()]);
                     break;
                 case 'ckeditor':
-                    return ck_js($callback, '', '上传失败');
+                    return ck_js($callback, '', $file->getError());
                     break;
                 default:
                     return json(['code' => 0, 'class' => 'danger', 'info' => $file->getError()]);
