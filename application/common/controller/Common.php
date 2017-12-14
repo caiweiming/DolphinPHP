@@ -20,6 +20,20 @@ use think\Controller;
 class Common extends Controller
 {
     /**
+     * 初始化
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    protected function _initialize()
+    {
+        // 后台公共模板
+        $this->assign('_admin_base_layout', config('admin_base_layout'));
+        // 当前配色方案
+        $this->assign('system_color', config('system_color'));
+        // 输出弹出层参数
+        $this->assign('_pop', $this->request->param('_pop'));
+    }
+
+    /**
      * 获取筛选条件
      * @author 蔡伟明 <314013107@qq.com>
      * @alter 小乌 <82950492@qq.com>

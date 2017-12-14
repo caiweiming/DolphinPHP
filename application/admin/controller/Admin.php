@@ -33,6 +33,7 @@ class Admin extends Common
      */
     protected function _initialize()
     {
+        parent::_initialize();
         // 是否拒绝ie浏览器访问
         if (config('system.deny_ie') && get_browser_type() == 'ie') {
             $this->redirect('admin/ie/index');
@@ -49,11 +50,6 @@ class Admin extends Common
 
         // 设置分页参数
         $this->setPageParam();
-
-        // 后台公共模板
-        $this->assign('_admin_base_layout', config('admin_base_layout'));
-        // 当前配色方案
-        $this->assign('system_color', config('system_color'));
 
         // 如果不是ajax请求，则读取菜单
         if (!$this->request->isAjax()) {
@@ -88,9 +84,6 @@ class Admin extends Common
             ZBuilder::make('aside')
                 ->addBlock('switch', '系统设置', $settings);
         }
-
-        // 输出弹出层参数
-        $this->assign('_pop', $this->request->param('_pop'));
     }
 
     /**
