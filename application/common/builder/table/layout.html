@@ -45,6 +45,57 @@
                 {/notempty}
                 <div class="block-content tab-content">
                     <div class="tab-pane active">
+                        {notempty name="_search_area"}
+                        <div class="search-area border-b push">
+                            <input type="hidden" id="_o" value="{$_search_area_op|default=''}">
+                            <form action="{$_search_area_url}" class="form-horizontal row" id="search-area">
+                                {volist name="_search_area" id="vo"}
+                                {switch name="vo[0]"}
+                                {case value="text"}
+                                <div class="col-md-{$_search_area_layout[$vo.1]|default='3'} col-xs-12 push">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{$vo.2|default=''}</span>
+                                        <input class="form-control" type="{$vo.0|default='text'}" id="search_{$vo.1|default=''}" name="{$vo.1|default=''}" value="{$vo.4|default=''}" placeholder="{$vo.2|default=''}">
+                                    </div>
+                                </div>
+                                {/case}
+                                {case value="select"}
+                                <div class="col-md-{$_search_area_layout[$vo.1]|default='3'} col-xs-12 push">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{$vo.2|default=''}</span>
+                                        <select class="js-select2 form-control" id="search_{$vo.1|default=''}" name="{$vo.1|default=''}" data-width="resolve" data-allow-clear="true" data-placeholder="{$vo.2|default=''}">
+                                            <option></option>
+                                            {notempty name="vo.5"}
+                                            {volist name="vo.5" id="v"}
+                                            <option value="{$key}" {if ((string)$vo.4 == (string)$key)}selected{/if}>{$v}</option>
+                                            {/volist}
+                                            {/notempty}
+                                        </select>
+                                    </div>
+                                </div>
+                                {/case}
+                                {case value="daterange"}
+                                <div class="col-md-{$_search_area_layout[$vo.1]|default='3'} col-xs-12 push">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{$vo.2|default=''}</span>
+                                        <input class="js-daterangepicker form-control" type="text" id="search_{$vo.1|default=''}" name="{$vo.1|default=''}" value="{$vo.4|default=''}" placeholder="{$vo.2|default=''}" {$vo.5|default=""}>
+                                    </div>
+                                </div>
+                                {/case}
+                                {/switch}
+                                {/volist}
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                            <a href="{$_search_area_url}" class="btn btn-sm btn-default" type="reset"><i class="fa fa-reply"></i> 重置</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        {/notempty}
+
                         {// 顶部筛选及搜索 }
                         {$extra_html_toolbar_top|default=''}
                         <div class="row data-table-toolbar">

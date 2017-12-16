@@ -133,5 +133,11 @@ return [
     ],
     'jqueryui_js' => [ // jqueryui
         "__LIBS__/jquery-ui/jquery-ui.min.js",
+    ],
+    'daterangepicker_js' => [ // 日期时间范围
+        "__LIBS__/bootstrap-daterangepicker/daterangepicker.js",
+    ],
+    'daterangepicker_css' => [ // 日期时间范围
+        "__LIBS__/bootstrap-daterangepicker/daterangepicker.css",
     ]
 ];

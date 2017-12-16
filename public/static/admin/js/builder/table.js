@@ -417,4 +417,17 @@ jQuery(document).ready(function() {
             window.location.href = $url;
         }
     });
+
+    // 搜索区域
+    $('#search-area').submit(function () {
+        var items = $('#search-area').serializeArray();
+        var op  = $('#_o').val();
+        var str = [];
+        $.each(items, function (index, e) {
+            str.push(e.name + '=' + e.value)
+        });
+        str = str.join('|');
+        location.href = $(this).attr('action')+'?_s='+str+'&_o='+op;
+        return false;
+    });
 });

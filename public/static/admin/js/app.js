@@ -1021,6 +1021,54 @@ var App = function() {
     };
 
     /*
+     * 日期时间范围
+     *
+     * App.initHelper('daterangepicker');
+     *
+     */
+    var uiHelperDaterangepicker = function () {
+        jQuery('.js-daterangepicker').each(function () {
+            var $daterangepicker = jQuery(this);
+            var $format = $daterangepicker.data('format') === undefined ? "YYYY-MM-DD" : $daterangepicker.data('format');
+            var $autoUpdateInput = $daterangepicker.data('auto-update-input') === undefined ? false : $daterangepicker.data('auto-update-input');
+            var $showDropdowns = $daterangepicker.data('show-dropdowns') === undefined ? true : $daterangepicker.data('show-dropdowns');
+            var $singleDatePicker = $daterangepicker.data('single-date-picker') === undefined ? false : $daterangepicker.data('single-date-picker');
+
+            $daterangepicker.daterangepicker({
+                autoUpdateInput: $autoUpdateInput,
+                showDropdowns: $showDropdowns,
+                locale: {
+                    "format": $format,
+                    "separator": " - ",
+                    "applyLabel": "确定",
+                    "cancelLabel": "取消",
+                    "fromLabel": "From",
+                    "toLabel": "To",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "W",
+                    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],
+                    "monthNames": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    "firstDay": 7
+                }
+            });
+
+            if (!$singleDatePicker) {
+                $daterangepicker.on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format($format) + ' - ' + picker.endDate.format($format));
+                });
+            } else {
+                $daterangepicker.on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format($format));
+                });
+            }
+
+            $daterangepicker.on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+    };
+
+    /*
      * Bootstrap Colorpicker init, for more examples you can check out http://mjolnic.com/bootstrap-colorpicker/
      *
      * App.initHelper('colorpicker');
@@ -1362,6 +1410,9 @@ var App = function() {
                     break;
                 case 'datepicker':
                     uiHelperDatepicker();
+                    break;
+                case 'daterangepicker':
+                    uiHelperDaterangepicker();
                     break;
                 case 'colorpicker':
                     uiHelperColorpicker();

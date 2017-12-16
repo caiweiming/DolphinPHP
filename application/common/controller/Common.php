@@ -50,6 +50,8 @@ class Common extends Controller
         $filter_time_to   = input('param._filter_time_to/s', '');
         $select_field     = input('param._select_field/s', '');
         $select_value     = input('param._select_value/s', '');
+        $search_area      = input('param._s', '');
+        $search_area_op   = input('param._o', '');
 
         $map = [];
 
@@ -81,6 +83,28 @@ class Common extends Controller
             foreach ($filter as $key => $item) {
                 if (isset($filter_content[$key])) {
                     $map[$item] = ['in', $filter_content[$key]];
+                }
+            }
+        }
+
+        // 搜索区域
+        if ($search_area != '') {
+            $search_area = explode('|', $search_area);
+            $search_area_op = explode('|', $search_area_op);
+            foreach ($search_area as $key => $item) {
+                list($field, $value) = explode('=', $item);
+                $op = explode('=', $search_area_op[$key]);
+                if ($value != '') {
+                    switch ($op[1]) {
+                        case 'like':
+                            $map[$field] = ['like', "%$value%"];
+                            break;
+                        case 'between time':
+                        case 'not between time':
+                            $value = explode(' - ', $value);
+                        default:
+                            $map[$field] = [$op[1], $value];
+                    }
                 }
             }
         }

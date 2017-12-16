@@ -149,6 +149,9 @@ class Builder extends ZBuilder
         '_select_list'       => [],       // 顶部下拉菜单列表
         '_filter_time'       => [],       // 时间段筛选
         'empty_tips'         => '暂无数据', // 没有数据时的提示信息
+        '_search_area'       => [],       // 搜索区域
+        '_search_area_url'   => '',       // 搜索区域url
+        '_search_area_op'    => '',       // 搜索区域匹配方式
     ];
 
     /**
@@ -1059,6 +1062,90 @@ class Builder extends ZBuilder
             ];
 
             $this->_vars['search_button'] = $search_button !== null ? $search_button : config('zbuilder.search_button');
+        }
+        return $this;
+    }
+
+    /**
+     * 设置搜索区域
+     * @param array $items
+     * @param string $url
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function setSearchArea($items = [], $url = '')
+    {
+        if (!empty($items)) {
+            $_op = [];
+            $_defaults = [];
+            $_s  = $this->request->param('_s', '');
+            if ($_s != '') {
+                $_s = explode('|', $_s);
+                foreach ($_s as $v) {
+                    list($field, $value) = explode('=', $v);
+                    $_defaults[$field] = $value;
+                }
+            }
+
+            foreach ($items as &$item) {
+                $layout = 3;
+
+                if (strpos($item[0], ':')) {
+                    list($item[0], $layout) = explode(':', $item[0]);
+                }
+
+                $type    = $item[0];
+                $name    = $item[1];
+                $label   = $item[2];
+                $op      = isset($item[3]) ? $item[3] : 'eq';
+                $item[4] = isset($_defaults[$name]) ? $_defaults[$name] : (isset($item[4]) ? $item[4] : ''); // 默认值
+                $item[5] = isset($item[5]) ? $item[5] : [];
+
+                switch ($op) {
+                    case '=':  $op = 'eq';  break;
+                    case '<>': $op = 'neq'; break;
+                    case '>':  $op = 'gt';  break;
+                    case '<':  $op = 'lt';  break;
+                    case '>=': $op = 'egt'; break;
+                    case '<=': $op = 'elt'; break;
+                    default:
+                        $op = $op == '' ? 'eq' : $op;
+                }
+
+                switch ($type) {
+                    case 'text':
+                        break;
+                    case 'select':
+                        $this->_vars['_js_files'][]  = 'select2_js';
+                        $this->_vars['_css_files'][] = 'select2_css';
+                        $this->_vars['_js_init'][]   = 'select2';
+                        break;
+                    case 'daterange':
+                        $this->_vars['_js_files'][]  = 'moment_js';
+                        $this->_vars['_js_files'][]  = 'daterangepicker_js';
+                        $this->_vars['_css_files'][] = 'daterangepicker_css';
+                        $this->_vars['_js_init'][]   = 'daterangepicker';
+                        $op = $op == 'eq' ? 'between time' : $op . ' time';
+
+                        $params = [];
+                        if (!empty($item[5])) {
+                            foreach ($item[5] as $key => $param) {
+                                $params[] = 'data-'.strtolower($key).'="'.$param.'"';
+                            }
+                        }
+                        $item[5] = implode(' ', $params);
+                        break;
+                    default:
+
+                }
+
+                $_op[] = $name.'='.strtolower($op);
+                $this->_vars['_search_area_layout'][$name] = $layout;
+            }
+
+            $this->_vars['_search_area_op']  = implode('|', $_op);
+            $this->_vars['_search_area']     = $items;
+            $this->_vars['_search_area_url'] = $url == '' ? $this->request->baseUrl(true) : $url;
         }
         return $this;
     }
@@ -2222,7 +2309,6 @@ class Builder extends ZBuilder
         // 处理js和css合并的参数
         if (!empty($this->_vars['_js_files'])) {
             $this->_vars['_js_files'] = array_unique($this->_vars['_js_files']);
-            sort($this->_vars['_js_files']);
         }
         if (!empty($this->_vars['_css_files'])) {
             $this->_vars['_css_files'] = array_unique($this->_vars['_css_files']);
