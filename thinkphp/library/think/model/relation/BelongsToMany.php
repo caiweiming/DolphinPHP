@@ -74,7 +74,7 @@ class BelongsToMany extends Relation
     protected function newPivot($data = [])
     {
         $class = $this->pivotName ?: '\\think\\model\\Pivot';
-        $pivot = new $class($this->parent, $data, $this->middle);
+        $pivot = new $class($data, $this->parent, $this->middle);
         if ($pivot instanceof Pivot) {
             return $pivot;
         } else {
@@ -212,11 +212,12 @@ class BelongsToMany extends Relation
     /**
      * 根据关联条件查询当前模型
      * @access public
-     * @param mixed $where 查询条件（数组或者闭包）
+     * @param  mixed  $where 查询条件（数组或者闭包）
+     * @param  mixed  $fields   字段
      * @return Query
      * @throws Exception
      */
-    public function hasWhere($where = [])
+    public function hasWhere($where = [], $fields = null)
     {
         throw new Exception('relation not support: hasWhere');
     }
@@ -382,7 +383,7 @@ class BelongsToMany extends Relation
     {
         // 关联查询封装
         $tableName = $this->query->getTable();
-        $table     = $this->pivot->getTable();
+        $table     = $this->pivot->getTable($this->middle);
         $fields    = $this->getQueryFields($tableName);
 
         $query = $this->query->field($fields)
