@@ -27,9 +27,7 @@ class Index extends Controller
      * @author 蔡伟明 <314013107@qq.com>
      */
     protected function _initialize() {
-        $base_file = $this->request->baseFile();
-        $base_dir  = rtrim($base_file, 'index.php');
-        $this->assign('static_dir', $base_dir. 'static/');
+        $this->assign('static_dir', 'static/');
     }
 
     /**
