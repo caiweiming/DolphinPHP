@@ -95,7 +95,12 @@ class Ajax extends Common
             }
         }
 
-        $data_list = Db::name($table)->where($map)->group($field)->column($field);
+        if (strpos($table, '/')) {
+            $data_list = model($table)->where($map)->group($field)->column($field);
+        } else {
+            $data_list = Db::name($table)->where($map)->group($field)->column($field);
+        }
+
         if ($data_list === false) {
             return json(['code' => 0, 'msg' => '查询失败']);
         }
