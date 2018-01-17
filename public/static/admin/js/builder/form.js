@@ -82,7 +82,7 @@ jQuery(document).ready(function() {
         var local = new BMap.LocalSearch(map, {
             onSearchComplete: function () {
                 var point = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
-                map.centerAndZoom(point, 18);
+                map.centerAndZoom(point, map_level);
                 // 创建标注
                 create_mark(point);
             }
