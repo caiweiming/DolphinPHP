@@ -71,6 +71,7 @@ return [
     ],
     'select2_js' => [ // 下拉框
         $libs_path. "select2/select2.full.min.js",
+        $libs_path. "select2/i18n/zh-CN.js",
     ],
     'select2_css' => [ // 下拉框
         $libs_path. "select2/select2.min.css",
