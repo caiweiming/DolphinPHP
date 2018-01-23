@@ -438,6 +438,9 @@ table.treetable tr.branch {
     overflow: hidden;
     margin: 0;
 }
+.form_group_hide .btn{
+    height:0;
+}
 
 /* 百度地图 */
 .bmap{
