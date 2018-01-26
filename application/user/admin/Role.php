@@ -93,7 +93,7 @@ class Role extends Admin
         $menus = cache('access_menus');
         if (!$menus) {
             $modules = Db::name('admin_module')->where('status', 1)->column('name');
-            $menus = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
+            $menus = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,url_value,title,icon');
             $menus = Tree::toLayer($menus);
             $menus = $this->buildJsTree($menus);
 
@@ -147,7 +147,7 @@ class Role extends Admin
         $info       = RoleModel::get($id);
         $role_list  = RoleModel::getTree($id, '顶级角色');
         $modules    = Db::name('admin_module')->where('status', 1)->column('name');
-        $menus      = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,title,icon');
+        $menus      = MenuModel::where('module', 'in', $modules)->order('sort,id')->column('id,pid,sort,url_value,title,icon');
         $menus      = Tree::toLayer($menus);
         $menus      = $this->buildJsTree($menus, $info);
 
@@ -180,9 +180,9 @@ class Role extends Admin
                     $option['selected'] = in_array($menu['id'], $user['menu_auth']) ? true : false;
                 }
                 if (isset($menu['child'])) {
-                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].$this->buildJsTree($menu['child'], $user).'</li>';
+                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].($menu['url_value'] == '' ? '' : ' ('.$menu['url_value'].')').$this->buildJsTree($menu['child'], $user).'</li>';
                 } else {
-                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].'</li>';
+                    $result .= '<li id="'.$menu['id'].'" data-jstree=\''.json_encode($option).'\'>'.$menu['title'].($menu['url_value'] == '' ? '' : ' ('.$menu['url_value'].')').'</li>';
                 }
             }
         }
