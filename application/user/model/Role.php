@@ -49,7 +49,7 @@ class Role extends Model
     public static function getTree($id = null, $default = '')
     {
         $result[0]       = '顶级角色';
-        $where['status'] = ['egt', 0];
+        $where['status'] = 1;
 
         // 排除指定菜单及其子菜单
         if ($id !== null) {
