@@ -395,6 +395,9 @@ class Module extends Admin
 
         // 导出数据库表
         if (isset($module_info['tables']) && !empty($module_info['tables'])) {
+            if (!is_dir($module_dir. '/sql')) {
+                mkdir($module_dir. '/sql', 644, true);
+            }
             if (!Database::export($module_info['tables'], $module_dir. '/sql/install.sql', config('database.prefix'), $export_data)) {
                 $this->error('数据库文件创建失败，请重新导出');
             }
