@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f1a3530a154f6a245f95118f89a54df",
+    "content-hash": "5a67c147552f4443b605e80408d5617d",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.3",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://dl.composer-proxy.org/ezyang/htmlpurifier/95e1bae3182efc0f3422896a3236e991049dac69.zip",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "url": "https://files.phpcomposer.com/files/ezyang/htmlpurifier/d85d39da4576a6934b72480be6978fb10c860021.zip",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
             "require": {
@@ -51,20 +51,20 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2018-02-23T01:58:20+00:00"
         },
         {
             "name": "topthink/framework",
-            "version": "v5.0.13",
+            "version": "v5.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "29803c09c9e8d7385ab720d2c199c036ceedc4d3"
+                "reference": "7c1375791fe8772e33282ee8611ea465dc215fca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/top-think/framework/29803c09c9e8d7385ab720d2c199c036ceedc4d3.zip",
-                "reference": "29803c09c9e8d7385ab720d2c199c036ceedc4d3",
+                "url": "https://files.phpcomposer.com/files/top-think/framework/7c1375791fe8772e33282ee8611ea465dc215fca.zip",
+                "reference": "7c1375791fe8772e33282ee8611ea465dc215fca",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2017-12-13T04:44:30+00:00"
+            "time": "2018-01-31T08:40:10+00:00"
         },
         {
             "name": "topthink/think-captcha",

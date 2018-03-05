@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -192,7 +192,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         $con = Db::connect($connection);
         // 设置当前模型 确保查询返回模型对象
         $queryClass = $this->query ?: $con->getConfig('query');
-        $query      = new $queryClass($con, $this->class);
+        $query      = new $queryClass($con, $this);
 
         // 设置当前数据表和模型名
         if (!empty($this->table)) {
@@ -206,6 +206,19 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         }
 
         return $query;
+    }
+
+    /**
+     * 创建新的模型实例
+     * @access public
+     * @param  array|object $data 数据
+     * @param  bool         $isUpdate 是否为更新
+     * @param  mixed        $where 更新条件
+     * @return Model
+     */
+    public function newInstance($data = [], $isUpdate = false, $where = null)
+    {
+        return (new static($data))->isUpdate($isUpdate, $where);
     }
 
     /**
@@ -599,7 +612,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     protected function getRelationData(Relation $modelRelation)
     {
-        if ($this->parent && get_class($this->parent) == $modelRelation->getModel()) {
+        if ($this->parent && !$modelRelation->isSelfRelation() && get_class($modelRelation->getModel()) == get_class($this->parent)) {
             $value = $this->parent;
         } else {
             // 首先获取关联数据
@@ -1070,12 +1083,17 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 }
             }
 
-            if (is_string($pk) && isset($data[$pk])) {
-                if (!isset($where[$pk])) {
-                    unset($where);
-                    $where[$pk] = $data[$pk];
+            $array = [];
+
+            foreach ((array) $pk as $key) {
+                if (isset($data[$key])) {
+                    $array[$key] = $data[$key];
+                    unset($data[$key]);
                 }
-                unset($data[$pk]);
+            }
+
+            if (!empty($array)) {
+                $where = $array;
             }
 
             // 检测字段
@@ -1123,10 +1141,11 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             }
 
             // 获取自动增长主键
-            if ($result && is_string($pk) && (!isset($this->data[$pk]) || '' == $this->data[$pk])) {
-                $insertId = $this->getQuery()->getLastInsID($sequence);
-                if ($insertId) {
-                    $this->data[$pk] = $insertId;
+            if ($result && $insertId = $this->getQuery()->getLastInsID($sequence)) {
+                foreach ((array) $pk as $key) {
+                    if (!isset($this->data[$key]) || '' == $this->data[$key]) {
+                        $this->data[$key] = $insertId;
+                    }
                 }
             }
 

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -245,7 +245,7 @@ class HasMany extends Relation
         return $this->parent->db()
             ->alias($model)
             ->field($model . '.*')
-            ->join($table . ' ' . $relation, $model . '.' . $this->localKey . '=' . $relation . '.' . $this->foreignKey, $joinType)
+            ->join([$table => $relation], $model . '.' . $this->localKey . '=' . $relation . '.' . $this->foreignKey, $joinType)
             ->group($relation . '.' . $this->foreignKey)
             ->having('count(' . $id . ')' . $operator . $count);
     }
@@ -277,7 +277,7 @@ class HasMany extends Relation
         return $this->parent->db()->alias($model)
             ->field($fields)
             ->group($model . '.' . $this->localKey)
-            ->join($table . ' ' . $relation, $model . '.' . $this->localKey . '=' . $relation . '.' . $this->foreignKey)
+            ->join([$table => $relation], $model . '.' . $this->localKey . '=' . $relation . '.' . $this->foreignKey)
             ->where($where);
     }
 

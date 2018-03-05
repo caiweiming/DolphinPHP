@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -58,9 +58,9 @@ class Query
      * 构造函数
      * @access public
      * @param Connection $connection 数据库对象实例
-     * @param string     $model      模型名
+     * @param Model      $model      模型对象
      */
-    public function __construct(Connection $connection = null, $model = '')
+    public function __construct(Connection $connection = null, $model = null)
     {
         $this->connection = $connection ?: Db::connect([], true);
         $this->prefix     = $this->connection->getConfig('prefix');
@@ -133,7 +133,7 @@ class Query
     /**
      * 获取当前的模型对象名
      * @access public
-     * @return string
+     * @return Model|null
      */
     public function getModel()
     {
@@ -534,22 +534,24 @@ class Query
      * MIN查询
      * @access public
      * @param string $field 字段名
+     * @param bool   $force   强制转为数字类型
      * @return mixed
      */
-    public function min($field)
+    public function min($field, $force = true)
     {
-        return $this->value('MIN(' . $field . ') AS tp_min', 0, true);
+        return $this->value('MIN(' . $field . ') AS tp_min', 0, $force);
     }
 
     /**
      * MAX查询
      * @access public
      * @param string $field 字段名
+     * @param bool   $force   强制转为数字类型
      * @return mixed
      */
-    public function max($field)
+    public function max($field, $force = true)
     {
-        return $this->value('MAX(' . $field . ') AS tp_max', 0, true);
+        return $this->value('MAX(' . $field . ') AS tp_max', 0, $force);
     }
 
     /**
@@ -635,6 +637,7 @@ class Query
                 $this->options = [];
                 return true;
             }
+            return $this->setField($field, ['inc', $field, $step]);
         }
         return $this->setField($field, ['dec', $field, $step]);
     }
@@ -704,8 +707,7 @@ class Query
     {
         // 传入的表名为数组
         if (is_array($join)) {
-            $table = key($join);
-            $alias = current($join);
+            $table = $join;
         } else {
             $join = trim($join);
             if (false !== strpos($join, '(')) {
@@ -726,13 +728,9 @@ class Query
                     $table = $this->getTable($table);
                 }
             }
-        }
-        if (isset($alias) && $table != $alias) {
-            if (isset($this->options['alias'][$table])) {
-                $table = $table . '@think' . uniqid();
+            if (isset($alias) && $table != $alias) {
+                $table = [$table => $alias];
             }
-            $table = [$table => $alias];
-            $this->alias($table);
         }
         return $table;
     }
@@ -1904,11 +1902,10 @@ class Query
             $with = explode(',', $with);
         }
 
-        $first        = true;
-        $currentModel = $this->model;
+        $first = true;
 
         /** @var Model $class */
-        $class = new $currentModel;
+        $class = $this->model;
         foreach ($with as $key => $relation) {
             $subRelation = '';
             $closure     = false;
@@ -1967,7 +1964,7 @@ class Query
                     $relation = $key;
                 }
                 $relation = Loader::parseName($relation, 1, false);
-                $count    = '(' . (new $this->model)->$relation()->getRelationCountQuery($closure) . ')';
+                $count    = '(' . $this->model->$relation()->getRelationCountQuery($closure) . ')';
                 $this->field([$count => Loader::parseName($relation) . '_count']);
             }
         }
@@ -2359,11 +2356,10 @@ class Query
         // 数据列表读取后的处理
         if (!empty($this->model)) {
             // 生成模型对象
-            $modelName = $this->model;
             if (count($resultSet) > 0) {
                 foreach ($resultSet as $key => $result) {
                     /** @var Model $model */
-                    $model = new $modelName($result);
+                    $model = $this->model->newInstance($result);
                     $model->isUpdate(true);
 
                     // 关联查询
@@ -2383,7 +2379,7 @@ class Query
                 // 模型数据集转换
                 $resultSet = $model->toCollection($resultSet);
             } else {
-                $resultSet = (new $modelName)->toCollection($resultSet);
+                $resultSet = $this->model->toCollection($resultSet);
             }
         } elseif ('collection' == $this->connection->getConfig('resultset_type')) {
             // 返回Collection对象
@@ -2509,7 +2505,7 @@ class Query
                 $result = isset($resultSet[0]) ? $resultSet[0] : null;
             }
 
-            if (isset($cache) && false !== $result) {
+            if (isset($cache) && $result) {
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
@@ -2519,8 +2515,7 @@ class Query
         if (!empty($result)) {
             if (!empty($this->model)) {
                 // 返回模型对象
-                $model  = $this->model;
-                $result = new $model($result);
+                $result = $this->model->newInstance($result);
                 $result->isUpdate(true, isset($options['where']['AND']) ? $options['where']['AND'] : null);
                 // 关联查询
                 if (!empty($options['relation'])) {
@@ -2551,7 +2546,8 @@ class Query
     protected function throwNotFound($options = [])
     {
         if (!empty($this->model)) {
-            throw new ModelNotFoundException('model data Not Found:' . $this->model, $this->model, $options);
+            $class = get_class($this->model);
+            throw new ModelNotFoundException('model data Not Found:' . $class, $class, $options);
         } else {
             $table = is_array($options['table']) ? key($options['table']) : $options['table'];
             throw new DataNotFoundException('table data not Found:' . $table, $table, $options);
@@ -2599,48 +2595,54 @@ class Query
     public function chunk($count, $callback, $column = null, $order = 'asc')
     {
         $options = $this->getOptions();
-        if (isset($options['table'])) {
-            $table = is_array($options['table']) ? key($options['table']) : $options['table'];
-        } else {
-            $table = '';
+        if (empty($options['table'])) {
+            $options['table'] = $this->getTable();
         }
-        $column = $column ?: $this->getPk($table);
-        if (is_array($column)) {
-            $column = $column[0];
-        }
+        $column = $column ?: $this->getPk($options);
+
         if (isset($options['order'])) {
             if (App::$debug) {
                 throw new \LogicException('chunk not support call order');
             }
             unset($options['order']);
         }
-        $bind      = $this->bind;
-        $resultSet = $this->options($options)->limit($count)->order($column, $order)->select();
-        if (strpos($column, '.')) {
-            list($alias, $key) = explode('.', $column);
+        $bind = $this->bind;
+        if (is_array($column)) {
+            $times = 1;
+            $query = $this->options($options)->page($times, $count);
         } else {
-            $key = $column;
-        }
-        if ($resultSet instanceof Collection) {
-            $resultSet = $resultSet->all();
-        }
-
-        while (!empty($resultSet)) {
-            if (false === call_user_func($callback, $resultSet)) {
-                return false;
+            if (strpos($column, '.')) {
+                list($alias, $key) = explode('.', $column);
+            } else {
+                $key = $column;
             }
-            $end       = end($resultSet);
-            $lastId    = is_array($end) ? $end[$key] : $end->getData($key);
-            $resultSet = $this->options($options)
-                ->limit($count)
-                ->bind($bind)
-                ->where($column, 'asc' == strtolower($order) ? '>' : '<', $lastId)
-                ->order($column, $order)
-                ->select();
+            $query = $this->options($options)->limit($count);
+        }
+        $resultSet = $query->order($column, $order)->select();
+
+        while (count($resultSet) > 0) {
             if ($resultSet instanceof Collection) {
                 $resultSet = $resultSet->all();
             }
+
+            if (false === call_user_func($callback, $resultSet)) {
+                return false;
+            }
+
+            if (is_array($column)) {
+                $times++;
+                $query = $this->options($options)->page($times, $count);
+            } else {
+                $end    = end($resultSet);
+                $lastId = is_array($end) ? $end[$key] : $end->getData($key);
+                $query  = $this->options($options)
+                    ->limit($count)
+                    ->where($column, 'asc' == strtolower($order) ? '>' : '<', $lastId);
+            }
+
+            $resultSet = $query->bind($bind)->order($column, $order)->select();
         }
+
         return true;
     }
 

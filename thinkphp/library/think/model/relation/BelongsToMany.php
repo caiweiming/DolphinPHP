@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -52,6 +52,10 @@ class BelongsToMany extends Relation
         }
         $this->query = (new $model)->db();
         $this->pivot = $this->newPivot();
+
+        if ('think\model\Pivot' == get_class($this->pivot)) {
+            $this->pivot->name($this->middle);
+        }
     }
 
     /**
@@ -383,7 +387,7 @@ class BelongsToMany extends Relation
     {
         // 关联查询封装
         $tableName = $this->query->getTable();
-        $table     = $this->pivot->getTable($this->middle);
+        $table     = $this->pivot->getTable();
         $fields    = $this->getQueryFields($tableName);
 
         $query = $this->query->field($fields)
@@ -391,7 +395,7 @@ class BelongsToMany extends Relation
 
         if (empty($this->baseQuery)) {
             $relationFk = $this->query->getPk();
-            $query->join($table . ' pivot', 'pivot.' . $foreignKey . '=' . $tableName . '.' . $relationFk)
+            $query->join([$table => 'pivot'], 'pivot.' . $foreignKey . '=' . $tableName . '.' . $relationFk)
                 ->where($condition);
         }
         return $query;
@@ -572,7 +576,7 @@ class BelongsToMany extends Relation
         if (empty($this->baseQuery) && $this->parent->getData()) {
             $pk    = $this->parent->getPk();
             $table = $this->pivot->getTable();
-            $this->query->join($table . ' pivot', 'pivot.' . $this->foreignKey . '=' . $this->query->getTable() . '.' . $this->query->getPk())->where('pivot.' . $this->localKey, $this->parent->$pk);
+            $this->query->join([$table => 'pivot'], 'pivot.' . $this->foreignKey . '=' . $this->query->getTable() . '.' . $this->query->getPk())->where('pivot.' . $this->localKey, $this->parent->$pk);
             $this->baseQuery = true;
         }
     }
