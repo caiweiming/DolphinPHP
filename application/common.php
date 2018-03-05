@@ -1226,6 +1226,7 @@ if (!function_exists('load_assets')) {
                 $result .= '<script src="'.$item.'"></script>';
             }
         }
+        $result = str_replace(array_keys(config('view_replace_str')), array_values(config('view_replace_str')), $result);
         return $result;
     }
 }
