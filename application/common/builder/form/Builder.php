@@ -1755,6 +1755,7 @@ class Builder extends ZBuilder
             if (!preg_match('/__.*?__/', $item)) {
                 $urls[$key] = '__EXTEND_FORM__/'.$type.'/'.$item;
             }
+            $urls[$key] = str_replace(array_keys(config('view_replace_str')), array_values(config('view_replace_str')), $urls[$key]);
         }
         return $urls;
     }
