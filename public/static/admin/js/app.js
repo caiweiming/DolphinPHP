@@ -833,13 +833,7 @@ var App = function() {
     var uiHelperMagnific = function(){
         // Simple Gallery init
         jQuery('.js-gallery').each(function(){
-            jQuery(this).magnificPopup({
-                delegate: 'a.img-link',
-                type: 'image',
-                gallery: {
-                    enabled: true
-                }
-            });
+            jQuery(this).viewer({url: 'data-original'});
         });
 
         // Advanced Gallery init

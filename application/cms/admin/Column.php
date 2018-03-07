@@ -76,7 +76,7 @@ class Column extends Admin
             ->addTopButtons('add,enable,disable') // 批量添加顶部按钮
             ->addRightButton('custom', $btnAdd)
             ->addRightButton('edit') // 添加右侧按钮
-            ->addRightButton('custom', $btnMove)
+//            ->addRightButton('custom', $btnMove)
             ->addRightButton('delete', ['data-tips' => '删除栏目前，请确保无子栏目和文档！']) // 添加右侧按钮
             ->setRowList($data_list) // 设置表格数据
             ->fetch(); // 渲染模板

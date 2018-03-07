@@ -5,9 +5,7 @@
             {notempty name="form[type].value"}
                 {volist name="form[type]['value']|explode=',',###" id="vo"}
                 <div class="file-item thumbnail">
-                    <a class="img-link" href="{$vo|get_file_path}">
-                        <img src="{$vo|get_thumb}" width="100">
-                    </a>
+                    <img data-original="{$vo|get_file_path}" src="{$vo|get_thumb}" width="100">
                     <i class="fa fa-times-circle remove-picture" data-id="{$vo}"></i>
                     <i class="fa fa-fw fa-arrows move-picture"></i>
                 </div>

@@ -1870,10 +1870,12 @@ class Builder extends ZBuilder
                         case 'avatar': // 头像
                             break;
                         case 'img_url': // 外链图片
-                            $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><a href="'.$row[$column['name']].'" class="img-link"><img class="image" src="'.$row[$column['name']].'"></a></div>';
+                            if ($row[$column['name']] != '') {
+                                $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><img class="image" data-original="'.$row[$column['name']].'" src="'.$row[$column['name']].'"></div>';
+                            }
                             break;
                         case 'picture': // 单张图片
-                            $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><a href="'.get_file_path($row[$column['name']]).'" class="img-link" title="'.get_file_name($row[$column['name']]).'"><img class="image" src="'.get_file_path($row[$column['name']]).'"></a></div>';
+                            $row[$column['name'].'__'.$column['type']] = '<div class="js-gallery"><img class="image" data-original="'.get_file_path($row[$column['name']]).'" src="'.get_thumb($row[$column['name']]).'"></div>';
                             break;
                         case 'pictures': // 多张图片
                             if ($row[$column['name']] === '') {
@@ -1885,7 +1887,7 @@ class Builder extends ZBuilder
                                     if ($column['param'] != '' && $k == $column['param']) {
                                         break;
                                     }
-                                    $imgs .= ' <a href="'.get_file_path($img).'" class="img-link" title="'.get_file_name($img).'"><img class="image" src="'.get_file_path($img).'"></a>';
+                                    $imgs .= ' <img class="image" data-original="'.get_file_path($img).'" src="'.get_thumb($img).'">';
                                 }
                                 $row[$column['name'].'__'.$column['type']] = $imgs.'</div>';
                             }

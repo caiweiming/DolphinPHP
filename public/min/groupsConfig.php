@@ -31,12 +31,14 @@ return [
         $static_path. "admin/js/builder/form.js",
         $static_path. "admin/js/builder/aside.js",
         $static_path. "admin/js/builder/table.js",
+        $libs_path. "viewer/viewer.min.js"
     ],
     'core_css' => [ // 默认加载
         $libs_path. "magnific-popup/magnific-popup.min.css",
         $static_path. "admin/css/bootstrap.min.css",
         $static_path. "admin/css/oneui.css",
         $static_path. "admin/css/dolphin.css",
+        $libs_path. "viewer/viewer.min.css"
     ],
     'libs_js' => [ // 默认加载
         $libs_path. "bootstrap-notify/bootstrap-notify.min.js",

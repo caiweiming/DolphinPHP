@@ -598,6 +598,17 @@ var Dolphin = function () {
         });
     };
 
+    /**
+     * 初始化图片查看
+     * @author CaiWeiMing <314013107@qq.com>
+     */
+    var viewerLoader = function () {
+        $('.gallery-list,.uploader-list').each(function () {
+            $(this).viewer('destroy');
+            $(this).viewer({url: 'data-original'});
+        });
+    };
+
     return {
         // 初始化
         init: function () {
@@ -618,6 +629,10 @@ var Dolphin = function () {
         // 启用图标搜索
         iconSearch: function () {
             iconSearchLoader();
+        },
+        // 初始化图片查看
+        viewer: function () {
+            viewerLoader();
         }
     };
 }();

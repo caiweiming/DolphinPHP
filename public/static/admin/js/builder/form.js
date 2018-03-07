@@ -181,7 +181,6 @@ jQuery(document).ready(function() {
         var $jcrop_input      = $self.find('.js-jcrop-input');
         var $remove_picture   = $self.find('.remove-picture');
         var $thumbnail        = $self.find('.thumbnail');
-        var $img_link         = $self.find('.img-link');
         var $modal            = $self.find('.modal-popin');
         var $pic_height       = '';
 
@@ -331,9 +330,8 @@ jQuery(document).ready(function() {
                 .done(function(res) {
                     Dolphin.loading('hide');
                     if (res.code == '1') {
-                        $thumbnail.show().find('img').attr('src', res.thumb || res.src);
+                        $thumbnail.show().find('img').attr('src', res.thumb || res.src).attr('data-original', res.src);
                         $jcrop_input.val(res.id);
-                        $img_link.attr('href', res.src);
                         $jcrop_cut_info.val('');
                         $modal.modal('hide');
                     } else {
@@ -350,13 +348,7 @@ jQuery(document).ready(function() {
         });
 
         // 查看大图
-        $(this).magnificPopup({
-            delegate: 'a.img-link',
-            type: 'image',
-            gallery: {
-                enabled: true
-            }
-        });
+        Dolphin.viewer();
     });
 
     // editormd编辑器
@@ -682,9 +674,7 @@ jQuery(document).ready(function() {
         uploader.on( 'fileQueued', function( file ) {
             var $li = $(
                     '<div id="' + file.id + '" class="file-item js-gallery thumbnail">' +
-                    '<a class="img-link" href="">'+
                     '<img>' +
-                    '</a>'+
                     '<div class="info">' + file.name + '</div>' +
                     '<i class="fa fa-times-circle remove-picture"></i>' +
                     ($multiple ? '<i class="fa fa-fw fa-arrows move-picture"></i>' : '') +
@@ -742,7 +732,9 @@ jQuery(document).ready(function() {
             }
 
             $li.find('.file-state').html('<div class="bg-'+response.class+'">'+response.info+'</div>');
-            $li.find('a.img-link').attr('href', response.path);
+            $li.find('img').attr('data-original', response.path);
+            // 上传成功后，再次初始化图片查看功能
+            Dolphin.viewer();
 
             // 文件上传成功后的自定义回调函数
             if (window['dp_image_upload_success'] !== undefined) window['dp_image_upload_success']();
@@ -797,15 +789,8 @@ jQuery(document).ready(function() {
             } else {
                 $input_file.val('');
             }
-        });
-
-        // 查看大图
-        $(this).magnificPopup({
-            delegate: 'a.img-link',
-            type: 'image',
-            gallery: {
-                enabled: true
-            }
+            // 删除后，再次初始化图片查看功能
+            Dolphin.viewer();
         });
 
         // 将上传实例存起来
@@ -822,21 +807,15 @@ jQuery(document).ready(function() {
                         ids.push($(this).data('id'));
                     });
                     $input_file.val(ids.join(','));
+                    // 拖拽排序后，重新初始化图片查看功能
+                    Dolphin.viewer();
                 }
             }).disableSelection();
         }
     });
 
     // 图片相册
-    $('.gallery-list').each(function () {
-        $(this).magnificPopup({
-            delegate: 'a.img-link',
-            type: 'image',
-            gallery: {
-                enabled: true
-            }
-        });
-    });
+    Dolphin.viewer();
 
     // 排序
     $('.nestable').each(function () {

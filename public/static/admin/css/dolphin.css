@@ -508,3 +508,9 @@ table.treetable tr.branch {
         padding: 10px 30px;
     }
 }
+
+.js-gallery>img,
+.gallery-list .thumbnail>img,
+.uploader-list .thumbnail>img {
+    cursor: zoom-in;
+}
