@@ -587,6 +587,17 @@ var Dolphin = function () {
         });
     };
 
+    /**
+     * 刷新页面
+     * @author CaiWeiMing <314013107@qq.com>
+     */
+    var pageReloadLoader = function () {
+        // 刷新页面
+        $('.page-reload').click(function () {
+            location.reload();
+        });
+    };
+
     return {
         // 初始化
         init: function () {
@@ -594,6 +605,7 @@ var Dolphin = function () {
             ajaxGet();
             jsGet();
             topMenu();
+            pageReloadLoader();
         },
         // 页面加载提示
         loading: function ($mode) {
