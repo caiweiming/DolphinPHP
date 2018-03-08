@@ -9,16 +9,29 @@
 // | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
-/**
- * 安装程序配置文件
- */
-return array(
-    //产品配置
-    'install_product_name'   => 'DolphinPHP', //产品名称
-    'install_website_domain' => 'http://www.dolphinphp.com', //官方网址
-    'install_company_name'   => '河源市卓锐科技有限公司', //公司名称
-    'original_table_prefix'  => 'dp_', //默认表前缀
+namespace app\user\model;
 
-    // 安装配置
-    'install_table_total' => 237, // 安装时，需执行的sql语句数量
-);
+use think\Model;
+
+/**
+ * 角色模型
+ * @package app\admin\model
+ */
+class Message extends Model
+{
+    // 设置当前模型对应的完整数据表名称
+    protected $name = 'admin_message';
+
+    // 自动写入时间戳
+    protected $autoWriteTimestamp = true;
+
+    /**
+     * 获取当前用户未读消息数量
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return int|string
+     */
+    public static function getMessageCount()
+    {
+        return self::where(['status' => 0, 'uid_receive' => UID])->count();
+    }
+}

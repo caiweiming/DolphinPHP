@@ -1405,3 +1405,29 @@ if (!function_exists('generate_rand_str')) {
         return $str;
     }
 }
+
+if (!function_exists('dp_send_message')) {
+    /**
+     * 发送消息给用户
+     * @param string $type 消息类型
+     * @param string $content 消息内容
+     * @param string $uids 用户id，可以是数组，也可以是逗号隔开的字符串
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool
+     */
+    function dp_send_message($type = '', $content = '', $uids = '') {
+        $uids = is_array($uids) ? $uids : explode(',', $uids);
+        $list = [];
+        foreach ($uids as $uid) {
+            $list[] = [
+                'uid_receive' => $uid,
+                'uid_send'    => UID,
+                'type'        => $type,
+                'content'     => $content,
+            ];
+        }
+
+        $MessageModel = model('user/message');
+        return false !== $MessageModel->saveAll($list);
+    }
+}

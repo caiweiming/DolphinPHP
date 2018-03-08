@@ -16,6 +16,7 @@ use app\common\builder\ZBuilder;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Module as ModuleModel;
 use app\user\model\Role as RoleModel;
+use app\user\model\Message as MessageModel;
 use think\Cache;
 use think\Db;
 use think\Loader;
@@ -61,6 +62,8 @@ class Admin extends Common
             $this->assign('_sidebar_menus', MenuModel::getSidebarMenu());
             // 获取面包屑导航
             $this->assign('_location', MenuModel::getLocation('', true));
+            // 获取当前用户未读消息数量
+            $this->assign('_message', MessageModel::getMessageCount());
             // 构建侧栏
             $data = [
                 'table'      => 'admin_config', // 表名或模型名
