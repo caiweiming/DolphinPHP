@@ -492,13 +492,14 @@ CREATE TABLE `dp_admin_role` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   `access` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否可登录后台',
+  `default_module` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '默认访问模块',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of dp_admin_role
 -- ----------------------------
-INSERT INTO `dp_admin_role` VALUES ('1', '0', '超级管理员', '系统默认创建的角色，拥有最高权限', '', '0', '1476270000', '1468117612', '1', '1');
+INSERT INTO `dp_admin_role` VALUES ('1', '0', '超级管理员', '系统默认创建的角色，拥有最高权限', '', '0', '1476270000', '1468117612', '1', '1', '0');
 
 -- ----------------------------
 -- Table structure for `dp_admin_user`

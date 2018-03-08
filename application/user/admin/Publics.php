@@ -13,6 +13,8 @@ namespace app\user\admin;
 
 use app\common\controller\Common;
 use app\user\model\User as UserModel;
+use app\user\model\Role as RoleModel;
+use app\admin\model\Menu as MenuModel;
 use think\Hook;
 
 /**
@@ -62,7 +64,7 @@ class Publics extends Common
             if ($uid) {
                 // 记录行为
                 action_log('user_signin', 'admin_user', $uid, $uid);
-                $this->success('登录成功', url('admin/index/index'));
+                $this->jumpUrl();
             } else {
                 $this->error($UserModel->getError());
             }
@@ -78,10 +80,41 @@ class Publics extends Common
             }
 
             if (is_signin()) {
-                $this->redirect('admin/index/index');
+                $this->jumpUrl();
             } else {
                 return $this->fetch();
             }
+        }
+    }
+
+    /**
+     * 跳转到第一个有权限访问的url
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed|string
+     */
+    private function jumpUrl()
+    {
+        if (session('user_auth.role') == 1) {
+            $this->success('登录成功', url('admin/index/index'));
+        }
+
+        $default_module = RoleModel::where('id', session('user_auth.role'))->value('default_module');
+        $menu = MenuModel::get($default_module);
+        if (!$menu) {
+            $this->error('当前角色未指定默认跳转模块！');
+        }
+
+        if ($menu['url_type'] == 'link') {
+            $this->success('登录成功', $menu['url_value']);
+        }
+
+        $menu_url = explode('/', $menu['url_value']);
+        role_auth();
+        $url = action('admin/ajax/getSidebarMenu', ['module_id' => $default_module, 'module' => $menu['module'], 'controller' => $menu_url[1]]);
+        if ($url == '') {
+            $this->error('权限不足');
+        } else {
+            $this->success('登录成功', $url);
         }
     }
 

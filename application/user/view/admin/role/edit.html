@@ -61,6 +61,28 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-xs-12" for="pid">默认模块</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="default_module" name="default_module">
+                                        {volist name="module_list" id="module"}
+                                        <option value="{$key}" {eq name="$info['default_module']" value="$key"}selected{/eq}>{$module}</option>
+                                        {/volist}
+                                    </select>
+                                    <div class="help-block">该角色登录后，默认跳转的模块。注意，该角色必须有该模块的节点访问权限。</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12">是否可登录后台</label>
+                                <div class="col-xs-12">
+                                    <label class="css-input css-radio css-radio-primary css-radio-sm push-10-r">
+                                        <input type="radio" name="access" id="access1" value="0" {eq name="$info['access']" value="0"}checked{/eq}>
+                                        <span></span> 否</label>
+                                    <label class="css-input css-radio css-radio-primary css-radio-sm push-10-r">
+                                        <input type="radio" name="access" id="access2" value="1" {eq name="$info['access']" value="1"}checked{/eq}>
+                                        <span></span> 是</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-xs-12" for="sort">排序</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" type="text" id="sort" name="sort" value="{$info.sort}" placeholder="请输入排序">

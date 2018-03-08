@@ -158,8 +158,7 @@ class Menu extends Model
             $top_id = $location[0]['id'];
             // 获取顶级节点下的所有节点
             $map = [
-                'status' => 1,
-                'module' => $module
+                'status' => 1
             ];
             // 非开发模式，只显示可以显示的菜单
             if (config('develop_mode') == 0) {

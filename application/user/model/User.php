@@ -78,8 +78,8 @@ class User extends Model
                 return false;
             }
             // 检查是可登录后台
-            if (!RoleModel::where('id', $user['role'])->value('access')) {
-                $this->error = '禁止访问，原因：用户所在角色禁止访问后台！';
+            if (!RoleModel::where(['id' => $user['role'], 'status' => 1])->value('access')) {
+                $this->error = '禁止访问，用户所在角色未启用或禁止访问后台！';
                 return false;
             }
             if (!Hash::check((string)$password, $user['password'])) {

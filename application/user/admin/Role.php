@@ -47,6 +47,13 @@ class Role extends Admin
                 ['id', 'ID'],
                 ['name', '角色名称'],
                 ['description', '描述'],
+                ['default_module', '默认模块', 'callback', function($value, $list_module){
+                    if ($value == '') {
+                        return '未设置';
+                    } else {
+                        return isset($list_module[$value]) ? $list_module[$value] : '模块不存在';
+                    }
+                }, MenuModel::where('pid', 0)->column('id,title')],
                 ['create_time', '创建时间', 'datetime'],
                 ['access', '是否可登录后台', 'switch'],
                 ['status', '状态', 'switch'],
@@ -105,6 +112,7 @@ class Role extends Admin
 
         $this->assign('page_title', '新增');
         $this->assign('role_list', RoleModel::getTree());
+        $this->assign('module_list', MenuModel::where('pid', 0)->column('id,title'));
         $this->assign('menus', $menus);
         return $this->fetch();
     }
@@ -153,6 +161,7 @@ class Role extends Admin
 
         $this->assign('page_title', '编辑');
         $this->assign('role_list', $role_list);
+        $this->assign('module_list', MenuModel::where('pid', 0)->column('id,title'));
         $this->assign('menus', $menus);
         $this->assign('info', $info);
         return $this->fetch('edit');
