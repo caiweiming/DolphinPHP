@@ -39,17 +39,9 @@ class Attachment extends Admin
             if (in_array(strtolower($value['ext']), ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
                 if ($value['driver'] == 'local') {
                     $thumb = $value['thumb'] != '' ? $value['thumb'] : $value['path'];
-                    $value['type'] = '<a class="img-link" href="'. PUBLIC_PATH . $value['path'].'"
-                    data-toggle="tooltip"
-                    title="点击查看大图"
-                    target="_blank">
-                    <img class="image" src="'. PUBLIC_PATH . $thumb.'"></a>';
+                    $value['type'] = '<img class="image" title="点击查看大图" data-original="'. PUBLIC_PATH . $value['path'].'" src="'. PUBLIC_PATH . $thumb.'">';
                 } else {
-                    $value['type'] = '<a class="img-link" href="'. $value['path'].'"
-                    data-toggle="tooltip"
-                    title="点击查看大图"
-                    target="_blank">
-                    <img class="image" src="'. $value['path'].'"></a>';
+                    $value['type'] = '<img class="image" title="点击查看大图" data-original="'. $value['path'].'" src="'. $value['path'].'">';
                 }
             } else {
                 if ($value['driver'] == 'local') {
