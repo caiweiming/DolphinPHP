@@ -39,5 +39,10 @@ return [
     ],
 
     // 搜索框
-    'search_button' => false
+    'search_button' => false,
+
+    // 表单图标
+    'icons' => [
+        // 如：test => '测试图标'
+    ]
 ];

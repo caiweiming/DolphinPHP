@@ -1431,3 +1431,20 @@ if (!function_exists('dp_send_message')) {
         return false !== $MessageModel->saveAll($list);
     }
 }
+
+if (!function_exists('extend_form_icon')) {
+    /**
+     * 扩展表单图标选择器
+     * @param string $name 图标名
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    function extend_form_icon($name = '') {
+        $template = './extend/icon/'.$name.'/'.$name.'.html';
+        if (file_exists($template)) {
+            return file_get_contents($template);
+        } else {
+            return '找不到图标模板';
+        }
+    }
+}

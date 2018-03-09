@@ -66,7 +66,9 @@ class Config
             // 前台IMG目录
             '__HOME_IMG__'  => PUBLIC_PATH. 'static/home/img',
             // 表单项扩展目录
-            '__EXTEND_FORM__' => $base_dir.'extend/form'
+            '__EXTEND_FORM__' => PUBLIC_PATH.'extend/form',
+            // 表单项图标扩展目录
+            '__EXTEND_ICON__' => PUBLIC_PATH.'extend/icon',
         ];
         config('view_replace_str', $view_replace_str);
 
