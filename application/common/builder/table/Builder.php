@@ -1892,6 +1892,21 @@ class Builder extends ZBuilder
                                 $row[$column['name'].'__'.$column['type']] = $imgs.'</div>';
                             }
                             break;
+                        case 'files':
+                            if ($row[$column['name']] === '') {
+                                $row[$column['name'].'__'.$column['type']] = !empty($column['default']) ? $column['default'] : '暂无文件';
+                            } else {
+                                $list_file = is_array($row[$column['name']]) ? $row[$column['name']] : explode(',', $row[$column['name']]);
+                                $files = '<div>';
+                                foreach ($list_file as $k => $file) {
+                                    if ($column['param'] != '' && $k == $column['param']) {
+                                        break;
+                                    }
+                                    $files .= ' [<a href="'.get_file_path($file).'">'.get_file_name($file).'</a>]';
+                                }
+                                $row[$column['name'].'__'.$column['type']] = $files.'</div>';
+                            }
+                            break;
                         case 'select': // 下拉框
                             if ($column['default']) {
                                 $prepend = isset($column['default'][$row[$column['name']]]) ? $column['default'][$row[$column['name']]] : '无对应值';
