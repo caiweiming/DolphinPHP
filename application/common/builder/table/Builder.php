@@ -1688,7 +1688,9 @@ class Builder extends ZBuilder
                         $row[$column['name']] = $key + 1;
                     }
 
-                    $row[$column['name']] = in_array($column['name'], $this->rawField) ? $this->getData($key, $column['name']) : (isset($row[$column['name']]) ? $row[$column['name']] : '');
+                    if (in_array($column['name'], $this->rawField)) {
+                        $row[$column['name']] = $this->getData($key, $column['name']);
+                    }
 
                     // 备份原数据
                     if (isset($row[$column['name']])) {
