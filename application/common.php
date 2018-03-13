@@ -1323,7 +1323,7 @@ if (!function_exists('extend_form_item')) {
         if (file_exists($template)) {
             $template_content = file_get_contents($template);
             $view = new View();
-            return $view->display($template_content, array_merge($form, $_layout));
+            return $view->display($template_content, $form);
         } else {
             return '';
         }
