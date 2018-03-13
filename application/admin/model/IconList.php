@@ -9,16 +9,16 @@
 // | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
-/**
- * 安装程序配置文件
- */
-return array(
-    //产品配置
-    'install_product_name'   => 'DolphinPHP', //产品名称
-    'install_website_domain' => 'http://www.dolphinphp.com', //官方网址
-    'install_company_name'   => '河源市卓锐科技有限公司', //公司名称
-    'original_table_prefix'  => 'dp_', //默认表前缀
+namespace app\admin\model;
 
-    // 安装配置
-    'install_table_total' => 250, // 安装时，需执行的sql语句数量
-);
+use think\Model;
+
+/**
+ * 图标列表模型
+ * @package app\admin\model
+ */
+class IconList extends Model
+{
+    // 设置当前模型对应的完整数据表名称
+    protected $name = 'admin_icon_list';
+}

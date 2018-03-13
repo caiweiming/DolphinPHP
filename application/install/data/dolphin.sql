@@ -254,6 +254,43 @@ INSERT INTO `dp_admin_hook_plugin` VALUES ('1', 'admin_index', 'SystemInfo', '14
 INSERT INTO `dp_admin_hook_plugin` VALUES ('2', 'admin_index', 'DevTeam', '1477755780', '1477755780', '2', '1');
 
 -- ----------------------------
+-- Table structure for dp_admin_icon
+-- ----------------------------
+DROP TABLE IF EXISTS `dp_admin_icon`;
+CREATE TABLE `dp_admin_icon` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL DEFAULT '' COMMENT '图标名称',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '图标css地址',
+  `prefix` varchar(32) NOT NULL DEFAULT '' COMMENT '图标前缀',
+  `font_family` varchar(32) NOT NULL DEFAULT '' COMMENT '字体名',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='图标表';
+
+-- ----------------------------
+-- Records of dp_admin_icon
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for dp_admin_icon_list
+-- ----------------------------
+DROP TABLE IF EXISTS `dp_admin_icon_list`;
+CREATE TABLE `dp_admin_icon_list` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `icon_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '所属图标id',
+  `title` varchar(128) NOT NULL DEFAULT '' COMMENT '图标标题',
+  `class` varchar(255) NOT NULL DEFAULT '' COMMENT '图标类名',
+  `code` varchar(128) NOT NULL DEFAULT '' COMMENT '图标关键词',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='详细图标列表';
+
+-- ----------------------------
+-- Records of dp_admin_icon_list
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `dp_admin_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `dp_admin_log`;
@@ -406,6 +443,15 @@ INSERT INTO `dp_admin_menu` VALUES ('221', '215', 'user', '快速编辑', '', 'm
 INSERT INTO `dp_admin_menu` VALUES ('222', '2', 'admin', '消息中心', 'fa fa-fw fa-comments-o', 'module_admin', 'admin/message/index', '_self', '0', '1520495992', '1520496254', '100', '0', '1', '');
 INSERT INTO `dp_admin_menu` VALUES ('223', '222', 'admin', '删除', '', 'module_admin', 'admin/message/delete', '_self', '0', '1520495992', '1520496263', '100', '0', '1', '');
 INSERT INTO `dp_admin_menu` VALUES ('224', '222', 'admin', '启用', '', 'module_admin', 'admin/message/enable', '_self', '0', '1520495992', '1520496270', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('225', '32', 'admin', '图标管理', 'fa fa-fw fa-tint', 'module_admin', 'admin/icon/index', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('226', '225', 'admin', '新增', '', 'module_admin', 'admin/icon/add', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('227', '225', 'admin', '编辑', '', 'module_admin', 'admin/icon/edit', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('228', '225', 'admin', '删除', '', 'module_admin', 'admin/icon/delete', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('229', '225', 'admin', '启用', '', 'module_admin', 'admin/icon/enable', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('230', '225', 'admin', '禁用', '', 'module_admin', 'admin/icon/disable', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('231', '225', 'admin', '快速编辑', '', 'module_admin', 'admin/icon/quickedit', '_self', '0', '1520908295', '1520908295', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('232', '225', 'admin', '图标列表', '', 'module_admin', 'admin/icon/items', '_self', '0', '1520923368', '1520923368', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('233', '225', 'admin', '更新图标', '', 'module_admin', 'admin/icon/reload', '_self', '0', '1520931908', '1520931908', '100', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for dp_admin_message

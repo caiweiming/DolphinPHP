@@ -572,7 +572,7 @@ var Dolphin = function () {
         jQuery('.js-icon-search').on('keyup', function(){
             $searchValue = jQuery(this).val().toLowerCase();
 
-            if ($searchValue.length > 2) { // If more than 2 characters, search the icons
+            if ($searchValue.length) { // If more than 2 characters, search the icons
                 $searchItems.hide();
 
                 jQuery('code', $searchItems)

@@ -45,8 +45,8 @@
         {/eq}
     {/notempty}
 
-    {volist name="Think.config.zbuilder.icons" id="icon"}
-        <link rel="stylesheet" href="__EXTEND_ICON__/{$key}/{$key}.css">
+    {volist name="_icons" id="icon"}
+        <link rel="stylesheet" href="{$icon.url}">
     {/volist}
 
     {block name="plugins-css"}{/block}

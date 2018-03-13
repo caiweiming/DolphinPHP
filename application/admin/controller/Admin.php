@@ -15,6 +15,7 @@ use app\common\controller\Common;
 use app\common\builder\ZBuilder;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Module as ModuleModel;
+use app\admin\model\Icon as IconModel;
 use app\user\model\Role as RoleModel;
 use app\user\model\Message as MessageModel;
 use think\Cache;
@@ -64,6 +65,8 @@ class Admin extends Common
             $this->assign('_location', MenuModel::getLocation('', true));
             // 获取当前用户未读消息数量
             $this->assign('_message', MessageModel::getMessageCount());
+            // 获取自定义图标
+            $this->assign('_icons', IconModel::getUrls());
             // 构建侧栏
             $data = [
                 'table'      => 'admin_config', // 表名或模型名

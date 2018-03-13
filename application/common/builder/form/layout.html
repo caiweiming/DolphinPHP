@@ -310,9 +310,9 @@
             <li>
                 <a href="#sl" data-toggle="tab">SIMPLE LINE</a>
             </li>
-            {volist name="Think.config.zbuilder.icons" id="icon"}
+            {volist name="_icons" id="icon"}
             <li>
-                <a href="#{$key}" data-toggle="tab">{$icon}</a>
+                <a href="#icon{$icon.id}" data-toggle="tab">{$icon.name}</a>
             </li>
             {/volist}
         </ul>
@@ -326,9 +326,9 @@
             <div class="tab-pane fade" id="sl">
                 {include file="../application/common/builder/form/icon/sl.html" /}
             </div>
-            {volist name="Think.config.zbuilder.icons" id="icon"}
-            <div class="tab-pane fade" id="{$key}">
-                {:extend_form_icon($key)}
+            {volist name="_icons" id="icon"}
+            <div class="tab-pane fade" id="icon{$icon.id}">
+                {$icon.html|default='暂无图标'}
             </div>
             {/volist}
         </div>
