@@ -117,6 +117,8 @@ CREATE TABLE `dp_admin_attachment` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
+  `width` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '图片宽度',
+  `height` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '图片高度',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='附件表';
 
