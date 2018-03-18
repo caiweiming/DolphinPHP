@@ -250,11 +250,17 @@ class Attachment extends Admin
 
         // 移动到框架应用根目录/uploads/ 目录下
         $info = $file->move(config('upload_path') . DS . $dir);
-
         if($info){
             // 缩略图路径
             $thumb_path_name = '';
+            // 图片宽度
+            $img_width = '';
+            // 图片高度
+            $img_height = '';
             if ($dir == 'images') {
+                $img = Image::open($info);
+                $img_width  = $img->width();
+                $img_height = $img->height();
                 // 水印功能
                 if ($watermark == '') {
                     if (config('upload_thumb_water') == 1 && config('upload_thumb_water_pic') > 0) {
@@ -291,7 +297,9 @@ class Attachment extends Admin
                 'md5'    => $info->hash('md5'),
                 'sha1'   => $info->hash('sha1'),
                 'thumb'  => $thumb_path_name,
-                'module' => $module
+                'module' => $module,
+                'width'  => $img_width,
+                'height' => $img_height,
             ];
 
             // 写入数据库
@@ -453,6 +461,7 @@ class Attachment extends Admin
         }
 
         $file = new File($file_path);
+        $img  = Image::open($file);
         $file_info = [
             'uid'    => session('user_auth.uid'),
             'name'   => $file_name,
@@ -462,7 +471,9 @@ class Attachment extends Admin
             'size'   => $file->getSize(),
             'md5'    => $file->hash('md5'),
             'sha1'   => $file->hash('sha1'),
-            'module' => $this->request->module()
+            'module' => $this->request->module(),
+            'width'  => $img->width(),
+            'height' => $img->height()
         ];
 
         if ($file_add = AttachmentModel::create($file_info)) {
@@ -622,7 +633,9 @@ class Attachment extends Admin
                 'md5'    => $file->hash('md5'),
                 'sha1'   => $file->hash('sha1'),
                 'thumb'  => $thumb_path_name,
-                'module' => $module
+                'module' => $module,
+                'width'  => $image->width(),
+                'height' => $image->height()
             ];
 
             if ($file_add = AttachmentModel::create($file_info)) {
