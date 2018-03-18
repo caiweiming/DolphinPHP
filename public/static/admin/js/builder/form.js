@@ -173,6 +173,8 @@ jQuery(document).ready(function() {
         var $self             = $(this);
         var $jcrop            = $self.find('.js-jcrop');
         var $options          = $jcrop.data('options') || {};
+        var $thumb            = $jcrop.data('thumb');
+        var $watermark        = $jcrop.data('watermark');
         var $jcrop_cut_btn    = $self.find('.js-jcrop-cut-btn');
         var $jcrop_upload_btn = $self.find('.js-jcrop-upload-btn');
         var $jcrop_file       = $self.find('.js-jcrop-file');
@@ -318,7 +320,9 @@ jQuery(document).ready(function() {
             if ($cut_value != '') {
                 var $data = {
                     path: $jcrop_preview.attr('src'),
-                    cut: $cut_value
+                    cut: $cut_value,
+                    thumb: $thumb,
+                    watermark: $watermark
                 };
                 Dolphin.loading();
                 $.ajax({
@@ -634,6 +638,10 @@ jQuery(document).ready(function() {
         var $ext              = $input_file.data('ext');
         // 图片限制大小
         var $size             = $input_file.data('size');
+        // 缩略图参数
+        var $thumb            = $input_file.data('thumb');
+        // 水印参数
+        var $watermark        = $input_file.data('watermark');
         // 图片列表
         var $file_list        = $('#file_list_' + $input_file_name);
         // 优化retina, 在retina下这个值是2
@@ -667,6 +675,11 @@ jQuery(document).ready(function() {
                 title: 'Images',
                 extensions: $ext,
                 mimeTypes: 'image/jpg,image/jpeg,image/bmp,image/png,image/gif'
+            },
+            // 自定义参数
+            formData: {
+                thumb: $thumb,
+                watermark: $watermark
             }
         });
 

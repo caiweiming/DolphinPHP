@@ -861,10 +861,12 @@ class Builder extends ZBuilder
      * @param string $size 图片大小，单位为kb，0为不限制
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
+     * @param array|string $thumb 缩略图参数
+     * @param array|string $watermark 水印参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addImage($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
+    public function addImage($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '', $thumb = '', $watermark = '')
     {
         $size = ($size != '' ? $size : config('upload_image_size')) * 1024;
         $ext  = $ext != '' ? $ext : config('upload_image_ext');
@@ -879,6 +881,20 @@ class Builder extends ZBuilder
             'ext'         => $ext,
             'extra_class' => $extra_class,
         ];
+
+        // 处理缩略图参数
+        if (isset($thumb['size'])) {
+            $item['thumb'] = $thumb['size'].'|'.(isset($thumb['type']) ? $thumb['type'] : 1);
+        } else {
+            $item['thumb'] = $thumb;
+        }
+
+        // 处理水印参数
+        if (isset($watermark['img'])) {
+            $item['watermark'] = $watermark['img'].'|'.(isset($watermark['pos']) ? $watermark['pos'] : 9).'|'.(isset($watermark['alpha']) ? $watermark['alpha'] : 50);
+        } else {
+            $item['watermark'] = $watermark;
+        }
 
         if ($this->_is_group) {
             return $item;
@@ -897,10 +913,12 @@ class Builder extends ZBuilder
      * @param string $size 图片大小，单位为kb，0为不限制
      * @param string $ext 文件后缀
      * @param string $extra_class 额外css类名
+     * @param array|string $thumb 缩略图参数
+     * @param array|string $watermark 水印参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addImages($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '')
+    public function addImages($name = '', $title = '', $tips = '', $default = '', $size = '', $ext = '', $extra_class = '', $thumb = '', $watermark = '')
     {
         $size = ($size != '' ? $size : config('upload_image_size')) * 1024;
         $ext  = $ext != '' ? $ext : config('upload_image_ext');
@@ -915,6 +933,20 @@ class Builder extends ZBuilder
             'ext'         => $ext,
             'extra_class' => $extra_class,
         ];
+
+        // 处理缩略图参数
+        if (isset($thumb['size'])) {
+            $item['thumb'] = $thumb['size'].'|'.(isset($thumb['type']) ? $thumb['type'] : 1);
+        } else {
+            $item['thumb'] = $thumb;
+        }
+
+        // 处理水印参数
+        if (isset($watermark['img'])) {
+            $item['watermark'] = $watermark['img'].'|'.(isset($watermark['pos']) ? $watermark['pos'] : 9).'|'.(isset($watermark['alpha']) ? $watermark['alpha'] : 50);
+        } else {
+            $item['watermark'] = $watermark;
+        }
 
         if ($this->_is_group) {
             return $item;
@@ -932,10 +964,12 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param array $options 参数
      * @param string $extra_class 额外css类名
+     * @param array|string $thumb 缩略图参数
+     * @param array|string $watermark 水印参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addJcrop($name = '', $title = '', $tips = '', $default = '', $options = [], $extra_class = '')
+    public function addJcrop($name = '', $title = '', $tips = '', $default = '', $options = [], $extra_class = '', $thumb = '', $watermark = '')
     {
         $item = [
             'type'        => 'jcrop',
@@ -946,6 +980,20 @@ class Builder extends ZBuilder
             'options'     => json_encode($options),
             'extra_class' => $extra_class,
         ];
+
+        // 处理缩略图参数
+        if (isset($thumb['size'])) {
+            $item['thumb'] = $thumb['size'].'|'.(isset($thumb['type']) ? $thumb['type'] : 1);
+        } else {
+            $item['thumb'] = $thumb;
+        }
+
+        // 处理水印参数
+        if (isset($watermark['img'])) {
+            $item['watermark'] = $watermark['img'].'|'.(isset($watermark['pos']) ? $watermark['pos'] : 9).'|'.(isset($watermark['alpha']) ? $watermark['alpha'] : 50);
+        } else {
+            $item['watermark'] = $watermark;
+        }
 
         if ($this->_is_group) {
             return $item;

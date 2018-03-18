@@ -114,6 +114,10 @@ class Attachment extends Admin
         // 附件类型限制
         $ext_limit = $dir == 'images' ? config('upload_image_ext') : config('upload_file_ext');
         $ext_limit = $ext_limit != '' ? parse_attr($ext_limit) : '';
+        // 缩略图参数
+        $thumb = $this->request->post('thumb', '');
+        // 水印参数
+        $watermark = $this->request->post('watermark', '');
 
         // 获取附件数据
         $callback = '';
@@ -248,16 +252,32 @@ class Attachment extends Admin
         $info = $file->move(config('upload_path') . DS . $dir);
 
         if($info){
-            // 水印功能
-            if ($dir == 'images' && config('upload_thumb_water') == 1 && config('upload_thumb_water_pic') > 0) {
-                $this->create_water($info->getRealPath());
-            }
-
             // 缩略图路径
             $thumb_path_name = '';
-            // 生成缩略图
-            if ($dir == 'images' && config('upload_image_thumb') != '') {
-                $thumb_path_name = $this->create_thumb($info, $info->getPathInfo()->getfileName(), $info->getFilename());
+            if ($dir == 'images') {
+                // 水印功能
+                if ($watermark == '') {
+                    if (config('upload_thumb_water') == 1 && config('upload_thumb_water_pic') > 0) {
+                        $this->create_water($info->getRealPath(), config('upload_thumb_water_pic'));
+                    }
+                } else {
+                    if (strtolower($watermark) != 'close') {
+                        list($watermark_img, $watermark_pos, $watermark_alpha) = explode('|', $watermark);
+                        $this->create_water($info->getRealPath(), $watermark_img, $watermark_pos, $watermark_alpha);
+                    }
+                }
+
+                // 生成缩略图
+                if ($thumb == '') {
+                    if (config('upload_image_thumb') != '') {
+                        $thumb_path_name = $this->create_thumb($info, $info->getPathInfo()->getfileName(), $info->getFilename());
+                    }
+                } else {
+                    if (strtolower($thumb) != 'close') {
+                        list($thumb_size, $thumb_type) = explode('|', $thumb);
+                        $thumb_path_name = $this->create_thumb($info, $info->getPathInfo()->getfileName(), $info->getFilename(), $thumb_size, $thumb_type);
+                    }
+                }
             }
 
             // 获取附件信息
@@ -527,6 +547,8 @@ class Attachment extends Admin
     {
         $file_path = $this->request->post('path', '');
         $cut_info  = $this->request->post('cut', '');
+        $thumb     = $this->request->post('thumb', '');
+        $watermark = $this->request->post('watermark', '');
         $module    = $this->request->param('module', '');
 
         // 上传图片
@@ -564,14 +586,28 @@ class Attachment extends Admin
             $image->crop($cut_info[0], $cut_info[1], $cut_info[2], $cut_info[3], $cut_info[4], $cut_info[5])->save($new_file_path);
 
             // 水印功能
-            if (config('upload_thumb_water') == 1 && config('upload_thumb_water_pic') > 0) {
-                $this->create_water($new_file_path);
+            if ($watermark == '') {
+                if (config('upload_thumb_water') == 1 && config('upload_thumb_water_pic') > 0) {
+                    $this->create_water($new_file_path, config('upload_thumb_water_pic'));
+                }
+            } else {
+                if (strtolower($watermark) != 'close') {
+                    list($watermark_img, $watermark_pos, $watermark_alpha) = explode('|', $watermark);
+                    $this->create_water($new_file_path, $watermark_img, $watermark_pos, $watermark_alpha);
+                }
             }
 
             // 是否创建缩略图
             $thumb_path_name = '';
-            if (config('upload_image_thumb') != '') {
-                $thumb_path_name = $this->create_thumb($new_file_path, $dir_name, $file_name);
+            if ($thumb == '') {
+                if (config('upload_image_thumb') != '') {
+                    $thumb_path_name = $this->create_thumb($new_file_path, $dir_name, $file_name);
+                }
+            } else {
+                if (strtolower($thumb) != 'close') {
+                    list($thumb_size, $thumb_type) = explode('|', $thumb);
+                    $thumb_path_name = $this->create_thumb($new_file_path, $dir_name, $file_name, $thumb_size, $thumb_type);
+                }
             }
 
             // 保存图片
@@ -611,17 +647,21 @@ class Attachment extends Admin
      * @param string $file 目标文件，可以是文件对象或文件路径
      * @param string $dir 保存目录，即目标文件所在的目录名
      * @param string $save_name 缩略图名
+     * @param string $thumb_size 尺寸
+     * @param string $thumb_type 裁剪类型
      * @author 蔡伟明 <314013107@qq.com>
      * @return string 缩略图路径
      */
-    private function create_thumb($file = '', $dir = '', $save_name = '')
+    private function create_thumb($file = '', $dir = '', $save_name = '', $thumb_size = '', $thumb_type = '')
     {
         // 获取要生成的缩略图最大宽度和高度
-        list($thumb_max_width, $thumb_max_height) = explode(',', config('upload_image_thumb'));
+        $thumb_size = $thumb_size == '' ? config('upload_image_thumb') : $thumb_size;
+        list($thumb_max_width, $thumb_max_height) = explode(',', $thumb_size);
         // 读取图片
         $image = Image::open($file);
         // 生成缩略图
-        $image->thumb($thumb_max_width, $thumb_max_height, config('upload_image_thumb_type'));
+        $thumb_type = $thumb_type == '' ? config('upload_image_thumb_type') : $thumb_type;
+        $image->thumb($thumb_max_width, $thumb_max_height, $thumb_type);
         // 保存缩略图
         $thumb_path = config('upload_path') . DS . 'images/' . $dir . '/thumb/';
         if (!is_dir($thumb_path)) {
@@ -636,19 +676,25 @@ class Attachment extends Admin
     /**
      * 添加水印
      * @param string $file 要添加水印的文件路径
+     * @param string $watermark_img 水印图片id
+     * @param string $watermark_pos 水印位置
+     * @param string $watermark_alpha 水印透明度
      * @author 蔡伟明 <314013107@qq.com>
      */
-    private function create_water($file = '')
+    private function create_water($file = '', $watermark_img = '', $watermark_pos = '', $watermark_alpha = '')
     {
-        $path = model('admin/attachment')->getFilePath(config('upload_thumb_water_pic'), 1);
+        $path = model('admin/attachment')->getFilePath($watermark_img, 1);
         $thumb_water_pic = realpath(ROOT_PATH . 'public/' . $path);
-
-        // 读取图片
-        $image = Image::open($file);
-        // 添加水印
-        $image->water($thumb_water_pic, config('upload_thumb_water_position'), config('upload_thumb_water_alpha'));
-        // 保存水印图片，覆盖原图
-        $image->save($file);
+        if (is_file($thumb_water_pic)) {
+            // 读取图片
+            $image = Image::open($file);
+            // 添加水印
+            $watermark_pos   = $watermark_pos   == '' ? config('upload_thumb_water_position') : $watermark_pos;
+            $watermark_alpha = $watermark_alpha == '' ? config('upload_thumb_water_alpha') : $watermark_alpha;
+            $image->water($thumb_water_pic, $watermark_pos, $watermark_alpha);
+            // 保存水印图片，覆盖原图
+            $image->save($file);
+        }
     }
 
     /**
