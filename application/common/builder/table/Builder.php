@@ -1191,7 +1191,7 @@ class Builder extends ZBuilder
                 $files_name = explode(',', $files_name);
             }
             foreach ($files_name as $item) {
-                $this->_vars[$type.'_list'][] = $item;
+                $this->_vars[$type.'_list'][] = PUBLIC_PATH. 'static/'. $this->_module .'/'.$type.'/'.$item.'.'.$type;
             }
         }
     }

@@ -343,7 +343,7 @@
     {/notempty}
 
     {volist name="css_list" id="vo"}
-    <link rel="stylesheet" href="__MODULE_CSS__/{$vo}.css">
+    <link rel="stylesheet" href="{$vo}">
     {/volist}
 
     {volist name="extend_css_list" id="vo"}
@@ -367,7 +367,7 @@
     {/notempty}
 
     {volist name="js_list" id="vo"}
-    <script src="__MODULE_JS__/{$vo}.js"></script>
+    <script src="{$vo}"></script>
     {/volist}
 
     {volist name="extend_js_list" id="vo"}

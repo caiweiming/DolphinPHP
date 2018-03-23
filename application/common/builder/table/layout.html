@@ -296,7 +296,7 @@
 
 {block name="style"}
     {volist name="css_list" id="vo"}
-    <link rel="stylesheet" href="__MODULE_CSS__/{$vo}.css">
+    <link rel="stylesheet" href="{$vo}">
     {/volist}
 
     {// 额外CSS代码 }
@@ -306,7 +306,7 @@
 {block name="script"}
 
     {volist name="js_list" id="vo"}
-    <script src="__MODULE_JS__/{$vo}.js"></script>
+    <script src="{$vo}"></script>
     {/volist}
 
     {// 额外JS代码 }
