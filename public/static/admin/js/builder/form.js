@@ -277,6 +277,7 @@ jQuery(document).ready(function() {
                                     Dolphin.loading('hide');
                                     if (jcrop_api != '') {
                                         jcrop_api.destroy();
+                                        $.Jcrop.component.DragState.prototype.touch = null;
                                     }
                                     $jcrop.Jcrop($options, function () {
                                         jcrop_api   = this;
