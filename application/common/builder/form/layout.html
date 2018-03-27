@@ -339,16 +339,16 @@
 
 {block name="style"}
     {notempty name="_editormd"}
-    <link href="__LIBS__/editormd/css/editormd.min.css" rel="stylesheet" type="text/css" />
+    <link href="__LIBS__/editormd/css/editormd.min.css?v={:config('asset_version')}" rel="stylesheet" type="text/css" />
     {/notempty}
 
     {volist name="css_list" id="vo"}
-    <link rel="stylesheet" href="{$vo}">
+    <link rel="stylesheet" href="{$vo}?v={:config('asset_version')}">
     {/volist}
 
     {volist name="extend_css_list" id="vo"}
         {volist name="vo" id="v"}
-        <link rel="stylesheet" href="{$v}">
+        <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
         {/volist}
     {/volist}
 
@@ -358,21 +358,21 @@
 
 {block name="script"}
     {notempty name="_ueditor"}
-    <script src="__LIBS__/ueditor/ueditor.config.js"></script>
-    <script src="__LIBS__/ueditor/ueditor.all.min.js"></script>
+    <script src="__LIBS__/ueditor/ueditor.config.js?v={:config('asset_version')}"></script>
+    <script src="__LIBS__/ueditor/ueditor.all.min.js?v={:config('asset_version')}"></script>
     {/notempty}
 
     {notempty name="_ckeditor"}
-    <script src="__LIBS__/ckeditor/ckeditor.js"></script>
+    <script src="__LIBS__/ckeditor/ckeditor.js?v={:config('asset_version')}"></script>
     {/notempty}
 
     {volist name="js_list" id="vo"}
-    <script src="{$vo}"></script>
+    <script src="{$vo}?v={:config('asset_version')}"></script>
     {/volist}
 
     {volist name="extend_js_list" id="vo"}
         {volist name="vo" id="v"}
-        <script src="{$v}"></script>
+        <script src="{$v}?v={:config('asset_version')}"></script>
         {/volist}
     {/volist}
 

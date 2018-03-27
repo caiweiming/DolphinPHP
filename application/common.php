@@ -176,7 +176,7 @@ if (!function_exists('minify')) {
                 $url .= 'b=' . $files;
                 break;
         }
-        echo $url;
+        echo $url.'&v='.config('asset_version');
     }
 }
 
@@ -1221,9 +1221,9 @@ if (!function_exists('load_assets')) {
         $result = '';
         foreach ($assets_list as $item) {
             if ($type == 'css') {
-                $result .= '<link rel="stylesheet" href="'.$item.'">';
+                $result .= '<link rel="stylesheet" href="'.$item.'?v='.config('asset_version').'">';
             } else {
-                $result .= '<script src="'.$item.'"></script>';
+                $result .= '<script src="'.$item.'?v='.config('asset_version').'"></script>';
             }
         }
         $result = str_replace(array_keys(config('view_replace_str')), array_values(config('view_replace_str')), $result);

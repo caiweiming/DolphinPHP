@@ -55,14 +55,14 @@
     {eq name="Think.config.minify_status" value="1"}
     <link rel="stylesheet" id="css-main" href="{:minify('group', 'libs_css,core_css')}">
     {else/}
-    <link rel="stylesheet" href="__LIBS__/sweetalert/sweetalert.min.css">
-    <link rel="stylesheet" href="__LIBS__/magnific-popup/magnific-popup.min.css">
-    <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css">
-    <link rel="stylesheet" href="__ADMIN_CSS__/oneui.css">
-    <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css" id="css-main">
-    <link rel="stylesheet" href="__LIBS__/viewer/viewer.min.css">
+    <link rel="stylesheet" href="__LIBS__/sweetalert/sweetalert.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__LIBS__/magnific-popup/magnific-popup.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/oneui.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css?v={:config('asset_version')}" id="css-main">
+    <link rel="stylesheet" href="__LIBS__/viewer/viewer.min.css?v={:config('asset_version')}">
     {/eq}
-    <link rel="stylesheet" id="css-theme" href="__ADMIN_CSS__/themes/{:config('system_color')}.min.css">
+    <link rel="stylesheet" id="css-theme" href="__ADMIN_CSS__/themes/{:config('system_color')}.min.css?v={:config('asset_version')}">
 
     <!--页面css-->
     {block name="style"}{/block}
@@ -82,7 +82,7 @@
     {:hook('page_plugin_css')}
 
     <!--自定义css-->
-    <link rel="stylesheet" href="__ADMIN_CSS__/custom.css">
+    <link rel="stylesheet" href="__ADMIN_CSS__/custom.css?v={:config('asset_version')}">
     <script>
         // url
         var dolphin = {
@@ -433,28 +433,28 @@
 {eq name="Think.config.minify_status" value="1"}
 <script src="{:minify('group', 'core_js,libs_js')}"></script>
 {else/}
-<script src="__ADMIN_JS__/core/jquery.min.js"></script>
-<script src="__ADMIN_JS__/core/bootstrap.min.js"></script>
-<script src="__ADMIN_JS__/core/jquery.slimscroll.min.js"></script>
-<script src="__ADMIN_JS__/core/jquery.scrollLock.min.js"></script>
-<script src="__ADMIN_JS__/core/jquery.appear.min.js"></script>
-<script src="__ADMIN_JS__/core/jquery.countTo.min.js"></script>
-<script src="__ADMIN_JS__/core/jquery.placeholder.min.js"></script>
-<script src="__ADMIN_JS__/core/js.cookie.min.js"></script>
-<script src="__LIBS__/magnific-popup/magnific-popup.min.js"></script>
-<script src="__ADMIN_JS__/app.js"></script>
-<script src="__ADMIN_JS__/dolphin.js"></script>
-<script src="__ADMIN_JS__/builder/form.js"></script>
-<script src="__ADMIN_JS__/builder/aside.js"></script>
-<script src="__ADMIN_JS__/builder/table.js"></script>
-<script src="__LIBS__/bootstrap-notify/bootstrap-notify.min.js"></script>
-<script src="__LIBS__/sweetalert/sweetalert.min.js"></script>
-<script src="__LIBS__/js-xss/xss.min.js"></script>
-<script src="__LIBS__/viewer/viewer.min.js"></script>
+<script src="__ADMIN_JS__/core/jquery.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/bootstrap.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.slimscroll.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.scrollLock.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.appear.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.countTo.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.placeholder.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/js.cookie.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/magnific-popup/magnific-popup.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/app.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/dolphin.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/form.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/aside.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/table.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/bootstrap-notify/bootstrap-notify.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/sweetalert/sweetalert.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/js-xss/xss.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/viewer/viewer.min.js?v={:config('asset_version')}"></script>
 {/eq}
 
 <!-- Page JS Plugins -->
-<script src="__LIBS__/layer/layer.js"></script>
+<script src="__LIBS__/layer/layer.js?v={:config('asset_version')}"></script>
 {notempty name="_js_files"}
     {eq name="Think.config.minify_status" value="1"}
         <script src="{:minify('group', $_js_files)}"></script>
