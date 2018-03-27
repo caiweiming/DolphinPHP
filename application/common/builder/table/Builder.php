@@ -1153,13 +1153,14 @@ class Builder extends ZBuilder
     /**
      * 引入模块js文件
      * @param string $files_name js文件名，多个文件用逗号隔开
+     * @param string $module 指定模块
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function js($files_name = '')
+    public function js($files_name = '', $module = '')
     {
         if ($files_name != '') {
-            $this->loadFile('js', $files_name);
+            $this->loadFile('js', $files_name, $module);
         }
         return $this;
     }
@@ -1167,13 +1168,14 @@ class Builder extends ZBuilder
     /**
      * 引入模块css文件
      * @param string $files_name css文件名，多个文件用逗号隔开
+     * @param string $module 指定模块
      * @author caiweiming <314013107@qq.com>
      * @return $this
      */
-    public function css($files_name = '')
+    public function css($files_name = '', $module = '')
     {
         if ($files_name != '') {
-            $this->loadFile('css', $files_name);
+            $this->loadFile('css', $files_name, $module);
         }
         return $this;
     }
@@ -1182,16 +1184,22 @@ class Builder extends ZBuilder
      * 引入css或js文件
      * @param string $type 类型：css/js
      * @param string $files_name 文件名，多个用逗号隔开
+     * @param string $module 指定模块
      * @author caiweiming <314013107@qq.com>
      */
-    private function loadFile($type = '', $files_name = '')
+    private function loadFile($type = '', $files_name = '', $module = '')
     {
         if ($files_name != '') {
+            $module = $module == '' ? $this->_module : $module;
             if (!is_array($files_name)) {
                 $files_name = explode(',', $files_name);
             }
             foreach ($files_name as $item) {
-                $this->_vars[$type.'_list'][] = PUBLIC_PATH. 'static/'. $this->_module .'/'.$type.'/'.$item.'.'.$type;
+                if (strpos($item, '/')) {
+                    $this->_vars[$type.'_list'][] = PUBLIC_PATH. 'static/'. $item.'.'.$type;
+                } else {
+                    $this->_vars[$type.'_list'][] = PUBLIC_PATH. 'static/'. $module .'/'.$type.'/'.$item.'.'.$type;
+                }
             }
         }
     }
