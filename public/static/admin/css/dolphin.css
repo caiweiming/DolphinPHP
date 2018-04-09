@@ -29,20 +29,43 @@ h6,
     max-height: 34px;
 }
 .dolphin-header {
-    padding-left: 6px;
-    padding-right: 10px;
+    padding: 6px 10px 1px 6px;
 }
 .text-modern {
     color: #1F98CA;
 }
 /* 顶部导航 */
+#header-navbar {
+    min-height: 50px;
+}
 .content-mini.content-mini-full {
-    padding: 10px;
+    padding: 0 10px 0 0;
 }
 .nav-header {
-    margin-top: 3px;
+    margin-top: 6px;
 }
-
+.nav-pills > li > a {
+    font-weight: normal;;
+    padding: 15px 17px;
+    border-radius: 0;
+}
+.side-header{
+    min-height: 50px;
+}
+.side-content{
+    padding: 7px 20px 1px;
+}
+.header-navbar-fixed #main-container{
+    padding-top: 50px;
+    background: #f1f1f1;
+}
+#page-footer{
+    padding: 13px 30px 13px;
+}
+.btn,
+.form-control{
+    border-radius: 0;
+}
 /* 表单元素 */
 .form-horizontal .css-checkbox {
     margin-right: 10px;
@@ -500,12 +523,16 @@ table.treetable tr.branch {
 
 .breadcrumb {
     padding:10px 14px;
+    font-weight: normal;
+    border-radius: 0;
 }
 
 @media screen and (min-width: 768px){
     /* 面包屑导航 */
     .breadcrumb {
         padding: 10px 30px;
+        font-weight: normal;
+        border-radius: 0;
     }
 }
 
