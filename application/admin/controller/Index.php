@@ -44,8 +44,9 @@ class Index extends Admin
      */
     public function wipeCache()
     {
-        if (!empty(config('wipe_cache_type'))) {
-            foreach (config('wipe_cache_type') as $item) {
+        $wipe_cache_type = config('wipe_cache_type');
+        if (!empty($wipe_cache_type)) {
+            foreach ($wipe_cache_type as $item) {
                 if ($item == 'LOG_PATH') {
                     $dirs = (array) glob(constant($item) . '*');
                     foreach ($dirs as $dir) {
