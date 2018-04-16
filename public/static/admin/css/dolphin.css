@@ -29,7 +29,7 @@ h6,
     max-height: 34px;
 }
 .dolphin-header {
-    padding: 6px 10px 1px 6px;
+    padding: 8px 10px 1px 6px;
 }
 .text-modern {
     color: #1F98CA;
@@ -51,9 +51,6 @@ h6,
 }
 .side-header{
     min-height: 50px;
-}
-.side-content{
-    padding: 7px 20px 1px;
 }
 .header-navbar-fixed #main-container{
     padding-top: 50px;
