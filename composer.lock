@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "5a67c147552f4443b605e80408d5617d",
@@ -16,7 +16,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/ezyang/htmlpurifier/d85d39da4576a6934b72480be6978fb10c860021.zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
                 "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
@@ -55,16 +55,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.0.15",
+            "version": "v5.0.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "7c1375791fe8772e33282ee8611ea465dc215fca"
+                "reference": "3bf48cbfef3b20f9278bf713226a42624ba4de3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/top-think/framework/7c1375791fe8772e33282ee8611ea465dc215fca.zip",
-                "reference": "7c1375791fe8772e33282ee8611ea465dc215fca",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/3bf48cbfef3b20f9278bf713226a42624ba4de3f",
+                "reference": "3bf48cbfef3b20f9278bf713226a42624ba4de3f",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2018-01-31T08:40:10+00:00"
+            "time": "2018-04-14T05:04:04+00:00"
         },
         {
             "name": "topthink/think-captcha",
@@ -150,7 +150,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://dl.composer-proxy.org/topthink/think-helper/0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f.zip",
+                "url": "https://api.github.com/repos/top-think/think-helper/zipball/0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f",
                 "reference": "0c99dc625b0d2d4124e1b6ca15a3ad6f0125963f",
                 "shasum": ""
             },
@@ -186,7 +186,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://dl.composer-proxy.org/topthink/think-image/8586cf47f117481c6d415b20f7dedf62e79d5512.zip",
+                "url": "https://api.github.com/repos/top-think/think-image/zipball/8586cf47f117481c6d415b20f7dedf62e79d5512",
                 "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512",
                 "shasum": ""
             },
@@ -226,7 +226,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/top-think/think-installer/1be326e68f63de4e95977ed50f46ae75f017556d.zip",
+                "url": "https://api.github.com/repos/top-think/think-installer/zipball/1be326e68f63de4e95977ed50f46ae75f017556d",
                 "reference": "1be326e68f63de4e95977ed50f46ae75f017556d",
                 "shasum": ""
             },
