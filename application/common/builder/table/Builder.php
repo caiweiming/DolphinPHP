@@ -152,6 +152,10 @@ class Builder extends ZBuilder
         '_search_area'       => [],       // 搜索区域
         '_search_area_url'   => '',       // 搜索区域url
         '_search_area_op'    => '',       // 搜索区域匹配方式
+        'builder_height'     => 'fixed',  // 表格高度
+        'fixed_right_column' => 0,        // 固定右边列数量
+        'fixed_left_column'  => 0,        // 固定左边列数量
+        'column_width'       => [],       // 列宽度
     ];
 
     /**
@@ -1044,6 +1048,43 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 设置表格高度
+     * @param string $height 高度：fixed/auto/具体数值
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     * @since 1.3.0
+     */
+    public function setHeight($height = 'fixed')
+    {
+        $this->_vars['builder_height'] = $height;
+        return $this;
+    }
+
+    /**
+     * 固定左侧列数
+     * @param int $num 数量
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function fixedRight($num = 0)
+    {
+        $this->_vars['fixed_right_column'] = $num;
+        return $this;
+    }
+
+    /**
+     * 固定右侧列数
+     * @param int $num 数量
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function fixedLeft($num = 0)
+    {
+        $this->_vars['fixed_left_column'] = $num;
+        return $this;
+    }
+
+    /**
      * 设置搜索参数
      * @param array $fields 参与搜索的字段
      * @param string $placeholder 提示符
@@ -1297,6 +1338,33 @@ class Builder extends ZBuilder
         if (!empty($columns)) {
             foreach ($columns as $column) {
                 call_user_func_array([$this, 'addColumn'], $column);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 设置列宽
+     * @param string $column 列名，即字段名
+     * @param int $width 宽度，默认为100
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function setColumnWidth($column = '', $width = 100)
+    {
+        if ($column != '') {
+            if (is_array($column)) {
+                foreach ($column as $field => $width) {
+                    $this->_vars['column_width'][$field] = $width;
+                }
+            } else {
+                if (strpos($column, ',')) {
+                    $columns = explode(',', $column);
+                    foreach ($columns as $column) {
+                        $this->_vars['column_width'][$column] = $width;
+                    }
+                }
+                $this->_vars['column_width'][$column] = $width;
             }
         }
         return $this;
@@ -1674,9 +1742,9 @@ class Builder extends ZBuilder
                         if ($button_style['icon']) {
                             $row['right_button'] .= '<i class="'.$button['icon'].'"></i> ';
                         }
-                        $row['right_button'] .= $button['title'].'</a> ';
+                        $row['right_button'] .= $button['title'].'</a>';
                     } else {
-                        $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a> ';
+                        $row['right_button'] .= '<a '.$button['attribute'].' data-toggle="tooltip"><i class="'.$button['icon'].'"></i></a>';
                     }
                 }
                 $row['right_button'] = '<div class="btn-group">'. $row['right_button'] .'</div>';

@@ -678,13 +678,14 @@ var App = function() {
         // For each table
         jQuery('.js-table-checkable').each(function(){
             var $table = jQuery(this);
+            var $table_target = jQuery('.js-table-checkable-target');
 
             // When a checkbox is clicked in thead
             jQuery('thead input:checkbox', $table).on('click', function() {
                 var $checkedStatus = jQuery(this).prop('checked');
 
                 // Check or uncheck all checkboxes in tbody
-                jQuery('tbody input[name="ids[]"]:checkbox', $table).each(function() {
+                jQuery('tbody input[name="ids[]"]:checkbox', $table_target).each(function() {
                     var $checkbox = jQuery(this);
 
                     $checkbox.prop('checked', $checkedStatus);
@@ -693,25 +694,35 @@ var App = function() {
             });
 
             // When a checkbox is clicked in tbody
-            jQuery('tbody input[name="ids[]"]:checkbox', $table).on('click', function() {
+            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function() {
                 var $checkbox = jQuery(this);
 
                 uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
             });
+        });
 
-            // When a row is clicked in tbody
-            // jQuery('tbody > tr', $table).on('click', function(e) {
-            //     if (e.target.type !== 'checkbox'
-            //             && e.target.type !== 'button'
-            //             && e.target.tagName.toLowerCase() !== 'a'
-            //             && !jQuery(e.target).parent('label').length) {
-            //         var $checkbox       = jQuery('input:checkbox', this);
-            //         var $checkedStatus  = $checkbox.prop('checked');
-            //
-            //         $checkbox.prop('checked', ! $checkedStatus);
-            //         uiHelperTableToolscheckRow($checkbox, ! $checkedStatus);
-            //     }
-            // });
+        jQuery('.js-table-checkable-left').each(function(){
+            var $table = jQuery(this);
+            var $table_target = jQuery('.js-table-checkable-target-left');
+
+            // When a checkbox is clicked in thead
+            jQuery('thead input:checkbox', $table).on('click', function() {
+                var $checkedStatus = jQuery(this).prop('checked');
+
+                // Check or uncheck all checkboxes in tbody
+                jQuery('tbody input[name="ids[]"]:checkbox', $table_target).each(function() {
+                    var $checkbox = jQuery(this);
+                    $checkbox.prop('checked', $checkedStatus);
+                    uiHelperTableToolscheckRow($checkbox, $checkedStatus);
+                });
+            });
+
+            // When a checkbox is clicked in tbody
+            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function() {
+                var $checkbox = jQuery(this);
+
+                uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
+            });
         });
     };
 
