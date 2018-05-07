@@ -96,6 +96,10 @@ class Module extends Admin
      */
     public function install($name = '', $confirm = 0)
     {
+        // 设置最大执行时间和内存大小
+        ini_set('max_execution_time', '0');
+        ini_set('memory_limit', '1024M');
+
         if ($name == '') $this->error('模块不存在！');
         if ($name == 'admin' || $name == 'user') $this->error('禁止操作系统核心模块！');
 

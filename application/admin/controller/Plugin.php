@@ -86,6 +86,10 @@ class Plugin extends Admin
      */
     public function install($name = '')
     {
+        // 设置最大执行时间和内存大小
+        ini_set('max_execution_time', '0');
+        ini_set('memory_limit', '1024M');
+
         $plug_name = trim($name);
         if ($plug_name == '') $this->error('插件不存在！');
 
