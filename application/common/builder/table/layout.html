@@ -185,7 +185,7 @@
                                             <col>
                                             {/if}
                                             {volist name="columns" id="column"}
-                                            <col>
+                                            <col class="{$column_hide[$column['name']]|default=''}">
                                             {/volist}
                                         </colgroup>
                                         <thead>
@@ -199,7 +199,7 @@
                                             {/if}
 
                                             {volist name="columns" id="column"}
-                                            <th class="column-{$column['name']} {$column.class|default=''}">
+                                            <th class="column-{$column['name']} {$column_hide[$column['name']]|default=''} {$column.class|default=''}">
                                                 {// 字段标题}
                                                 {$column.title|default=''|htmlspecialchars}
                                                 <span>
@@ -250,7 +250,7 @@
                                             <col width="50">
                                             {/if}
                                             {volist name="columns" id="column"}
-                                            <col width="{$column_width[$column['name']]|default='100'}">
+                                            <col width="{$column_width[$column['name']]|default='100'}" class="{$column_hide[$column['name']]|default=''}">
                                             {/volist}
                                         </colgroup>
                                         <tbody>
@@ -267,7 +267,7 @@
                                                 {/if}
 
                                                 {volist name="columns" id="column"}
-                                                <td class="{$column['class']|default=''}">
+                                                <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                     <div class="table-cell">
                                                     {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
                                                     {$row[$column['name']]|default=''}
@@ -302,7 +302,7 @@
                                                 <col>
                                                 {/if}
                                                 {volist name="columns" id="column"}
-                                                <col>
+                                                <col class="{$column_hide[$column['name']]|default=''}">
                                                 {/volist}
                                             </colgroup>
                                             <thead>
@@ -316,7 +316,7 @@
                                                     {/if}
 
                                                     {volist name="columns" id="column"}
-                                                    <th class="column-{$column['name']} {$column.class|default=''}" {gt name="i" value="$fixed_left_column"}style="visibility:hidden"{/gt}>
+                                                    <th class="column-{$column['name']} {$column_hide[$column['name']]|default=''} {$column.class|default=''}" {gt name="i" value="$fixed_left_column"}style="visibility:hidden"{/gt}>
                                                     {// 字段标题}
                                                     {$column.title|default=''|htmlspecialchars}
                                                     <span>
@@ -367,7 +367,7 @@
                                                 <col>
                                                 {/if}
                                                 {volist name="columns" id="column"}
-                                                <col>
+                                                <col class="{$column_hide[$column['name']]|default=''}">
                                                 {/volist}
                                             </colgroup>
                                             <tbody>
@@ -382,7 +382,7 @@
                                                 {/if}
 
                                                 {volist name="columns" id="column"}
-                                                <td class="{$column['class']|default=''}">
+                                                <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                     {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
                                                     {$row[$column['name']]|default=''}
                                                     {php}else:{/php}
@@ -417,7 +417,7 @@
                                                 <col>
                                                 {/if}
                                                 {volist name="columns" id="column"}
-                                                <col>
+                                                <col class="{$column_hide[$column['name']]|default=''}">
                                                 {/volist}
                                             </colgroup>
                                             <thead>
@@ -431,7 +431,7 @@
                                                     {/if}
 
                                                     {volist name="columns" id="column"}
-                                                    <th class="column-{$column['name']} {$column.class|default=''}">
+                                                    <th class="column-{$column['name']} {$column_hide[$column['name']]|default=''} {$column.class|default=''}">
                                                         {// 字段标题}
                                                         {$column.title|default=''|htmlspecialchars}
                                                         <span>
@@ -483,7 +483,7 @@
                                                     <col>
                                                     {/if}
                                                     {volist name="columns" id="column"}
-                                                    <col>
+                                                    <col class="{$column_hide[$column['name']]|default=''}">
                                                     {/volist}
                                                 </colgroup>
                                                 <tbody>
@@ -498,7 +498,7 @@
                                                         {/if}
 
                                                         {volist name="columns" id="column"}
-                                                        <td class="{$column['class']|default=''}">
+                                                        <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                             {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
                                                             {$row[$column['name']]|default=''}
                                                             {php}else:{/php}

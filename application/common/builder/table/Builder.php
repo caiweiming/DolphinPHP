@@ -156,6 +156,7 @@ class Builder extends ZBuilder
         'fixed_right_column' => 0,        // 固定右边列数量
         'fixed_left_column'  => 0,        // 固定左边列数量
         'column_width'       => [],       // 列宽度
+        'column_hide'        => [],       // 隐藏列
     ];
 
     /**
@@ -1363,8 +1364,53 @@ class Builder extends ZBuilder
                     foreach ($columns as $column) {
                         $this->_vars['column_width'][$column] = $width;
                     }
+                } else {
+                    $this->_vars['column_width'][$column] = $width;
                 }
-                $this->_vars['column_width'][$column] = $width;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 隐藏列
+     * @param string $column 列名，即字段名
+     * @param string $screen 屏幕，xs/sm/md/lg
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function hideColumn($column = '', $screen = '')
+    {
+        if ($column != '') {
+            if (is_array($column)) {
+                foreach ($column as $field => $screen) {
+                    $screens = is_array($screen) ? $screen : explode(',', $screen);
+                    foreach ($screens as $key => $value) {
+                        $screens[$key] = 'hidden-'.$value;
+                    }
+                    $screens = implode(' ', $screens);
+
+                    $this->_vars['column_hide'][$field] = $screens;
+                }
+            } else {
+                $screens = is_array($screen) ? $screen : explode(',', $screen);
+                foreach ($screens as &$screen) {
+                    $screen = 'hidden-'.$screen;
+                }
+                $screens = implode(' ', $screens);
+
+                if (strpos($column, ',')) {
+                    $columns = explode(',', $column);
+                    foreach ($columns as $column) {
+                        $this->_vars['column_hide'][$column] = isset($this->_vars['column_hide'][$column]) ?
+                            $this->_vars['column_hide'][$column]. ' ' . $screen :
+                            $screens;
+                    }
+                } else {
+                    $this->_vars['column_hide'][$column] = isset($this->_vars['column_hide'][$column]) ?
+                        $this->_vars['column_hide'][$column]. ' ' . $screen :
+                        $screens;
+                }
             }
         }
         return $this;
