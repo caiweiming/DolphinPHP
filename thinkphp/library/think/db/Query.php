@@ -53,6 +53,8 @@ class Query
     protected static $info = [];
     // 回调事件
     private static $event = [];
+    // 读取主库
+    private static $readMaster = [];
 
     /**
      * 构造函数
@@ -138,6 +140,25 @@ class Query
     public function getModel()
     {
         return $this->model;
+    }
+
+    /**
+     * 设置后续从主库读取数据
+     * @access public
+     * @param  bool $allTable
+     * @return void
+     */
+    public function readMaster($allTable = false)
+    {
+        if ($allTable) {
+            $table = '*';
+        } else {
+            $table = isset($this->options['table']) ? $this->options['table'] : $this->getTable();
+        }
+
+        static::$readMaster[$table] = true;
+
+        return $this;
     }
 
     /**
@@ -238,7 +259,7 @@ class Query
      */
     public function execute($sql, $bind = [])
     {
-        return $this->connection->execute($sql, $bind);
+        return $this->connection->execute($sql, $bind, $this);
     }
 
     /**
@@ -2204,7 +2225,7 @@ class Query
         }
 
         // 执行操作
-        $result = 0 === $sql ? 0 : $this->execute($sql, $bind);
+        $result = 0 === $sql ? 0 : $this->execute($sql, $bind, $this);
         if ($result) {
             $sequence  = $sequence ?: (isset($options['sequence']) ? $options['sequence'] : null);
             $lastInsId = $this->getLastInsID($sequence);
@@ -2270,10 +2291,10 @@ class Query
             return $this->connection->getRealSql($sql, $bind);
         } elseif (is_array($sql)) {
             // 执行操作
-            return $this->batchQuery($sql, $bind);
+            return $this->batchQuery($sql, $bind, $this);
         } else {
             // 执行操作
-            return $this->execute($sql, $bind);
+            return $this->execute($sql, $bind, $this);
         }
     }
 
@@ -2299,7 +2320,7 @@ class Query
             return $this->connection->getRealSql($sql, $bind);
         } else {
             // 执行操作
-            return $this->execute($sql, $bind);
+            return $this->execute($sql, $bind, $this);
         }
     }
 
@@ -2366,7 +2387,7 @@ class Query
                 Cache::clear($options['cache']['tag']);
             }
             // 执行操作
-            $result = '' == $sql ? 0 : $this->execute($sql, $bind);
+            $result = '' == $sql ? 0 : $this->execute($sql, $bind, $this);
             if ($result) {
                 if (is_string($pk) && isset($where[$pk])) {
                     $data[$pk] = $where[$pk];
@@ -2838,7 +2859,7 @@ class Query
             Cache::clear($options['cache']['tag']);
         }
         // 执行操作
-        $result = $this->execute($sql, $bind);
+        $result = $this->execute($sql, $bind, $this);
         if ($result) {
             if (!is_array($data) && is_string($pk) && isset($key) && strpos($key, '|')) {
                 list($a, $val) = explode('|', $key);
@@ -2921,6 +2942,10 @@ class Query
             if (!isset($options[$name])) {
                 $options[$name] = false;
             }
+        }
+
+        if (isset(static::$readMaster['*']) || (is_string($options['table']) && isset(static::$readMaster[$options['table']]))) {
+            $options['master'] = true;
         }
 
         foreach (['join', 'union', 'group', 'having', 'limit', 'order', 'force', 'comment'] as $name) {
