@@ -83,7 +83,7 @@ class User extends Model
                 return false;
             }
             if (!Hash::check((string)$password, $user['password'])) {
-                $this->error = '密码错误！';
+                $this->error = '账号或者密码错误！';
             } else {
                 $uid = $user['id'];
 
