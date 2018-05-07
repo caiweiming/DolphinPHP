@@ -610,6 +610,7 @@
             var builder_table_right_body = $('#builder-table-right-body');
             var table_main = $('#builder-table-main');
             var table_body = $('#builder-table-body');
+            var table_right = $('#builder-table-right');
             var table_head_col  = builder_table_head.find('col');
             var table_body_col  = table_body.find('col');
             var table_left_head_col  = $('#builder-table-left-head').find('col');
@@ -655,12 +656,12 @@
             if (table_body.width() < $('#builder-table-main').width()) {
                 builder_table_left_body.height(table_body.height() - 17);
                 builder_table_right_body.height(table_body.height() - 17);
+                table_right.height(table_body.height() + 33);
             } else {
                 builder_table_left_body.height(table_body.height());
                 builder_table_right_body.height(table_body.height());
+                table_right.height(table_body.height() + 50);
             }
-
-            $('#builder-table-right').height($('#builder-table-left').height());
 
             /*行高亮*/
             var table_main_tr = table_main.find('tbody tr');

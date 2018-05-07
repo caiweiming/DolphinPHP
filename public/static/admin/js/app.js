@@ -704,6 +704,7 @@ var App = function() {
         jQuery('.js-table-checkable-left').each(function(){
             var $table = jQuery(this);
             var $table_target = jQuery('.js-table-checkable-target-left');
+            var $tr = $table_target.find('tr');
 
             // When a checkbox is clicked in thead
             jQuery('thead input:checkbox', $table).on('click', function() {
@@ -712,30 +713,36 @@ var App = function() {
                 // Check or uncheck all checkboxes in tbody
                 jQuery('tbody input[name="ids[]"]:checkbox', $table_target).each(function() {
                     var $checkbox = jQuery(this);
+                    var $index = $table_target.find('input[name="ids[]"]:checkbox').index($(this));
                     $checkbox.prop('checked', $checkedStatus);
-                    uiHelperTableToolscheckRow($checkbox, $checkedStatus);
+                    uiHelperTableToolscheckRow($checkbox, $checkedStatus, $index);
                 });
             });
 
             // When a checkbox is clicked in tbody
-            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function() {
+            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function(e) {
                 var $checkbox = jQuery(this);
+                var $index = $table_target.find('input[name="ids[]"]:checkbox').index($(this));
 
-                uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
+                uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'), $index);
             });
         });
     };
 
     // Checkable table functionality helper - Checks or unchecks table row
-    var uiHelperTableToolscheckRow = function($checkbox, $checkedStatus) {
+    var uiHelperTableToolscheckRow = function($checkbox, $checkedStatus, $index) {
         if ($checkedStatus) {
             $checkbox
                 .closest('tr')
                 .addClass('active');
+            $('.js-table-checkable-target').find('tr').eq($index).addClass('active');
+            $('#builder-table-right-body-inner').find('tr').eq($index).addClass('active');
         } else {
             $checkbox
                 .closest('tr')
                 .removeClass('active');
+            $('.js-table-checkable-target').find('tr').eq($index).removeClass('active');
+            $('#builder-table-right-body-inner').find('tr').eq($index).removeClass('active');
         }
     };
 
