@@ -923,21 +923,23 @@ var App = function() {
                     onImageUpload: function(files) {
                         //上传图片到服务器
                         var formData = new FormData();
-                        formData.append('file', files[0]);
-                        $.ajax({
-                            url : dolphin.image_upload_url,//后台文件上传接口
-                            type : 'POST',
-                            data : formData,
-                            cache: false,
-                            processData : false,
-                            contentType : false,
-                            success : function(res) {
-                                if (res.code) {
-                                    $summernote.summernote('insertImage', res.path);
-                                } else {
-                                    Dolphin.notify(res.info, 'danger');
+                        $.each(files, function () {
+                            formData.append('file', $(this)[0]);
+                            $.ajax({
+                                url : dolphin.image_upload_url,//后台文件上传接口
+                                type : 'POST',
+                                data : formData,
+                                cache: false,
+                                processData : false,
+                                contentType : false,
+                                success : function(res) {
+                                    if (res.code) {
+                                        $summernote.summernote('insertImage', res.path);
+                                    } else {
+                                        Dolphin.notify(res.info, 'danger');
+                                    }
                                 }
-                            }
+                            });
                         });
                     }
                 }
