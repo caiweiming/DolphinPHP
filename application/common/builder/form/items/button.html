@@ -1,4 +1,4 @@
-<div class="form-group col-md-{$_layout[$form[type].name]|default='12'} col-xs-12" id="form_group_{$form[type].name}">
+<div class="form-group col-lg-{$_layout[$form[type].name]['lg']|default='12'} col-md-{$_layout[$form[type].name]['md']|default='12'} col-sm-{$_layout[$form[type].name]['sm']|default='12'} col-xs-{$_layout[$form[type].name]['xs']|default='12'}" id="form_group_{$form[type].name}">
     <div class="col-xs-12 form-btn-parent">
         {eq name="form[type].ele_type" value="button"}
         <button class="form-btn btn  {$form[type].class|default='btn-primary'}" id="{$form[type].id|default=''}" type="button" {$form[type].data|default=''} {present name="form[type].disabled"}disabled{/present}><i class="{$form[type].icon|default=''}"></i> {$form[type].title|default=''}</button>

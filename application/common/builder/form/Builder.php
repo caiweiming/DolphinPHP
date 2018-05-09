@@ -1697,7 +1697,15 @@ class Builder extends ZBuilder
 
             // 判断是否有布局参数
             if (strpos($type, ':')) {
-                list($type, $this->_vars['_layout'][$name]) = explode(':', $type);
+                list($type, $layout) = explode(':', $type);
+
+                $layout = explode('|', $layout);
+                $this->_vars['_layout'][$name] = [
+                    'xs' => $layout[0],
+                    'sm' => isset($layout[1]) ? ($layout[1] == '' ? $layout[0] : $layout[1]) : $layout[0],
+                    'md' => isset($layout[2]) ? ($layout[2] == '' ? $layout[0] : $layout[2]) : $layout[0],
+                    'lg' => isset($layout[3]) ? ($layout[3] == '' ? $layout[0] : $layout[3]) : $layout[0],
+                ];
             }
 
             $method = 'add'. ucfirst($type);
@@ -1893,7 +1901,15 @@ class Builder extends ZBuilder
     public function layout($column = [])
     {
         if (!empty($column)) {
-            $this->_vars['_layout'] = array_merge($this->_vars['_layout'], $column);
+            foreach ($column as $field => $layout) {
+                $layout = explode('|', $layout);
+                $this->_vars['_layout'][$field] = [
+                    'xs' => $layout[0],
+                    'sm' => isset($layout[1]) ? ($layout[1] == '' ? $layout[0] : $layout[1]) : $layout[0],
+                    'md' => isset($layout[2]) ? ($layout[2] == '' ? $layout[0] : $layout[2]) : $layout[0],
+                    'lg' => isset($layout[3]) ? ($layout[3] == '' ? $layout[0] : $layout[3]) : $layout[0],
+                ];
+            }
         }
         return $this;
     }
