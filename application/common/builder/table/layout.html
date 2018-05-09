@@ -566,7 +566,7 @@
 
 {block name="script"}
     <script>
-        $(window).load(function () {
+        var init_table = function() {
             var left_column = '{$fixed_left_column}';
             var right_column = '{$fixed_right_column}';
             var left_width = 0;
@@ -603,7 +603,11 @@
             $('#builder-table-left').width(left_width);
             /*设置右侧固定列*/
             $('#builder-table-right').width(right_width);
+        };
+        jQuery(window).on('resize load', function () {
+            init_table();
         });
+
         $(document).ready(function () {
             var builder_table_head = $('#builder-table-head');
             var builder_table_left_body = $('#builder-table-left-body');

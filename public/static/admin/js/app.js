@@ -400,6 +400,9 @@ var App = function() {
                                     .addClass($iconFullscreen);
                             }
                         }
+                        if (typeof(init_table) === "function") {
+                            init_table();
+                        }
                         break;
                     case 'fullscreen_on':
                         $elBlock.addClass('block-opt-fullscreen');
