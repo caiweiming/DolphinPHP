@@ -43,22 +43,38 @@ class Role extends Model
      * 获取树形角色
      * @param null $id 需要隐藏的角色id
      * @param string $default 默认第一个菜单项，默认为“顶级角色”，如果为false则不显示，也可传入其他名称
+     * @param null $filter 角色id，过滤显示指定角色及其子角色
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public static function getTree($id = null, $default = '')
+    public static function getTree($id = null, $default = '', $filter = null)
     {
         $result[0]       = '顶级角色';
         $where['status'] = 1;
 
         // 排除指定菜单及其子菜单
+        $hide_ids = [];
         if ($id !== null) {
             $hide_ids    = array_merge([$id], self::getChildsId($id));
             $where['id'] = ['notin', $hide_ids];
         }
 
+        // 过滤显示指定角色及其子角色
+        if ($filter !== null) {
+            $show_ids = array_merge([$filter], self::getChildsId($filter));
+
+            if (isset($where['id'])) {
+                $ids = array_diff($show_ids, $hide_ids);
+                $where['id'] = ['in', $ids];
+            } else {
+                $where['id'] = ['in', $show_ids];
+            }
+        }
+
         // 获取菜单
-        $roles = Tree::config(['title' => 'name'])->toList(self::where($where)->column('id,pid,name'));
+        $roles = self::where($where)->column('id,pid,name');
+        $pid   = self::where($where)->order('pid')->value('pid');
+        $roles = Tree::config(['title' => 'name'])->toList($roles, $pid);
         foreach ($roles as $role) {
             $result[$role['id']] = $role['title_display'];
         }
@@ -171,5 +187,24 @@ class Role extends Model
     public static function getAuthWithRole($role = [])
     {
         return self::where('id', 'in', $role)->column('id,menu_auth');
+    }
+
+    /**
+     * 重设权限
+     * @param null $pid 父级id
+     * @param array $new_auth 新权限
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public static function resetAuth($pid = null, $new_auth = [])
+    {
+        if ($pid !== null) {
+            $data = self::where('pid', $pid)->column('id,menu_auth');
+            foreach ($data as $id => $menu_auth) {
+                $menu_auth = json_decode($menu_auth, true);
+                $menu_auth = json_encode(array_intersect($menu_auth, $new_auth));
+                self::where('id', $id)->setField('menu_auth', $menu_auth);
+                self::resetAuth($id, $new_auth);
+            }
+        }
     }
 }

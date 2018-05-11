@@ -38,7 +38,7 @@
                         <div class="tab-pane fade in active push-20" id="tab1">
                             <div class="form-group">
                                 <label class="col-xs-12" for="pid">所属角色</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12">
                                     <select class="form-control" id="pid" name="pid">
                                         <option value="">请选择：</option>
                                         {volist name="role_list" id="role"}
@@ -49,19 +49,19 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-xs-12" for="title">角色名称</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12">
                                     <input class="form-control" type="text" id="title" name="name" value="" placeholder="请输入角色名称">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-xs-12" for="description">角色描述</label>
-                                <div class="col-xs-9">
+                                <div class="col-sm-12">
                                     <textarea class="form-control" id="description" rows="7" name="description" placeholder="请输入角色描述"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-xs-12" for="pid">默认模块</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12">
                                     <select class="form-control" id="default_module" name="default_module">
                                         {volist name="module_list" id="module"}
                                         <option value="{$key}">{$module}</option>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-xs-12" for="sort">排序</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12">
                                     <input class="form-control" type="text" id="sort" name="sort" value="100" placeholder="请输入排序">
                                 </div>
                             </div>

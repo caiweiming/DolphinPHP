@@ -37,12 +37,14 @@ class Index extends Admin
 
         // 获取查询条件
         $map = $this->getMap();
+        // 非超级管理员检查可管理角色
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getChildsId(session('user_auth.role'));
+            $map['role'] = ['in', $role_list];
+        }
 
         // 数据列表
-        $data_list = UserModel::where($map)->order('sort,id desc')->paginate();
-
-        // 分页数据
-        $page = $data_list->render();
+        $data_list = UserModel::where($map)->order('sort,role,id desc')->paginate();
 
         // 授权按钮
         $btn_access = [
@@ -50,6 +52,13 @@ class Index extends Admin
             'icon'  => 'fa fa-fw fa-key',
             'href'  => url('access', ['uid' => '__id__'])
         ];
+
+        // 角色列表
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getTree(null, false, session('user_auth.role'));
+        } else {
+            $role_list = RoleModel::getTree();
+        }
 
         // 使用ZBuilder快速创建数据表格
         return ZBuilder::make('table')
@@ -60,7 +69,7 @@ class Index extends Admin
                 ['id', 'ID'],
                 ['username', '用户名'],
                 ['nickname', '昵称'],
-                ['role', '角色', 'select', RoleModel::getTree(null, false)],
+                ['role', '角色', $role_list],
                 ['email', '邮箱'],
                 ['mobile', '手机号'],
                 ['create_time', '创建时间', 'datetime'],
@@ -71,7 +80,6 @@ class Index extends Admin
             ->addRightButton('custom', $btn_access) // 添加授权按钮
             ->addRightButtons('edit,delete') // 批量添加右侧按钮
             ->setRowList($data_list) // 设置表格数据
-            ->setPages($page) // 设置分页数据
             ->fetch(); // 渲染页面
     }
 
@@ -90,6 +98,17 @@ class Index extends Admin
             // 验证失败 输出错误信息
             if(true !== $result) $this->error($result);
 
+            // 非超级管理需要验证可选择角色
+            if (session('user_auth.role') != 1) {
+                if ($data['role'] == session('user_auth.role')) {
+                    $this->error('禁止创建与当前角色同级的用户');
+                }
+                $role_list = RoleModel::getChildsId(session('user_auth.role'));
+                if (!in_array($data['role'], $role_list)) {
+                    $this->error('权限不足，禁止创建非法角色的用户');
+                }
+            }
+
             if ($user = UserModel::create($data)) {
                 Hook::listen('user_add', $user);
                 // 记录行为
@@ -100,13 +119,20 @@ class Index extends Admin
             }
         }
 
+        // 角色列表
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getTree(null, false, session('user_auth.role'));
+        } else {
+            $role_list = RoleModel::getTree(null, false);
+        }
+
         // 使用ZBuilder快速创建表单
         return ZBuilder::make('form')
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['text', 'username', '用户名', '必填，可由英文字母、数字组成'],
                 ['text', 'nickname', '昵称', '可以是中文'],
-                ['select', 'role', '角色', '', RoleModel::getTree(null, false)],
+                ['select', 'role', '角色', '非超级管理员，禁止创建与当前角色同级的用户', $role_list],
                 ['text', 'email', '邮箱', ''],
                 ['password', 'password', '密码', '必填，6-20位'],
                 ['text', 'mobile', '手机号'],
@@ -125,6 +151,16 @@ class Index extends Admin
     public function edit($id = null)
     {
         if ($id === null) $this->error('缺少参数');
+
+        // 非超级管理员检查可编辑用户
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getChildsId(session('user_auth.role'));
+            $map['role'] = ['in', $role_list];
+            $user_list = UserModel::where($map)->column('id');
+            if (!in_array($id, $user_list)) {
+                $this->error('权限不足，没有可操作的用户');
+            }
+        }
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -150,6 +186,17 @@ class Index extends Admin
                 unset($data['password']);
             }
 
+            // 非超级管理需要验证可选择角色
+            if (session('user_auth.role') != 1) {
+                if ($data['role'] == session('user_auth.role')) {
+                    $this->error('禁止修改为当前角色同级的用户');
+                }
+                $role_list = RoleModel::getChildsId(session('user_auth.role'));
+                if (!in_array($data['role'], $role_list)) {
+                    $this->error('权限不足，禁止修改为非法角色的用户');
+                }
+            }
+
             if (UserModel::update($data)) {
                 $user = UserModel::get($data['id']);
                 Hook::listen('user_edit', $user);
@@ -164,6 +211,13 @@ class Index extends Admin
         // 获取数据
         $info = UserModel::where('id', $id)->field('password', true)->find();
 
+        // 角色列表
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getTree(null, false, session('user_auth.role'));
+        } else {
+            $role_list = RoleModel::getTree(null, false);
+        }
+
         // 使用ZBuilder快速创建表单
         return ZBuilder::make('form')
             ->setPageTitle('编辑') // 设置页面标题
@@ -171,7 +225,7 @@ class Index extends Admin
                 ['hidden', 'id'],
                 ['static', 'username', '用户名', '不可更改'],
                 ['text', 'nickname', '昵称', '可以是中文'],
-                ['select', 'role', '角色', '', RoleModel::getTree(null, false)],
+                ['select', 'role', '角色', '非超级管理员，禁止创建与当前角色同级的用户', $role_list],
                 ['text', 'email', '邮箱', ''],
                 ['password', 'password', '密码', '必填，6-20位'],
                 ['text', 'mobile', '手机号'],
@@ -192,6 +246,16 @@ class Index extends Admin
     public function access($tab = '', $uid = 0)
     {
         if ($uid === 0) $this->error('缺少参数');
+
+        // 非超级管理员检查可编辑用户
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getChildsId(session('user_auth.role'));
+            $map['role'] = ['in', $role_list];
+            $user_list = UserModel::where($map)->column('id');
+            if (!in_array($uid, $user_list)) {
+                $this->error('权限不足，没有可操作的用户');
+            }
+        }
 
         // 保存数据
         if ($this->request->isPost()) {
@@ -374,6 +438,19 @@ class Index extends Admin
         if ((is_array($ids) && in_array(UID, $ids)) || $ids == UID) {
             $this->error('禁止操作当前账号');
         }
+        // 非超级管理员检查可管理用户
+        if (session('user_auth.role') != 1) {
+            $user_ids  = (array)$ids;
+            $role_list = RoleModel::getChildsId(session('user_auth.role'));
+            $map['role'] = ['in', $role_list];
+            $user_list = UserModel::where($map)->column('id');
+            $user_list = array_intersect($user_list, $user_ids);
+            if (!$user_list) {
+                $this->error('权限不足，没有可操作的用户');
+            } else {
+                $this->request->post(['ids'=> $user_list]);
+            }
+        }
         $uid_delete = is_array($ids) ? '' : $ids;
         $ids        = array_map('get_nickname', (array)$ids);
         return parent::setStatus($type, ['user_'.$type, 'admin_user', $uid_delete, UID, implode('、', $ids)]);
@@ -391,6 +468,17 @@ class Index extends Admin
         $id      == UID && $this->error('禁止操作当前账号');
         $field   = input('post.name', '');
         $value   = input('post.value', '');
+
+        // 非超级管理员检查可操作的用户
+        if (session('user_auth.role') != 1) {
+            $role_list = RoleModel::getChildsId(session('user_auth.role'));
+            $map['role'] = ['in', $role_list];
+            $user_list = UserModel::where($map)->column('id');
+            if (!in_array($id, $user_list)) {
+                $this->error('权限不足，没有可操作的用户');
+            }
+        }
+
         $config  = UserModel::where('id', $id)->value($field);
         $details = '字段(' . $field . ')，原值(' . $config . ')，新值：(' . $value . ')';
         return parent::quickEdit(['user_edit', 'admin_user', $id, UID, $details]);
