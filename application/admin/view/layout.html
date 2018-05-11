@@ -45,9 +45,11 @@
         {/eq}
     {/notempty}
 
-    {volist name="_icons" id="icon"}
+    {notempty name="_icons"}
+        {volist name="_icons" id="icon"}
         <link rel="stylesheet" href="{$icon.url}">
-    {/volist}
+        {/volist}
+    {/notempty}
 
     {block name="plugins-css"}{/block}
 
