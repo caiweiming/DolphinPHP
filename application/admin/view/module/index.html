@@ -103,31 +103,33 @@
                             {else/}
                                 {notempty name="modules"}
                                 <div class="col-md-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-builder table-hover table-bordered table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>名称</th>
-                                                <th>图标</th>
-                                                <th>版本</th>
-                                                <th>作者</th>
-                                                <th>简介</th>
-                                                <th class="column-right_button">操作</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {volist name="modules" id="module"}
-                                            <tr>
-                                                <td>{$module.title|default='无模块标题'}</td>
-                                                <td><i class="{$module.icon|default='fa fa-puzzle-piece'}"></i></td>
-                                                <td>{$module.version|default='无版本号'}</td>
-                                                <td><a href="{$module.author_url|default=''}" target="_blank">{$module.author|default=''}</a></td>
-                                                <td>{$module.description|default='暂无简介'}</td>
-                                                <td>{$module.actions}</td>
-                                            </tr>
-                                            {/volist}
-                                            </tbody>
-                                        </table>
+                                    <div class="builder-table-wrapper" id="builder-table-wrapper">
+                                        <div class="builder-table" id="builder-table">
+                                            <table class="table table-builder table-hover table-bordered table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>名称</th>
+                                                    <th>图标</th>
+                                                    <th>版本</th>
+                                                    <th>作者</th>
+                                                    <th>简介</th>
+                                                    <th class="column-right_button">操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {volist name="modules" id="module"}
+                                                <tr>
+                                                    <td>{$module.title|default='无模块标题'}</td>
+                                                    <td><i class="{$module.icon|default='fa fa-puzzle-piece'}"></i></td>
+                                                    <td>{$module.version|default='无版本号'}</td>
+                                                    <td><a href="{$module.author_url|default=''}" target="_blank">{$module.author|default=''}</a></td>
+                                                    <td>{$module.description|default='暂无简介'}</td>
+                                                    <td>{$module.actions}</td>
+                                                </tr>
+                                                {/volist}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 {/notempty}
