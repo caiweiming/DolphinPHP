@@ -255,7 +255,7 @@
                                         </colgroup>
                                         <tbody>
                                             {volist name="row_list" id="row"}
-                                            <tr class="{$row['_tr_class']|default=''}" id="builder-table-main-tr">
+                                            <tr class="{$row['_tr_class']|default=''}">
                                                 {if (!$hide_checkbox)}
                                                 <td class="text-center">
                                                     <div class="table-cell">
@@ -577,7 +577,7 @@
             var table_left_body = $('#builder-table-left-body').find('table');
             var table_right_head = $('#builder-table-right-head').find('table');
             var table_right_body = $('#builder-table-right-body').find('table');
-            var table_head_tr = $('#builder-table-main-tr').find('td');
+            var table_head_tr_td = table_main.find('tr:first-child td');
             var table_body = $('#builder-table-body');
             var table_body_col  = table_body.find('col');
             var table_body_first_tr_th_len = table_body_col.length;
@@ -590,7 +590,7 @@
             table_right_body.width(table_main.width());
 
             // 设置表头列宽度
-            $.each(table_head_tr, function (i, e) {
+            $.each(table_head_tr_td, function (i, e) {
                 if (i < left_column) {
                     left_width += $(this).outerWidth();
                 }
