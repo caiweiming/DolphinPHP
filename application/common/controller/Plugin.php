@@ -51,6 +51,9 @@ abstract class Plugin
         if (is_file($this->plugin_path.'config.php')) {
             $this->config_file = $this->plugin_path.'config.php';
         }
+        if (is_file($this->plugin_path.'common.php')) {
+            include $this->plugin_path.'common.php';
+        }
     }
 
     /**
