@@ -212,9 +212,9 @@ class Builder extends ZBuilder
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function hideCheckbox()
+    public function hideCheckbox($status = true)
     {
-        $this->_vars['hide_checkbox'] = true;
+        $this->_vars['hide_checkbox'] = $status;
         return $this;
     }
 
