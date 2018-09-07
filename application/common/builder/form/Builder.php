@@ -1054,6 +1054,21 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 创建快速多级联动Token
+     * @param string $table 表名
+     * @param string $option
+     * @param string $key
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool|string
+     */
+    private function createLinkagesToken($table = '', $option = '', $key = '')
+    {
+        $table_token = substr(sha1($table.'-'.$option.'-'.$key.'-'.session('user_auth.last_login_ip').'-'.UID.'-'.session('user_auth.last_login_time')), 0, 8);
+        session($table_token, ['table' => $table, 'option' => $option, 'key' => $key]);
+        return $table_token;
+    }
+
+    /**
      * 添加快速多级联动
      * @param string $name 表单项名
      * @param string $title 标题
@@ -1091,6 +1106,8 @@ class Builder extends ZBuilder
             }
         }
 
+        $linkages_token = $this->createLinkagesToken($table, $option, $key);
+
         $item = [
             'type'   => 'linkages',
             'name'   => $name,
@@ -1102,6 +1119,7 @@ class Builder extends ZBuilder
             'option' => $option,
             'pid'    => $pid,
             'value'  => $default,
+            'token'  => $linkages_token,
         ];
 
         if ($this->_is_group) {

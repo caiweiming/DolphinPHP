@@ -25,19 +25,22 @@ class Ajax extends Common
 {
     /**
      * 获取联动数据
-     * @param string $table 表名
+     * @param string $token token
      * @param int $pid 父级ID
-     * @param string $key 下拉选项的值
-     * @param string $option 下拉选项的名称
      * @param string $pidkey 父级id字段名
      * @author 蔡伟明 <314013107@qq.com>
      * @return \think\response\Json
      */
-    public function getLevelData($table = '', $pid = 0, $key = 'id', $option = 'name', $pidkey = 'pid')
+    public function getLevelData($token = '', $pid = 0, $pidkey = 'pid')
     {
-        if ($table == '') {
-            return json(['code' => 0, 'msg' => '缺少表名']);
+        if ($token == '') {
+            return json(['code' => 0, 'msg' => '缺少Token']);
         }
+
+        $token_data = session($token);
+        $table      = $token_data['table'];
+        $option     = $token_data['option'];
+        $key        = $token_data['key'];
 
         $data_list = Db::name($table)->where($pidkey, $pid)->column($option, $key);
 
@@ -59,15 +62,14 @@ class Ajax extends Common
 
     /**
      * 获取筛选数据
-     * @param string $table 表名
-     * @param string $field 字段名
+     * @param string $token
      * @param array $map 查询条件
      * @param string $options 选项，用于显示转换
      * @param string $list 选项缓存列表名称
      * @author 蔡伟明 <314013107@qq.com>
      * @return \think\response\Json
      */
-    public function getFilterList($table = '', $field = '', $map = [], $options = '', $list = '')
+    public function getFilterList($token = '', $map = [], $options = '', $list = '')
     {
         if ($list != '') {
             $result = [
@@ -77,9 +79,14 @@ class Ajax extends Common
             ];
             return json($result);
         }
-        if ($table == '') {
-            return json(['code' => 0, 'msg' => '缺少表名']);
+        if ($token == '') {
+            return json(['code' => 0, 'msg' => '缺少Token']);
         }
+
+        $token_data = session($token);
+        $table = $token_data['table'];
+        $field = $token_data['field'];
+
         if ($field == '') {
             return json(['code' => 0, 'msg' => '缺少字段']);
         }

@@ -903,10 +903,8 @@ jQuery(document).ready(function() {
     $('.select-linkages').change(function () {
         var self       = $(this), // 下拉框
             value      = self.val(), // 下拉框选中值
-            table      = self.data('table'), // 数据表
-            key        = self.data('key') || 'id',
+            token      = self.data('token'), // token
             pidkey     = self.data('pidkey') || 'pid',
-            option     = self.data('option') || 'name',
             next_level = self.data('next-level'), // 下一级别
             next_level_id = self.data('next-level-id') || ''; // 下一级别的下拉框id
 
@@ -931,12 +929,10 @@ jQuery(document).ready(function() {
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    table: table,
+                    token: token,
                     level: next_level,
                     pid: value,
-                    key: key,
-                    pidkey: pidkey,
-                    option: option
+                    pidkey: pidkey
                 }
             })
             .done(function(res) {

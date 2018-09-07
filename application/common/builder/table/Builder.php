@@ -2181,6 +2181,20 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 创建筛选Token
+     * @param string $table 表名
+     * @param string $field 字段
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return bool|string
+     */
+    private function createFilterToken($table = '', $field = '')
+    {
+        $table_token = substr(sha1($table.'-'.$field.'-'.session('user_auth.last_login_ip').'-'.UID.'-'.session('user_auth.last_login_time')), 0, 8);
+        session($table_token, ['table' => $table, 'field' => $field]);
+        return $table_token;
+    }
+
+    /**
      * 编译表格数据
      * @author 蔡伟明 <314013107@qq.com>
      */
@@ -2227,20 +2241,20 @@ class Builder extends ZBuilder
                 if (is_numeric($key)) {
                     if (strpos($value, '.')) {
                         list($table, $field) = explode('.', $value);
+                        $_filter_token = $this->createFilterToken($table, $field);
                         $filter_columns[$field] = [
-                            'table'   => $table,
+                            'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'field'   => $field,
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$field]) ? $filter_maps[$field] : '',
                             'options' => isset($this->_filter_options[$value]) ? $this->_filter_options[$value] : '',
                             'list'    => isset($this->_filter_list[$value]) ? $this->_filter_list[$value] : ''
                         ];
                     } else {
+                        $_filter_token = $this->createFilterToken($this->_table_name, $value);
                         $filter_columns[$value] = [
-                            'table'   => $this->_table_name,
+                            'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'field'   => $value,
                             'filter'  => $value,
                             'map'     => isset($filter_maps[$value]) ? $filter_maps[$value] : '',
                             'options' => isset($this->_filter_options[$value]) ? $this->_filter_options[$value] : '',
@@ -2250,20 +2264,20 @@ class Builder extends ZBuilder
                 } else {
                     if (strpos($value, '.')) {
                         list($table, $field) = explode('.', $value);
+                        $_filter_token = $this->createFilterToken($table, $field);
                         $filter_columns[$key] = [
-                            'table'   => $table,
+                            'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'field'   => $field,
                             'filter'  => $table . '.' . $field,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
                             'options' => isset($this->_filter_options[$field]) ? $this->_filter_options[$field] : '',
                             'list'    => isset($this->_filter_list[$field]) ? $this->_filter_list[$field] : ''
                         ];
                     } else {
+                        $_filter_token = $this->createFilterToken($value, $key);
                         $filter_columns[$key] = [
-                            'table'   => $value,
+                            'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'field'   => $key,
                             'filter'  => $value . '.' . $key,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
                             'options' => isset($this->_filter_options[$key]) ? $this->_filter_options[$key] : '',

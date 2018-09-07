@@ -16,7 +16,7 @@
 <div class="form-group col-lg-{$_layout[$form[type].name]['lg']|default='12'} col-md-{$_layout[$form[type].name]['md']|default='12'} col-sm-{$_layout[$form[type].name]['sm']|default='12'} col-xs-{$_layout[$form[type].name]['xs']|default='12'}" id="form_group_{$form[type].name}">
     <label class="col-xs-12">{$form[type].title|htmlspecialchars}</label>
     <div class="select-box">
-        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_1" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="2" data-next-level-id="linkages_{$form[type].name}_2">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_1" data-token="{$form[type].token}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="2" data-next-level-id="linkages_{$form[type].name}_2">
             <option value="">请选择：</option>
             {volist name="level_one" id="option"}
             <option value="{$option[$form[type]['key']]}" {if (isset($level_key[1]) && $level_key[1] == (string)$option[$form[type]['key']])}selected{/if}>{$option[$form[type]['option']]|clear_js}</option>
@@ -39,7 +39,7 @@
 
     {eq name="form[type].level" value="3"}
     <div class="select-box">
-        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-token="{$form[type].token}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
             <option value="">请选择：</option>
             {notempty name="level_data.1"}
                 {volist name="level_data.1" id="option"}
@@ -62,7 +62,7 @@
 
     {eq name="form[type].level" value="4"}
     <div class="select-box">
-        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_2" data-token="{$form[type].token}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="3" data-next-level-id="linkages_{$form[type].name}_3">
             <option value="">请选择：</option>
             {notempty name="level_data.1"}
                 {volist name="level_data.1" id="option"}
@@ -72,7 +72,7 @@
         </select>
     </div>
     <div class="select-box">
-        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_3" data-table="{$form[type].table}" data-key="{$form[type].key|default='id'}" data-option="{$form[type].option|default='name'}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="4" data-next-level-id="linkages_{$form[type].name}_4">
+        <select class="js-select2 form-control select-linkages" id="linkages_{$form[type].name}_3" data-token="{$form[type].token}" data-pidkey="{$form[type].pid|default='pid'}" data-next-level="4" data-next-level-id="linkages_{$form[type].name}_4">
             <option value="">请选择：</option>
             {notempty name="level_data.2"}
                 {volist name="level_data.2" id="option"}
