@@ -148,11 +148,15 @@ jQuery(document).ready(function() {
                 list: self.data('list') || ''
             };
 
+        var width=$(window).width();
+        if(width>500){
+            width=500;
+        }
         layer.open({
             type: 1,
             title: '<i class="fa fa-filter"></i> 筛选',
             shadeClose: true,
-            area: ['500px', '530px'],
+            area: [width+'px', '530px'],
             btn:['确定', '取消'],
             content: '<div class="block-content" id="filter-check-content"><i class="fa fa-cog fa-spin"></i> 正在读取...</div>',
             success: function () {
