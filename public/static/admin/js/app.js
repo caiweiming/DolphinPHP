@@ -1137,7 +1137,7 @@ var App = function() {
     var uiHelperTagsInputs = function(){
         // Init Tags Inputs (with .js-tags-input class)
         jQuery('.js-tags-input').tagsInput({
-            height: '36px',
+            height: 'auto',
             width: '100%',
             defaultText: '添加标签',
             removeWithBackspace: true,
