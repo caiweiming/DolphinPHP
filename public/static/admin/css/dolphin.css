@@ -63,6 +63,12 @@ h6,
 .form-control{
     border-radius: 0;
 }
+.notice-circle {
+    position: absolute;
+    right: 25px;
+    top: -2px;
+    font-size: 12px;
+}
 /* 表单元素 */
 .form-horizontal .css-checkbox {
     margin-right: 10px;
