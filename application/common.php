@@ -293,15 +293,21 @@ if (!function_exists('parse_config')) {
         ];
         $result = [];
         foreach ($configs as $item) {
+            if (strpos($item[0], ':')) {
+                list($config_type, $layout) = explode(':', $item[0]);
+            } else {
+                $config_type = $item[0];
+            }
+
             // 判断是否为分组
-            if ($item[0] == 'group') {
+            if ($config_type == 'group') {
                 foreach ($item[1] as $option) {
                     foreach ($option as $group => $val) {
                         $result[$val[1]] = isset($val[$type[$val[0]]]) ? $val[$type[$val[0]]] : '';
                     }
                 }
             } else {
-                $result[$item[1]] = isset($item[$type[$item[0]]]) ? $item[$type[$item[0]]] : '';
+                $result[$item[1]] = isset($item[$type[$config_type]]) ? $item[$type[$config_type]] : '';
             }
         }
         return $result;
@@ -355,15 +361,21 @@ if (!function_exists('set_config_value')) {
         ];
 
         foreach ($configs as &$item) {
+            if (strpos($item[0], ':')) {
+                list($config_type, $layout) = explode(':', $item[0]);
+            } else {
+                $config_type = $item[0];
+            }
+
             // 判断是否为分组
-            if ($item[0] == 'group') {
+            if ($config_type == 'group') {
                 foreach ($item[1] as &$option) {
                     foreach ($option as $group => &$val) {
                         $val[$type[$val[0]]] = isset($values[$val[1]]) ? $values[$val[1]] : '';
                     }
                 }
             } else {
-                $item[$type[$item[0]]] = isset($values[$item[1]]) ? $values[$item[1]] : '';
+                $item[$type[$config_type]] = isset($values[$item[1]]) ? $values[$item[1]] : '';
             }
         }
         return $configs;
