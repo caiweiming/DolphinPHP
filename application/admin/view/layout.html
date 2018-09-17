@@ -350,7 +350,7 @@
                 <li><i class="fa fa-map-marker"></i></li>
                 {notempty name="_location"}
                 {volist name="_location" id="v"}
-                <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{$v.url_value|url}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>
+                <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{:url($v.url_value, $v.params)}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>
                 {/volist}
                 {/notempty}
             </ol>
