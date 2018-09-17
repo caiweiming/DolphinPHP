@@ -61,6 +61,8 @@ class Builder extends ZBuilder
         'extend_css_list' => [],    // 扩展表单项css列表
         '_method'         => 'post',// 表单提交方式
         'empty_tips'      => '暂无数据',// 没有表单项时的提示信息
+        '_token_name'     => '__token__', // 表单令牌名称
+        '_token_value'    => '', // 表单令牌值
     ];
 
     /**
@@ -76,6 +78,8 @@ class Builder extends ZBuilder
     {
         $this->_template = APP_PATH. 'common/builder/form/layout.html';
         $this->_vars['post_url'] = $this->request->url(true);
+        $this->_vars['_token_name'] = config('zbuilder.form_token_name');
+        $this->_vars['_token_value'] = $this->request->token($this->_vars['_token_name']);
     }
 
     /**
@@ -217,6 +221,20 @@ class Builder extends ZBuilder
     public function setHeaderTitle($title = '')
     {
         $this->_vars['header_title'] = trim($title);
+        return $this;
+    }
+
+    /**
+     * 设置表单令牌
+     * @param string $name 令牌名称
+     * @param string $type 令牌生成方法
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function setToken($name = '__token__', $type = 'md5')
+    {
+        $this->_vars['_token_name']  = $name === '' ? '__token__' : $name;
+        $this->_vars['_token_value'] = $this->request->token($this->_vars['_token_name'], $type);
         return $this;
     }
 

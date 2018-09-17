@@ -49,6 +49,9 @@
                         <div class="block-content">
                             {$extra_html_form_top|default=''}
                             <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="{$_method}">
+                                {notempty name="_token_name"}
+                                    {:token($_token_name, $_token_value)}
+                                {/notempty}
                                 {empty name="form_items"}
                                     {notempty name="empty_tips"}
                                     <div class="form-empty">

@@ -39,5 +39,8 @@ return [
     ],
 
     // 搜索框
-    'search_button' => false
+    'search_button' => false,
+
+    // 表单令牌名称，如果不启用，请设置为false，也可以设置其他名称，如：__hash__
+    'form_token_name' => '__token__'
 ];
