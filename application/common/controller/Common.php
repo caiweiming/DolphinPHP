@@ -102,6 +102,10 @@ class Common extends Controller
                         case 'between time':
                         case 'not between time':
                             $value = explode(' - ', $value);
+                            if ($value[0] == $value[1]) {
+                                $value[0] = date('Y-m-d', strtotime($value[0])). ' 00:00:00';
+                                $value[1] = date('Y-m-d', strtotime($value[1])). ' 23:59:59';
+                            }
                         default:
                             $map[$field] = [$op[1], $value];
                     }
