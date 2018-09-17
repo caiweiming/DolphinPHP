@@ -114,11 +114,15 @@ class Menu extends Model
             }
             $map['status'] = 1;
             $map['pid']    = 0;
-            $menus = self::where($map)->order('sort,id')->limit($max)->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
-            foreach ($menus as $key => &$menu) {
+            $list_menu     = self::where($map)->order('sort,id')->column('id,pid,module,title,url_value,url_type,url_target,icon,params');
+            $i             = 0;
+            $menus         = [];
+            foreach ($list_menu as $key => &$menu) {
+                if ($max != '' && $i >= $max) {
+                    break;
+                }
                 // 没有访问权限的节点不显示
                 if (!RoleModel::checkAuth($menu['id'])) {
-                    unset($menus[$key]);
                     continue;
                 }
                 if ($menu['url_value'] != '' && ($menu['url_type'] == 'module_admin' || $menu['url_type'] == 'module_home')) {
@@ -127,6 +131,8 @@ class Menu extends Model
                     $menu['action']     = $url[2];
                     $menu['url_value']  = $menu['url_type'] == 'module_admin' ? admin_url($menu['url_value'], $menu['params']) : home_url($menu['url_value'], $menu['params']);
                 }
+                $menus[$key] = $menu;
+                $i++;
             }
             // 非开发模式，缓存菜单
             if (config('develop_mode') == 0) {
