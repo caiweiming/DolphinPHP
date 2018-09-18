@@ -299,6 +299,9 @@ class Builder extends ZBuilder
             if (!empty($options) && is_array($options)) {
                 foreach ($columns as $key => $column) {
                     if (is_numeric($key)) {
+                        if (strpos($column, '.')) {
+                            $column = explode('.', $column)[1];
+                        }
                         cache('filter_options_'.$column, $options);
                         $this->_filter_options[$column] = 'filter_options_'.$column;
                     } else {
@@ -2245,10 +2248,10 @@ class Builder extends ZBuilder
                         $filter_columns[$field] = [
                             'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'filter'  => $table . '.' . $field,
+                            'filter'  => $value,
                             'map'     => isset($filter_maps[$field]) ? $filter_maps[$field] : '',
-                            'options' => isset($this->_filter_options[$value]) ? $this->_filter_options[$value] : '',
-                            'list'    => isset($this->_filter_list[$value]) ? $this->_filter_list[$value] : ''
+                            'options' => isset($this->_filter_options[$field]) ? $this->_filter_options[$field] : '',
+                            'list'    => isset($this->_filter_list[$field]) ? $this->_filter_list[$field] : ''
                         ];
                     } else {
                         $_filter_token = $this->createFilterToken($this->_table_name, $value);
@@ -2268,10 +2271,10 @@ class Builder extends ZBuilder
                         $filter_columns[$key] = [
                             'token'   => $_filter_token,
                             'type'    => $this->_filter_type[$value],
-                            'filter'  => $table . '.' . $field,
+                            'filter'  => $value,
                             'map'     => isset($filter_maps[$key]) ? $filter_maps[$key] : '',
-                            'options' => isset($this->_filter_options[$field]) ? $this->_filter_options[$field] : '',
-                            'list'    => isset($this->_filter_list[$field]) ? $this->_filter_list[$field] : ''
+                            'options' => isset($this->_filter_options[$key]) ? $this->_filter_options[$key] : '',
+                            'list'    => isset($this->_filter_list[$key]) ? $this->_filter_list[$key] : ''
                         ];
                     } else {
                         $_filter_token = $this->createFilterToken($value, $key);
