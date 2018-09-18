@@ -282,9 +282,15 @@ div.tagsinput {
 }
 .builder-table-head{
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 .builder-table-body{
     overflow: auto;
+    margin-top: -1px;
+}
+#builder-table-main {
+    margin-bottom: -1px;
 }
 .builder-table-left{
     position: absolute;
@@ -327,7 +333,6 @@ div.tagsinput {
 .builder-table-right-head table,
 .builder-table-right-body-inner table,
 #builder-table-main{
-    /*width: 1px;*/
     table-layout: fixed;
 }
 .builder-table-right-head{
