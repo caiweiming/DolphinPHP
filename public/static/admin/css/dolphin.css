@@ -252,6 +252,7 @@ div.tagsinput {
     text-overflow: ellipsis;
     word-break: break-all;
     box-sizing: border-box;
+    min-height: 22px;
 }
 .data-table-toolbar {
     margin-bottom: 10px;
