@@ -238,154 +238,208 @@ class Index extends Admin
 
     /**
      * 授权
-     * @param string $tab tab分组名
+     * @param string $module 模块名
      * @param int $uid 用户id
+     * @param string $tab 分组tab
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
-    public function access($tab = '', $uid = 0)
+    public function access($module = '', $uid = 0, $tab = '')
     {
         if ($uid === 0) $this->error('缺少参数');
 
         // 非超级管理员检查可编辑用户
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
+            $map['role'] = ['in', $role_list];
+            $user_list = UserModel::where($map)->column('id');
             if (!in_array($uid, $user_list)) {
                 $this->error('权限不足，没有可操作的用户');
             }
         }
 
-        // 保存数据
-        if ($this->request->isPost()) {
-            $post = $this->request->post();
-            list($module, $group) = explode('_', $post['tab_name']);
-
-            // 先删除原有授权
-            $map['module'] = $module;
-            $map['group']  = $group;
-            $map['uid']    = $post['uid'];
-            if (false === AccessModel::where($map)->delete()) {
-                $this->error('清除旧授权失败');
-            }
-
-            $data = [];
-            // 授权节点
-            $nids = [];
-            if (isset($post['group_auth'])) {
-                $nids = $post['group_auth'];
-                foreach ($post['group_auth'] as $nid) {
-                    $data[] = [
-                        'nid'    => $nid,
-                        'uid'    => $post['uid'],
-                        'group'  => $group,
-                        'module' => $module
-                    ];
-                }
-                // 添加新的授权
-                $AccessModel = new AccessModel;
-                if (!$AccessModel->saveAll($data)) {
-                    $this->error('操作失败');
-                }
-            }
-
-            // 记录行为
-            $nids = !empty($nids) ? implode(',', $nids) : '无';
-            $details = "模块($module)，分组($group)，授权节点ID($nids)";
-            action_log('user_access', 'admin_user', $uid, UID, $details);
-            $this->success('操作成功', 'index');
-        }
-
         // 获取所有授权配置信息
-        $list_access = ModuleModel::where('access', 'neq', '')->column('access', 'name');
-        if ($list_access) {
-            $curr_access  = '';
-            $group_table  = '';
-            $tab_list     = [];
-            foreach ($list_access as $module => &$groups) {
-                $groups = json_decode($groups, true);
+        $list_module = ModuleModel::where('access', 'neq', '')
+            ->where('access', 'neq', '')
+            ->where('status', 1)
+            ->column('name,title,access');
 
-                foreach ($groups as $group => $access) {
-                    // 如果分组为空，则默认为第一个
-                    if ($tab == '') {
-                        // 当前分组名
-                        $tab = $module. '_' . $group;
-                        // 节点表名
-                        $group_table = $access['table_name'];
-                        // 当前权限配置信息
-                        $curr_access = $access;
+        if ($list_module) {
+            // tab分组信息
+            $tab_list = [];
+            foreach ($list_module as $key => $value) {
+                $list_module[$key]['access'] = json_decode($value['access'], true);
+                // 配置分组信息
+                $tab_list[$value['name']] = [
+                    'title' => $value['title'],
+                    'url'   => url('access', [
+                        'module' => $value['name'],
+                        'uid'    => $uid
+                    ])
+                ];
+            }
+            $module = $module == '' ? current(array_keys($list_module)) : $module;
+            $this->assign('tab_nav', [
+                'tab_list' => $tab_list,
+                'curr_tab' => $module
+            ]);
+
+            // 读取授权内容
+            $access = $list_module[$module]['access'];
+            foreach ($access as $key => $value) {
+                $access[$key]['url'] = url('access', [
+                    'module'  => $module,
+                    'uid'     => $uid,
+                    'tab'     => $key
+                ]);
+            }
+
+            // 当前授权
+            $curr_access = current($access)['nodes'];
+            // 当前分组
+            $tab = $tab == '' ? current(array_keys($access)) : $tab;
+
+            $this->assign('tab', $tab);
+            $this->assign('access', $access);
+
+            if ($this->request->isPost()) {
+                $post = $this->request->param();
+                if (isset($post['nodes'])) {
+                    $data_node = [];
+                    foreach ($post['nodes'] as $node) {
+                        list($group, $nid) = explode('|', $node);
+                        $data_node[] = [
+                            'module' => $module,
+                            'group'  => $group,
+                            'uid'    => $uid,
+                            'nid'    => $nid,
+                            'tag'    => $post['tag']
+                        ];
                     }
 
-                    // 配置分组信息
-                    $tab_list[$module. '_' . $group] = [
-                        'title' => $access['tab_title'],
-                        'url'   => url('access', [
-                            'tab' => $module. '_' . $group,
-                            'uid' => $uid
-                        ])
-                    ];
-                }
-            }
+                    // 先删除原有授权
+                    $map['module'] = $post['module'];
+                    $map['tag']    = $post['tag'];
+                    $map['uid']    = $post['uid'];
+                    if (false === AccessModel::where($map)->delete()) {
+                        $this->error('清除旧授权失败');
+                    }
 
-            list($module, $group) = explode('_', $tab);
-            if ($curr_access == '') {
-                $curr_access = $list_access[$module][$group];
-                $group_table = $curr_access['table_name'];
-            }
+                    // 添加新的授权
+                    $AccessModel = new AccessModel;
+                    if (!$AccessModel->saveAll($data_node)) {
+                        $this->error('操作失败');
+                    }
 
-            // tab分组信息
-            $tab_nav = [
-                'tab_list' => $tab_list,
-                'curr_tab' => $tab
-            ];
-            $this->assign('tab_nav', $tab_nav);
+                    // 调用后置方法
+                    if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
+                        $class = "app\\{$module}\\model\\".$curr_access['model_name'];
+                        $model = new $class;
+                        try{
+                            $model->afterAccessUpdate($post);
+                        }catch(\Exception $e){}
+                    }
 
-            // 获取授权数据
-            $groups = '';
-            if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
-                $class = "app\\{$module}\\model\\".$curr_access['model_name'];
-                $model = new $class;
-
-                try{
-                    $groups = $model->access();
-                }catch(\Exception $e){
-                    $this->error('模型：'.$class."缺少“access”方法");
+                    // 记录行为
+                    $nids = implode(',', $post['nodes']);
+                    $details = "模块($module)，分组(".$post['tag'].")，授权节点ID($nids)";
+                    action_log('user_access', 'admin_user', $uid, UID, $details);
+                    $this->success('操作成功', url('access', ['uid' => $post['uid'], 'module' => $module, 'tab' => $tab]));
+                } else {
+                    // 清除所有数据授权
+                    $map['module'] = $post['module'];
+                    $map['tag']    = $post['tag'];
+                    $map['uid']    = $post['uid'];
+                    if (false === AccessModel::where($map)->delete()) {
+                        $this->error('清除旧授权失败');
+                    } else {
+                        $this->success('操作成功');
+                    }
                 }
             } else {
-                // 没有设置模型名，则按表名获取数据
-                $fileds = [
-                    $curr_access['primary_key'],
-                    $curr_access['parent_id'],
-                    $curr_access['node_name']
-                ];
+                $nodes = [];
+                if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
+                    $class = "app\\{$module}\\model\\".$curr_access['model_name'];
+                    $model = new $class;
 
-                $groups = Db::name($group_table)->order($curr_access['primary_key'])->field($fileds)->select();
-            }
+                    try{
+                        $nodes = $model->access();
+                    }catch(\Exception $e){
+                        $this->error('模型：'.$class."缺少“access”方法");
+                    }
+                } else {
+                    // 没有设置模型名，则按表名获取数据
+                    $fields = [
+                        $curr_access['primary_key'],
+                        $curr_access['parent_id'],
+                        $curr_access['node_name']
+                    ];
 
-            if ($groups) {
+                    $nodes = Db::name($curr_access['table_name'])->order($curr_access['primary_key'])->field($fields)->select();
+                    $tree_config = [
+                        'title' => $curr_access['node_name'],
+                        'id'    => $curr_access['primary_key'],
+                        'pid'   => $curr_access['parent_id']
+                    ];
+                    $nodes = Tree::config($tree_config)->toLayer($nodes);
+                }
+
                 // 查询当前用户的权限
-                $map['module'] = $module;
-                $map['group']  = $group;
-                $map['uid']    = $uid;
-                $node_access = AccessModel::where($map)->column('nid');
-                $this->assign('node_access', $node_access);
-                $this->assign('tab_name', $tab);
-                $this->assign('field_access', $curr_access);
-                $tree_config = [
-                    'title' => $curr_access['node_name'],
-                    'id'    => $curr_access['primary_key'],
-                    'pid'   => $curr_access['parent_id']
+                $map = [
+                    'module' => $module,
+                    'tag'    => $tab,
+                    'uid'    => $uid
                 ];
-                $this->assign('groups', Tree::config($tree_config)->toList($groups));
+                $node_access = AccessModel::where($map)->select();
+                $user_access = [];
+                foreach ($node_access as $item) {
+                    $user_access[$item['group'].'|'.$item['nid']] = 1;
+                }
+
+                $nodes = $this->buildJsTree($nodes, $curr_access, $user_access);
+                $this->assign('nodes', $nodes);
             }
         }
 
-        $page_tips = isset($curr_access['page_tips']) ? $curr_access['page_tips'] : '';
-        $tips_type = isset($curr_access['tips_type']) ? $curr_access['tips_type'] : 'info';
-        $this->assign('page_tips', $page_tips);
-        $this->assign('tips_type', $tips_type);
+        $this->assign('module', $module);
+        $this->assign('uid', $uid);
+        $this->assign('tab', $tab);
         $this->assign('page_title', '数据授权');
         return $this->fetch();
+    }
+
+    /**
+     * 构建jstree代码
+     * @param array $nodes 节点
+     * @param array $curr_access 当前授权信息
+     * @param array $user_access 用户授权信息
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return string
+     */
+    private function buildJsTree($nodes = [], $curr_access = [], $user_access = [])
+    {
+        $result = '';
+        if (!empty($nodes)) {
+            $option = [
+                'opened'   => true,
+                'selected' => false
+            ];
+            foreach ($nodes as $node) {
+                $key = $curr_access['group'].'|'.$node[$curr_access['primary_key']];
+                $option['selected'] = isset($user_access[$key]) ? true : false;
+                if (isset($node['child'])) {
+                    $curr_access_child = isset($curr_access['child']) ? $curr_access['child'] : $curr_access;
+                    $result .= '<li id="'.$key.'" data-jstree=\''.json_encode($option).'\'>'.$node[$curr_access['node_name']].$this->buildJsTree($node['child'], $curr_access_child, $user_access).'</li>';
+                } else {
+                    $result .= '<li id="'.$key.'" data-jstree=\''.json_encode($option).'\'>'.$node[$curr_access['node_name']].'</li>';
+                }
+            }
+        }
+
+        return '<ul>'.$result.'</ul>';
     }
 
     /**

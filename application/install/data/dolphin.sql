@@ -23,7 +23,8 @@ CREATE TABLE `dp_admin_access` (
   `module` varchar(16) NOT NULL DEFAULT '' COMMENT '模型名称',
   `group` varchar(16) NOT NULL DEFAULT '' COMMENT '权限分组标识',
   `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `nid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '授权节点id'
+  `nid` varchar(16) NOT NULL DEFAULT '' COMMENT '授权节点id',
+  `tag` varchar(16) NOT NULL DEFAULT '' COMMENT '分组标签'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='统一授权表';
 
 -- ----------------------------

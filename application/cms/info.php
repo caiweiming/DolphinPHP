@@ -590,12 +590,15 @@ return [
 
     // 授权配置
     'access' => [
-        'group' => [
-            "tab_title"   => '栏目授权',
-            "table_name"  => "cms_column",
-            "primary_key" => "id",
-            "parent_id"   => "pid",
-            "node_name"   => "name"
+        'column' => [
+            'title' => '栏目授权',
+            'nodes' => [
+                'group'       => 'column',
+                'table_name'  => 'cms_column',
+                'primary_key' => 'id',
+                'parent_id'   => 'pid',
+                'node_name'   => 'name',
+            ]
         ],
     ],
 ];

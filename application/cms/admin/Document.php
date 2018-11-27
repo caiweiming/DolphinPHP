@@ -119,6 +119,9 @@ class Document extends Admin
                     case 'bmap':
                         $value['level'] = $value['level'] == 0 ? 12 : $value['level'];
                         break;
+                    case 'colorpicker':
+                        $value['mode']  = '';
+                        break;
                 }
             }
 
