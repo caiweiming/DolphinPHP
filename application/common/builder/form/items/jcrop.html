@@ -1,6 +1,6 @@
 <div class="form-group col-lg-{$_layout[$form[type].name]['lg']|default='12'} col-md-{$_layout[$form[type].name]['md']|default='12'} col-sm-{$_layout[$form[type].name]['sm']|default='12'} col-xs-{$_layout[$form[type].name]['xs']|default='12'} js-jcrop-interface {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
     <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
-    <div class="col-sm-12 uploader-list">
+    <div class="col-xs-12 uploader-list">
         <div class="file-item thumbnail" {$form[type]['value'] ?: "style='display:none'"}>
             <img data-original="{$form[type]['value']|get_file_path}" src="{$form[type]['value']|get_thumb}" width="100">
             <i class="fa fa-times-circle remove-picture"></i>
