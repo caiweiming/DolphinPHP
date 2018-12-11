@@ -298,7 +298,11 @@ class Index extends Admin
             }
 
             // 当前授权
-            $curr_access = current($access)['nodes'];
+            $curr_access = current($access);
+            if (!isset($curr_access['nodes'])) {
+                $this->error('模块：'.$module.' 数据授权配置缺少nodes信息');
+            }
+            $curr_access_nodes = $curr_access['nodes'];
             // 当前分组
             $tab = $tab == '' ? current(array_keys($access)) : $tab;
 
@@ -335,8 +339,8 @@ class Index extends Admin
                     }
 
                     // 调用后置方法
-                    if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
-                        $class = "app\\{$module}\\model\\".$curr_access['model_name'];
+                    if (isset($curr_access_nodes['model_name']) && $curr_access_nodes['model_name'] != '') {
+                        $class = "app\\{$module}\\model\\".$curr_access_nodes['model_name'];
                         $model = new $class;
                         try{
                             $model->afterAccessUpdate($post);
@@ -361,8 +365,8 @@ class Index extends Admin
                 }
             } else {
                 $nodes = [];
-                if (isset($curr_access['model_name']) && $curr_access['model_name'] != '') {
-                    $class = "app\\{$module}\\model\\".$curr_access['model_name'];
+                if (isset($curr_access_nodes['model_name']) && $curr_access_nodes['model_name'] != '') {
+                    $class = "app\\{$module}\\model\\".$curr_access_nodes['model_name'];
                     $model = new $class;
 
                     try{
@@ -373,16 +377,16 @@ class Index extends Admin
                 } else {
                     // 没有设置模型名，则按表名获取数据
                     $fields = [
-                        $curr_access['primary_key'],
-                        $curr_access['parent_id'],
-                        $curr_access['node_name']
+                        $curr_access_nodes['primary_key'],
+                        $curr_access_nodes['parent_id'],
+                        $curr_access_nodes['node_name']
                     ];
 
-                    $nodes = Db::name($curr_access['table_name'])->order($curr_access['primary_key'])->field($fields)->select();
+                    $nodes = Db::name($curr_access_nodes['table_name'])->order($curr_access_nodes['primary_key'])->field($fields)->select();
                     $tree_config = [
-                        'title' => $curr_access['node_name'],
-                        'id'    => $curr_access['primary_key'],
-                        'pid'   => $curr_access['parent_id']
+                        'title' => $curr_access_nodes['node_name'],
+                        'id'    => $curr_access_nodes['primary_key'],
+                        'pid'   => $curr_access_nodes['parent_id']
                     ];
                     $nodes = Tree::config($tree_config)->toLayer($nodes);
                 }
@@ -399,9 +403,14 @@ class Index extends Admin
                     $user_access[$item['group'].'|'.$item['nid']] = 1;
                 }
 
-                $nodes = $this->buildJsTree($nodes, $curr_access, $user_access);
+                $nodes = $this->buildJsTree($nodes, $curr_access_nodes, $user_access);
                 $this->assign('nodes', $nodes);
             }
+
+            $page_tips = isset($curr_access['page_tips']) ? $curr_access['page_tips'] : '';
+            $tips_type = isset($curr_access['tips_type']) ? $curr_access['tips_type'] : 'info';
+            $this->assign('page_tips', $page_tips);
+            $this->assign('tips_type', $tips_type);
         }
 
         $this->assign('module', $module);
