@@ -9,6 +9,7 @@
     {/notempty}
     <div class="row">
         <div class="col-md-12">
+            {$extra_html_block_top|default=''}
             <div class="block">
                 {notempty name="tab_nav"}
                 <ul class="nav nav-tabs">
@@ -551,6 +552,7 @@
                     </div>
                 </div>
             </div>
+            {$extra_html_block_bottom|default=''}
         </div>
     </div>
 {/block}

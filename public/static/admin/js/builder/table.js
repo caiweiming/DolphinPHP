@@ -375,10 +375,37 @@ jQuery(document).ready(function() {
     });
 
     // 弹出框显示页面
-    $('a.pop').click(function () {
+    $('#page-container').delegate('a.pop', 'click', function () {
         var $url   = $(this).attr('href');
         var $title = $(this).attr('title') || $(this).data('original-title');
         var $layer = $(this).data('layer');
+
+        // 是否需要获取表格数据
+        if ($(this).hasClass('js-get')) {
+            var target_form = $(this).attr("target-form");
+            var form        = jQuery('form[name=' + target_form + ']');
+            var form_data   = form.serialize() || [];
+
+            if (form.length === 0) {
+                form = jQuery('.' + target_form + '[type=checkbox]:checked');
+                form.each(function () {
+                    form_data.push($(this).val());
+                });
+                form_data = form_data.join(',');
+            }
+
+            if (form_data === '') {
+                Dolphin.notify('请选择要操作的数据', 'warning');
+                return false;
+            }
+
+            if ($url.indexOf('?') !== -1) {
+                $url += '&' + target_form + '=' + form_data;
+            } else {
+                $url += '?' + target_form + '=' + form_data;
+            }
+        }
+
         var $options = {
             title: $title,
             content: $url
