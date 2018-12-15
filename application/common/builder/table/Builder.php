@@ -1295,10 +1295,11 @@ class Builder extends ZBuilder
      * @param string $default 默认值
      * @param string $param 额外参数
      * @param string $class css类名
+     * @param string $extra 扩展参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addColumn($name = '', $title = '', $type = '', $default = '', $param = '', $class = '')
+    public function addColumn($name = '', $title = '', $type = '', $default = '', $param = '', $class = '', $extra = '')
     {
         $field = $name;
         $table = '';
@@ -1319,11 +1320,12 @@ class Builder extends ZBuilder
             'default' => $default,
             'param'   => $param,
             'class'   => $class,
+            'extra'   => $extra,
             'field'   => $field,
             'table'   => $table,
         ];
 
-        $args   = array_slice(func_get_args(), 6);
+        $args   = array_slice(func_get_args(), 7);
         $column = array_merge($column, $args);
 
         $this->_vars['columns'][] = $column;
@@ -1840,8 +1842,14 @@ class Builder extends ZBuilder
 
                                 $url = $column['class'] == 'pop' ? $url.(strpos($url, '?') ? '&' : '?').'_pop=1' : $url;
 
+                                if ($column['extra'] != '') {
+                                    $title = $column['extra'] === true ? $column['title'] : $column['extra'];
+                                } else {
+                                    $title = $row[$column['name']];
+                                }
+
                                 $row[$column['name'].'__'.$column['type']] = '<a href="'. $url .'"
-                                    title="'. $row[$column['name']] .'"
+                                    title="'. $title .'"
                                     class="'. $column['class'] .'"
                                     target="'.$target.'">'.$row[$column['name']].'</a>';
                             }
@@ -2192,7 +2200,7 @@ class Builder extends ZBuilder
      */
     private function createFilterToken($table = '', $field = '')
     {
-        $table_token = substr(sha1($table.'-'.$field.'-'.session('user_auth.last_login_ip').'-'.UID.'-'.session('user_auth.last_login_time')), 0, 8);
+        $table_token = substr(sha1($table.'-'.$field.'-'.session('user_auth.last_login_ip').'-'.session('user_auth.uid').'-'.session('user_auth.last_login_time')), 0, 8);
         session($table_token, ['table' => $table, 'field' => $field]);
         return $table_token;
     }
