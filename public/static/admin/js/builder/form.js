@@ -854,12 +854,14 @@ jQuery(document).ready(function() {
 
     // 联动下拉框
     $('.select-linkage').change(function(){
-        var self       = $(this), // 下拉框
-            value      = self.val(), // 下拉框选中值
-            ajax_url   = self.data('url'), // 异步请求地址
-            param      = self.data('param'), // 参数名称
-            next_items = self.data('next-items').split(','), // 下级下拉框的表单名数组
-            next_item  = next_items[0]; // 下一级下拉框表单名
+        var self        = $(this), // 下拉框
+            value       = self.val(), // 下拉框选中值
+            ajax_url    = self.data('url'), // 异步请求地址
+            param       = self.data('param'), // 参数名称
+            next_items  = self.data('next-items').split(','), // 下级下拉框的表单名数组
+            next_item   = next_items[0], // 下一级下拉框表单名
+            extra_param = self.data('extra-param'), // 额外参数
+            data        = param + "=" + value; // 发送的数据
 
         // 下级联动菜单恢复默认
         if (next_items.length > 0) {
@@ -868,25 +870,34 @@ jQuery(document).ready(function() {
             }
         }
 
-        if (value != '') {
+        // 获取额外参数值
+        if (extra_param !== '') {
+            extra_param = extra_param.split(',');
+            $.each(extra_param, function (index, item) {
+                var item_value = $('#'+item).val() || '';
+                data += '&' + item + '=' + item_value;
+            });
+        }
+
+        if (value !== '') {
             Dolphin.loading();
             // 获取数据
             $.ajax({
                 url: ajax_url,
                 type: 'POST',
                 dataType: 'json',
-                data: param + "=" + value
+                data: data
             })
             .done(function(res) {
                 Dolphin.loading('hide');
-                if (res.code == '1') {
+                if (res.code) {
                     var list = res.list;
                     if (list) {
-                        for (var item in list) {
+                        $.each(list, function (index, item) {
                             var option = $('<option></option>');
-                            option.val(list[item].key).html(list[item].value);
+                            option.val(item['key']).html(item['value']);
                             $('select[name="'+ next_item +'"]').append(option);
-                        }
+                        });
                     }
                 } else {
                     Dolphin.notify(res.msg, 'danger');

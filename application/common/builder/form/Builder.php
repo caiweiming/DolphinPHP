@@ -1046,21 +1046,23 @@ class Builder extends ZBuilder
      * @param string $param 指定请求参数的key名称，默认为$name的值
      *      比如$param为“key”
      *      那么请求数据的时候会发送参数key=某个下拉框选项值
+     * @param string $extra_param 额外参数名，可以同时发送表单中的其他表单项值
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addLinkage($name = '', $title = '', $tips = '', $options = [], $default = '', $ajax_url = '', $next_items = '', $param = '')
+    public function addLinkage($name = '', $title = '', $tips = '', $options = [], $default = '', $ajax_url = '', $next_items = '', $param = '', $extra_param = '')
     {
         $item = [
-            'type'       => 'linkage',
-            'name'       => $name,
-            'title'      => $title,
-            'tips'       => $tips,
-            'value'      => $default,
-            'options'    => $options,
-            'ajax_url'   => $ajax_url,
-            'next_items' => $next_items,
-            'param'      => $param == '' ? $name : $param,
+            'type'        => 'linkage',
+            'name'        => $name,
+            'title'       => $title,
+            'tips'        => $tips,
+            'value'       => $default,
+            'options'     => $options,
+            'ajax_url'    => $ajax_url,
+            'next_items'  => $next_items,
+            'param'       => $param == '' ? $name : $param,
+            'extra_param' => $extra_param,
         ];
 
         if ($this->_is_group) {
