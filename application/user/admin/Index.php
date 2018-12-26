@@ -297,14 +297,14 @@ class Index extends Admin
                 ]);
             }
 
+            // 当前分组
+            $tab = $tab == '' ? current(array_keys($access)) : $tab;
             // 当前授权
-            $curr_access = current($access);
+            $curr_access = $access[$tab];
             if (!isset($curr_access['nodes'])) {
                 $this->error('模块：'.$module.' 数据授权配置缺少nodes信息');
             }
             $curr_access_nodes = $curr_access['nodes'];
-            // 当前分组
-            $tab = $tab == '' ? current(array_keys($access)) : $tab;
 
             $this->assign('tab', $tab);
             $this->assign('access', $access);
