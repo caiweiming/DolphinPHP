@@ -2250,6 +2250,11 @@ class Builder extends ZBuilder
                     if ($item['type'] == 'static' && $item['hidden'] != '') {
                         $item['hidden'] = $this->_vars['form_data'][$item['name']];
                     }
+                    // 处理拖拽排序组件
+                    if ($item['type'] == 'sort') {
+                        $value = explode(',', $item['value']);
+                        $item['content'] = array_merge(array_flip($value), $item['content']);
+                    }
                 }
             }
         }
