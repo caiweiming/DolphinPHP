@@ -1591,6 +1591,32 @@ class Builder extends ZBuilder
     }
 
     /**
+     * 通过文件设置额外代码
+     * @param string $template 模板文件名
+     * @param string $tag 标记
+     * @param array $vars 模板输出变量
+     * @param array $replace 替换内容
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return $this
+     */
+    public function setExtraHtmlFile($template = '', $tag = '', $vars = [], $replace = [])
+    {
+        $template = $template == '' ? $this->_action : $template;
+        $file = APP_PATH. $this->_module.'/view/admin/'.$this->_controller.'/'.$template.'.html';
+        if (file_exists($file)) {
+            $content = file_get_contents($file);
+            $content = $this->view->display($content, $vars, $replace);
+        } else {
+            $content = '模板文件不存在：'.$file;
+        }
+
+        $tag != '' && $tag = '_'.$tag;
+        $this->_vars['extra_html'.$tag] = $content;
+
+        return $this;
+    }
+
+    /**
      * 设置额外JS代码
      * @param string $extra_js 额外JS代码
      * @author 蔡伟明 <314013107@qq.com>
