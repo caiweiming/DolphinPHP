@@ -2070,8 +2070,12 @@ class Builder extends ZBuilder
                             break;
                         case 'select': // 下拉框
                             if ($column['default']) {
-                                $prepend = isset($column['default'][$row[$column['name']]]) ? $column['default'][$row[$column['name']]] : '无对应值';
-                                $class   = $prepend == '无对应值' ? 'select-edit text-danger' : 'select-edit';
+                                if (isset($column['default'][$row[$column['name']]])) {
+                                    $prepend = $column['default'][$row[$column['name']]] != '' ? $column['default'][$row[$column['name']]] : '空值';
+                                } else {
+                                    $prepend = '无对应值';
+                                }
+                                $class   = ($prepend == '无对应值' || $prepend == '空值') ? 'select-edit text-danger' : 'select-edit';
                                 $source = json_encode($column['default'], JSON_FORCE_OBJECT);
                                 $row[$column['name'].'__'.$column['type']] = '<a href="javascript:void(0);" 
                                     class="'.$class.'"
