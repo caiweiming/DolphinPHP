@@ -329,7 +329,7 @@ jQuery(document).ready(function() {
                 Dolphin.notify(res.msg, 'success');
             } else {
                 Dolphin.notify(res.msg, 'danger');
-                $switch.prop('checked', !$data.status);
+                $switch.prop('checked', !$data.value);
                 return false;
             }
         }).fail(function (res) {
