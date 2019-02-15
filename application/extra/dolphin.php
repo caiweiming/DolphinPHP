@@ -19,6 +19,6 @@ return [
     'develop_team'      => 'DolphinPHP',
 
     // 公司信息
-    'company_name'    => '河源市卓锐科技有限公司',
+    'company_name'    => '广东卓锐软件有限公司',
     'company_website' => 'http://www.zrthink.com',
 ];
