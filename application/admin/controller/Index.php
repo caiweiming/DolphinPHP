@@ -2,16 +2,15 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
-use think\Cache;
+use think\facade\Cache;
+use think\facade\Env;
 use think\helper\Hash;
 use think\Db;
 use app\common\builder\ZBuilder;
@@ -47,14 +46,20 @@ class Index extends Admin
         $wipe_cache_type = config('wipe_cache_type');
         if (!empty($wipe_cache_type)) {
             foreach ($wipe_cache_type as $item) {
-                if ($item == 'LOG_PATH') {
-                    $dirs = (array) glob(constant($item) . '*');
-                    foreach ($dirs as $dir) {
-                        array_map('unlink', glob($dir . '/*.log'));
-                    }
-                    array_map('rmdir', $dirs);
-                } else {
-                    array_map('unlink', glob(constant($item) . '/*.*'));
+                switch ($item) {
+                    case 'TEMP_PATH':
+                        array_map('unlink', glob(Env::get('runtime_path'). 'temp/*.*'));
+                        break;
+                    case 'LOG_PATH':
+                        $dirs = (array) glob(Env::get('runtime_path') . 'log/*');
+                        foreach ($dirs as $dir) {
+                            array_map('unlink', glob($dir . '/*.log'));
+                        }
+                        array_map('rmdir', $dirs);
+                        break;
+                    case 'CACHE_PATH':
+                        array_map('unlink', glob(Env::get('runtime_path'). 'cache/*.*'));
+                        break;
                 }
             }
             Cache::clear();
@@ -113,10 +118,12 @@ class Index extends Admin
      * 检查版本更新
      * @author 蔡伟明 <314013107@qq.com>
      * @return \think\response\Json
+     * @throws \think\db\exception\BindParamException
+     * @throws \think\exception\PDOException
      */
     public function checkUpdate()
     {
-        $params = config('dolphin');
+        $params = config('dolphin.');
         $params['domain']  = request()->domain();
         $params['website'] = config('web_site_title');
         $params['ip']      = $_SERVER['SERVER_ADDR'];

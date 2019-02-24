@@ -50,7 +50,7 @@
                                     </div>
                                     <h4 class="text-uppercase push-10"><a class="text-primary-dark" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">{$item.title}</a></h4>
                                     {present name="item.summary"}
-                                    <p class="push-20">{$item.summary}</p>
+                                    <p class="push-20">{$item.summary|raw}</p>
                                     {/present}
                                     <div class="btn-group btn-group-sm">
                                         <a class="btn btn-default" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">继续阅读...</a>
@@ -64,7 +64,7 @@
                                     </div>
                                     <h4 class="text-uppercase push-10"><a class="text-primary-dark" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">{$item.title}</a></h4>
                                     {present name="item.summary"}
-                                    <p class="push-20">{$item.summary}</p>
+                                    <p class="push-20">{$item.summary|raw}</p>
                                     {/present}
                                     <div class="btn-group btn-group-sm">
                                         <a class="btn btn-default" href="{:url('cms/document/detail', ['id' => $item['id'], 'model' => $model])}">继续阅读...</a>
@@ -78,7 +78,7 @@
 
                     <!-- Pagination -->
                     <nav>
-                        {$pages}
+                        {$pages|raw}
                     </nav>
                     <!-- END Pagination -->
                 </div>

@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\model;
@@ -21,7 +19,7 @@ use app\admin\model\Hook as HookModel;
 class HookPlugin extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__ADMIN_HOOK_PLUGIN__';
+    protected $name = 'admin_hook_plugin';
 
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -53,7 +51,10 @@ class HookPlugin extends Model
      * @param array $hooks 钩子
      * @param string $plugin_name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
-     * @return bool
+     * @return bool|int|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public static function addHooks($hooks = [], $plugin_name = '')
     {
@@ -63,6 +64,7 @@ class HookPlugin extends Model
                 return false;
             }
 
+            $data = [];
             foreach ($hooks as $name => $description) {
                 if (is_numeric($name)) {
                     $name = $description;
@@ -85,6 +87,8 @@ class HookPlugin extends Model
      * @param string $plugin_name 钩子名称
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public static function deleteHooks($plugin_name = '')
     {
@@ -114,7 +118,7 @@ class HookPlugin extends Model
 
             foreach ($plugins as $key => $plugin) {
                 $map = [
-                    'hook' => $hook,
+                    'hook'   => $hook,
                     'plugin' => $plugin
                 ];
                 self::where($map)->setField('sort', $key + 1);

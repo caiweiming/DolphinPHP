@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -16,7 +14,7 @@ use app\common\builder\ZBuilder;
 use app\cms\model\Model as DocumentModel;
 use app\admin\model\Menu as MenuModel;
 use think\Db;
-use think\Cache;
+use think\facade\Cache;
 
 /**
  * 内容模型控制器
@@ -68,6 +66,7 @@ class Model extends Admin
      * 新增内容模型
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add()
     {
@@ -142,6 +141,7 @@ class Model extends Admin
      * @param null $id 模型id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function edit($id = null) {
         if ($id === null) $this->error('参数错误');
@@ -192,7 +192,11 @@ class Model extends Admin
      * 删除内容模型
      * @param null $ids 内容模型id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed|void
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = null)
     {
@@ -223,10 +227,10 @@ class Model extends Admin
                 cache('cms_model_title_list', null);
                 return parent::delete();
             } else {
-                return $this->error('删除内容模型字段失败');
+                $this->error('删除内容模型字段失败');
             }
         } else {
-            return $this->error('删除内容模型表失败');
+            $this->error('删除内容模型表失败');
         }
     }
 }

@@ -84,17 +84,17 @@
                                         </div>
                                     </div>
                                     <div class="block-content bg-gray-lighter">
-                                        <div class="{$module.status_class} pull-right push-10-l">{$module.status_info}</div>
+                                        <div class="{$module.status_class} pull-right push-10-l">{$module.status_info|raw}</div>
                                         <div class="push-10">
                                             <a class="h5" href="{$module.author_url|default=''}" target="_blank"><i class="fa fa-user"></i> {$module.author|default=''}</a>
                                         </div>
                                         <div class="push-10 mheight-100">
                                             <div data-toggle="slimscroll" data-height="110px">
-                                                <p class="text-gray-dark">{$module.description|default='暂无简介'}</p>
+                                                <p class="text-gray-dark">{$module.description|raw|default='暂无简介'}</p>
                                             </div>
                                         </div>
                                         <div class="text-center push">
-                                            {$module.actions}
+                                            {$module.actions|raw}
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@
                                                     <td>{$module.version|default='无版本号'}</td>
                                                     <td><a href="{$module.author_url|default=''}" target="_blank">{$module.author|default=''}</a></td>
                                                     <td>{$module.description|default='暂无简介'}</td>
-                                                    <td>{$module.actions}</td>
+                                                    <td>{$module.actions|raw}</td>
                                                 </tr>
                                                 {/volist}
                                                 </tbody>

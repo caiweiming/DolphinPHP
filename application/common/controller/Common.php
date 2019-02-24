@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\common\controller;
@@ -23,7 +21,7 @@ class Common extends Controller
      * 初始化
      * @author 蔡伟明 <314013107@qq.com>
      */
-    protected function _initialize()
+    protected function initialize()
     {
         // 后台公共模板
         $this->assign('_admin_base_layout', config('admin_base_layout'));
@@ -41,23 +39,23 @@ class Common extends Controller
      */
     final protected function getMap()
     {
-        $search_field     = input('param.search_field/s', '');
-        $keyword          = input('param.keyword/s', '');
-        $filter           = input('param._filter/s', '');
-        $filter_content   = input('param._filter_content/s', '');
-        $filter_time      = input('param._filter_time/s', '');
-        $filter_time_from = input('param._filter_time_from/s', '');
-        $filter_time_to   = input('param._filter_time_to/s', '');
-        $select_field     = input('param._select_field/s', '');
-        $select_value     = input('param._select_value/s', '');
-        $search_area      = input('param._s', '');
-        $search_area_op   = input('param._o', '');
+        $search_field     = input('param.search_field/s', '', 'trim');
+        $keyword          = input('param.keyword/s', '', 'trim');
+        $filter           = input('param._filter/s', '', 'trim');
+        $filter_content   = input('param._filter_content/s', '', 'trim');
+        $filter_time      = input('param._filter_time/s', '', 'trim');
+        $filter_time_from = input('param._filter_time_from/s', '', 'trim');
+        $filter_time_to   = input('param._filter_time_to/s', '', 'trim');
+        $select_field     = input('param._select_field/s', '', 'trim');
+        $select_value     = input('param._select_value/s', '', 'trim');
+        $search_area      = input('param._s', '', 'trim');
+        $search_area_op   = input('param._o', '', 'trim');
 
         $map = [];
 
         // 搜索框搜索
         if ($search_field != '' && $keyword !== '') {
-            $map[$search_field] = ['like', "%$keyword%"];
+            $map[] = [$search_field, 'like', "%$keyword%"];
         }
 
         // 下拉筛选
@@ -66,14 +64,14 @@ class Common extends Controller
             $select_value = array_filter(explode('|', $select_value), 'strlen');
             foreach ($select_field as $key => $item) {
                 if ($select_value[$key] != '_all') {
-                    $map[$item] = $select_value[$key];
+                    $map[] = [$item, '=', $select_value[$key]];
                 }
             }
         }
 
         // 时间段搜索
         if ($filter_time != '' && $filter_time_from != '' && $filter_time_to != '') {
-            $map[$filter_time] = ['between time', [$filter_time_from.' 00:00:00', $filter_time_to.' 23:59:59']];
+            $map[] = [$filter_time, 'between time', [$filter_time_from.' 00:00:00', $filter_time_to.' 23:59:59']];
         }
 
         // 表头筛选
@@ -82,7 +80,7 @@ class Common extends Controller
             $filter_content = array_filter(explode('|', $filter_content), 'strlen');
             foreach ($filter as $key => $item) {
                 if (isset($filter_content[$key])) {
-                    $map[$item] = ['in', $filter_content[$key]];
+                    $map[] = [$item, 'in', $filter_content[$key]];
                 }
             }
         }
@@ -93,11 +91,12 @@ class Common extends Controller
             $search_area_op = explode('|', $search_area_op);
             foreach ($search_area as $key => $item) {
                 list($field, $value) = explode('=', $item);
-                $op = explode('=', $search_area_op[$key]);
+                $value = trim($value);
+                $op    = explode('=', $search_area_op[$key]);
                 if ($value != '') {
                     switch ($op[1]) {
                         case 'like':
-                            $map[$field] = ['like', "%$value%"];
+                            $map[] = [$field, 'like', "%$value%"];
                             break;
                         case 'between time':
                         case 'not between time':
@@ -107,7 +106,7 @@ class Common extends Controller
                                 $value[1] = date('Y-m-d', strtotime($value[1])). ' 23:59:59';
                             }
                         default:
-                            $map[$field] = [$op[1], $value];
+                            $map[] = [$field, $op[1], $value];
                     }
                 }
             }
@@ -146,7 +145,16 @@ class Common extends Controller
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    final protected function pluginView($template = '', $suffix = '', $vars = [], $replace = [], $config = [])
+    /**
+     * 渲染插件模板
+     * @param string $template 模板文件名
+     * @param string $suffix 模板后缀
+     * @param array $vars 模板输出变量
+     * @param array $config 模板参数
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     */
+    final protected function pluginView($template = '', $suffix = '', $vars = [], $config = [])
     {
         $plugin_name = input('param.plugin_name');
 
@@ -160,6 +168,6 @@ class Common extends Controller
         $suffix = $suffix == '' ? 'html' : $suffix;
         $template = $template == '' ? $action : $template;
         $template_path = config('plugin_path'). "{$plugin}/view/{$template}.{$suffix}";
-        return parent::fetch($template_path, $vars, $replace, $config);
+        return parent::fetch($template_path, $vars, $config);
     }
 }

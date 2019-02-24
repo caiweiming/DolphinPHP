@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -15,14 +13,15 @@ use app\admin\model\Module as ModuleModel;
 use app\admin\model\Plugin as PluginModel;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Action as ActionModel;
-use think\Cache;
+use think\facade\Cache;
 use util\Database;
 use util\Sql;
 use util\File;
 use util\PHPZip;
 use util\Tree;
 use think\Db;
-use think\Hook;
+use think\facade\Hook;
+use think\facade\Env;
 
 /**
  * 模块管理控制器
@@ -41,6 +40,7 @@ class Module extends Admin
     {
         // 配置分组信息
         $list_group = ['local' => '本地模块'];
+        $tab_list = [];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);
@@ -92,7 +92,8 @@ class Module extends Admin
      * @param string $name 模块标识
      * @param int $confirm 是否确认
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function install($name = '', $confirm = 0)
     {
@@ -146,13 +147,13 @@ class Module extends Admin
         }
 
         // 执行安装文件
-        $install_file = realpath(APP_PATH.$name.'/install.php');
+        $install_file = realpath(Env::get('app_path').$name.'/install.php');
         if (file_exists($install_file)) {
             @include($install_file);
         }
 
         // 执行安装模块sql文件
-        $sql_file = realpath(APP_PATH.$name.'/sql/install.sql');
+        $sql_file = realpath(Env::get('app_path').$name.'/sql/install.sql');
         if (file_exists($sql_file)) {
             if (isset($module_info['database_prefix']) && !empty($module_info['database_prefix'])) {
                 $sql_statement = Sql::getSqlFromFile($sql_file, false, [$module_info['database_prefix'] => config('database.prefix')]);
@@ -203,9 +204,9 @@ class Module extends Admin
 
         if ($ModuleModel->allowField($allowField)->save()) {
             // 复制静态资源目录
-            File::copy_dir(APP_PATH. $name. '/public', ROOT_PATH. 'public');
+            File::copy_dir(Env::get('app_path'). $name. '/public', Env::get('root_path'). 'public');
             // 删除静态资源目录
-            File::del_dir(APP_PATH. $name. '/public');
+            File::del_dir(Env::get('app_path'). $name. '/public');
             cache('modules', null);
             cache('module_all', null);
             // 记录行为
@@ -223,6 +224,8 @@ class Module extends Admin
      * @param int $confirm 是否确认
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function uninstall($name = '', $confirm = 0)
     {
@@ -239,7 +242,7 @@ class Module extends Admin
         }
 
         // 执行卸载文件
-        $uninstall_file = realpath(APP_PATH.$name.'/uninstall.php');
+        $uninstall_file = realpath(Env::get('app_path').$name.'/uninstall.php');
         if (file_exists($uninstall_file)) {
             @include($uninstall_file);
         }
@@ -247,7 +250,7 @@ class Module extends Admin
         // 执行卸载模块sql文件
         $clear = $this->request->get('clear');
         if ($clear == 1) {
-            $sql_file = realpath(APP_PATH.$name.'/sql/uninstall.sql');
+            $sql_file = realpath(Env::get('app_path').$name.'/sql/uninstall.sql');
             if (file_exists($sql_file)) {
                 if (isset($module_info['database_prefix']) && !empty($module_info['database_prefix'])) {
                     $sql_statement = Sql::getSqlFromFile($sql_file, false, [$module_info['database_prefix'] => config('database.prefix')]);
@@ -285,9 +288,9 @@ class Module extends Admin
         // 删除模块信息
         if (ModuleModel::where('name', $name)->delete()) {
             // 复制静态资源目录
-            File::copy_dir(ROOT_PATH. 'public/static/'. $name, APP_PATH.$name.'/public/static/'. $name);
+            File::copy_dir(Env::get('root_path'). 'public/static/'. $name, Env::get('app_path').$name.'/public/static/'. $name);
             // 删除静态资源目录
-            File::del_dir(ROOT_PATH. 'public/static/'. $name);
+            File::del_dir(Env::get('root_path'). 'public/static/'. $name);
             cache('modules', null);
             cache('module_all', null);
             // 记录行为
@@ -340,7 +343,9 @@ class Module extends Admin
      * 导出模块
      * @param string $name 模块名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function export($name = '')
     {
@@ -353,7 +358,7 @@ class Module extends Admin
         }
 
         // 模块导出目录
-        $module_dir = ROOT_PATH. 'export/module/'. $name;
+        $module_dir = Env::get('root_path'). 'export/module/'. $name;
 
         // 删除旧的导出数据
         if (is_dir($module_dir)) {
@@ -361,9 +366,9 @@ class Module extends Admin
         }
 
         // 复制模块目录到导出目录
-        File::copy_dir(APP_PATH. $name, $module_dir);
+        File::copy_dir(Env::get('app_path'). $name, $module_dir);
         // 复制静态资源目录
-        File::copy_dir(ROOT_PATH. 'public/static/'. $name, $module_dir.'/public/static/'. $name);
+        File::copy_dir(Env::get('root_path'). 'public/static/'. $name, $module_dir.'/public/static/'. $name);
 
         // 模块本地配置信息
         $module_info = ModuleModel::getInfoFromFile($name);
@@ -441,11 +446,9 @@ class Module extends Admin
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 /**
@@ -455,7 +458,7 @@ return {$menus};
 
 INFO;
         // 写入到文件
-        return file_put_contents(ROOT_PATH. 'export/module/'. $name. '/menus.php', $content);
+        return file_put_contents(Env::get('root_path'). 'export/module/'. $name. '/menus.php', $content);
     }
 
     /**
@@ -481,11 +484,9 @@ INFO;
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 /**
@@ -495,7 +496,7 @@ return {$info};
 
 INFO;
         // 写入到文件
-        return file_put_contents(ROOT_PATH. 'export/module/'. $name. '/info.php', $content);
+        return file_put_contents(Env::get('root_path'). 'export/module/'. $name. '/info.php', $content);
     }
 
     /**
@@ -503,7 +504,9 @@ INFO;
      * @param string $type 类型：disable/enable
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function setStatus($type = '', $record = [])
     {
@@ -535,7 +538,9 @@ INFO;
      * 禁用模块
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function disable($record = [])
     {
@@ -546,7 +551,9 @@ INFO;
      * 启用模块
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function enable($record = [])
     {

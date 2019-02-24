@@ -52,7 +52,7 @@
                                                 <td>{$vo.version}</td>
                                                 <td>{$vo.version_need}</td>
                                                 <td class="text-center">
-                                                    {$vo.result}
+                                                    {$vo.result|raw}
                                                 </td>
                                             </tr>
                                         {/volist}
@@ -85,7 +85,7 @@
                                             <td>{$vo.version}</td>
                                             <td>{$vo.version_need}</td>
                                             <td class="text-center">
-                                                {$vo.result}
+                                                {$vo.result|raw}
                                             </td>
                                         </tr>
                                         {/volist}
@@ -112,7 +112,7 @@
                                         <tr>
                                             <td>{$vo.table}</td>
                                             <td class="text-center">
-                                                {$vo.result}
+                                                {$vo.result|raw}
                                             </td>
                                         </tr>
                                         {/volist}

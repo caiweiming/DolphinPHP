@@ -13,9 +13,12 @@
 return [
     // 应用初始化
     'app_init'     => [],
+    // 应用调度开始
+    'app_dispatch' => [
+        'app\\common\\behavior\\Config', // 注册配置行为
+    ],
     // 应用开始
     'app_begin'    => [
-        'app\\common\\behavior\\Config', // 注册配置行为
         'app\\common\\behavior\\Hook', // 注册钩子行为
     ],
     // 模块初始化

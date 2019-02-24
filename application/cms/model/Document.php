@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\model;
@@ -22,7 +20,7 @@ use app\cms\model\Field as FieldModel;
 class Document extends ThinkModel
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__CMS_DOCUMENT__';
+    protected $name = 'cms_document';
 
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -32,7 +30,8 @@ class Document extends ThinkModel
      * @param array $map 筛选条件
      * @param array $order 排序
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return \think\Paginator
+     * @throws \think\exception\DbException
      */
     public static function getList($map = [], $order = [])
     {
@@ -51,7 +50,10 @@ class Document extends ThinkModel
      * @param string $model 独立模型id
      * @param array $map 查询条件
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @return array|string|ThinkModel|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public static function getOne($id = '', $model = '', $map = [])
     {
@@ -83,6 +85,11 @@ class Document extends ThinkModel
      * 新增或更新文档
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function saveData()
     {

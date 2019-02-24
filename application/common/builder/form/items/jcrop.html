@@ -11,7 +11,7 @@
         <input type="file" class="hidden js-jcrop-file" accept="image/jpg,image/jpeg,image/bmp,image/png,image/gif" value="">
         <input type="hidden" class="js-jcrop-input" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}">
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
     <!-- Pop In Modal -->

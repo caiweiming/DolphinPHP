@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\admin;
@@ -19,7 +17,7 @@ use app\admin\model\Module as ModuleModel;
 use app\admin\model\Access as AccessModel;
 use util\Tree;
 use think\Db;
-use think\Hook;
+use think\facade\Hook;
 
 /**
  * 用户默认控制器
@@ -29,7 +27,10 @@ class Index extends Admin
 {
     /**
      * 用户首页
+     * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
      */
     public function index()
     {
@@ -40,7 +41,7 @@ class Index extends Admin
         // 非超级管理员检查可管理角色
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['role'] = ['in', $role_list];
+            $map[] = ['role', 'in', $role_list];
         }
 
         // 数据列表
@@ -87,6 +88,7 @@ class Index extends Admin
      * 新增
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add()
     {
@@ -147,6 +149,10 @@ class Index extends Admin
      * @param null $id 用户id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function edit($id = null)
     {
@@ -155,8 +161,7 @@ class Index extends Admin
         // 非超级管理员检查可编辑用户
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['role'] = ['in', $role_list];
-            $user_list = UserModel::where($map)->column('id');
+            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
             if (!in_array($id, $user_list)) {
                 $this->error('权限不足，没有可操作的用户');
             }
@@ -243,9 +248,11 @@ class Index extends Admin
      * @param string $tab 分组tab
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function access($module = '', $uid = 0, $tab = '')
     {
@@ -254,8 +261,7 @@ class Index extends Admin
         // 非超级管理员检查可编辑用户
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['role'] = ['in', $role_list];
-            $user_list = UserModel::where($map)->column('id');
+            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
             if (!in_array($uid, $user_list)) {
                 $this->error('权限不足，没有可操作的用户');
             }
@@ -455,7 +461,8 @@ class Index extends Admin
      * 删除用户
      * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = [])
     {
@@ -467,7 +474,8 @@ class Index extends Admin
      * 启用用户
      * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($ids = [])
     {
@@ -479,7 +487,8 @@ class Index extends Admin
      * 禁用用户
      * @param array $ids 用户id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($ids = [])
     {
@@ -492,7 +501,8 @@ class Index extends Admin
      * @param string $type 类型：delete/enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {
@@ -504,8 +514,7 @@ class Index extends Admin
         if (session('user_auth.role') != 1) {
             $user_ids  = (array)$ids;
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['role'] = ['in', $role_list];
-            $user_list = UserModel::where($map)->column('id');
+            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
             $user_list = array_intersect($user_list, $user_ids);
             if (!$user_list) {
                 $this->error('权限不足，没有可操作的用户');
@@ -534,8 +543,7 @@ class Index extends Admin
         // 非超级管理员检查可操作的用户
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['role'] = ['in', $role_list];
-            $user_list = UserModel::where($map)->column('id');
+            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
             if (!in_array($id, $user_list)) {
                 $this->error('权限不足，没有可操作的用户');
             }

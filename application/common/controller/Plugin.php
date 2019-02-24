@@ -2,16 +2,14 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\common\controller;
 
-use think\View;
+use think\Container;
 use think\Exception;
 
 /**
@@ -46,7 +44,7 @@ abstract class Plugin
      */
     public function __construct()
     {
-        $this->view = new View();
+        $this->view = Container::get('view');
         $this->plugin_path = config('plugin_path').$this->getName().'/';
         if (is_file($this->plugin_path.'config.php')) {
             $this->config_file = $this->plugin_path.'config.php';
@@ -71,13 +69,12 @@ abstract class Plugin
      * 显示方法
      * @param string $template 模板或直接解析内容
      * @param array $vars 模板输出变量
-     * @param array $replace 替换内容
      * @param array $config 模板参数
      * @param bool $renderContent 是否渲染内容
-     * @throws Exception
+     * @throws \Exception
      * @author 蔡伟明 <314013107@qq.com>
      */
-    final protected function fetch($template = '', $vars = [], $replace = [], $config = [], $renderContent = false)
+    final protected function fetch($template = '', $vars = [], $config = [], $renderContent = false)
     {
         if ($template != '') {
             if (!is_file($template)) {
@@ -87,7 +84,7 @@ abstract class Plugin
                 }
             }
 
-            echo $this->view->fetch($template, $vars, $replace, $config, $renderContent);
+            echo $this->view->fetch($template, $vars, $config, $renderContent);
         }
     }
 

@@ -4,12 +4,12 @@
     {notempty name="page_tips"}
     <div class="alert alert-{$tips_type} alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <p>{$page_tips}</p>
+        <p>{$page_tips|raw}</p>
     </div>
     {/notempty}
     <div class="row">
         <div class="col-md-12">
-            {$extra_html_block_top|default=''}
+            {$extra_html_block_top|raw|default=''}
             <div class="block">
                 {notempty name="tab_nav"}
                 <ul class="nav nav-tabs">
@@ -68,7 +68,7 @@
                                             <option></option>
                                             {notempty name="vo.5"}
                                             {volist name="vo.5" id="v"}
-                                            <option value="{$key}" {if ((string)$vo.4 == (string)$key)}selected{/if}>{$v}</option>
+                                            <option value="{$key}" {if ((string)$vo.4 == (string)$key)}selected{/if}>{$v|raw}</option>
                                             {/volist}
                                             {/notempty}
                                         </select>
@@ -98,7 +98,7 @@
                         {/notempty}
 
                         {// 顶部筛选及搜索 }
-                        {$extra_html_toolbar_top|default=''}
+                        {$extra_html_toolbar_top|raw|default=''}
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 {// 搜索框 }
@@ -134,7 +134,7 @@
                                 <div class="toolbar-btn-action">
                                     {if (!empty($top_buttons))}
                                         {volist name="top_buttons" id="button"}
-                                            {$button}
+                                            {$button|raw}
                                         {/volist}
                                     {/if}
 
@@ -149,7 +149,7 @@
                                             {volist name="item['options']" id="option"}
                                             <option value="{$key}" {php}if($item['current'] != '' && $item['current'] == $key){echo 'selected';}{/php}
                                             {php}if(is_array($item['url'])):{/php}
-                                            data-url='{$item['url'][$key]}'
+                                            data-url='{$item['url'][$key]|raw}'
                                             {php}endif;{/php}
                                             >{$option}</option>
                                             {/volist}
@@ -175,10 +175,10 @@
                                 </div>
                             </div>
                         </div>
-                        {$extra_html_toolbar_bottom|default=''}
+                        {$extra_html_toolbar_bottom|raw|default=''}
                         <div class="builder-table-wrapper" id="builder-table-wrapper">
                             <div class="builder-table" id="builder-table">
-                                {$extra_html_table_top|default=''}
+                                {$extra_html_table_top|raw|default=''}
                                 <div class="builder-table-head" id="builder-table-head">
                                     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
                                         <colgroup>
@@ -271,9 +271,9 @@
                                                 <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                     <div class="table-cell">
                                                     {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
-                                                    {$row[$column['name']]|default=''}
+                                                    {$row[$column['name']]|raw|default=''}
                                                     {php}else:{/php}
-                                                    {$row[$column['name'].'__'.$column['type']]|default=''}
+                                                    {$row[$column['name'].'__'.$column['type']]|raw|default=''}
                                                     {php}endif;{/php}
                                                     </div>
                                                 </td>
@@ -286,7 +286,7 @@
                                             <tr class="table-empty">
                                                 {php}$colspan = count($columns)+1{/php}
                                                 <td class="text-center empty-info" colspan="{$colspan}">
-                                                    <i class="fa fa-database"></i> {$empty_tips}<br>
+                                                    <i class="fa fa-database"></i> {$empty_tips|raw}<br>
                                                 </td>
                                             </tr>
                                             {/notempty}
@@ -385,9 +385,9 @@
                                                 {volist name="columns" id="column"}
                                                 <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                     {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
-                                                    {$row[$column['name']]|default=''}
+                                                    {$row[$column['name']]|raw|default=''}
                                                     {php}else:{/php}
-                                                    {$row[$column['name'].'__'.$column['type']]|default=''}
+                                                    {$row[$column['name'].'__'.$column['type']]|raw|default=''}
                                                     {php}endif;{/php}
                                                 </td>
                                                 {/volist}
@@ -399,7 +399,7 @@
                                             <tr class="table-empty">
                                                 {php}$colspan = count($columns)+1{/php}
                                                 <td class="text-center empty-info" colspan="{$colspan}">
-                                                    <i class="fa fa-database"></i> {$empty_tips}<br>
+                                                    <i class="fa fa-database"></i> {$empty_tips|raw}<br>
                                                 </td>
                                             </tr>
                                             {/notempty}
@@ -501,9 +501,9 @@
                                                         {volist name="columns" id="column"}
                                                         <td class="{$column['class']|default=''} {$column_hide[$column['name']]|default=''}">
                                                             {php}if(is_array($column['type']) || $column['type'] == '' || $column['type'] == 'btn' || $column['type'] == 'text'):{/php}
-                                                            {$row[$column['name']]|default=''}
+                                                            {$row[$column['name']]|raw|default=''}
                                                             {php}else:{/php}
-                                                            {$row[$column['name'].'__'.$column['type']]|default=''}
+                                                            {$row[$column['name'].'__'.$column['type']]|raw|default=''}
                                                             {php}endif;{/php}
                                                         </td>
                                                         {/volist}
@@ -515,7 +515,7 @@
                                                     <tr class="table-empty">
                                                         {php}$colspan = count($columns)+1{/php}
                                                         <td class="text-center empty-info" colspan="{$colspan}">
-                                                            <i class="fa fa-database"></i> {$empty_tips}<br>
+                                                            <i class="fa fa-database"></i> {$empty_tips|raw}<br>
                                                         </td>
                                                     </tr>
                                                     {/notempty}
@@ -527,7 +527,7 @@
                                 </div>
                                 <div class="builder-table-right-header"></div>
                                 {/gt}
-                                {$extra_html_table_bottom|default=''}
+                                {$extra_html_table_bottom|raw|default=''}
                             </div>
                         </div>
                         <div class="data-table-toolbar">
@@ -535,14 +535,14 @@
                                 <div class="col-sm-12">
                                     {// 分页 }
                                     {notempty name="pages"}
-                                        {$pages}
+                                        {$pages|raw}
                                     {/notempty}
                                     {notempty name="_page_info"}
                                     <div class="pagination-info pull-right">
                                         <div>
                                             <input type="text" class="form-control input-sm go-page" id="go-page" name="page" value="{:input('param.page', '1')}">
                                             <input type="text" class="form-control input-sm nums" id="list-rows" name="list_rows" value="{php}echo input('param.list_rows', '') == '' ? $_page_info->listRows() : input('param.list_rows');{/php}">
-                                            / <strong>{$_page_info->lastPage()}</strong> 页，共 <strong>{$_page_info->total()}</strong> 条数据，每页显示数量
+                                            / <strong>{$_page_info->lastPage()|raw}</strong> 页，共 <strong>{$_page_info->total()|raw}</strong> 条数据，每页显示数量
                                         </div>
                                     </div>
                                     {/notempty}
@@ -552,7 +552,7 @@
                     </div>
                 </div>
             </div>
-            {$extra_html_block_bottom|default=''}
+            {$extra_html_block_bottom|raw|default=''}
         </div>
     </div>
 {/block}
@@ -563,7 +563,7 @@
     {/volist}
 
     {// 额外CSS代码 }
-    {$extra_css|default=''}
+    {$extra_css|raw|default=''}
 {/block}
 
 {block name="script"}
@@ -701,5 +701,5 @@
     {/volist}
 
     {// 额外JS代码 }
-    {$extra_js|default=''}
+    {$extra_js|raw|default=''}
 {/block}

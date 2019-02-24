@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -25,6 +23,11 @@ class Content extends Admin
     /**
      * 空操作，用于显示各个模型的文档列表
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function _empty()
     {
@@ -38,8 +41,8 @@ class Content extends Admin
             $table_name = substr($model['table'], strlen(config('database.prefix')));
 
             // 查询
-            $map = $this->getMap();
-            $map['trash'] = 0;
+            $map   = $this->getMap();
+            $map[] = ['trash', '=', 0];
 
             // 排序
             $order = $this->getOrder('update_time desc');
@@ -93,8 +96,8 @@ class Content extends Admin
         } else {
             // 查询
             $map = $this->getMap();
-            $map['cms_document.trash'] = 0;
-            $map['cms_document.model'] = $model['id'];
+            $map[] = ['cms_document.trash', '=', 0];
+            $map[] = ['cms_document.model', '=', $model['id']];
             // 排序
             $order = $this->getOrder('update_time desc');
             // 数据列表

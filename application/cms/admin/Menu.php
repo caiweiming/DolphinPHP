@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -30,6 +28,10 @@ class Menu extends Admin
      * @param null $id 导航id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function index($id = null)
     {
@@ -92,6 +94,7 @@ class Menu extends Admin
      * @param int $pid 菜单父级id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add($nid = null, $pid = 0)
     {
@@ -141,6 +144,7 @@ class Menu extends Admin
      * @param null $id 菜单id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function edit($id = null)
     {
@@ -190,7 +194,8 @@ class Menu extends Admin
      * 删除菜单
      * @param null $ids 菜单id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = null)
     {
@@ -205,7 +210,8 @@ class Menu extends Admin
      * 启用菜单
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -216,7 +222,8 @@ class Menu extends Admin
      * 禁用菜单
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -228,7 +235,8 @@ class Menu extends Admin
      * @param string $type 类型：delete/enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {

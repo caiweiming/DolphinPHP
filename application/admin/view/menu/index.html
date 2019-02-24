@@ -56,7 +56,7 @@
                             <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
                         </li>
                     </ul>
-                    <h3 class="block-title">{$page_title}</h3>
+                    <h3 class="block-title">{$page_title|raw}</h3>
                 </div>
                 {/notempty}
                 <div class="block-content tab-content">
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="dd" id="menu_list">
-                            <ol class="dd-list">{$menus}</ol>
+                            <ol class="dd-list">{$menus|raw}</ol>
                         </div>
                         {/notempty}
 

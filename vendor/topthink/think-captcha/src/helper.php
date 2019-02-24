@@ -34,7 +34,9 @@ function captcha($id = '', $config = [])
  */
 function captcha_src($id = '')
 {
-    return Url::build('/captcha' . ($id ? "/{$id}" : ''));
+//    return Url::build('/captcha' . ($id ? "/{$id}" : ''));
+    $base_file = str_replace(ADMIN_FILE, 'index.php', request()->baseFile());
+    return $base_file.'/captcha'.($id ? "/{$id}" : '').'.html';
 }
 
 /**

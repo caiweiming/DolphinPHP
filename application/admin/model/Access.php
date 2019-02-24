@@ -2,17 +2,15 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\model;
 
 use think\Model;
-use think\Request;
+use think\facade\Request;
 
 /**
  * 统一授权模型
@@ -21,7 +19,7 @@ use think\Request;
 class Access extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__ADMIN_ACCESS__';
+    protected $name = 'admin_access';
 
     /**
      * 获取用户授权节点
@@ -40,7 +38,7 @@ class Access extends Model
         if (strpos($group, '.')) {
             list($module, $group) = explode('.', $group);
         } else {
-            $module = Request::instance()->module();
+            $module = Request::module();
         }
 
         $map = [

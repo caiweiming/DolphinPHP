@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\common\builder;
@@ -41,7 +39,7 @@ class ZBuilder extends Common
      * 初始化
      * @author 蔡伟明 <314013107@qq.com>
      */
-    public function _initialize()
+    public function initialize()
     {}
 
     /**
@@ -79,14 +77,13 @@ class ZBuilder extends Common
      * 加载模板输出
      * @param string $template 模板文件名
      * @param array  $vars     模板输出变量
-     * @param array  $replace  模板替换
      * @param array  $config   模板参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function fetch($template = '', $vars = [], $replace = [], $config = [])
+    public function fetch($template = '', $vars = [], $config = [])
     {
         $vars = array_merge($vars, self::$vars);
-        return parent::fetch($template, $vars, $replace, $config);
+        return parent::fetch($template, $vars, $config);
     }
 }

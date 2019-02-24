@@ -12,6 +12,7 @@
 namespace app\admin\model;
 
 use think\Model;
+use think\facade\Env;
 
 /**
  * 模块模型
@@ -54,8 +55,8 @@ class Module extends Model
     {
         $result = cache('module_all');
         if (!$result) {
-            $dirs = array_map('basename', glob(APP_PATH.'*', GLOB_ONLYDIR));
-            if ($dirs === false || !file_exists(APP_PATH)) {
+            $dirs = array_map('basename', glob(Env::get('app_path').'*', GLOB_ONLYDIR));
+            if ($dirs === false || !file_exists(Env::get('app_path'))) {
                 $this->error = '模块目录不可读或者不存在';
                 return false;
             }
@@ -209,8 +210,8 @@ class Module extends Model
         $info = [];
         if ($name != '') {
             // 从配置文件获取
-            if (is_file(APP_PATH. $name . '/info.php')) {
-                $info = include APP_PATH. $name . '/info.php';
+            if (is_file(Env::get('app_path'). $name . '/info.php')) {
+                $info = include Env::get('app_path'). $name . '/info.php';
             }
         }
         return $info;
@@ -333,9 +334,9 @@ class Module extends Model
     public static function getMenusFromFile($name = '')
     {
         $menus = [];
-        if ($name != '' && is_file(APP_PATH. $name . '/menus.php')) {
+        if ($name != '' && is_file(Env::get('app_path'). $name . '/menus.php')) {
             // 从菜单文件获取
-            $menus = include APP_PATH. $name . '/menus.php';
+            $menus = include Env::get('app_path'). $name . '/menus.php';
         }
         return $menus;
     }

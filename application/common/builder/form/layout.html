@@ -4,10 +4,10 @@
     {notempty name="page_tips"}
     <div class="alert alert-{$tips_type} alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <p>{$page_tips}</p>
+        <p>{$page_tips|raw}</p>
     </div>
     {/notempty}
-    {$extra_html_content_top|default=''}
+    {$extra_html_content_top|raw|default=''}
     <div class="row">
         <div class="col-md-12">
             <div class="block">
@@ -47,7 +47,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="block-content">
-                            {$extra_html_form_top|default=''}
+                            {$extra_html_form_top|raw|default=''}
                             <form class="form-builder row" name="form-builder" action="{$post_url|default=''}" method="{$_method}">
                                 {notempty name="_token_name"}
                                     {:token($_token_name, $_token_value)}
@@ -56,7 +56,7 @@
                                     {notempty name="empty_tips"}
                                     <div class="form-empty">
                                         <p class="text-center text-muted empty-info">
-                                            <i class="fa fa-database"></i> {$empty_tips}<br>
+                                            <i class="fa fa-database"></i> {$empty_tips|raw}<br>
                                         </p>
                                     </div>
                                     {/notempty}
@@ -281,11 +281,11 @@
                                         {/empty}
 
                                         {// 额外按钮}
-                                        {$btn_extra|default=''}
+                                        {$btn_extra|raw|default=''}
                                     </div>
                                 </div>
                             </form>
-                            {$extra_html_form_bottom|default=''}
+                            {$extra_html_form_bottom|raw|default=''}
                         </div>
                     </div>
                 </div>
@@ -331,13 +331,13 @@
             </div>
             {volist name="_icons" id="icon"}
             <div class="tab-pane fade" id="icon{$icon.id}">
-                {$icon.html|default='暂无图标'}
+                {$icon.html|raw|default='暂无图标'}
             </div>
             {/volist}
         </div>
     </div>
     {/notempty}
-    {$extra_html_content_bottom|default=''}
+    {$extra_html_content_bottom|raw|default=''}
 {/block}
 
 {block name="style"}
@@ -356,7 +356,7 @@
     {/volist}
 
     {// 额外CSS代码 }
-    {$extra_css|default=''}
+    {$extra_css|raw|default=''}
 {/block}
 
 {block name="script"}
@@ -380,5 +380,5 @@
     {/volist}
 
     {// 额外JS代码 }
-    {$extra_js|default=''}
+    {$extra_js|raw|default=''}
 {/block}

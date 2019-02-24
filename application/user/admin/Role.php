@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\admin;
@@ -28,6 +26,8 @@ class Role extends Admin
      * 角色列表页
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
      */
     public function index()
     {
@@ -36,7 +36,7 @@ class Role extends Admin
         // 非超级管理员检查可管理角色
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $map['id'] = ['in', $role_list];
+            $map[] = ['id', 'in', $role_list];
         }
         // 数据列表
         $data_list = RoleModel::where($map)->order('pid,id')->paginate();
@@ -129,7 +129,7 @@ class Role extends Admin
             if (session('user_auth.role') != 1) {
                 $menu_auth = RoleModel::where('id', session('user_auth.role'))->value('menu_auth');
                 $menu_auth = json_decode($menu_auth, true);
-                $map['id'] = ['in', $menu_auth];
+                $map[]     = ['id', 'in', $menu_auth];
             }
             $menus = MenuModel::where('module', 'in', $modules)
                 ->where($map)
@@ -238,7 +238,7 @@ class Role extends Admin
         if (session('user_auth.role') != 1) {
             $menu_auth = RoleModel::where('id', session('user_auth.role'))->value('menu_auth');
             $menu_auth = json_decode($menu_auth, true);
-            $map['id'] = ['in', $menu_auth];
+            $map[]     = ['id', 'in', $menu_auth];
         }
         $menus = MenuModel::where('module', 'in', $modules)
             ->where($map)
@@ -291,7 +291,8 @@ class Role extends Admin
      * 删除角色
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($record = [])
     {
@@ -302,7 +303,8 @@ class Role extends Admin
      * 启用角色
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -313,7 +315,8 @@ class Role extends Admin
      * 禁用角色
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -325,7 +328,8 @@ class Role extends Admin
      * @param string $type 类型：delete/enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {

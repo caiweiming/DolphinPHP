@@ -13,7 +13,7 @@
         <input type="hidden" name="{$form[type].name}" data-multiple="true" data-size="{$form[type]['size']|default=0}" data-ext='{$form[type]["ext"]|default=""}' id="{$form[type].name}" value="{$form[type].value|default=''}">
         <div id="picker_{$form[type].name}">上传多个文件</div>
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
 </div>

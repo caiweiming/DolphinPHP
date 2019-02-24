@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -33,8 +31,8 @@ class Document extends Admin
     {
         cookie('__forward__', $_SERVER['REQUEST_URI']);
         // 查询
-        $map = $this->getMap();
-        $map['cms_document.trash'] = 0;
+        $map   = $this->getMap();
+        $map[] = ['cms_document.trash', '=', 0];
         // 排序
         $order = $this->getOrder('update_time desc');
         // 数据列表
@@ -69,6 +67,7 @@ class Document extends Admin
      * @param string $model 模型id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add($cid = 0, $model = '')
     {
@@ -88,15 +87,16 @@ class Document extends Admin
             $column = ColumnModel::getInfo($cid);
 
             // 独立模型只取该模型的字段，不包含系统字段
+            $where = [];
             if (get_model_type($column['model']) == 2) {
-                $where['model'] = $column['model'];
+                $where[] = ['model', '=', $column['model']];
             } else {
-                $where['model'] = ['in', [0, $column['model']]];
+                $where[] = ['model', 'in', [0, $column['model']]];
             }
 
             // 获取文档模型字段
-            $where['status'] = 1;
-            $where['show']   = 1;
+            $where[] = ['status', '=', 1];
+            $where[] = ['show', '=', 1];
             $fields = FieldModel::where($where)->order('sort asc,id asc')->column(true);
 
             foreach ($fields as &$value) {
@@ -167,6 +167,7 @@ class Document extends Admin
      * @param string $model 模型id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function edit($id = null, $model = '')
     {
@@ -186,16 +187,17 @@ class Document extends Admin
         $info = DocumentModel::getOne($id, $model);
 
         // 独立模型只取该模型的字段，不包含系统字段
+        $where = [];
         if ($model != '') {
             $info['model']  = $model;
-            $where['model'] = $model;
+            $where[] = ['model', '=', $model];
         } else {
-            $where['model'] = ['in', [0, $info['model']]];
+            $where[] = ['model', 'in', [0, $info['model']]];
         }
 
         // 获取文档模型字段
-        $where['status'] = 1;
-        $where['show']   = 1;
+        $where[] = ['status', '=', 1];
+        $where[] = ['show', '=', 1];
         $fields = FieldModel::where($where)->order('sort asc,id asc')->column(true);
 
         foreach ($fields as $id => &$value) {
@@ -247,7 +249,6 @@ class Document extends Admin
      * @param null $ids 文档id
      * @param string $table 数据表
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
      */
     public function delete($ids = null, $table = '')
     {
@@ -263,14 +264,15 @@ class Document extends Admin
 
         // 删除并记录日志
         action_log('document_trash', $table, $document_id, UID, implode('、', $document_title));
-        return $this->success('删除成功');
+        $this->success('删除成功');
     }
 
     /**
      * 启用文档
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -281,7 +283,8 @@ class Document extends Admin
      * 禁用文档
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -293,11 +296,17 @@ class Document extends Admin
      * @param string $type 类型：enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {
-        $table_name     = input('param.table');
+        $table_token = input('param._t', '');
+        $table_token == '' && $this->error('缺少参数');
+        !session('?'.$table_token) && $this->error('参数错误');
+
+        $table_data     = session($table_token);
+        $table_name     = $table_data['table'];
         $ids            = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
         $document_id    = is_array($ids) ? '' : $ids;
         $document_title = Db::name($table_name)->where('id', 'in', $ids)->column('title');
@@ -312,12 +321,17 @@ class Document extends Admin
      */
     public function quickEdit($record = [])
     {
-        $id       = input('post.pk', '');
-        $field    = input('post.name', '');
-        $value    = input('post.value', '');
-        $table    = input('post.table', '');
-        $document = Db::name($table)->where('id', $id)->value($field);
-        $details  = '表名('.$table.')，字段(' . $field . ')，原值(' . $document . ')，新值：(' . $value . ')';
+        $table_token = input('param._t', '');
+        $table_token == '' && $this->error('缺少参数');
+        !session('?'.$table_token) && $this->error('参数错误');
+
+        $table_data = session($table_token);
+        $table      = $table_data['table'];
+        $id         = input('post.pk', '');
+        $field      = input('post.name', '');
+        $value      = input('post.value', '');
+        $document   = Db::name($table)->where('id', $id)->value($field);
+        $details    = '表名(' . $table . ')，字段(' . $field . ')，原值(' . $document . ')，新值：(' . $value . ')';
         return parent::quickEdit(['document_edit', 'cms_document', $id, UID, $details]);
     }
 }

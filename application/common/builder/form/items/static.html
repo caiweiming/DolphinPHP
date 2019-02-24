@@ -6,7 +6,7 @@
         <input type="hidden" name="{$form[type].name}" value='{$form[type].hidden|default=""}'>
         {/notempty}
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
 </div>

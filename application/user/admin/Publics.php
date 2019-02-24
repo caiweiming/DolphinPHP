@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\admin;
@@ -15,7 +13,7 @@ use app\common\controller\Common;
 use app\user\model\User as UserModel;
 use app\user\model\Role as RoleModel;
 use app\admin\model\Menu as MenuModel;
-use think\Hook;
+use think\facade\Hook;
 
 /**
  * 用户公开控制器，不经过权限认证
@@ -52,7 +50,7 @@ class Publics extends Common
             if (config('captcha_signin')) {
                 $captcha = $this->request->post('captcha', '');
                 $captcha == '' && $this->error('请输入验证码');
-                if(!captcha_check($captcha, '', config('captcha'))){
+                if(!captcha_check($captcha, '')){
                     //验证失败
                     $this->error('验证码错误或失效');
                 };
@@ -69,6 +67,7 @@ class Publics extends Common
                 $this->error($UserModel->getError());
             }
         } else {
+
             $hook_result = Hook::listen('signin_sso');
             if (!empty($hook_result) && true !== $hook_result[0]) {
                 if (isset($hook_result[0]['url'])) {

@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -14,7 +12,7 @@ namespace app\admin\controller;
 use app\common\controller\Common;
 use app\admin\model\Menu as MenuModel;
 use app\admin\model\Attachment as AttachmentModel;
-use think\Cache;
+use think\facade\Cache;
 use think\Db;
 
 /**
@@ -163,7 +161,7 @@ class Ajax extends Common
      * @author 蔡伟明 <314013107@qq.com>
      */
     public function setTheme($theme = '') {
-        $map['name'] = 'system_color';
+        $map['name']  = 'system_color';
         $map['group'] = 'system';
         if (Db::name('admin_config')->where($map)->setField('value', $theme)) {
             $this->success('设置成功');

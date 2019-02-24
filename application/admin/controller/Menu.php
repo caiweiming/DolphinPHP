@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -15,7 +13,7 @@ use app\common\builder\ZBuilder;
 use app\admin\model\Module as ModuleModel;
 use app\admin\model\Menu as MenuModel;
 use app\user\model\Role as RoleModel;
-use think\Cache;
+use think\facade\Cache;
 
 /**
  * 节点管理
@@ -28,6 +26,7 @@ class Menu extends Admin
      * @param string $group 分组
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \Exception
      */
     public function index($group = 'admin')
     {
@@ -85,6 +84,7 @@ class Menu extends Admin
      * @param string $pid 所属节点id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \Exception
      */
     public function add($module = 'admin', $pid = '')
     {
@@ -155,6 +155,10 @@ class Menu extends Admin
      * @param int $id 节点ID
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function edit($id = 0)
     {
@@ -178,7 +182,7 @@ class Menu extends Admin
             $this->setRoleMenu($data['id'], isset($data['role']) ? $data['role'] : []);
 
             // 验证是否更改所属模块，如果是，则该节点的所有子孙节点的模块都要修改
-            $map['id'] = $data['id'];
+            $map['id']     = $data['id'];
             $map['module'] = $data['module'];
             if (!MenuModel::where($map)->find()) {
                 MenuModel::changeModule($data['id'], $data['module']);
@@ -229,6 +233,7 @@ class Menu extends Admin
      * @param string $role_id 角色id
      * @param array $roles 角色id
      * @author 蔡伟明 <314013107@qq.com>
+     * @throws \Exception
      */
     private function setRoleMenu($role_id = '', $roles = [])
     {
@@ -309,7 +314,9 @@ class Menu extends Admin
      * 删除节点
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function delete($record = [])
     {
@@ -339,7 +346,6 @@ class Menu extends Admin
     /**
      * 保存节点排序
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
      */
     public function save()
     {
@@ -485,7 +491,9 @@ class Menu extends Admin
      * 启用节点
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function enable($record = [])
     {
@@ -499,7 +507,9 @@ class Menu extends Admin
      * 禁用节点
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function disable($record = [])
     {
@@ -514,7 +524,6 @@ class Menu extends Admin
      * @param string $type 类型
      * @param array $record 行为日志
      * @author 小乌 <82950492@qq.com>
-     * @return void
      */
     public function setStatus($type = '', $record = [])
     {

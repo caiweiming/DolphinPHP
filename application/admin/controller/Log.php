@@ -2,18 +2,15 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
 use app\common\builder\ZBuilder;
 use app\admin\model\Log as LogModel;
-use think\Db;
 
 /**
  * 系统日志控制器
@@ -25,6 +22,7 @@ class Log extends Admin
      * 日志列表
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function index()
     {
@@ -63,6 +61,8 @@ class Log extends Admin
      * 日志详情
      * @param null $id 日志id
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
      */
     public function details($id = null)
     {

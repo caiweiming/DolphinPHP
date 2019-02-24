@@ -35,7 +35,7 @@
                 <div class="col-md-8">
                     <div class="block block-rounded">
                         <div class="block-content document-content">
-                            {$document.content|default=""}
+                            {$document.content|raw|default=""}
                         </div>
                     </div>
                     <nav>

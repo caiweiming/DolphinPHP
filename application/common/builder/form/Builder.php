@@ -2,17 +2,16 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\common\builder\form;
 
 use app\common\builder\ZBuilder;
 use think\Exception;
+use think\facade\Env;
 
 /**
  * 表单构建器
@@ -74,9 +73,9 @@ class Builder extends ZBuilder
      * 初始化
      * @author 蔡伟明 <314013107@qq.com>
      */
-    public function _initialize()
+    public function initialize()
     {
-        $this->_template = APP_PATH. 'common/builder/form/layout.html';
+        $this->_template = Env::get('app_path'). 'common/builder/form/layout.html';
         $this->_vars['post_url'] = $this->request->url(true);
         $this->_vars['_token_name'] = config('zbuilder.form_token_name');
         $this->_vars['_token_value'] = $this->request->token($this->_vars['_token_name']);
@@ -1849,7 +1848,7 @@ class Builder extends ZBuilder
             if (!preg_match('/__.*?__/', $item)) {
                 $urls[$key] = '__EXTEND_FORM__/'.$type.'/'.$item;
             }
-            $urls[$key] = str_replace(array_keys(config('view_replace_str')), array_values(config('view_replace_str')), $urls[$key]);
+            $urls[$key] = str_replace(array_keys(config('template.tpl_replace_string')), array_values(config('template.tpl_replace_string')), $urls[$key]);
         }
         return $urls;
     }
@@ -1962,7 +1961,7 @@ class Builder extends ZBuilder
     public function js($files_name = '', $module = '')
     {
         if ($files_name != '') {
-            $this->loadFile('js', $files_name);
+            $this->loadFile('js', $files_name, $module);
         }
         return $this;
     }
@@ -1977,7 +1976,7 @@ class Builder extends ZBuilder
     public function css($files_name = '', $module = '')
     {
         if ($files_name != '') {
-            $this->loadFile('css', $files_name);
+            $this->loadFile('css', $files_name, $module);
         }
         return $this;
     }
@@ -2264,12 +2263,11 @@ class Builder extends ZBuilder
      * 加载模板输出
      * @param string $template 模板文件名
      * @param array  $vars     模板输出变量
-     * @param array  $replace  模板替换
      * @param array  $config   模板参数
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function fetch($template = '', $vars = [], $replace = [], $config = [])
+    public function fetch($template = '', $vars = [], $config = [])
     {
         if (!empty($vars)) {
             $this->_vars['form_data'] = array_merge($this->_vars['form_data'], $vars);
@@ -2324,6 +2322,6 @@ class Builder extends ZBuilder
         $this->_vars['btn_extra'] = implode(' ', $this->_vars['btn_extra']);
 
         // 实例化视图并渲染
-        return parent::fetch($this->_template, $this->_vars, $replace, $config);
+        return parent::fetch($this->_template, $this->_vars, $config);
     }
 }

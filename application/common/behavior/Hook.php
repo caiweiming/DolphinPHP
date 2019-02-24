@@ -14,6 +14,8 @@ namespace app\common\behavior;
 use app\admin\model\Hook as HookModel;
 use app\admin\model\HookPlugin as HookPluginModel;
 use app\admin\model\Plugin as PluginModel;
+use think\facade\Cache;
+use think\facade\Config;
 
 /**
  * 注册钩子
@@ -24,17 +26,17 @@ class Hook
 {
     /**
      * 执行行为 run方法是Behavior唯一的接口
-     * @access public
-     * @param mixed $params  行为参数
-     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
-    public function run(&$params)
+    public function run()
     {
         if(defined('BIND_MODULE') && BIND_MODULE === 'install') return;
 
-        $hook_plugins = cache('hook_plugins');
-        $hooks        = cache('hooks');
-        $plugins      = cache('plugins');
+        $hook_plugins = Cache::get('hook_plugins');
+        $hooks        = Cache::get('hooks');
+        $plugins      = Cache::get('plugins');
 
         if (!$hook_plugins) {
             // 所有钩子
@@ -44,17 +46,17 @@ class Hook
             // 钩子对应的插件
             $hook_plugins = HookPluginModel::where('status', 1)->order('hook,sort')->select();
             // 非开发模式，缓存数据
-            if (config('develop_mode') == 0) {
-                cache('hook_plugins', $hook_plugins);
-                cache('hooks', $hooks);
-                cache('plugins', $plugins);
+            if (Config::get('develop_mode') == 0) {
+                Cache::set('hook_plugins', $hook_plugins);
+                Cache::set('hooks', $hooks);
+                Cache::set('plugins', $plugins);
             }
         }
 
         if ($hook_plugins) {
             foreach ($hook_plugins as $value) {
                 if (isset($hooks[$value['hook']]) && isset($plugins[$value['plugin']])) {
-                    \think\Hook::add($value['hook'], get_plugin_class($value['plugin']));
+                    \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
                 }
             }
         }

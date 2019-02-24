@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -24,6 +22,8 @@ class Message extends Admin
      * 消息中心
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
      */
     public function index()
     {
@@ -57,12 +57,17 @@ class Message extends Admin
      * 设置已阅读
      * @param array $ids
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($ids = [])
     {
         empty($ids) && $this->error('参数错误');
-        $result = MessageModel::where(['uid_receive' => UID, 'id' => ['in', $ids]])
+        $map = [
+            ['uid_receive', '=', UID],
+            ['id', 'in', $ids]
+        ];
+        $result = MessageModel::where($map)
             ->update(['status' => 1, 'read_time' => $this->request->time()]);
         if (false !== $result) {
             $this->success('设置成功');

@@ -2,15 +2,13 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
 // +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
 
 use think\Db;
-use think\View;
+use think\Container;
 use app\user\model\User;
 
 // 应用公共文件
@@ -387,13 +385,12 @@ if (!function_exists('hook')) {
      * 监听钩子
      * @param string $name 钩子名称
      * @param mixed  $params 传入参数
-     * @param mixed  $extra  额外参数
      * @param bool   $once   只获取一个有效返回值
      * @author 蔡伟明 <314013107@qq.com>
      * @alter 小乌 <82950492@qq.com>
      */
-    function hook($name = '', $params = null, $extra = null, $once = false) {
-        \think\Hook::listen($name, $params, $extra, $once);
+    function hook($name = '', $params = null, $once = false) {
+        \think\facade\Hook::listen($name, $params, $once);
     }
 }
 
@@ -696,10 +693,13 @@ if (!function_exists('get_level_data')) {
     /**
      * 获取联动数据
      * @param string $table 表名
-     * @param  integer $pid 父级ID
-     * @param  string $pid_field 父级ID的字段名
+     * @param int $pid 父级ID
+     * @param string $pid_field 父级ID的字段名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return false|PDOStatement|string|\think\Collection
+     * @return array|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function get_level_data($table = '', $pid = 0, $pid_field = 'pid')
     {
@@ -744,6 +744,9 @@ if (!function_exists('get_level_key_data')) {
      * @param int $level 级别
      * @author 蔡伟明 <314013107@qq.com>
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function get_level_key_data($table = '', $id = '', $id_field = 'id', $name_field = 'name', $pid_field = 'pid', $level = 1)
     {
@@ -954,8 +957,12 @@ if (!function_exists('clear_js')) {
 if (!function_exists('get_nickname')) {
     /**
      * 根据用户ID获取用户昵称
-     * @param  integer $uid 用户ID
-     * @return string  用户昵称
+     * @param int $uid 用户ID
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed|string 用户昵称
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function get_nickname($uid = 0)
     {
@@ -1105,9 +1112,12 @@ if (!function_exists('parse_action')) {
      * @param int $self 替换规则里的变量为执行用户的id
      * @author huajie <banhuajie@163.com>
      * @alter 蔡伟明 <314013107@qq.com>
-     * @return boolean|array: false解析出错 ， 成功返回规则数组
+     * @return array|bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
-    function parse_action($action = null, $self){
+    function parse_action($action, $self){
         if(empty($action)){
             return false;
         }
@@ -1166,8 +1176,11 @@ if (!function_exists('execute_action')) {
         $return = true;
         foreach ($rules as $rule){
             // 检查执行周期
-            $map = ['action_id' => $action_id, 'user_id' => $user_id];
-            $map['create_time'] = ['gt', request()->time() - intval($rule['cycle']) * 3600];
+            $map = [
+                ['action_id', '=', $action_id],
+                ['user_id', '=', $user_id],
+                ['create_time', 'gt', request()->time() - intval($rule['cycle']) * 3600],
+            ];
             $exec_count = model('admin/log')->where($map)->count();
             if($exec_count > $rule['max']){
                 continue;
@@ -1207,6 +1220,9 @@ if (!function_exists('packet_exists')) {
      * @param string $name 数据包名
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     function packet_exists($name = '')
     {
@@ -1238,7 +1254,7 @@ if (!function_exists('load_assets')) {
                 $result .= '<script src="'.$item.'?v='.config('asset_version').'"></script>';
             }
         }
-        $result = str_replace(array_keys(config('view_replace_str')), array_values(config('view_replace_str')), $result);
+        $result = str_replace(array_keys(config('template.tpl_replace_string')), array_values(config('template.tpl_replace_string')), $result);
         return $result;
     }
 }
@@ -1334,7 +1350,7 @@ if (!function_exists('extend_form_item')) {
         $template = './extend/form/'.$form['type'].'/'.$form['type'].'.html';
         if (file_exists($template)) {
             $template_content = file_get_contents($template);
-            $view = new View();
+            $view = Container::get('view');
             return $view->display($template_content, $form);
         } else {
             return '';
@@ -1426,6 +1442,7 @@ if (!function_exists('dp_send_message')) {
      * @param string $uids 用户id，可以是数组，也可以是逗号隔开的字符串
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
+     * @throws Exception
      */
     function dp_send_message($type = '', $content = '', $uids = '') {
         $uids = is_array($uids) ? $uids : explode(',', $uids);

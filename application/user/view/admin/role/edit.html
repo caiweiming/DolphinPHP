@@ -43,7 +43,7 @@
                                     <select class="form-control" id="pid" name="pid">
                                         <option value="">请选择：</option>
                                         {volist name="role_list" id="role"}
-                                        <option value="{$key}" {eq name="$info['pid']" value="$key"}selected{/eq}>{$role}</option>
+                                        <option value="{$key}" {eq name="$info['pid']" value="$key"}selected{/eq}>{$role|raw}</option>
                                         {/volist}
                                     </select>
                                 </div>
@@ -65,7 +65,7 @@
                                 <div class="col-sm-12">
                                     <select class="form-control" id="default_module" name="default_module">
                                         {volist name="module_list" id="module"}
-                                        <option value="{$key}" {eq name="$info['default_module']" value="$key"}selected{/eq}>{$module}</option>
+                                        <option value="{$key}" {eq name="$info['default_module']" value="$key"}selected{/eq}>{$module|raw}</option>
                                         {/volist}
                                     </select>
                                     <div class="help-block">该角色登录后，默认跳转的模块。注意，该角色必须有该模块的节点访问权限。</div>
@@ -98,12 +98,12 @@
                                         <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>
                                         <button title="收起所有节点" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有节点</button>
                                         <span class="form-inline">
-                                        <input class="form-control" id="search-auth" onkeydown="if(event.keyCode === 13){return false;}" type="text" value="" placeholder="输入关键字搜索">
-                                    </span>
+                                            <input class="form-control" id="search-auth" onkeydown="if(event.keyCode === 13){return false;}" type="text" value="" placeholder="输入关键字搜索">
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <div id="jstree" class="push">{$menus|default=''}</div>
+                            <div id="jstree" class="push">{$menus|raw|default=''}</div>
                         </div>
                         <div class="push-20">
                             <button class="btn btn-minw btn-primary" type="submit">

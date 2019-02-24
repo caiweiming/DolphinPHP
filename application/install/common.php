@@ -2,12 +2,12 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
 // +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
+
+use think\facade\Env;
 
 // 此函数文件来自OneThink
 
@@ -18,7 +18,7 @@
 function check_env(){
     $items = array(
         'os'      => array('操作系统', '不限制', '类Unix', PHP_OS, 'check'),
-        'php'     => array('PHP版本', '5.5', '5.5+', PHP_VERSION, 'check'),
+        'php'     => array('PHP版本', '5.6', '5.6+', PHP_VERSION, 'check'),
         'upload'  => array('附件上传', '不限制', '2M+', '未知', 'check'),
         'gd'      => array('GD库', '2.0', '2.0+', '未知', 'check'),
         'disk'    => array('磁盘空间', '100M', '不限制', '未知', 'check'),
@@ -47,7 +47,7 @@ function check_env(){
 
     // 磁盘空间检测
     if(function_exists('disk_free_space')) {
-        $disk_size = floor(disk_free_space(INSTALL_APP_PATH) / (1024*1024));
+        $disk_size = floor(disk_free_space(Env::get('app_path')) / (1024*1024));
         $items['disk'][3] = $disk_size.'M';
         if ($disk_size < 100) {
             $items['disk'][4] = 'times text-warning';
@@ -65,6 +65,7 @@ function check_env(){
 function check_dirfile(){
     $items = array(
         array('dir',  '可写', 'check', '../application'),
+        array('dir',  '可写', 'check', '../config'),
         array('dir',  '可写', 'check', '../data'),
         array('dir',  '可写', 'check', '../export'),
         array('dir',  '可写', 'check', '../packet'),
@@ -145,14 +146,14 @@ function check_func(){
 function write_config($config){
     if(is_array($config)){
         //读取配置内容
-        $conf = file_get_contents(APP_PATH . 'install/data/database.tpl');
+        $conf = file_get_contents(Env::get('app_path') . 'install/data/database.tpl');
         // 替换配置项
         foreach ($config as $name => $value) {
             $conf = str_replace("[{$name}]", $value, $conf);
         }
 
         //写入应用配置文件
-        if(file_put_contents(APP_PATH . 'database.php', $conf)){
+        if(file_put_contents(Env::get('config_path') . 'database.php', $conf)){
             show_msg('配置文件写入成功');
         } else {
             show_msg('配置文件写入失败！', 'error');
@@ -169,7 +170,7 @@ function write_config($config){
  */
 function create_tables($db, $prefix = ''){
     // 读取SQL文件
-    $sql = file_get_contents(APP_PATH . 'install/data/dolphin.sql');
+    $sql = file_get_contents(Env::get('app_path') . 'install/data/dolphin.sql');
 
     $sql = str_replace("\r", "\n", $sql);
     $sql = explode(";\n", $sql);
@@ -203,7 +204,7 @@ function create_tables($db, $prefix = ''){
  */
 function update_tables($db, $prefix = ''){
     //读取SQL文件
-    $sql = file_get_contents(APP_PATH . 'install/data/update.sql');
+    $sql = file_get_contents(Env::get('app_path') . 'install/data/update.sql');
     $sql = str_replace("\r", "\n", $sql);
     $sql = explode(";\n", $sql);
 
@@ -246,6 +247,7 @@ function update_tables($db, $prefix = ''){
 /**
  * 及时显示提示信息
  * @param  string $msg 提示信息
+ * @param  string $class 类名
  */
 function show_msg($msg, $class = ''){
     echo "<script type=\"text/javascript\">showmsg(\"{$msg}\", \"{$class}\")</script>";

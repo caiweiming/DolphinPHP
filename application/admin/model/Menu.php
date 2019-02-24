@@ -65,16 +65,18 @@ class Menu extends Model
      */
     public static function getMenuTree($id = 0, $default = '', $module = '')
     {
-        $result[0]       = '顶级节点';
-        $where['status'] = ['egt', 0];
+        $result[0] = '顶级节点';
+        $where = [
+            ['status', 'egt', 0]
+        ];
         if ($module != '') {
-            $where['module'] = $module;
+            $where[] = ['module', '=', $module];
         }
 
         // 排除指定节点及其子节点
         if ($id !== 0) {
-            $hide_ids    = array_merge([$id], self::getChildsId($id));
-            $where['id'] = ['notin', $hide_ids];
+            $hide_ids = array_merge([$id], self::getChildsId($id));
+            $where[]  = ['id', 'not in', $hide_ids];
         }
 
         // 获取节点
@@ -217,11 +219,13 @@ class Menu extends Model
         $location = cache($cache_name);
 
         if (!$location) {
-            $map['pid'] = ['<>', 0];
-            $map['url_value'] = strtolower($model.'/'.trim(preg_replace("/[A-Z]/", "_\\0", $controller), "_").'/'.$action);
+            $map = [
+                ['pid', '<>', 0],
+                ['url_value', '=', strtolower($model.'/'.trim(preg_replace("/[A-Z]/", "_\\0", $controller), "_").'/'.$action)]
+            ];
 
             // 当前操作对应的节点ID
-            $curr_id  = $id == '' ? self::where($map)->value('id') : $id;
+            $curr_id = $id == '' ? self::where($map)->value('id') : $id;
 
             // 获取节点ID是所有父级节点
             $location = Tree::getParents(self::column('id,pid,title,url_value,params'), $curr_id);
@@ -240,6 +244,7 @@ class Menu extends Model
                 cache($cache_name, $location);
             }
         }
+
         return $location;
     }
 

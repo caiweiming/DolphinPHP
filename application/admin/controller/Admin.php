@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -18,9 +16,9 @@ use app\admin\model\Module as ModuleModel;
 use app\admin\model\Icon as IconModel;
 use app\user\model\Role as RoleModel;
 use app\user\model\Message as MessageModel;
-use think\Cache;
+use think\facade\Cache;
 use think\Db;
-use think\Loader;
+use think\facade\App;
 use think\helper\Hash;
 
 /**
@@ -32,10 +30,11 @@ class Admin extends Common
     /**
      * 初始化
      * @author 蔡伟明 <314013107@qq.com>
+     * @throws \think\Exception
      */
-    protected function _initialize()
+    protected function initialize()
     {
-        parent::_initialize();
+        parent::initialize();
         // 是否拒绝ie浏览器访问
         if (config('system.deny_ie') && get_browser_type() == 'ie') {
             $this->redirect('admin/ie/index');
@@ -113,7 +112,7 @@ class Admin extends Common
         if ($table_data['prefix'] == 2) {
             // 使用模型
             try {
-                $Model = Loader::model($table);
+                $Model = App::model($table);
             } catch (\Exception $e) {
                 $this->error('找不到模型：'.$table);
             }
@@ -163,7 +162,8 @@ class Admin extends Common
      * 禁用
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -174,7 +174,8 @@ class Admin extends Common
      * 启用
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -185,7 +186,8 @@ class Admin extends Common
      * 启用
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($record = [])
     {
@@ -266,7 +268,9 @@ class Admin extends Common
 
     /**
      * 自动创建添加页面
-     * @author caiweiming <314013107@qq.com>
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
      */
     public function add()
     {
@@ -324,7 +328,13 @@ class Admin extends Common
     /**
      * 自动创建编辑页面
      * @param string $id 主键值
-     * @author caiweiming <314013107@qq.com>
+     * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function edit($id = '')
     {
@@ -392,7 +402,8 @@ class Admin extends Common
      * @param string $type 操作类型：enable,disable,delete
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {
@@ -419,7 +430,9 @@ class Admin extends Common
 
         // 主键名称
         $pk = $Model->getPk();
-        $map[$pk] = ['in', $ids];
+        $map = [
+            [$pk, 'in', $ids]
+        ];
 
         $result = false;
         switch ($type) {
@@ -453,6 +466,8 @@ class Admin extends Common
      * 模块设置
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function moduleConfig()
     {

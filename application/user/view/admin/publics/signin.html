@@ -151,9 +151,7 @@
                                 location.href = res.url;
                             }, 1500);
                         } else {
-                            if (res.msg == '验证码错误或失效') {
-                                $('#captcha').click();
-                            }
+                            $('#captcha').click();
                             Dolphin.notify(res.msg, 'danger');
                         }
                     }).fail(function () {

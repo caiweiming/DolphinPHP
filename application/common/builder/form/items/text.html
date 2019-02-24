@@ -6,13 +6,13 @@
         {/notempty}
 
         {notempty name="form[type].group.0"}
-        <span class="input-group-addon">{$form[type].group.0|clear_js}</span>
+        <span class="input-group-addon">{$form[type].group.0|raw|clear_js}</span>
         {/notempty}
 
-        <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="{$form[type].placeholder|default='请输入'.$form[type].title}" {$form[type].extra_attr|default=''}>
+        <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="{$form[type].placeholder|default='请输入'.$form[type].title}" {$form[type].extra_attr|raw|default=''}>
 
         {notempty name="form[type].group.1"}
-        <span class="input-group-addon">{$form[type].group.1|clear_js}</span>
+        <span class="input-group-addon">{$form[type].group.1|raw|clear_js}</span>
         {/notempty}
 
         {notempty name="form[type].group"}
@@ -20,7 +20,7 @@
         {/notempty}
 
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
 </div>

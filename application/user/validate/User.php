@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\validate;
@@ -20,7 +18,7 @@ use think\Validate;
  */
 class User extends Validate
 {
-    //定义验证规则
+    // 定义验证规则
     protected $rule = [
         'username|用户名' => 'require|alphaNum|unique:admin_user',
         'nickname|昵称'  => 'require|unique:admin_user',
@@ -30,7 +28,7 @@ class User extends Validate
         'mobile|手机号'   => 'regex:^1\d{10}|unique:admin_user',
     ];
 
-    //定义验证提示
+    // 定义验证提示
     protected $message = [
         'username.require' => '请输入用户名',
         'email.require'    => '邮箱不能为空',
@@ -41,7 +39,7 @@ class User extends Validate
         'mobile.regex'     => '手机号不正确',
     ];
 
-    //定义验证场景
+    // 定义验证场景
     protected $scene = [
         //更新
         'update'  =>  ['email', 'password' => 'length:6,20', 'mobile', 'role'],

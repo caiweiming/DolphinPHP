@@ -70,7 +70,7 @@ h6,
     font-size: 12px;
 }
 /* 表单元素 */
-.form-horizontal .css-checkbox {
+.form-group .css-checkbox {
     margin-right: 10px;
 }
 .help-block {

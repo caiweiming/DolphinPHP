@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -19,6 +17,7 @@ use app\cms\model\Document;
 use app\user\model\Role as RoleModel;
 use util\Tree;
 use util\File;
+use think\facade\Env;
 
 /**
  * 栏目控制器
@@ -30,6 +29,7 @@ class Column extends Admin
      * 栏目列表
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function index()
     {
@@ -87,6 +87,7 @@ class Column extends Admin
      * @param int $pid 父级id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add($pid = 0)
     {
@@ -109,8 +110,8 @@ class Column extends Admin
             }
         }
 
-        $template_list   = File::get_dirs(APP_PATH.'cms/view/column/')['file'];
-        $template_detail = File::get_dirs(APP_PATH.'cms/view/document/')['file'];
+        $template_list   = File::get_dirs(Env::get('app_path').'cms/view/column/')['file'];
+        $template_detail = File::get_dirs(Env::get('app_path').'cms/view/document/')['file'];
 
         // 显示添加页面
         return ZBuilder::make('form')
@@ -141,6 +142,8 @@ class Column extends Admin
      * 编辑栏目
      * @param string $id 栏目id
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
      */
     public function edit($id = '')
     {
@@ -158,17 +161,17 @@ class Column extends Admin
             if (ColumnModel::update($data)) {
                 // 记录行为
                 action_log('column_edit', 'cms_column', $id, UID, $data['name']);
-                return $this->success('编辑成功', 'index');
+                $this->success('编辑成功', 'index');
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
         // 获取数据
         $info = ColumnModel::get($id);
 
-        $template_list   = File::get_dirs(APP_PATH.'cms/view/column/')['file'];
-        $template_detail = File::get_dirs(APP_PATH.'cms/view/document/')['file'];
+        $template_list   = File::get_dirs(Env::get('app_path').'cms/view/column/')['file'];
+        $template_detail = File::get_dirs(Env::get('app_path').'cms/view/document/')['file'];
 
         // 显示编辑页面
         return ZBuilder::make('form')
@@ -201,7 +204,11 @@ class Column extends Admin
      * 删除栏目
      * @param null $ids 栏目id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = null)
     {
@@ -226,7 +233,8 @@ class Column extends Admin
      * 启用栏目
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -237,7 +245,8 @@ class Column extends Admin
      * 禁用栏目
      * @param array $record 行为日志
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -249,7 +258,8 @@ class Column extends Admin
      * @param string $type 类型：enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {

@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\admin;
@@ -26,13 +24,16 @@ class Recycle extends Admin
      * 文档列表
      * @param string $model 内容模型id
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
      */
     public function index($model = '')
     {
         if ($model == '') {
             // 查询
-            $map = $this->getMap();
-            $map['cms_document.trash'] = 1;
+            $map   = $this->getMap();
+            $map[] = ['cms_document.trash', '=', 1];
             // 排序
             $order = $this->getOrder('update_time desc');
             // 数据列表
@@ -76,8 +77,8 @@ class Recycle extends Admin
             $table_name = get_model_table($model);
 
             // 查询
-            $map = $this->getMap();
-            $map['trash'] = 1;
+            $map   = $this->getMap();
+            $map[] = ['trash', '=', 1];
 
             // 排序
             $order = $this->getOrder('update_time desc');
@@ -155,7 +156,8 @@ class Recycle extends Admin
      * @param null $ids 文档id
      * @param string $table 表名
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = null, $table = '')
     {

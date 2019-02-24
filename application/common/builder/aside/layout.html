@@ -6,7 +6,7 @@
         <ul class="nav nav-tabs nav-tabs-alt nav-justified" data-toggle="tabs">
             {volist name="aside.tab_nav.tab_list" id="tab"}
             <li {$aside.tab_nav.curr_tab == $key?='class="active"'}>
-                <a href="#{$key}">{$tab}</a>
+                <a href="#{$key}">{$tab|raw}</a>
             </li>
             {/volist}
         </ul>
@@ -38,7 +38,7 @@
                     {include file="../application/common/builder/aside/blocks/online.html" /}
                     {include file="../application/common/builder/aside/blocks/switch.html" /}
                     {case value="html"}
-                        {$_block.title|default=''}
+                        {$_block.title|raw|default=''}
                     {/case}
                 {/switch}
             {/volist}

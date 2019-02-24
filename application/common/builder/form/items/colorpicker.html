@@ -2,11 +2,11 @@
     <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
     <div class="col-xs-12">
         <div class="js-colorpicker input-group" data-colorpicker-mode="{$form[type].mode == '' ? 'rgba' : $form[type].mode}">
-            <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="请从右边选择颜色" {$form[type].extra_attr|default=''}>
+            <input class="form-control" type="text" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="请从右边选择颜色" {$form[type].extra_attr|raw|default=''}>
             <span class="input-group-addon"><i style="background-color: rgb(92, 144, 210);"></i></span>
         </div>
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
 </div>

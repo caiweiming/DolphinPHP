@@ -2,17 +2,16 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\install\controller;
 
 use think\Controller;
 use think\Db;
+use think\facade\Env;
 
 define('INSTALL_APP_PATH', realpath('./') . '/');
 
@@ -26,7 +25,7 @@ class Index extends Controller
      * 获取入口目录
      * @author 蔡伟明 <314013107@qq.com>
      */
-    protected function _initialize() {
+    protected function initialize() {
         $this->assign('static_dir', 'static/');
     }
 
@@ -36,7 +35,7 @@ class Index extends Controller
      */
     public function index()
     {
-        if (is_file(APP_PATH . 'database.php')) {
+        if (is_file(Env::get('app_path') . 'database.php')) {
             // 已经安装过了 执行更新程序
             session('reinstall', true);
             $this->assign('next', '重新安装');

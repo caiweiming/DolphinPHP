@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\model;
@@ -23,7 +21,7 @@ use think\Db;
 class User extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__ADMIN_USER__';
+    protected $name = 'admin_user';
 
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -89,7 +87,7 @@ class User extends Model
 
                 // 更新登录信息
                 $user['last_login_time'] = request()->time();
-                $user['last_login_ip']   = get_client_ip(1);
+                $user['last_login_ip']   = request()->ip(1);
                 if ($user->save()) {
                     // 自动登录
                     return $this->autoLogin($this::get($uid), $rememberme);

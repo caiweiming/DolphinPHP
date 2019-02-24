@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace plugins\HelloWorld\controller;
@@ -26,6 +24,8 @@ class Admin extends Common
      * 插件管理页
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
      */
     public function index()
     {
@@ -101,14 +101,14 @@ class Admin extends Common
             ]);
             if(true !== $result){
                 // 验证失败 输出错误信息
-                return $this->error($result);
+                $this->error($result);
             }
 
             // 插入数据
             if (HelloWorld::create($data)) {
-                return $this->success('新增成功', cookie('__forward__'));
+                $this->success('新增成功', cookie('__forward__'));
             } else {
-                return $this->error('新增失败');
+                $this->error('新增失败');
             }
         }
 
@@ -133,14 +133,14 @@ class Admin extends Common
             $validate = new HelloWorldValidate();
             if (!$validate->check($data)) {
                 // 验证失败 输出错误信息
-                return $this->error($validate->getError());
+                $this->error($validate->getError());
             }
 
             // 更新数据
             if (HelloWorld::update($data)) {
-                return $this->success('编辑成功', cookie('__forward__'));
+                $this->success('编辑成功', cookie('__forward__'));
             } else {
-                return $this->error('编辑失败');
+                $this->error('编辑失败');
             }
         }
 
@@ -163,6 +163,7 @@ class Admin extends Common
      * 插件自定义方法
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function testTable()
     {
@@ -188,6 +189,7 @@ class Admin extends Common
      * @param string $age
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function testForm($id = '', $table = '', $name = '', $age = '')
     {

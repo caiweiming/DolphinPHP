@@ -3,12 +3,12 @@
     <div class="col-xs-12">
         {volist name="form[type].options" id="option"}
         <label class="css-input css-radio css-radio-{$form[type].attr.color|default='primary'} css-radio-{$form[type].attr.size|default='sm'} push-10-r  {$form[type].extra_label_class|default=''}">
-            <input type="radio" name="{$form[type].name}" id="{$form[type].name}{$i}" value="{$key}" {php}$key = (string)$key;{/php} {eq name="key" value="$form[type].value|default=''"}checked{/eq} {$form[type].extra_attr|default=''}>
-            <span></span> {$option|htmlspecialchars}
+            <input type="radio" name="{$form[type].name}" id="{$form[type].name}{$i}" value="{$key}" {php}$key = (string)$key;{/php} {eq name="key" value="$form[type].value|default=''"}checked{/eq} {$form[type].extra_attr|raw|default=''}>
+            <span></span> {$option|raw|htmlspecialchars}
         </label>
         {/volist}
         {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|clear_js}</div>
+        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
         {/notempty}
     </div>
 </div>

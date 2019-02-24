@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\user\model;
@@ -22,7 +20,7 @@ use app\admin\model\Menu as MenuModel;
 class Role extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__ADMIN_ROLE__';
+    protected $name = 'admin_role';
 
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -50,24 +48,30 @@ class Role extends Model
     public static function getTree($id = null, $default = '', $filter = null)
     {
         $result[0]       = '顶级角色';
-        $where['status'] = 1;
+        $where = [
+            ['status', '=', 1]
+        ];
 
         // 排除指定菜单及其子菜单
         $hide_ids = [];
         if ($id !== null) {
-            $hide_ids    = array_merge([$id], self::getChildsId($id));
-            $where['id'] = ['notin', $hide_ids];
+            $hide_ids = array_merge([$id], self::getChildsId($id));
+            $hide_ids = ['id', 'not in', $hide_ids];
         }
 
         // 过滤显示指定角色及其子角色
         if ($filter !== null) {
             $show_ids = array_merge([$filter], self::getChildsId($filter));
 
-            if (isset($where['id'])) {
+            if (!empty($hide_ids)) {
                 $ids = array_diff($show_ids, $hide_ids);
-                $where['id'] = ['in', $ids];
+                $where[] = ['id', 'in', $ids];
             } else {
-                $where['id'] = ['in', $show_ids];
+                $where[] = ['id', 'in', $show_ids];
+            }
+        } else {
+            if (!empty($hide_ids)) {
+                $where[] = $hide_ids;
             }
         }
 
@@ -112,6 +116,7 @@ class Role extends Model
      * @param bool $url 是否为节点url，默认为节点id
      * @author 蔡伟明 <314013107@qq.com>
      * @return bool
+     * @throws \think\Exception
      */
     public static function checkAuth($id = 0, $url = false)
     {

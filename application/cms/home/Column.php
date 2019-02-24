@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\home;
@@ -26,6 +24,9 @@ class Column extends Common
      * @param null $id 栏目id
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function index($id = null)
     {
@@ -45,9 +46,9 @@ class Column extends Common
             $cid_all[] = (int)$id;
 
             $map = [
-                $model['table'].'.trash'  => 0,
-                $model['table'].'.status' => 1,
-                $model['table'].'.cid'    => ['in', $cid_all]
+                [$model['table'].'.trash', '=', 0],
+                [$model['table'].'.status', '=', 1],
+                [$model['table'].'.cid', 'in', $cid_all],
             ];
 
             $data_list = Db::view($model['table'], true)
@@ -61,9 +62,9 @@ class Column extends Common
             $cid_all[] = (int)$id;
 
             $map = [
-                'cms_document.trash'  => 0,
-                'cms_document.status' => 1,
-                'cms_document.cid'    => ['in', $cid_all]
+                ['cms_document.trash', '=', 0],
+                ['cms_document.status', '=', 1],
+                ['cms_document.cid', 'in', $cid_all],
             ];
 
             $data_list = Db::view('cms_document', true)
@@ -86,8 +87,9 @@ class Column extends Common
 
     /**
      * 获取栏目面包屑导航
-     * @param int $id
+     * @param $id
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
      */
     public function getBreadcrumb($id)
     {

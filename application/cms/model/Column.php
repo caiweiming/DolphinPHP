@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\cms\model;
@@ -21,7 +19,7 @@ use util\Tree;
 class Column extends ThinkModel
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = '__CMS_COLUMN__';
+    protected $name = 'cms_column';
 
     // 自动写入时间戳
     protected $autoWriteTimestamp = true;
@@ -71,11 +69,13 @@ class Column extends ThinkModel
         $result[0] = '顶级栏目';
 
         // 排除指定节点及其子节点
+        $where = [
+            ['status', '=', 1]
+        ];
         if ($id !== 0) {
-            $hide_ids    = array_merge([$id], self::getChildsId($id));
-            $where['id'] = ['notin', $hide_ids];
+            $hide_ids = array_merge([$id], self::getChildsId($id));
+            $where[]  = ['id', 'not in', $hide_ids];
         }
-        $where['status'] = 1;
 
         $data_list = Tree::config(['title' => 'name'])->toList(self::where($where)->order('pid,id')->column('id,pid,name'));
         foreach ($data_list as $item) {

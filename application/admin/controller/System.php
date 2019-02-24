@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -26,6 +24,8 @@ class System extends Admin
      * @param string $group 分组
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function index($group = 'base')
     {
@@ -94,10 +94,10 @@ class System extends Admin
                 $list_group[$name] = $module['title'];
             }
 
-            $tab_list   = [];
+            $tab_list = [];
             foreach ($list_group as $key => $value) {
                 $tab_list[$key]['title'] = $value;
-                $tab_list[$key]['url']  = url('index', ['group' => $key]);
+                $tab_list[$key]['url']   = url('index', ['group' => $key]);
             }
 
             if (isset(config('config_group')[$group])) {

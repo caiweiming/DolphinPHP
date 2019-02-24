@@ -104,7 +104,7 @@
             'get_level_data': '{:url("admin/ajax/getLevelData")}',
             'quick_edit_url': '{$quick_edit_url ? $quick_edit_url : url("quickEdit")}',
             'aside_edit_url': '{$aside_edit_url ? $aside_edit_url : url("admin/system/quickEdit")}',
-            'triggers': {$field_triggers|default=[]|json_encode}, // 触发器集合
+            'triggers': {:json_encode(isset($field_triggers) ? $field_triggers : [])}, // 触发器集合
             'field_hide': '{$field_hide|default=""}', // 需要隐藏的字段
             'field_values': '{$field_values|default=""}',
             'validate': '{$validate|default=""}', // 验证器
@@ -114,10 +114,10 @@
             '_filter': '{$Request.param._filter ? $Request.param._filter : (isset($_filter) ? $_filter : "")}',
             '_filter_content': '{$Request.param._filter_content == '' ? (isset($_filter_content) ? $_filter_content : "") : $Request.param._filter_content}',
             '_field_display': '{$Request.param._field_display ? $Request.param._field_display : (isset($_field_display) ? $_field_display : "")}',
-            '_field_clear': {$field_clear|default=[]|json_encode},
+            '_field_clear': {:json_encode(isset($field_clear) ? $field_clear : [])},
             'get_filter_list': '{:url("admin/ajax/getFilterList")}',
             'curr_url': '{:url("", $Request.route)}',
-            'curr_params': {$Request.param|json_encode},
+            'curr_params': {:json_encode($Request.param)},
             'layer': {:json_encode(config("zbuilder.pop"))}
         };
     </script>
@@ -474,7 +474,7 @@
     jQuery(function () {
         App.initHelpers(['appear', 'slimscroll', 'magnific-popup', 'table-tools']);
         {notempty name="_js_init"}
-        App.initHelpers({$_js_init});
+        App.initHelpers({$_js_init|raw});
         {/notempty}
     });
 </script>
@@ -486,6 +486,6 @@
 {:hook('page_plugin_js')}
 
 {// 额外HTML代码 }
-{$extra_html|default=''}
+{$extra_html|raw|default=''}
 </body>
 </html>

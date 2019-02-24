@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -15,8 +13,9 @@ use app\common\builder\ZBuilder;
 use app\admin\model\Attachment as AttachmentModel;
 use think\Image;
 use think\File;
-use think\Hook;
+use think\facade\Hook;
 use think\Db;
+use think\facade\Env;
 
 /**
  * 附件控制器
@@ -39,9 +38,9 @@ class Attachment extends Admin
             if (in_array(strtolower($value['ext']), ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
                 if ($value['driver'] == 'local') {
                     $thumb = $value['thumb'] != '' ? $value['thumb'] : $value['path'];
-                    $value['type'] = '<img class="image" title="点击查看大图" data-original="'. PUBLIC_PATH . $value['path'].'" src="'. PUBLIC_PATH . $thumb.'">';
+                    $value['type'] = '<div class="js-gallery"><img class="image" title="点击查看大图" data-original="'. PUBLIC_PATH . $value['path'].'" src="'. PUBLIC_PATH . $thumb.'"></div>';
                 } else {
-                    $value['type'] = '<img class="image" title="点击查看大图" data-original="'. $value['path'].'" src="'. $value['path'].'">';
+                    $value['type'] = '<div class="js-gallery"><img class="image" title="点击查看大图" data-original="'. $value['path'].'" src="'. $value['path'].'"></div>';
                 }
             } else {
                 if ($value['driver'] == 'local') {
@@ -66,7 +65,7 @@ class Attachment extends Admin
             ->setSearch(['name' => '名称']) // 设置搜索框
             ->addColumns([ // 批量添加数据列
                 ['id', 'ID'],
-                ['type', '类型', '', '', '', 'js-gallery'],
+                ['type', '类型'],
                 ['name', '名称'],
                 ['size', '大小', 'byte'],
                 ['driver', '上传驱动', parse_attr(Db::name('admin_config')->where('name', 'upload_driver')->value('options'))],
@@ -242,14 +241,14 @@ class Attachment extends Admin
 
         // 附件上传钩子，用于第三方文件上传扩展
         if (config('upload_driver') != 'local') {
-            $hook_result = Hook::listen('upload_attachment', $file, ['from' => $from, 'module' => $module], true);
+            $hook_result = Hook::listen('upload_attachment', ['file' => $file, 'from' => $from, 'module' => $module], true);
             if (false !== $hook_result) {
                 return $hook_result;
             }
         }
 
         // 移动到框架应用根目录/uploads/ 目录下
-        $info = $file->move(config('upload_path') . DS . $dir);
+        $info = $file->move(config('upload_path') . DIRECTORY_SEPARATOR . $dir);
         if($info){
             // 缩略图路径
             $thumb_path_name = '';
@@ -449,8 +448,8 @@ class Attachment extends Admin
         $file         = $this->request->post('file');
         $file_content = base64_decode($file);
         $file_name    = md5($file) . '.jpg';
-        $dir          = config('upload_path') . DS . 'images' . DS . date('Ymd', $this->request->time());
-        $file_path    = $dir . DS . $file_name;
+        $dir          = config('upload_path') . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . date('Ymd', $this->request->time());
+        $file_path    = $dir . DIRECTORY_SEPARATOR . $file_name;
 
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
@@ -495,7 +494,7 @@ class Attachment extends Admin
      * @author 蔡伟明 <314013107@qq.com>
      * @return \think\response\Json
      */
-    private function showFile($type = '', $config){
+    private function showFile($type, $config){
         /* 判断类型 */
         switch ($type) {
             /* 列出附件 */
@@ -586,7 +585,7 @@ class Attachment extends Admin
             $image = Image::open($file_path);
 
             $dir_name = date('Ymd');
-            $file_dir = config('upload_path') . DS . 'images/' . $dir_name . '/';
+            $file_dir = config('upload_path') . DIRECTORY_SEPARATOR . 'images/' . $dir_name . '/';
             if (!is_dir($file_dir)) {
                 mkdir($file_dir, 0766, true);
             }
@@ -676,7 +675,7 @@ class Attachment extends Admin
         $thumb_type = $thumb_type == '' ? config('upload_image_thumb_type') : $thumb_type;
         $image->thumb($thumb_max_width, $thumb_max_height, $thumb_type);
         // 保存缩略图
-        $thumb_path = config('upload_path') . DS . 'images/' . $dir . '/thumb/';
+        $thumb_path = config('upload_path') . DIRECTORY_SEPARATOR . 'images/' . $dir . '/thumb/';
         if (!is_dir($thumb_path)) {
             mkdir($thumb_path, 0766, true);
         }
@@ -697,7 +696,7 @@ class Attachment extends Admin
     private function create_water($file = '', $watermark_img = '', $watermark_pos = '', $watermark_alpha = '')
     {
         $path = model('admin/attachment')->getFilePath($watermark_img, 1);
-        $thumb_water_pic = realpath(ROOT_PATH . 'public/' . $path);
+        $thumb_water_pic = realpath(Env::get('root_path') . 'public/' . $path);
         if (is_file($thumb_water_pic)) {
             // 读取图片
             $image = Image::open($file);
@@ -768,7 +767,8 @@ class Attachment extends Admin
      * @param string $type 类型：delete/enable/disable
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {
@@ -781,7 +781,8 @@ class Attachment extends Admin
      * 删除附件
      * @param string $ids 附件id
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($ids = '')
     {

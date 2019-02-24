@@ -2,11 +2,9 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -14,10 +12,10 @@ namespace app\admin\controller;
 use app\common\builder\ZBuilder;
 use app\admin\model\Plugin as PluginModel;
 use app\admin\model\HookPlugin as HookPluginModel;
-use think\Cache;
+use think\facade\Cache;
 use util\Sql;
 use think\Db;
-use think\Hook;
+use think\facade\Hook;
 
 /**
  * 插件管理控制器
@@ -36,6 +34,7 @@ class Plugin extends Admin
     {
         // 配置分组信息
         $list_group = ['local' => '本地插件'];
+        $tab_list   = [];
         foreach ($list_group as $key => $value) {
             $tab_list[$key]['title'] = $value;
             $tab_list[$key]['url']   = url('index', ['group' => $key]);
@@ -154,6 +153,8 @@ class Plugin extends Admin
      * 卸载插件
      * @param string $name 插件标识
      * @author 蔡伟明 <314013107@qq.com>
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function uninstall($name = '')
     {
@@ -208,6 +209,7 @@ class Plugin extends Admin
      * @param string $name 插件名
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function manage($name = '')
     {
@@ -240,11 +242,10 @@ class Plugin extends Admin
 
         // 获取插件模型实例
         $PluginModel = get_plugin_model($name);
-
-        $order = $this->getOrder();
-        $map   = $this->getMap();
-        $data_list = $PluginModel->where($map)->order($order)->paginate();
-        $page      = $data_list->render();
+        $order       = $this->getOrder();
+        $map         = $this->getMap();
+        $data_list   = $PluginModel->where($map)->order($order)->paginate();
+        $page        = $data_list->render();
 
         // 使用ZBuilder快速创建数据表格
         $builder = ZBuilder::make('table')
@@ -298,6 +299,7 @@ class Plugin extends Admin
      * @param string $plugin_name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function add($plugin_name = '')
     {
@@ -354,6 +356,7 @@ class Plugin extends Admin
      * @param string $plugin_name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
+     * @throws \think\Exception
      */
     public function edit($id = '', $plugin_name = '')
     {
@@ -417,6 +420,12 @@ class Plugin extends Admin
      * 插件参数设置
      * @param string $name 插件名称
      * @author 蔡伟明 <314013107@qq.com>
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function config($name = '')
     {
@@ -458,7 +467,8 @@ class Plugin extends Admin
      * @param string $type 状态类型:enable/disable
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function setStatus($type = '', $record = [])
     {
@@ -488,7 +498,8 @@ class Plugin extends Admin
      * 禁用插件/禁用插件数据
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function disable($record = [])
     {
@@ -499,7 +510,8 @@ class Plugin extends Admin
      * 启用插件/启用插件数据
      * @param array $record 行为日志内容
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function enable($record = [])
     {
@@ -510,7 +522,8 @@ class Plugin extends Admin
      * 删除插件数据
      * @param array $record
      * @author 蔡伟明 <314013107@qq.com>
-     * @return void
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
      */
     public function delete($record = [])
     {
@@ -582,9 +595,8 @@ class Plugin extends Admin
      * @param string $button 按钮名称
      * @param array $data 字段信息
      * @author 蔡伟明 <314013107@qq.com>
-     * @return array
      */
-    private function parseButton($button = '', &$data)
+    private function parseButton($button, &$data)
     {
         foreach ($data[$button] as $key => &$value) {
             // 处理自定义按钮

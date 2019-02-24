@@ -2,17 +2,17 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
-// +----------------------------------------------------------------------
-// | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 
 namespace app\common\behavior;
 
 use app\admin\model\Config as ConfigModel;
 use app\admin\model\Module as ModuleModel;
+use think\facade\Env;
+use think\facade\Request;
 
 /**
  * 初始化配置信息行为
@@ -25,23 +25,24 @@ class Config
     /**
      * 执行行为 run方法是Behavior唯一的接口
      * @access public
-     * @param mixed $params  行为参数
      * @return void
      */
-    public function run(&$params)
+    public function run()
     {
         // 如果是安装操作，直接返回
         if(defined('BIND_MODULE') && BIND_MODULE === 'install') return;
 
+        // 获取请求信息
+        $path = Request::path();
+        $path = explode(config('pathinfo_depr'), $path);
         // 获取当前模块名称
         $module = '';
-        $dispatch = request()->dispatch();
-        if (isset($dispatch['module'])) {
-            $module = $dispatch['module'][0];
+        if (isset($path[0])) {
+            $module = $path[0];
         }
 
         // 获取入口目录
-        $base_file = request()->baseFile();
+        $base_file = Request::baseFile();
         $base_dir  = substr($base_file, 0, strripos($base_file, '/') + 1);
         define('PUBLIC_PATH', $base_dir);
 
@@ -68,27 +69,27 @@ class Config
             // 表单项扩展目录
             '__EXTEND_FORM__' => PUBLIC_PATH.'extend/form'
         ];
-        config('view_replace_str', $view_replace_str);
+        config('template.tpl_replace_string', $view_replace_str);
 
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
             define('ADMIN_FILE', substr($base_file, strripos($base_file, '/') + 1));
 
-            if ($dispatch['type'] == 'module' && $module == '') {
+            if ($module == '') {
                 header("Location: ".$base_file.'/admin', true, 302);exit();
             }
 
-            if ($module != '' && !in_array($module, config('module.default_controller_layer'))) {
+            if (!in_array($module, config('module.default_controller_layer'))) {
                 // 修改默认访问控制器层
                 config('url_controller_layer', 'admin');
                 // 修改视图模板路径
-                config('template.view_path', APP_PATH. $module. '/view/admin/');
+                config('template.view_path', Env::get('app_path'). $module. '/view/admin/');
             }
 
             // 插件静态资源目录
-            config('view_replace_str.__PLUGINS__', '/plugins');
+            config('template.tpl_replace_string.__PLUGINS__', '/plugins');
         } else {
-            if ($dispatch['type'] == 'module' && $module == 'admin') {
+            if ($module == 'admin') {
                 header("Location: ".$base_dir.ADMIN_FILE.'/admin', true, 302);exit();
             }
 
@@ -99,10 +100,10 @@ class Config
         }
 
         // 定义模块资源目录
-        config('view_replace_str.__MODULE_CSS__', PUBLIC_PATH. 'static/'. $module .'/css');
-        config('view_replace_str.__MODULE_JS__', PUBLIC_PATH. 'static/'. $module .'/js');
-        config('view_replace_str.__MODULE_IMG__', PUBLIC_PATH. 'static/'. $module .'/img');
-        config('view_replace_str.__MODULE_LIBS__', PUBLIC_PATH. 'static/'. $module .'/libs');
+        config('template.tpl_replace_string.__MODULE_CSS__', PUBLIC_PATH. 'static/'. $module .'/css');
+        config('template.tpl_replace_string.__MODULE_JS__', PUBLIC_PATH. 'static/'. $module .'/js');
+        config('template.tpl_replace_string.__MODULE_IMG__', PUBLIC_PATH. 'static/'. $module .'/img');
+        config('template.tpl_replace_string.__MODULE_LIBS__', PUBLIC_PATH. 'static/'. $module .'/libs');
         // 静态文件目录
         config('public_static_path', PUBLIC_PATH. 'static/');
 
@@ -123,6 +124,6 @@ class Config
         }
 
         // 设置配置信息
-        config($system_config);
+        config($system_config, 'app');
     }
 }
