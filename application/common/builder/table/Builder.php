@@ -1585,17 +1585,16 @@ class Builder extends ZBuilder
      * @param string $template 模板文件名
      * @param string $tag 标记
      * @param array $vars 模板输出变量
-     * @param array $replace 替换内容
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setExtraHtmlFile($template = '', $tag = '', $vars = [], $replace = [])
+    public function setExtraHtmlFile($template = '', $tag = '', $vars = [])
     {
         $template = $template == '' ? $this->_action : $template;
         $file = Env::get('app_path'). $this->_module.'/view/admin/'.$this->_controller.'/'.$template.'.html';
         if (file_exists($file)) {
             $content = file_get_contents($file);
-            $content = $this->view->display($content, $vars, $replace);
+            $content = $this->view->display($content, $vars);
         } else {
             $content = '模板文件不存在：'.$file;
         }
