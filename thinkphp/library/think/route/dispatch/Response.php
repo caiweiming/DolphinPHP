@@ -1,20 +1,23 @@
 <?php
 // +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2017 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: yunwuxin <448901948@qq.com>
+// | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think;
+namespace think\route\dispatch;
 
-// ThinkPHP 引导文件
-// 加载基础文件
-require __DIR__ . '/base.php';
+use think\route\Dispatch;
 
-// 执行应用
-App::initCommon();
-Console::init();
+class Response extends Dispatch
+{
+    public function exec()
+    {
+        return $this->dispatch;
+    }
+
+}

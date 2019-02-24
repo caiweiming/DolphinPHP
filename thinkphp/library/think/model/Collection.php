@@ -19,21 +19,22 @@ class Collection extends BaseCollection
     /**
      * 延迟预载入关联查询
      * @access public
-     * @param mixed $relation 关联
+     * @param  mixed $relation 关联
      * @return $this
      */
     public function load($relation)
     {
         $item = current($this->items);
         $item->eagerlyResultSet($this->items, $relation);
+
         return $this;
     }
 
     /**
      * 设置需要隐藏的输出属性
      * @access public
-     * @param array $hidden   属性列表
-     * @param bool  $override 是否覆盖
+     * @param  array $hidden   属性列表
+     * @param  bool  $override 是否覆盖
      * @return $this
      */
     public function hidden($hidden = [], $override = false)
@@ -42,13 +43,15 @@ class Collection extends BaseCollection
             /** @var Model $model */
             $model->hidden($hidden, $override);
         });
+
         return $this;
     }
 
     /**
      * 设置需要输出的属性
-     * @param array $visible
-     * @param bool  $override 是否覆盖
+     * @access public
+     * @param  array $visible
+     * @param  bool  $override 是否覆盖
      * @return $this
      */
     public function visible($visible = [], $override = false)
@@ -57,14 +60,15 @@ class Collection extends BaseCollection
             /** @var Model $model */
             $model->visible($visible, $override);
         });
+
         return $this;
     }
 
     /**
      * 设置需要追加的输出属性
      * @access public
-     * @param array $append   属性列表
-     * @param bool  $override 是否覆盖
+     * @param  array $append   属性列表
+     * @param  bool  $override 是否覆盖
      * @return $this
      */
     public function append($append = [], $override = false)
@@ -73,7 +77,24 @@ class Collection extends BaseCollection
             /** @var Model $model */
             $model && $model->append($append, $override);
         });
+
         return $this;
     }
 
+    /**
+     * 设置数据字段获取器
+     * @access public
+     * @param  string|array $name       字段名
+     * @param  callable     $callback   闭包获取器
+     * @return $this
+     */
+    public function withAttr($name, $callback = null)
+    {
+        $this->each(function ($model) use ($name, $callback) {
+            /** @var Model $model */
+            $model && $model->withAttribute($name, $callback);
+        });
+
+        return $this;
+    }
 }

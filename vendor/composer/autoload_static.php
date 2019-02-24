@@ -20,6 +20,10 @@ class ComposerStaticInitea24a8d88377c9cd0962665edfe67ce8
             'think\\captcha\\' => 14,
             'think\\' => 6,
         ),
+        'a' => 
+        array (
+            'app\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -37,8 +41,11 @@ class ComposerStaticInitea24a8d88377c9cd0962665edfe67ce8
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/thinkphp/library/think',
-            1 => __DIR__ . '/..' . '/topthink/think-image/src',
+            0 => __DIR__ . '/..' . '/topthink/think-image/src',
+        ),
+        'app\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/application',
         ),
     );
 
