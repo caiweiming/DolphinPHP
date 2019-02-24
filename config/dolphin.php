@@ -10,8 +10,8 @@
 return [
     // 产品信息
     'product_name'      => 'DolphinPHP',
-    'product_version'   => '1.3.3',
-    'build_version'     => '201901120957',
+    'product_version'   => '1.4.0',
+    'build_version'     => '201902242038',
     'product_website'   => 'http://www.dolphinphp.com',
     'product_update'    => 'http://www.dolphinphp.com/checkUpdate',
     'develop_team'      => 'DolphinPHP',
