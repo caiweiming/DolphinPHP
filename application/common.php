@@ -9,9 +9,15 @@
 
 use think\Db;
 use think\Container;
+use think\facade\Env;
 use app\user\model\User;
 
 // 应用公共文件
+
+// 加载自定义公共文件
+if (is_file(Env::get('app_path') . 'function.php')) {
+    include_once Env::get('app_path') . 'function.php';
+}
 
 if (!function_exists('is_signin')) {
     /**
