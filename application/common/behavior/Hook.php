@@ -15,7 +15,6 @@ use app\admin\model\Hook as HookModel;
 use app\admin\model\HookPlugin as HookPluginModel;
 use app\admin\model\Plugin as PluginModel;
 use think\facade\Cache;
-use think\facade\Config;
 
 /**
  * 注册钩子
@@ -46,7 +45,7 @@ class Hook
             // 钩子对应的插件
             $hook_plugins = HookPluginModel::where('status', 1)->order('hook,sort')->select();
             // 非开发模式，缓存数据
-            if (Config::get('develop_mode') == 0) {
+            if (config('develop_mode') == 0) {
                 Cache::set('hook_plugins', $hook_plugins);
                 Cache::set('hooks', $hooks);
                 Cache::set('plugins', $plugins);
