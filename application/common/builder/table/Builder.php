@@ -419,7 +419,7 @@ class Builder extends ZBuilder
                 $_field = $map;
             }
 
-            $_map[$_field] = isset($_filter_content[$_pos]) ? ['in', $_filter_content[$_pos]] : ['eq', ''];
+            $_map[] = isset($_filter_content[$_pos]) ? [$_field, 'in', $_filter_content[$_pos]] : [$_field, 'eq', ''];
         }
 
         return $_map;
