@@ -792,7 +792,15 @@ class Builder extends ZBuilder
                 foreach ($group as $key => $item) {
                     $type = array_shift($item);
                     if (strpos($type, ':')) {
-                        list($type, $this->_vars['_layout'][$item[0]]) = explode(':', $type);
+                        list($type, $layout) = explode(':', $type);
+
+                        $layout = explode('|', $layout);
+                        $this->_vars['_layout'][$item[0]] = [
+                            'xs' => $layout[0],
+                            'sm' => isset($layout[1]) ? ($layout[1] == '' ? $layout[0] : $layout[1]) : $layout[0],
+                            'md' => isset($layout[2]) ? ($layout[2] == '' ? $layout[0] : $layout[2]) : $layout[0],
+                            'lg' => isset($layout[3]) ? ($layout[3] == '' ? $layout[0] : $layout[3]) : $layout[0],
+                        ];
                     }
                     $group[$key] = call_user_func_array([$this, 'add'.ucfirst($type)], $item);
                 }

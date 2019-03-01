@@ -307,7 +307,12 @@ if (!function_exists('parse_config')) {
             if ($config_type == 'group') {
                 foreach ($item[1] as $option) {
                     foreach ($option as $group => $val) {
-                        $result[$val[1]] = isset($val[$type[$val[0]]]) ? $val[$type[$val[0]]] : '';
+                        if (strpos($val[0], ':')) {
+                            list($config_type, $layout) = explode(':', $val[0]);
+                        } else {
+                            $config_type = $val[0];
+                        }
+                        $result[$val[1]] = isset($val[$type[$config_type]]) ? $val[$type[$config_type]] : '';
                     }
                 }
             } else {
@@ -375,7 +380,15 @@ if (!function_exists('set_config_value')) {
             if ($config_type == 'group') {
                 foreach ($item[1] as &$option) {
                     foreach ($option as $group => &$val) {
-                        $val[$type[$val[0]]] = isset($values[$val[1]]) ? $values[$val[1]] : '';
+                        if (strpos($val[0], ':')) {
+                            list($config_type, $layout) = explode(':', $val[0]);
+                        } else {
+                            $config_type = $val[0];
+                        }
+                        if (!isset($val[3])) {
+                            $val[3] = '';
+                        }
+                        $val[$type[$config_type]] = isset($values[$val[1]]) ? $values[$val[1]] : '';
                     }
                 }
             } else {
