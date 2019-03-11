@@ -115,6 +115,18 @@ class System extends Admin
                     if ($value['options'] != '') {
                         $value['options'] = parse_attr($value['options']);
                     }
+                    switch ($value['type']) {
+                        // 日期时间
+                        case 'date':
+                            $value['value'] = $value['value'] != '' ? date('Y-m-d', $value['value']) : '';
+                            break;
+                        case 'time':
+                            $value['value'] = $value['value'] != '' ? date('H:i:s', $value['value']) : '';
+                            break;
+                        case 'datetime':
+                            $value['value'] = $value['value'] != '' ? date('Y-m-d H:i:s', $value['value']) : '';
+                            break;
+                    }
                 }
 
                 // 默认模块列表
