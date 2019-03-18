@@ -123,7 +123,7 @@
                                                     <td><i class="{$plugin.icon|default='fa fa-puzzle-piece'}"></i></td>
                                                     <td>{$plugin.version|default='无版本号'}</td>
                                                     <td><a href="{$plugin.author_url|default=''}" target="_blank">{$plugin.author|default=''}</a></td>
-                                                    <td>{$plugin.description|default='暂无简介'}</td>
+                                                    <td>{$plugin.description|raw|default='暂无简介'}</td>
                                                     <td>{$plugin.actions|raw}</td>
                                                 </tr>
                                                 {/volist}
