@@ -27,7 +27,7 @@ var Dolphin = function () {
                 if (undefined === form.get(0)) return false;
                 // 节点标签名为FORM表单
                 if ("FORM" === form.get(0).nodeName) {
-                    ajax_url = ajax_url || form.get(0).action;
+                    ajax_url = ajax_url || form.get(0).getAttribute('action');;
 
                     // 提交确认
                     if (self.hasClass('confirm')) {
