@@ -231,15 +231,15 @@
                                 <a {if($menu['id'] == $_location[1]["id"])}class="active"{/if} href="{$menu.url_value}" target="{$menu.url_target}"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
                             {else/}
                                 <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0);"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
-                            {/notempty}
-                            {notempty name="menu['child']"}
-                            <ul>
-                                {volist name="menu['child']" id="submenu"}
-                                <li>
-                                    <a {if(isset($_location[2]) && $submenu['id'] == $_location[2]["id"])}class="active"{/if} href="{$submenu.url_value}" target="{$submenu.url_target}"><i class="{$submenu.icon}"></i>{$submenu.title}</a>
-                                </li>
-                                {/volist}
-                            </ul>
+                                {notempty name="menu['child']"}
+                                <ul>
+                                    {volist name="menu['child']" id="submenu"}
+                                    <li>
+                                        <a {if(isset($_location[2]) && $submenu['id'] == $_location[2]["id"])}class="active"{/if} href="{$submenu.url_value}" target="{$submenu.url_target}"><i class="{$submenu.icon}"></i>{$submenu.title}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                {/notempty}
                             {/notempty}
                         </li>
                         {/volist}
