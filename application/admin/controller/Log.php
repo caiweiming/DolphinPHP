@@ -44,7 +44,9 @@ class Log extends Admin
                 ['id', '编号'],
                 ['title', '行为名称'],
                 ['username', '执行者'],
-                ['action_ip', '执行IP', 'callback', 'long2ip'],
+                ['action_ip', '执行IP', 'callback', function($value){
+                    return long2ip(intval($value));
+                }],
                 ['module_title', '所属模块'],
                 ['create_time', '执行时间', 'datetime', '', 'Y-m-d H:i:s'],
                 ['right_button', '操作', 'btn']
@@ -69,7 +71,7 @@ class Log extends Admin
         if ($id === null) $this->error('缺少参数');
         $info = LogModel::getAll(['admin_log.id' => $id]);
         $info = $info[0];
-        $info['action_ip'] = long2ip($info['action_ip']);
+        $info['action_ip'] = long2ip(intval($info['action_ip']));
 
         // 使用ZBuilder快速创建表单
         return ZBuilder::make('form')
