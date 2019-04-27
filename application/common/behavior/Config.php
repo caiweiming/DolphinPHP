@@ -32,14 +32,8 @@ class Config
         // 如果是安装操作，直接返回
         if(defined('BIND_MODULE') && BIND_MODULE === 'install') return;
 
-        // 获取请求信息
-        $path = Request::path();
-        $path = explode(config('pathinfo_depr'), $path);
         // 获取当前模块名称
-        $module = '';
-        if (isset($path[0])) {
-            $module = $path[0];
-        }
+        $module = Request::module();
 
         // 获取入口目录
         $base_file = Request::baseFile();
