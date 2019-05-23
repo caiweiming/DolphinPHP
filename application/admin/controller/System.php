@@ -110,6 +110,7 @@ class System extends Admin
                     ->order('sort asc,id asc')
                     ->field('group', true)
                     ->select();
+                $data_list = $data_list->toArray();
 
                 foreach ($data_list as &$value) {
                     // 解析options
