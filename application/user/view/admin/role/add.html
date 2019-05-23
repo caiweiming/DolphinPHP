@@ -102,7 +102,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="jstree" class="push">{$menus|raw|default=''}</div>
+                            {notempty name="menus"}
+                            <div class="block">
+                                <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs" id="menu-tab">
+                                    {volist name="menus" id="vo"}
+                                    <li class="{$curr_tab == $key ?= 'active'}">
+                                        <a href="#{$key}" data-tab="{$key}">{$vo.title}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                <div class="block-content tab-content">
+                                    {volist name="menus" id="vo"}
+                                    <div class="tab-pane {$curr_tab == $key ?= 'active'}" id="{$key}">
+                                        <div class="push js-tree" data-tab="{$key}">{$vo.menus|raw|default=''}</div>
+                                    </div>
+                                    {/volist}
+                                </div>
+                            </div>
+                            {else/}
+                            <p class="text-center text-muted">暂无可分配节点</p>
+                            {/notempty}
                         </div>
                         <div class="push-20">
                             <button class="btn btn-minw btn-primary" type="submit">
@@ -123,48 +142,72 @@
 <script src="__LIBS__/jstree/jstree.min.js"></script>
 <script>
     $(document).ready(function(){
-        $('#jstree').jstree({
-            plugins: ["checkbox", "search"],
-            "checkbox" : {
-                "keep_selected_style" : false,
-                "three_state" : false,
-                "cascade" : 'down+up'
-            },
-            "search" : {
-                'show_only_matches' : true,
-                'show_only_matches_children' : true
-            }
+        const $tree_list = {};
+        const $key_auth  = {};
+        let curr_tab     = '{$curr_tab}';
+
+        // 切换节点tab
+        $('#menu-tab > li > a').click(function () {
+            curr_tab = $(this).data('tab');
+            $('#search-auth').val($key_auth[curr_tab]);
+        });
+        // 初始化节点
+        $('.js-tree').each(function () {
+            const $tree = $(this);
+            const tab   = $(this).data('tab');
+
+            $key_auth[tab] = '';
+
+            $tree.jstree({
+                plugins: ["checkbox", "search"],
+                "checkbox" : {
+                    "keep_selected_style" : false,
+                    "three_state" : false,
+                    "cascade" : 'down+up'
+                },
+                "search" : {
+                    'show_only_matches' : true,
+                    'show_only_matches_children' : true
+                }
+            });
+            $tree_list[tab] = $tree;
         });
 
-        var to = false;
-        $('#search-auth').keyup(function () {
-            if(to) { clearTimeout(to); }
-            to = setTimeout(function () {
-                var v = $('#search-auth').val();
-                $('#jstree').jstree(true).search(v);
-            }, 250);
-        });
         // 全选
         $('#check-all').click(function () {
-            $('#jstree').jstree(true).check_all();
+            $tree_list[curr_tab].jstree(true).check_all();
         });
         // 取消全选
         $('#uncheck-all').click(function () {
-            $('#jstree').jstree(true).uncheck_all();
+            $tree_list[curr_tab].jstree(true).uncheck_all();
         });
         // 展开所有
         $('#expand-all').click(function () {
-            $('#jstree').jstree(true).open_all();
+            $tree_list[curr_tab].jstree(true).open_all();
         });
         // 收起所有
         $('#collapse-all').click(function () {
-            $('#jstree').jstree(true).close_all();
+            $tree_list[curr_tab].jstree(true).close_all();
+        });
+
+        var to = false;
+        $('#search-auth').keyup(function (event) {
+            if(to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#search-auth').val();
+                $key_auth[curr_tab] = v;
+                $tree_list[curr_tab].jstree(true).search(v);
+            }, 250);
         });
 
         // 提交表单
         $('#form').submit(function () {
             var form_data = $(this).serialize();
-            var auth_node = $('#jstree').jstree(true).get_checked();
+            var auth_node = [];
+            $.each($tree_list, function () {
+                auth_node.push.apply(auth_node, $(this).jstree(true).get_checked());
+            });
+
             if (auth_node.length) {
                 form_data += '&menu_auth='+auth_node.join(',');
             }

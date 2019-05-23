@@ -123,7 +123,7 @@ class Role extends Admin
         // 菜单列表
         $menus = cache('access_menus');
         if (!$menus) {
-            $modules = Db::name('admin_module')->where('status', 1)->column('name');
+            $modules = Db::name('admin_module')->where('status', 1)->column('name,title');
             $map     = [];
             // 非超级管理员角色，只能分配当前角色所拥有的权限
             if (session('user_auth.role') != 1) {
@@ -131,12 +131,32 @@ class Role extends Admin
                 $menu_auth = json_decode($menu_auth, true);
                 $map[]     = ['id', 'in', $menu_auth];
             }
-            $menus = MenuModel::where('module', 'in', $modules)
+
+            // 当前用户能分配的所有菜单
+            $menus = MenuModel::where('module', 'in', array_keys($modules))
                 ->where($map)
-                ->order('sort,id')
-                ->column('id,pid,sort,url_value,title,icon');
-            $menus = Tree::toLayer($menus);
-            $menus = $this->buildJsTree($menus);
+                ->order('module,sort,id')
+                ->column('id,pid,sort,url_value,title,icon,module');
+
+            // 按模块分组菜单
+            $moduleMenus = [];
+            foreach ($menus as $key => $menu) {
+                if (!isset($moduleMenus[$menu['module']])) {
+                    $moduleMenus[$menu['module']] = [
+                        'title' => isset($modules[$menu['module']]) ? $modules[$menu['module']] : '未知',
+                        'menus' => [$menu]
+                    ];
+                } else {
+                    $moduleMenus[$menu['module']]['menus'][] = $menu;
+                }
+            }
+
+            // 层级化每个模块的菜单
+            foreach ($moduleMenus as $key => $module) {
+                $menu = Tree::toLayer($module['menus']);
+                $moduleMenus[$key]['menus'] = $this->buildJsTree($menu);
+            }
+            $menus = $moduleMenus;
 
             // 非开发模式，缓存菜单
             if (config('develop_mode') == 0) {
@@ -154,6 +174,7 @@ class Role extends Admin
         $this->assign('role_list', $role_list);
         $this->assign('module_list', MenuModel::where('pid', 0)->column('id,title'));
         $this->assign('menus', $menus);
+        $this->assign('curr_tab', current(array_keys($menus)));
         return $this->fetch();
     }
 
@@ -232,7 +253,7 @@ class Role extends Admin
             $role_list = RoleModel::getTree($id, '顶级角色');
         }
 
-        $modules = Db::name('admin_module')->where('status', 1)->column('name');
+        $modules = Db::name('admin_module')->where('status', 1)->column('name,title');
         $map     = [];
         // 非超级管理员角色，只能分配当前角色所拥有的权限
         if (session('user_auth.role') != 1) {
@@ -240,17 +261,37 @@ class Role extends Admin
             $menu_auth = json_decode($menu_auth, true);
             $map[]     = ['id', 'in', $menu_auth];
         }
-        $menus = MenuModel::where('module', 'in', $modules)
+
+        // 当前用户能分配的所有菜单
+        $menus = MenuModel::where('module', 'in', array_keys($modules))
             ->where($map)
-            ->order('sort,id')
-            ->column('id,pid,sort,url_value,title,icon');
-        $menus = Tree::toLayer($menus);
-        $menus = $this->buildJsTree($menus, $info);
+            ->order('module,sort,id')
+            ->column('id,pid,sort,url_value,title,icon,module');
+
+        // 按模块分组菜单
+        $moduleMenus = [];
+        foreach ($menus as $key => $menu) {
+            if (!isset($moduleMenus[$menu['module']])) {
+                $moduleMenus[$menu['module']] = [
+                    'title' => isset($modules[$menu['module']]) ? $modules[$menu['module']] : '未知',
+                    'menus' => [$menu]
+                ];
+            } else {
+                $moduleMenus[$menu['module']]['menus'][] = $menu;
+            }
+        }
+
+        // 层级化每个模块的菜单
+        foreach ($moduleMenus as $key => $module) {
+            $menu = Tree::toLayer($module['menus']);
+            $moduleMenus[$key]['menus'] = $this->buildJsTree($menu, $info);
+        }
 
         $this->assign('page_title', '编辑');
         $this->assign('role_list', $role_list);
         $this->assign('module_list', MenuModel::where('pid', 0)->column('id,title'));
-        $this->assign('menus', $menus);
+        $this->assign('menus', $moduleMenus);
+        $this->assign('curr_tab', current(array_keys($moduleMenus)));
         $this->assign('info', $info);
         return $this->fetch('edit');
     }
