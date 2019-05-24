@@ -1740,14 +1740,15 @@ class Builder extends ZBuilder
                             // 是否能匹配到条件
                             $_button_match = true;
                             foreach ($replace_right_button['maps'] as $condition) {
-                                if (is_callable($condition[0])) {
+                                if (is_string($condition[0])) {
+                                    if (!isset($row[$condition[0]])) {
+                                        $_button_match = false; continue;
+                                    }
+                                    $_button_match = $this->parseCondition($row, $condition) ? $_button_match : false;
+                                } elseif (is_callable($condition[0])) {
                                     $_button_match = call_user_func($condition[0], $row) ? $_button_match : false;
                                     continue;
                                 }
-                                if (!isset($row[$condition[0]])) {
-                                    $_button_match = false; continue;
-                                }
-                                $_button_match = $this->parseCondition($row, $condition) ? $_button_match : false;
                             }
 
                             if ($_button_match) {
