@@ -1,10 +1,10 @@
 {extend name="$_admin_base_layout" /}
 
 {block name="content"}
-    {notempty name="page_tips"}
+    {notempty name="page_tips_top"}
     <div class="alert alert-{$tips_type} alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <p>{$page_tips|raw}</p>
+        <p>{$page_tips_top|raw}</p>
     </div>
     {/notempty}
     <div class="row">
@@ -555,6 +555,12 @@
             {$extra_html_block_bottom|raw|default=''}
         </div>
     </div>
+    {notempty name="page_tips_bottom"}
+    <div class="alert alert-{$tips_type} alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p>{$page_tips_bottom|raw}</p>
+    </div>
+    {/notempty}
 {/block}
 
 {block name="style"}

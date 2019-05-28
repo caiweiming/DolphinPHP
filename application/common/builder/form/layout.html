@@ -1,10 +1,10 @@
 {extend name="$_admin_base_layout" /}
 
 {block name="content"}
-    {notempty name="page_tips"}
+    {notempty name="page_tips_top"}
     <div class="alert alert-{$tips_type} alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <p>{$page_tips|raw}</p>
+        <p>{$page_tips_top|raw}</p>
     </div>
     {/notempty}
     {$extra_html_content_top|raw|default=''}
@@ -292,6 +292,12 @@
             </div>
         </div>
     </div>
+    {notempty name="page_tips_bottom"}
+    <div class="alert alert-{$tips_type} alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p>{$page_tips_bottom|raw}</p>
+    </div>
+    {/notempty}
     {// 图标 }
     {notempty name="_icon"}
     <div id="icon_tab" style="display:none">

@@ -221,14 +221,15 @@ class Builder extends ZBuilder
      * 设置页面提示
      * @param string $tips 提示信息
      * @param string $type 提示类型：success/info/warning/danger，默认info
+     * @param string $pos 提示位置：top,button
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function setPageTips($tips = '', $type = 'info')
+    public function setPageTips($tips = '', $type = 'info', $pos = 'top')
     {
         if ($tips != '') {
-            $this->_vars['page_tips'] = $tips;
-            $this->_vars['tips_type'] = $type;
+            $this->_vars['page_tips_'.$pos] = $tips;
+            $this->_vars['tips_type'] = $type != '' ? trim($type) : 'info';
         }
         return $this;
     }
