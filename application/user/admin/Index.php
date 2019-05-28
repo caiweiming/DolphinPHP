@@ -346,7 +346,12 @@ class Index extends Admin
 
                     // 调用后置方法
                     if (isset($curr_access_nodes['model_name']) && $curr_access_nodes['model_name'] != '') {
-                        $class = "app\\{$module}\\model\\".$curr_access_nodes['model_name'];
+                        if (strpos($curr_access_nodes['model_name'], '/')) {
+                            list($module, $model_name) = explode('/', $curr_access_nodes['model_name']);
+                        } else {
+                            $model_name = $curr_access_nodes['model_name'];
+                        }
+                        $class = "app\\{$module}\\model\\".$model_name;
                         $model = new $class;
                         try{
                             $model->afterAccessUpdate($post);
@@ -372,7 +377,12 @@ class Index extends Admin
             } else {
                 $nodes = [];
                 if (isset($curr_access_nodes['model_name']) && $curr_access_nodes['model_name'] != '') {
-                    $class = "app\\{$module}\\model\\".$curr_access_nodes['model_name'];
+                    if (strpos($curr_access_nodes['model_name'], '/')) {
+                        list($module, $model_name) = explode('/', $curr_access_nodes['model_name']);
+                    } else {
+                        $model_name = $curr_access_nodes['model_name'];
+                    }
+                    $class = "app\\{$module}\\model\\".$model_name;
                     $model = new $class;
 
                     try{
