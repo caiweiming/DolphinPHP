@@ -458,6 +458,7 @@ INSERT INTO `dp_admin_menu` VALUES ('232', '225', 'admin', '图标列表', '', '
 INSERT INTO `dp_admin_menu` VALUES ('233', '225', 'admin', '更新图标', '', 'module_admin', 'admin/icon/reload', '_self', '0', '1520931908', '1520931908', '100', '0', '1', '');
 INSERT INTO `dp_admin_menu` VALUES ('234', '20', 'user', '快速编辑', '', 'module_admin', 'user/index/quickedit', '_self', '0', '1526028258', '1526028258', '100', '0', '1', '');
 INSERT INTO `dp_admin_menu` VALUES ('235', '67', 'user', '快速编辑', '', 'module_admin', 'user/role/quickedit', '_self', '0', '1526028282', '1526028282', '100', '0', '1', '');
+INSERT INTO `dp_admin_menu` VALUES ('236', '6', 'admin', '快速编辑', '', 'module_admin', 'admin/system/quickedit', '_self', '0', '1559054310', '1559054310', '100', '0', '1', '');
 
 -- ----------------------------
 -- Table structure for dp_admin_message
