@@ -40,9 +40,9 @@ class Attachment extends Model
             $paths = [];
             foreach ($data_list as $key => $value) {
                 if ($value['driver'] == 'local') {
-                    $paths[$key] = ($type == 0 ? PUBLIC_PATH : '').$value['path'];
+                    $paths[$value['id']] = ($type == 0 ? PUBLIC_PATH : '').$value['path'];
                 } else {
-                    $paths[$key] = $value['path'];
+                    $paths[$value['id']] = $value['path'];
                 }
             }
             return $paths;
