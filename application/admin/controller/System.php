@@ -117,6 +117,10 @@ class System extends Admin
                     if ($value['options'] != '') {
                         $value['options'] = parse_attr($value['options']);
                     }
+                    // 默认模块列表
+                    if ($value['name'] == 'home_default_module') {
+                        $value['options'] = array_merge(['index' => '默认'], ModuleModel::getModule());
+                    }
                     switch ($value['type']) {
                         // 日期时间
                         case 'date':
@@ -132,12 +136,6 @@ class System extends Admin
                             $value['token'] = $this->createLinkagesToken($value['table'], $value['option'], $value['key']);
                             break;
                     }
-                }
-
-                // 默认模块列表
-                if (isset($data_list['home_default_module'])) {
-                    $list_module['index'] = '默认';
-                    $data_list['home_default_module']['options'] = array_merge($list_module, ModuleModel::getModule());
                 }
 
                 // 使用ZBuilder快速创建表单
