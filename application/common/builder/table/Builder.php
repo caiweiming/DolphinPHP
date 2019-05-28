@@ -1476,17 +1476,15 @@ class Builder extends ZBuilder
      */
     private function getData($index = '', $field = '')
     {
-        if ($this->data instanceof \think\paginator) {
-            if (is_object(current($this->data->getIterator()))) {
+        if (is_object($this->data) && is_object(current($this->data->getIterator()))) {
+            try {
                 $result = $this->data[$index]->getData($field);
-            } else {
-                $result = $this->data[$index][$field];
+            } catch (\Exception $e) {
+                $result = isset($this->data[$index][$field]) ? $this->data[$index][$field] : '';
             }
             return $result;
-        } elseif ($this->data instanceof \think\model\Collection) {
-            return $this->data[$index]->getData($field);
         } else {
-            return $this->data[$index][$field];
+            return isset($this->data[$index][$field]) ? $this->data[$index][$field] : '';
         }
     }
 
