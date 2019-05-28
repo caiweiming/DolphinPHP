@@ -1745,7 +1745,19 @@ class Builder extends ZBuilder
                                     $_button_match = $this->parseCondition($row, $condition) ? $_button_match : false;
                                 } elseif (is_callable($condition[0])) {
                                     $_button_match = call_user_func($condition[0], $row) ? $_button_match : false;
-                                    continue;
+                                }
+                            }
+
+                            // 替换按钮内容支持数据变量
+                            if ($replace_right_button['content'] != '') {
+                                if (preg_match_all('/__(.*?)__/', $replace_right_button['content'], $matches)) {
+                                    $replace_to = [];
+                                    $pattern    = [];
+                                    foreach ($matches[1] as $match) {
+                                        $pattern[]    = '/__'. $match .'__/i';
+                                        $replace_to[] = $row[$match];
+                                    }
+                                    $replace_right_button['content'] = preg_replace($pattern, $replace_to, $replace_right_button['content']);
                                 }
                             }
 
