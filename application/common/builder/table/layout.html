@@ -79,7 +79,7 @@
                                 <div class="col-md-{$_search_area_layout[$vo.1]|default='3'} col-xs-12 push">
                                     <div class="input-group">
                                         <span class="input-group-addon">{$vo.2|default=''}</span>
-                                        <input class="js-daterangepicker form-control" type="text" id="search_{$vo.1|default=''}" name="{$vo.1|default=''}" value="{$vo.4|default=''}" placeholder="{$vo.2|default=''}" {$vo.5|default=""}>
+                                        <input class="js-daterangepicker form-control" type="text" id="search_{$vo.1|default=''}" name="{$vo.1|default=''}" value="{$vo.4|default=''}" placeholder="{$vo.2|default=''}" {$vo.5|raw|default=""}>
                                     </div>
                                 </div>
                                 {/case}

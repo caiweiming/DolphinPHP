@@ -1175,7 +1175,7 @@ class Builder extends ZBuilder
                         $params = [];
                         if (!empty($item[5])) {
                             foreach ($item[5] as $key => $param) {
-                                $params[] = 'data-'.strtolower($key).'=\''.$param.'\'';
+                                $params[] = 'data-'.strtolower($key).'="'.$param.'"';
                             }
                         }
                         $item[5] = implode(' ', $params);
