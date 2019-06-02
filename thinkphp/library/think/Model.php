@@ -438,6 +438,16 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     }
 
     /**
+     * 判断模型是否为空
+     * @access public
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->data);
+    }
+
+    /**
      * 保存当前数据对象
      * @access public
      * @param  array  $data     数据
@@ -561,7 +571,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $this->autoRelationUpdate();
             }
 
-            return false;
+            return true;
         } elseif ($this->autoWriteTimestamp && $this->updateTime && !isset($data[$this->updateTime])) {
             // 自动写入更新时间
             $data[$this->updateTime] = $this->autoWriteTimestamp($this->updateTime);
