@@ -632,7 +632,11 @@
 
             {switch name="builder_height"}
             {case value="fixed"}
-            $('#builder-table-wrapper').css('max-height', ($(window).height() - 380)+'px');
+                {empty name="_pop"}
+                $('#builder-table-wrapper').css('max-height', ($(window).height() - 340)+'px');
+                {else/}
+                $('#builder-table-wrapper').css('max-height', ($(window).height() - 160)+'px');
+                {/empty}
             {/case}
             {case value="auto"}{/case}
             {default/}
