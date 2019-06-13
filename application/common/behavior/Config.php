@@ -35,8 +35,13 @@ class Config
 
         // 路由检测
         $dispatch = App::routeCheck()->init()->getDispatch();
-        // 获取当前模块名称
-        $module = isset($dispatch[0]) ? $dispatch[0] : '';
+        if (is_array($dispatch)) {
+            // 获取当前模块名称
+            $module = isset($dispatch[0]) ? $dispatch[0] : '';
+        } else {
+            // 闭包路由，直接返回
+            return;
+        }
 
         // 获取入口目录
         $base_file = Request::baseFile();
