@@ -380,6 +380,16 @@ jQuery(document).ready(function() {
         var $title = $(this).attr('title') || $(this).data('original-title');
         var $layer = $(this).data('layer');
 
+        // 把当前页面的过虑参数带到弹出POP中
+        var locationUrlSearch = location.search.substring(1);
+        if (locationUrlSearch) {
+            if ($url.indexOf('?') !== -1) {
+                $url += '&' + locationUrlSearch;
+            } else {
+                $url += '?' + locationUrlSearch;
+            }
+        }
+
         // 是否需要获取表格数据
         if ($(this).hasClass('js-get')) {
             var target_form = $(this).attr("target-form");
