@@ -135,6 +135,9 @@ class System extends Admin
                         case 'linkages':
                             $value['token'] = $this->createLinkagesToken($value['table'], $value['option'], $value['key']);
                             break;
+                        case 'colorpicker':
+                            $value['mode'] = 'rgba';
+                            break;
                     }
                 }
 
