@@ -374,21 +374,54 @@ class Role extends Admin
      */
     public function setStatus($type = '', $record = [])
     {
-        $ids     = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        $role_id = is_array($ids) ? 0 : $ids;
-        // 非超级管理员检查可管理角色
-        if (session('user_auth.role') != 1) {
-            $role_ids  = (array)$ids;
-            $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $role_list = array_intersect($role_list, $role_ids);
-            if (!$role_list) {
-                $this->error('权限不足，没有可操作的角色');
-            } else {
-                $this->request->post(['ids'=> $role_list]);
-            }
+        $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
+        $ids = (array)$ids;
+
+        // 当前角色所能操作的子角色
+        $role_list = RoleModel::getChildsId(session('user_auth.role'));
+        if (session('user_auth.role') != 1 && !$role_list) {
+            $this->error('权限不足，没有可操作的角色');
         }
-        $ids = RoleModel::where('id', 'in', $ids)->column('name');
-        return parent::setStatus($type, ['role_'.$type, 'admin_role', $role_id, UID, implode('、', $ids)]);
+
+        foreach ($ids as $id) {
+            if ($id == 1) {
+                // 跳过默认角色
+                continue;
+            }
+
+            // 非超级管理员检查可管理角色
+            if (session('user_auth.role') != 1) {
+                if (!in_array($id, $role_list)) {
+                    $this->error('权限不足，禁止操作角色ID：'.$id);
+                }
+            }
+
+            switch ($type) {
+                case 'enable':
+                    if (false === RoleModel::where('id', $id)->setField('status', 1)) {
+                        $this->error('启用失败，角色ID：'.$id);
+                    }
+                    break;
+                case 'disable':
+                    if (false === RoleModel::where('id', $id)->setField('status', 0)) {
+                        $this->error('禁用失败，角色ID：'.$id);
+                    }
+                    break;
+                case 'delete':
+                    $all_id = array_merge([$id], RoleModel::getChildsId($id));
+
+                    if (false === RoleModel::where('id', 'in', $all_id)->delete()) {
+                        $this->error('删除失败，角色ID：'.$id);
+                    }
+                    break;
+                default:
+                    $this->error('非法操作');
+            }
+
+            action_log('role_'.$type, 'admin_role', $id, UID);
+        }
+
+        $this->success('操作成功');
     }
 
     /**
