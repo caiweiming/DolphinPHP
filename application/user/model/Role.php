@@ -56,7 +56,6 @@ class Role extends Model
         $hide_ids = [];
         if ($id !== null) {
             $hide_ids = array_merge([$id], self::getChildsId($id));
-            $hide_ids = ['id', 'not in', $hide_ids];
         }
 
         // 过滤显示指定角色及其子角色
@@ -71,7 +70,7 @@ class Role extends Model
             }
         } else {
             if (!empty($hide_ids)) {
-                $where[] = $hide_ids;
+                $where[] = ['id', 'not in', $hide_ids];
             }
         }
 
