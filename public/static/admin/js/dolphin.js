@@ -450,10 +450,18 @@ var Dolphin = function () {
                     closeOnConfirm: true,
                     html: false
                 }, function () {
-                    location.href = url;
+                    if (self.hasClass('js-blank')) {
+                        window.open(url);
+                    }  else {
+                        location.href = url;
+                    }
                 });
             } else {
-                location.href = url;
+                if (self.hasClass('js-blank')) {
+                    window.open(url);
+                }  else {
+                    location.href = url;
+                }
             }
 
             return false;
