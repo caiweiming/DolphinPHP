@@ -189,7 +189,6 @@ class Document extends Admin
         // 独立模型只取该模型的字段，不包含系统字段
         $where = [];
         if ($model != '') {
-            $info['model']  = $model;
             $where[] = ['model', '=', $model];
         } else {
             $where[] = ['model', 'in', [0, $info['model']]];
@@ -220,7 +219,7 @@ class Document extends Admin
         }
 
         // 获取相同内容模型的栏目
-        $columns = Db::name('cms_column')->where(['model' => $where['model']])->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
+        $columns = Db::name('cms_column')->where(['model' => $model])->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
         $columns = Tree::config(['title' => 'name'])->toList($columns, current($columns)['pid']);
         $result  = [];
         foreach ($columns as $column) {
