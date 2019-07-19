@@ -120,7 +120,7 @@ class Document extends Admin
                         $value['level'] = $value['level'] == 0 ? 12 : $value['level'];
                         break;
                     case 'colorpicker':
-                        $value['mode']  = '';
+                        $value['mode']  = 'rgba';
                         break;
                 }
             }
@@ -194,6 +194,9 @@ class Document extends Admin
             $where[] = ['model', 'in', [0, $info['model']]];
         }
 
+        // 用于查询内容模型栏目
+        $map = $where;
+
         // 获取文档模型字段
         $where[] = ['status', '=', 1];
         $where[] = ['show', '=', 1];
@@ -215,11 +218,17 @@ class Document extends Admin
                 case 'datetime':
                     $info[$value['name']] = empty($info[$value['name']]) ? '' : format_time($info[$value['name']]);
                     break;
+                case 'bmap':
+                    $value['level'] = $value['level'] == 0 ? 12 : $value['level'];
+                    break;
+                case 'colorpicker':
+                    $value['mode']  = 'rgba';
+                    break;
             }
         }
 
         // 获取相同内容模型的栏目
-        $columns = Db::name('cms_column')->where(['model' => $model])->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
+        $columns = Db::name('cms_column')->where($map)->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
         $columns = Tree::config(['title' => 'name'])->toList($columns, current($columns)['pid']);
         $result  = [];
         foreach ($columns as $column) {
