@@ -58,7 +58,8 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -73,7 +74,8 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -129,7 +131,8 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -144,7 +147,8 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -194,7 +198,8 @@ var Dolphin = function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -209,7 +214,8 @@ var Dolphin = function () {
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                            parent.location.reload();return false;
+                                            res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                            return false;
                                         }
                                         // 关闭弹出框
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -247,7 +253,8 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                parent.location.reload();return false;
+                                res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                return false;
                             }
                             // 关闭弹出框
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -262,7 +269,8 @@ var Dolphin = function () {
                         setTimeout(function () {
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                parent.location.reload();return false;
+                                res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                return false;
                             }
                             // 关闭弹出框
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -322,7 +330,8 @@ var Dolphin = function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                                 // 刷新父窗口
                                 if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                    parent.location.reload();return false;
+                                    res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                    return false;
                                 }
                                 // 关闭弹出框
                                 if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -336,7 +345,8 @@ var Dolphin = function () {
                             setTimeout(function () {
                                 // 刷新父窗口
                                 if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                    parent.location.reload();return false;
+                                    res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                    return false;
                                 }
                                 // 关闭弹出框
                                 if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -369,7 +379,8 @@ var Dolphin = function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                parent.location.reload();return false;
+                                res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                return false;
                             }
                             // 关闭弹出框
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
@@ -383,7 +394,8 @@ var Dolphin = function () {
                         setTimeout(function () {
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
-                                parent.location.reload();return false;
+                                res.url === '' || res.url === location.href ? parent.location.reload() : parent.location.href = res.url;
+                                return false;
                             }
                             // 关闭弹出框
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
