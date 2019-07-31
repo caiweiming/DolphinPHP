@@ -143,60 +143,14 @@ class Attachment extends Admin
             } else {
                 $file_path = $file_exists['path'];
             }
-            switch ($from) {
-                case 'wangeditor':
-                    return $file_path;
-                    break;
-                case 'ueditor':
-                    return json([
-                        "state" => "SUCCESS",          // 上传状态，上传成功时必须返回"SUCCESS"
-                        "url"   => $file_path, // 返回的地址
-                        "title" => $file_exists['name'], // 附件名
-                    ]);
-                    break;
-                case 'editormd':
-                    return json([
-                        "success" => 1,
-                        "message" => '上传成功',
-                        "url"     => $file_path,
-                    ]);
-                    break;
-                case 'ckeditor':
-                    return ck_js($callback, $file_path);
-                    break;
-                default:
-                    return json([
-                        'code'   => 1,
-                        'info'   => '上传成功',
-                        'class'  => 'success',
-                        'id'     => $file_exists['id'],
-                        'path'   => $file_path
-                    ]);
-            }
+
+            // 附件已存在
+            return $this->uploadSuccess($from, $file_path, $file_exists['name'], $file_exists['id'], $callback);
         }
 
         // 判断附件大小是否超过限制
         if ($size_limit > 0 && ($file->getInfo('size') > $size_limit)) {
-            switch ($from) {
-                case 'wangeditor':
-                    return "error|附件过大";
-                    break;
-                case 'ueditor':
-                    return json(['state' => '附件过大']);
-                    break;
-                case 'editormd':
-                    return json(["success" => 0, "message" => '附件过大']);
-                    break;
-                case 'ckeditor':
-                    return ck_js($callback, '', '附件过大');
-                    break;
-                default:
-                    return json([
-                        'code'   => 0,
-                        'class'  => 'danger',
-                        'info'   => '附件过大'
-                    ]);
-            }
+            return $this->uploadError($from, '附件过大', $callback);
         }
 
         // 判断附件格式是否符合
@@ -217,26 +171,8 @@ class Attachment extends Admin
         }
 
         if ($error_msg != '') {
-            switch ($from) {
-                case 'wangeditor':
-                    return "error|{$error_msg}";
-                    break;
-                case 'ueditor':
-                    return json(['state' => $error_msg]);
-                    break;
-                case 'editormd':
-                    return json(["success" => 0, "message" => $error_msg]);
-                    break;
-                case 'ckeditor':
-                    return ck_js($callback, '', $error_msg);
-                    break;
-                default:
-                    return json([
-                        'code'   => 0,
-                        'class'  => 'danger',
-                        'info'   => $error_msg
-                    ]);
-            }
+            // 上传错误
+            return $this->uploadError($from, $error_msg, $callback);
         }
 
         // 附件上传钩子，用于第三方文件上传扩展
@@ -304,71 +240,12 @@ class Attachment extends Admin
             // 写入数据库
             if ($file_add = AttachmentModel::create($file_info)) {
                 $file_path = PUBLIC_PATH. $file_info['path'];
-                switch ($from) {
-                    case 'wangeditor':
-                        return $file_path;
-                        break;
-                    case 'ueditor':
-                        return json([
-                            "state" => "SUCCESS",          // 上传状态，上传成功时必须返回"SUCCESS"
-                            "url"   => $file_path, // 返回的地址
-                            "title" => $file_info['name'], // 附件名
-                        ]);
-                        break;
-                    case 'editormd':
-                        return json([
-                            "success" => 1,
-                            "message" => '上传成功',
-                            "url"     => $file_path,
-                        ]);
-                        break;
-                    case 'ckeditor':
-                        return ck_js($callback, $file_path);
-                        break;
-                    default:
-                        return json([
-                            'code'   => 1,
-                            'info'   => '上传成功',
-                            'class'  => 'success',
-                            'id'     => $file_add['id'],
-                            'path'   => $file_path
-                        ]);
-                }
+                return $this->uploadSuccess($from, $file_path, $file_info['name'], $file_add['id'], $callback);
             } else {
-                switch ($from) {
-                    case 'wangeditor':
-                        return "error|上传失败";
-                        break;
-                    case 'ueditor':
-                        return json(['state' => '上传失败']);
-                        break;
-                    case 'editormd':
-                        return json(["success" => 0, "message" => '上传失败']);
-                        break;
-                    case 'ckeditor':
-                        return ck_js($callback, '', '上传失败');
-                        break;
-                    default:
-                        return json(['code' => 0, 'class' => 'danger', 'info' => '上传失败']);
-                }
+                return $this->uploadError($from, '上传失败', $callback);
             }
         }else{
-            switch ($from) {
-                case 'wangeditor':
-                    return "error|".$file->getError();
-                    break;
-                case 'ueditor':
-                    return json(['state' => $file->getError()]);
-                    break;
-                case 'editormd':
-                    return json(["success" => 0, "message" => $file->getError()]);
-                    break;
-                case 'ckeditor':
-                    return ck_js($callback, '', $file->getError());
-                    break;
-                default:
-                    return json(['code' => 0, 'class' => 'danger', 'info' => $file->getError()]);
-            }
+            return $this->uploadError($from, $file->getError(), $callback);
         }
     }
 
@@ -706,6 +583,82 @@ class Attachment extends Admin
             $image->water($thumb_water_pic, $watermark_pos, $watermark_alpha);
             // 保存水印图片，覆盖原图
             $image->save($file);
+        }
+    }
+
+    /**
+     * 上传成功信息
+     * @param $from
+     * @param string $file_path
+     * @param string $file_name
+     * @param string $file_id
+     * @param string $callback
+     * @return string|\think\response\Json
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    private function uploadSuccess($from, $file_path = '', $file_name = '', $file_id = '', $callback = '')
+    {
+        switch ($from) {
+            case 'wangeditor':
+                return $file_path;
+                break;
+            case 'ueditor':
+                return json([
+                    "state" => "SUCCESS",  // 上传状态，上传成功时必须返回"SUCCESS"
+                    "url"   => $file_path, // 返回的地址
+                    "title" => $file_name, // 附件名
+                ]);
+                break;
+            case 'editormd':
+                return json([
+                    "success" => 1,
+                    "message" => '上传成功',
+                    "url"     => $file_path,
+                ]);
+                break;
+            case 'ckeditor':
+                return ck_js($callback, $file_path);
+                break;
+            default:
+                return json([
+                    'code'   => 1,
+                    'info'   => '上传成功',
+                    'class'  => 'success',
+                    'id'     => $file_id,
+                    'path'   => $file_path
+                ]);
+        }
+    }
+
+    /**
+     * 上传错误信息
+     * @param $from
+     * @param string $msg
+     * @param string $callback
+     * @return string|\think\response\Json
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    private function uploadError($from, $msg = '', $callback = '')
+    {
+        switch ($from) {
+            case 'wangeditor':
+                return "error|".$msg;
+                break;
+            case 'ueditor':
+                return json(['state' => $msg]);
+                break;
+            case 'editormd':
+                return json(["success" => 0, "message" => $msg]);
+                break;
+            case 'ckeditor':
+                return ck_js($callback, '', $msg);
+                break;
+            default:
+                return json([
+                    'code'   => 0,
+                    'class'  => 'danger',
+                    'info'   => $msg
+                ]);
         }
     }
 
