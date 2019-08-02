@@ -5,7 +5,11 @@
             {notempty name="form[type].value"}
             {volist name="form[type]['value']|explode=',',###" id="vo"}
             <div class="file-item thumbnail">
+                {if is_numeric($vo)}
                 <img data-original="{$vo|get_file_path}" src="{$vo|get_thumb}" width="100">
+                {else /}
+                <img data-original="{$vo}" src="{$vo}" width="100">
+                {/if}
             </div>
             {/volist}
             {/notempty}
