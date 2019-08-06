@@ -223,6 +223,9 @@ var App = function() {
                         Cookies.set('sidebarMini', 'true', { expires: 7 });
                     }
                 }
+                if (typeof(init_table) === "function") {
+                    init_table();
+                }
                 break;
             case 'sidebar_mini_on':
                 if ($windowW > 991) {
