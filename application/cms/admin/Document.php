@@ -220,7 +220,7 @@ class Document extends Admin
         }
 
         // 获取相同内容模型的栏目
-        $columns = Db::name('cms_column')->where(['model' => $where['model']])->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
+        $columns = Db::name('cms_column')->where([$where[0]])->whereOr('model', $info['model'])->order('pid,id')->column('id,name,pid');
         $columns = Tree::config(['title' => 'name'])->toList($columns, current($columns)['pid']);
         $result  = [];
         foreach ($columns as $column) {
