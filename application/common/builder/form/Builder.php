@@ -1785,19 +1785,40 @@ class Builder extends ZBuilder
     public function setFormItems($items = [])
     {
         if (!empty($items)) {
-            // 额外已经构造好的表单项目与单个组装的的表单项目进行合并
-            $this->_vars['form_items'] = array_merge($this->_vars['form_items'], $items);
-            foreach ($items as $item) {
-                if ($item['type'] == 'group') {
-                    foreach ($item['options'] as $group) {
-                        foreach ($group as $key => $value) {
-                            $this->loadMinify($group[$key]['type']);
+            foreach ($items as $key =>  $item) {
+                switch ($item['type']) {
+                    case 'group':
+                        foreach ($item['options'] as $options) {
+                            foreach ($options as $option) {
+                                $this->loadMinify($option['type']);
+                            }
                         }
-                    }
+                        break;
+                    case 'select':
+                        if (isset($item['extra_attr']) && $item['extra_attr'] == 'multiple') {
+                            $items[$key]['type'] = 'select2';
+                        }
+                        break;
+                }
+                if ($item['type'] == 'group') {
+
                 } else {
                     $this->loadMinify($item['type']);
                 }
+
+                // 设置布局参数
+                if (isset($item['layout'])) {
+                    $this->_vars['_layout'][$item['name']] = [
+                        'xs' => $item['layout'],
+                        'sm' => $item['layout'],
+                        'md' => $item['layout'],
+                        'lg' => $item['layout'],
+                    ];
+                }
             }
+
+            // 额外已经构造好的表单项目与单个组装的的表单项目进行合并
+            $this->_vars['form_items'] = array_merge($this->_vars['form_items'], $items);
         }
         return $this;
     }
