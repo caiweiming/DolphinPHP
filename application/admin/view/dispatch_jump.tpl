@@ -51,14 +51,20 @@
 
 <script type="text/javascript">
     (function(){
-        var wait = document.getElementById('wait'),
-            href = document.getElementById('href').href;
-        var interval = setInterval(function(){
-            var time = --wait.innerHTML;
+        let wait  = document.getElementById('wait'),
+            href  = document.getElementById('href').href,
+            pop   = '{$Request.param._pop}',
+            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        let interval = setInterval(function(){
+            let time = --wait.innerHTML;
             if(time <= 0) {
-                location.href = href;
+                if (pop === '1') {
+                    parent.layer.close(index);
+                } else {
+                    location.href = href;
+                }
                 clearInterval(interval);
-            };
+            }
         }, 1000);
 
         // 禁止跳转
