@@ -266,14 +266,14 @@
                                     <div class="col-xs-12">
                                         {php}if(isset($btn_hide) && !in_array('submit', $btn_hide)):{/php}
                                         <button class="btn btn-minw btn-primary {$submit_confirm ?= 'confirm '}{$ajax_submit ?= 'ajax-post'}" target-form="form-builder" type="submit">
-                                            {$btn_title['submit']|default='提交'}
+                                            {$btn_title['submit']|raw|default='提交'}
                                         </button>
                                         {php}endif;{/php}
 
                                         {empty name="_pop"}
                                         {php}if(isset($btn_hide) && !in_array('back', $btn_hide)):{/php}
                                         <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
-                                            {$btn_title['back']|default='返回'}
+                                            {$btn_title['back']|raw|default='返回'}
                                         </button>
                                         {php}endif;{/php}
                                         {else/}
