@@ -1083,8 +1083,8 @@ jQuery(document).ready(function() {
     // 关闭弹窗按钮
     $('#close-pop').click(function () {
         try {
-            if(typeof parent.layer_cancel === "function") {
-                parent.layer_cancel();
+            if(typeof window.layer_cancel === "function") {
+                window.layer_cancel();
             }
         } catch(e) {
 
