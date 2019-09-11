@@ -437,6 +437,31 @@ jQuery(document).ready(function() {
             $.extend($options, dolphin.layer);
         }
 
+        if ($options.cancel === null && (typeof parent.layer_cancel === "function")) {
+            $options.cancel = parent.layer_cancel;
+        }
+        if ($options.success === null && (typeof parent.layer_success === "function")) {
+            $options.success = parent.layer_success;
+        }
+        if ($options.yes === null && (typeof parent.layer_yes === "function")) {
+            $options.yes = parent.layer_yes;
+        }
+        if ($options.end === null && (typeof parent.layer_end === "function")) {
+            $options.end = parent.layer_end;
+        }
+        if ($options.full === null && (typeof parent.layer_full === "function")) {
+            $options.full = parent.layer_full;
+        }
+        if ($options.min === null && (typeof parent.layer_min === "function")) {
+            $options.min = parent.layer_min;
+        }
+        if ($options.max === null && (typeof parent.layer_max === "function")) {
+            $options.max = parent.layer_max;
+        }
+        if ($options.restore === null && (typeof parent.layer_restore === "function")) {
+            $options.restore = parent.layer_restore;
+        }
+
         layer.open($options);
         return false;
     });
