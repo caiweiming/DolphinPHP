@@ -1,0 +1,47 @@
+<div class="form-group col-lg-{$_layout['lg']|default='12'} col-md-{$_layout['md']|default='12'} col-sm-{$_layout['sm']|default='12'} col-xs-{$_layout['xs']|default='12'} {$extra_class|default=''}" id="form_group_{$name}">
+    <label class="col-xs-12" for="{$name}">{$title|htmlspecialchars}</label>
+    <div class="col-sm-12">
+        <table class="table table-bordered" id="table-{$name}">
+            {notempty name="head"}
+            <thead>
+                {volist name="head" id="row"}
+                <tr>
+                    {volist name="row" id="vo"}
+                    <th style="vertical-align: middle;" {notempty name="vo.rowspan"}rowspan="{$vo.rowspan}"{/notempty} {notempty name="vo.colspan"}colspan="{$vo.colspan}"{/notempty}>{$vo.value|raw|default=''}</th>
+                    {/volist}
+                </tr>
+                {/volist}
+            </thead>
+            {/notempty}
+            <tbody>
+            {empty name="data"}
+            <tr class="empty"><td class="text-center text-muted" colspan="{$cols|default=1}">暂无数据</td></tr>
+            {else/}
+            {volist name="data" id="row"}
+            <tr>
+                {volist name="row" id="vo"}
+                <td style="vertical-align: middle; {if condition='is_array($vo["value"])'}padding:0;{/if}" {notempty name="vo.rowspan"}rowspan="{$vo.rowspan}"{/notempty} {notempty name="vo.colspan"}colspan="{$vo.colspan}"{/notempty}>
+                {if condition="is_array($vo['value'])"}
+                <table class="table table-bordered">
+                    <tbody>
+                        {volist name="vo.value" id="v"}
+                        <tr>
+                            {volist name="v" id="td"}
+                            <td>{$td|raw}</td>
+                            {/volist}
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+                {else/}
+                {$vo.value|raw|default=''}
+                {/if}
+                </td>
+                {/volist}
+            </tr>
+            {/volist}
+            {/empty}
+            </tbody>
+        </table>
+    </div>
+</div>
