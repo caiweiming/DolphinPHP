@@ -57,9 +57,7 @@ class Builder
     /**
      * @var array 需要加载的js
      */
-    public $js = [
-//        'selecttable.js'
-    ];
+    public $js = [];
 
     /**
      * @var array 需要加载的css
