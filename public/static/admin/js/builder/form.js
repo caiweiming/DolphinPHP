@@ -866,7 +866,7 @@ jQuery(document).ready(function() {
         // 下级联动菜单恢复默认
         if (next_items.length > 0) {
             for (var i = 0; i < next_items.length; i++) {
-                $('select[name="'+ next_items[i] +'"]').html('<option value="">请选择：</option>');
+                $('#'+ next_items[i]).html('<option value="">请选择：</option>');
             }
         }
 
@@ -896,7 +896,7 @@ jQuery(document).ready(function() {
                         $.each(list, function (index, item) {
                             var option = $('<option></option>');
                             option.val(item['key']).html(item['value']);
-                            $('select[name="'+ next_item +'"]').append(option);
+                            $('#'+ next_item).append(option);
                         });
                     }
                 } else {
