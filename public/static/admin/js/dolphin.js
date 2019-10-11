@@ -66,6 +66,11 @@ var Dolphin = function () {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
+                                        }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                                     }, 1500);
                                 } else {
@@ -81,6 +86,11 @@ var Dolphin = function () {
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
+                                        }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
@@ -139,6 +149,11 @@ var Dolphin = function () {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
+                                        }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                                     }, 1500);
                                 } else {
@@ -154,6 +169,11 @@ var Dolphin = function () {
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
+                                        }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
@@ -206,6 +226,11 @@ var Dolphin = function () {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
                                         }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
+                                        }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                                     }, 1500);
                                 } else {
@@ -221,6 +246,11 @@ var Dolphin = function () {
                                         if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                             parent.layer.close(index);return false;
+                                        }
+                                        // 新窗口打开
+                                        if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                            window.open(res.url === '' ? location.href : res.url);
+                                            return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                     }, 2000);
@@ -261,6 +291,11 @@ var Dolphin = function () {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
+                            // 新窗口打开
+                            if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                window.open(res.url === '' ? location.href : res.url);
+                                return false;
+                            }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                         }, 1500);
                     } else {
@@ -276,6 +311,11 @@ var Dolphin = function () {
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
+                            }
+                            // 新窗口打开
+                            if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                window.open(res.url === '' ? location.href : res.url);
+                                return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
                         }, 2000);
@@ -338,6 +378,11 @@ var Dolphin = function () {
                                     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
                                 }
+                                // 新窗口打开
+                                if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                    window.open(res.url === '' ? location.href : res.url);
+                                    return false;
+                                }
                                 return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                             }, 1500);
                         } else {
@@ -352,6 +397,11 @@ var Dolphin = function () {
                                 if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                     parent.layer.close(index);return false;
+                                }
+                                // 新窗口打开
+                                if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                    window.open(res.url === '' ? location.href : res.url);
+                                    return false;
                                 }
                                 self.attr("autocomplete", "on").prop("disabled", false);
                             }, 2000);
@@ -387,6 +437,11 @@ var Dolphin = function () {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
                             }
+                            // 新窗口打开
+                            if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                window.open(res.url === '' ? location.href : res.url);
+                                return false;
+                            }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
                         }, 1500);
                     } else {
@@ -401,6 +456,11 @@ var Dolphin = function () {
                             if (res.data && (res.data === '_close_pop' || res.data._close_pop)) {
                                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                                 parent.layer.close(index);return false;
+                            }
+                            // 新窗口打开
+                            if (res.data && (res.data === '_blank' || res.data._blank)) {
+                                window.open(res.url === '' ? location.href : res.url);
+                                return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
                         }, 2000);
