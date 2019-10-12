@@ -647,6 +647,10 @@ class Builder extends ZBuilder
      */
     public function addTopButton($type = '', $attribute = [], $pop = false)
     {
+        if ($type == '') {
+            return $this;
+        }
+
         // 表单名，用于替换
         if (isset($attribute['table'])) {
             if (isset($attribute['prefix'])) {
@@ -916,6 +920,10 @@ class Builder extends ZBuilder
      */
     public function addRightButton($type = '', $attribute = [], $pop = false, $extra = [])
     {
+        if ($type == '') {
+            return $this;
+        }
+
         // 表单名，用于替换
         if (isset($attribute['table'])) {
             if (isset($attribute['prefix'])) {
