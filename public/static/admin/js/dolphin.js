@@ -557,14 +557,20 @@ var Dolphin = function () {
                 location.href = $('#nav-' + data.module_id).find('a').not('.nav-submenu').first().attr('href');
             } else {
                 $.post(dolphin.top_menu_url, data, function (res) {
-                    if (res !== '') {
+                    if (res.code) {
+                        if (res.data === '') {
+                            tips('暂无无节点权限', 'danger');return false;
+                        }
                         if ($target === '_self') {
-                            location.href = res;
+                            location.href = res.data;
                         } else {
-                            window.open(res);
+                            window.open(res.data);
                         }
                     } else {
-                        tips('无任何节点权限', 'danger');
+                        tips(res.msg, 'danger');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
                     }
                 }).fail(function (res) {
                     tips($(res.responseText).find('h1').text() || '服务器内部错误~', 'danger');

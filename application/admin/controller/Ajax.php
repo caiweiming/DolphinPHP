@@ -180,6 +180,10 @@ class Ajax extends Common
      */
     public function getSidebarMenu($module_id = '', $module = '', $controller = '')
     {
+        if (!is_signin()) {
+            $this->error('登录已失效，请重新登录', 'user/publics/signin');
+        }
+
         role_auth();
         $menus = MenuModel::getSidebarMenu($module_id, $module, $controller);
 
@@ -194,7 +198,7 @@ class Ajax extends Common
                 break;
             }
         }
-        return $output;
+        $this->success('获取成功', null, $output);
     }
 
     /**
