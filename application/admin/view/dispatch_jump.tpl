@@ -53,12 +53,13 @@
     (function(){
         let wait  = document.getElementById('wait'),
             href  = document.getElementById('href').href,
-            pop   = '{$Request.param._pop}',
-            index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            pop   = '{$Request.param._pop}'; //获取窗口索引
+
         let interval = setInterval(function(){
             let time = --wait.innerHTML;
             if(time <= 0) {
                 if (pop === '1') {
+                    let index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                 } else {
                     location.href = href;
