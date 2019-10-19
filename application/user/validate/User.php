@@ -26,6 +26,7 @@ class User extends Validate
         'email|邮箱'     => 'email|unique:admin_user',
         'password|密码'  => 'require|length:6,20',
         'mobile|手机号'   => 'regex:^1\d{10}|unique:admin_user',
+        '__token__'    => 'require|token',
     ];
 
     // 定义验证提示
@@ -37,12 +38,13 @@ class User extends Validate
         'password.require' => '密码不能为空',
         'password.length'  => '密码长度6-20位',
         'mobile.regex'     => '手机号不正确',
+        '__token__.token'  => '令牌数据无效，请刷新页面',
     ];
 
     // 定义验证场景
     protected $scene = [
         //更新
-        'update'  =>  ['email', 'password' => 'length:6,20', 'mobile', 'role'],
+        'update'  =>  ['email', 'password' => 'length:6,20', 'mobile', 'role', '__token__'],
         //登录
         'signin'  =>  ['username' => 'require', 'password' => 'require'],
     ];
