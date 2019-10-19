@@ -146,6 +146,9 @@ class Ajax extends Common
      */
     public function getModuleMenus($module = '')
     {
+        if (!is_signin()) {
+            $this->error('请先登录');
+        }
         $menus = MenuModel::getMenuTree(0, '', $module);
         $result = [
             'code' => 1,
@@ -161,8 +164,16 @@ class Ajax extends Common
      * @author 蔡伟明 <314013107@qq.com>
      */
     public function setTheme($theme = '') {
+        if (!is_signin()) {
+            $this->error('请先登录');
+        }
+        $themes = ['default', 'amethyst', 'city', 'flat', 'modern', 'smooth'];
+        if (!in_array($theme, $themes)) {
+            $this->error('非法操作');
+        }
         $map['name']  = 'system_color';
         $map['group'] = 'system';
+
         if (Db::name('admin_config')->where($map)->setField('value', $theme)) {
             $this->success('设置成功');
         } else {
