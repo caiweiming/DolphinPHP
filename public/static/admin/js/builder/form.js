@@ -286,7 +286,8 @@ jQuery(document).ready(function() {
                                     });
                                 });
                             } else {
-                                Dolphin.notify('上传失败，请重新上传', 'warning');
+                                Dolphin.loading('hide');
+                                Dolphin.notify(res.msg||'上传失败，请重新上传', 'warning');
                             }
                         }
                     }).fail(function(res) {
