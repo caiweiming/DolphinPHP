@@ -109,7 +109,20 @@ class Publics extends Common
 
         $menu_url = explode('/', $menu['url_value']);
         role_auth();
-        $url = action('admin/ajax/getSidebarMenu', ['module_id' => $default_module, 'module' => $menu['module'], 'controller' => $menu_url[1]]);
+
+        $menus = MenuModel::getSidebarMenu($default_module, $menu['module'], $menu_url[1]);
+        $url   = '';
+        foreach ($menus as $key => $menu) {
+            if (!empty($menu['url_value'])) {
+                $url = $menu['url_value'];
+                break;
+            }
+            if (!empty($menu['child'])) {
+                $url = $menu['child'][0]['url_value'];
+                break;
+            }
+        }
+
         if ($url == '') {
             $this->error('权限不足');
         } else {
