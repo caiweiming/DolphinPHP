@@ -58,7 +58,7 @@
         let interval = setInterval(function(){
             let time = --wait.innerHTML;
             if(time <= 0) {
-                if (pop === '1') {
+                if (pop === '1' && parent.layer !== undefined) {
                     let index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                 } else {
