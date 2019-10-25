@@ -2127,6 +2127,11 @@ class Builder extends ZBuilder
 
                             $row[$column['name'].'__'.$column['type']] = call_user_func_array($column['default'], $params);
                             break;
+                        case 'popover':
+                            $length = empty($column['default']) ? 10 : $column['default'];
+                            $placement = empty($column['param']) ? 'top' : $column['param'];
+                            $row[$column['name'].'__'.$column['type']] = mb_substr($row[$column['name']], 0, $length, 'utf-8').'... <i class="fa fa-fw fa-question-circle" data-toggle="popover" data-placement="'.$placement.'" data-content="'.$row[$column['name']].'"></i>';
+                            break;
                         case 'text':
                         default: // 默认
                             // 设置默认值
