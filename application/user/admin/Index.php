@@ -516,25 +516,44 @@ class Index extends Admin
      */
     public function setStatus($type = '', $record = [])
     {
-        $ids        = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        if ((is_array($ids) && in_array(UID, $ids)) || $ids == UID) {
-            $this->error('禁止操作当前账号');
+        $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
+        $ids = (array)$ids;
+
+        // 当前用户所能操作的用户
+        $role_list = RoleModel::getChildsId(session('user_auth.role'));
+        $user_list = UserModel::where('role', 'in', $role_list)->column('id');
+        if (session('user_auth.role') != 1 && !$user_list) {
+            $this->error('权限不足，没有可操作的用户');
         }
-        // 非超级管理员检查可管理用户
-        if (session('user_auth.role') != 1) {
-            $user_ids  = (array)$ids;
-            $role_list = RoleModel::getChildsId(session('user_auth.role'));
-            $user_list = UserModel::where('role', 'in', $role_list)->column('id');
-            $user_list = array_intersect($user_list, $user_ids);
-            if (!$user_list) {
-                $this->error('权限不足，没有可操作的用户');
-            } else {
-                $this->request->post(['ids'=> $user_list]);
-            }
+
+        $ids = array_intersect($user_list, $ids);
+        if (!$ids) {
+            $this->error('权限不足，没有可操作的用户');
         }
-        $uid_delete = is_array($ids) ? '' : $ids;
-        $ids        = array_map('get_nickname', (array)$ids);
-        return parent::setStatus($type, ['user_'.$type, 'admin_user', $uid_delete, UID, implode('、', $ids)]);
+
+        switch ($type) {
+            case 'enable':
+                if (false === UserModel::where('id', 'in', $ids)->setField('status', 1)) {
+                    $this->error('启用失败');
+                }
+                break;
+            case 'disable':
+                if (false === UserModel::where('id', 'in', $ids)->setField('status', 0)) {
+                    $this->error('禁用失败');
+                }
+                break;
+            case 'delete':
+                if (false === UserModel::where('id', 'in', $ids)->delete()) {
+                    $this->error('删除失败');
+                }
+                break;
+            default:
+                $this->error('非法操作');
+        }
+
+        action_log('user_'.$type, 'admin_user', '', UID);
+
+        $this->success('操作成功');
     }
 
     /**
