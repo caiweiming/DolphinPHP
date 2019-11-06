@@ -60,7 +60,7 @@ class Role extends Model
 
         // 过滤显示指定角色及其子角色
         if ($filter !== null) {
-            $show_ids = array_merge([$filter], self::getChildsId($filter));
+            $show_ids = self::getChildsId($filter);
 
             if (!empty($hide_ids)) {
                 $ids = array_diff($show_ids, $hide_ids);
