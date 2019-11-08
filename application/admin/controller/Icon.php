@@ -91,15 +91,14 @@ class Icon extends Admin
             $IconModel = new IconModel();
             if ($id = $IconModel->insertGetId($data)) {
                 // 拉取图标列表
-                $pattern = '/\.(.*)-(.*):before/';
+                $pattern = '/\.(.*):before/';
                 if (preg_match_all($pattern, $content, $matches)) {
-                    $prefix = $matches[1][0].'-';
                     $icon_list = [];
-                    foreach ($matches[2] as $match) {
+                    foreach ($matches[1] as $match) {
                         $icon_list[] = [
                             'icon_id' => $id,
                             'title'   => $match,
-                            'class'   => $font_family . ' ' . $prefix . $match,
+                            'class'   => $font_family . ' ' . $match,
                             'code'    => $match,
                         ];
                     }
@@ -186,15 +185,14 @@ class Icon extends Admin
         }
 
         // 拉取图标列表
-        $pattern = '/\.(.*)-(.*):before/';
+        $pattern = '/\.(.*):before/';
         if (preg_match_all($pattern, $content, $matches)) {
-            $prefix = $matches[1][0].'-';
             $icon_list = [];
-            foreach ($matches[2] as $match) {
+            foreach ($matches[1] as $match) {
                 $icon_list[] = [
                     'icon_id' => $id,
                     'title'   => $match,
-                    'class'   => $font_family . ' ' . $prefix . $match,
+                    'class'   => $font_family . ' ' . $match,
                     'code'    => $match,
                 ];
             }
@@ -207,5 +205,27 @@ class Icon extends Admin
             }
         }
         $this->success('更新成功');
+    }
+
+    /**
+     * 删除图标库
+     * @param string $ids
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function delete($ids = '')
+    {
+        $ids == '' && $this->error('请选择要删除的数据');
+        $ids = (array)$ids;
+
+        // 删除图标列表
+        if (false !== IconListModel::where('icon_id', 'in', $ids)->delete()) {
+            // 删除图标库
+            if (false !== IconModel::where('id', 'in', $ids)->delete()) {
+                $this->success('删除成功');
+            }
+        }
+        $this->error('删除失败');
     }
 }
