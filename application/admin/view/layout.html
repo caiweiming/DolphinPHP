@@ -267,9 +267,11 @@
                     <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
                         <img src="{$Think.session.user_auth.uid|get_avatar}" alt="{:session('user_auth.username')}">
                         <span class="caret"></span>
+                        {notempty name="_message"}
                         {gt name="_message" value="0"}
                         <i class="fa fa-circle text-danger notice-circle"></i>
                         {/gt}
+                        {/notempty}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li class="dropdown-header">{:session('user_auth.username')} ({:session('user_auth.role_name')})</li>
