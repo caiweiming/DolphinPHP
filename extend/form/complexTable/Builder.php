@@ -110,6 +110,6 @@ class Builder
      * @var array 需要加载的css
      */
     public $css = [
-        'complexTable.css'
+        'complextable.css'
     ];
 }
