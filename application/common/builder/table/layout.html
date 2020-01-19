@@ -192,7 +192,7 @@
                                         <thead>
                                         <tr>
                                             {if (!$hide_checkbox)}
-                                            <th class="text-center">
+                                            <th class="text-center column-checkbox">
                                                 <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
                                                     <input type="checkbox" id="check-all"><span></span>
                                                 </label>
@@ -248,7 +248,7 @@
                                     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable-target" id="builder-table-main">
                                         <colgroup>
                                             {if (!$hide_checkbox)}
-                                            <col width="50">
+                                            <col width="{$column_width['_checkbox']|default='50'}">
                                             {/if}
                                             {volist name="columns" id="column"}
                                             <col width="{$column_width[$column['name']]|default='100'}" class="{$column_hide[$column['name']]|default=''}">
@@ -259,7 +259,7 @@
                                             <tr class="{$row['_tr_class']|default=''}">
                                                 {if (!$hide_checkbox)}
                                                 <td class="text-center">
-                                                    <div class="table-cell">
+                                                    <div>
                                                         <label class="css-input css-checkbox css-checkbox-primary">
                                                             <input class="ids" type="checkbox" name="ids[]" value="{$row['_primary_key_value']|default=''}"><span></span>
                                                         </label>
@@ -309,7 +309,7 @@
                                             <thead>
                                                 <tr id="builder-table-left-first-tr">
                                                     {if (!$hide_checkbox)}
-                                                    <th class="text-center">
+                                                    <th class="text-center column-checkbox">
                                                         <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
                                                             <input type="checkbox"><span></span>
                                                         </label>
@@ -424,7 +424,7 @@
                                             <thead>
                                                 <tr>
                                                     {if (!$hide_checkbox)}
-                                                    <th class="text-center">
+                                                    <th class="text-center column-checkbox">
                                                         <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
                                                             <input type="checkbox"><span></span>
                                                         </label>
