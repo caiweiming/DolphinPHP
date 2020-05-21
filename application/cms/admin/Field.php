@@ -34,7 +34,7 @@ class Field extends Admin
 
         // 查询
         $map = $this->getMap();
-        $map['model'] = $id;
+        $map[]=['model','=',$id];
         // 数据列表
         $data_list = FieldModel::where($map)->order('id desc')->paginate();
 
