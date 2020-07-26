@@ -140,13 +140,6 @@ class Common extends Controller
 
     /**
      * 渲染插件模板
-     * @param string $template 模板名称
-     * @param string $suffix 模板后缀
-     * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
-     */
-    /**
-     * 渲染插件模板
      * @param string $template 模板文件名
      * @param string $suffix 模板后缀
      * @param array $vars 模板输出变量
