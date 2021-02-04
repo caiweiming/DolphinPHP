@@ -97,13 +97,11 @@ class Role extends Admin
             // 非超级管理员检查可添加角色
             if (session('user_auth.role') != 1) {
                 $role_list = RoleModel::getChildsId(session('user_auth.role'));
-                if ($data['pid'] != session('user_auth.role') && !in_array($data['pid'], $role_list)) {
+                if (!in_array($data['pid'], $role_list)) {
                     $this->error('所属角色设置错误，没有权限添加该角色');
                 }
-            }
 
-            // 非超级管理员检查可添加的节点权限
-            if (session('user_auth.role') != 1) {
+                // 非超级管理员检查可添加的节点权限
                 $menu_auth = RoleModel::where('id', session('user_auth.role'))->value('menu_auth');
                 $menu_auth = json_decode($menu_auth, true);
                 $menu_auth = array_intersect($menu_auth, $data['menu_auth']);
@@ -197,6 +195,9 @@ class Role extends Admin
             }
         }
 
+        // 获取数据
+        $info = RoleModel::get($id);
+
         // 保存数据
         if ($this->request->isPost()) {
             $data = $this->request->post();
@@ -205,6 +206,11 @@ class Role extends Admin
             } else {
                 $data['menu_auth'] = explode(',', $data['menu_auth']);
             }
+
+            if ($data['pid'] == '') {
+                $data['pid'] = $info['pid'];
+            }
+
             // 验证
             $result = $this->validate($data, 'Role');
             // 验证失败 输出错误信息
@@ -213,7 +219,7 @@ class Role extends Admin
             // 非超级管理员检查可添加角色
             if (session('user_auth.role') != 1) {
                 $role_list = RoleModel::getChildsId(session('user_auth.role'));
-                if ($data['pid'] != session('user_auth.role') && !in_array($data['pid'], $role_list)) {
+                if ($data['pid'] != $info['pid'] && !in_array($data['pid'], $role_list)) {
                     $this->error('所属角色设置错误，没有权限添加该角色');
                 }
             }
@@ -243,9 +249,6 @@ class Role extends Admin
                 $this->error('编辑失败');
             }
         }
-
-        // 获取数据
-        $info = RoleModel::get($id);
 
         if (session('user_auth.role') != 1) {
             $role_list = RoleModel::getTree($id, false, session('user_auth.role'));
