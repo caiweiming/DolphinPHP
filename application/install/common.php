@@ -122,6 +122,7 @@ function check_func(){
         array('curl','支持','check','模块'),
         array('file_get_contents', '支持', 'check','函数'),
         array('mb_strlen', '支持', 'check','函数'),
+        array('scandir', '支持', 'check','函数'),
     );
 
     foreach ($items as &$val) {
