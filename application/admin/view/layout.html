@@ -45,11 +45,13 @@
         {/eq}
     {/notempty}
 
-    {volist name="extend_css_list" id="vo"}
-        {volist name="vo" id="v"}
-        <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
+    {notempty name="extend_css_list"}
+        {volist name="extend_css_list" id="vo"}
+            {volist name="vo" id="v"}
+            <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
+            {/volist}
         {/volist}
-    {/volist}
+    {/notempty}
 
     {notempty name="_icons"}
         {volist name="_icons" id="icon"}
@@ -478,11 +480,13 @@
     {/eq}
 {/notempty}
 
-{volist name="extend_js_list" id="vo"}
-    {volist name="vo" id="v"}
-    <script src="{$v}?v={:config('asset_version')}"></script>
+{notempty name="extend_js_list"}
+    {volist name="extend_js_list" id="vo"}
+        {volist name="vo" id="v"}
+        <script src="{$v}?v={:config('asset_version')}"></script>
+        {/volist}
     {/volist}
-{/volist}
+{/notempty}
 
 <script>
     jQuery(function () {
