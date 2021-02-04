@@ -53,7 +53,7 @@ var Dolphin = function () {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
-                                    tips(msg, 'success');
+                                    tips(msg, 'success', null, null, null, res.wait);
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
@@ -72,10 +72,10 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                                    }, 1500);
+                                    }, res.wait * 1000);
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
-                                    tips(msg, 'danger');
+                                    tips(msg, 'danger', null, null, null, res.wait);
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -93,7 +93,7 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                    }, 2000);
+                                    }, res.wait * 1000);
                                 }
                             }).fail(function (res) {
                                 pageLoader('hide');
@@ -136,7 +136,7 @@ var Dolphin = function () {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
-                                    tips(msg, 'success');
+                                    tips(msg, 'success', null, null, null, res.wait);
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
@@ -155,10 +155,10 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                                    }, 1500);
+                                    }, res.wait * 1000);
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
-                                    tips(msg, 'danger');
+                                    tips(msg, 'danger', null, null, null, res.wait);
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -176,7 +176,7 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                    }, 2000);
+                                    }, res.wait * 1000);
                                 }
                             }).fail(function (res) {
                                 pageLoader('hide');
@@ -213,7 +213,7 @@ var Dolphin = function () {
                                     if (res.url && !self.hasClass("no-refresh")) {
                                         msg += " 页面即将自动跳转~";
                                     }
-                                    tips(msg, 'success');
+                                    tips(msg, 'success', null, null, null, res.wait);
                                     setTimeout(function () {
                                         self.attr("autocomplete", "on").prop("disabled", false);
                                         // 刷新父窗口
@@ -232,10 +232,10 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                                    }, 1500);
+                                    }, res.wait * 1000);
                                 } else {
                                     jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
-                                    tips(msg, 'danger');
+                                    tips(msg, 'danger', null, null, null, res.wait);
                                     setTimeout(function () {
                                         // 刷新父窗口
                                         if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -253,7 +253,7 @@ var Dolphin = function () {
                                             return false;
                                         }
                                         self.attr("autocomplete", "on").prop("disabled", false);
-                                    }, 2000);
+                                    }, res.wait * 1000);
                                 }
                             }).fail(function (res) {
                                 pageLoader('hide');
@@ -278,7 +278,7 @@ var Dolphin = function () {
                         if (res.url && !self.hasClass("no-refresh")) {
                             msg += "， 页面即将自动跳转~";
                         }
-                        tips(msg, 'success');
+                        tips(msg, 'success', null, null, null, res.wait);
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 刷新父窗口
@@ -297,10 +297,10 @@ var Dolphin = function () {
                                 return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                        }, 1500);
+                        }, res.wait * 1000);
                     } else {
                         jQuery(".reload-verify").length > 0 && jQuery(".reload-verify").click();
-                        tips(msg, 'danger');
+                        tips(msg, 'danger', null, null, null, res.wait);
                         setTimeout(function () {
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -318,7 +318,7 @@ var Dolphin = function () {
                                 return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
-                        }, 2000);
+                        }, res.wait * 1000);
                     }
                 }).fail(function (res) {
                     pageLoader('hide');
@@ -365,7 +365,7 @@ var Dolphin = function () {
                             if (res.url && !self.hasClass("no-refresh")) {
                                 msg += " 页面即将自动跳转~";
                             }
-                            tips(msg, 'success');
+                            tips(msg, 'success', null, null, null, res.wait);
                             setTimeout(function () {
                                 self.attr("autocomplete", "on").prop("disabled", false);
                                 // 刷新父窗口
@@ -384,9 +384,9 @@ var Dolphin = function () {
                                     return false;
                                 }
                                 return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                            }, 1500);
+                            }, res.wait * 1000);
                         } else {
-                            tips(msg, 'danger');
+                            tips(msg, 'danger', null, null, null, res.wait);
                             setTimeout(function () {
                                 // 刷新父窗口
                                 if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -404,7 +404,7 @@ var Dolphin = function () {
                                     return false;
                                 }
                                 self.attr("autocomplete", "on").prop("disabled", false);
-                            }, 2000);
+                            }, res.wait * 1000);
                         }
                     }).fail(function (res) {
                         pageLoader('hide');
@@ -424,7 +424,7 @@ var Dolphin = function () {
                         if (res.url && !self.hasClass("no-refresh")) {
                             msg += " 页面即将自动跳转~";
                         }
-                        tips(msg, 'success');
+                        tips(msg, 'success', null, null, null, res.wait);
                         setTimeout(function () {
                             self.attr("autocomplete", "on").prop("disabled", false);
                             // 刷新父窗口
@@ -443,9 +443,9 @@ var Dolphin = function () {
                                 return false;
                             }
                             return self.hasClass("no-refresh") ? false : void(res.url && !self.hasClass("no-forward") ? location.href = res.url : location.reload());
-                        }, 1500);
+                        }, res.wait * 1000);
                     } else {
-                        tips(msg, 'danger');
+                        tips(msg, 'danger', null, null, null, res.wait);
                         setTimeout(function () {
                             // 刷新父窗口
                             if (res.data && (res.data === '_parent_reload' || res.data._parent_reload)) {
@@ -463,7 +463,7 @@ var Dolphin = function () {
                                 return false;
                             }
                             self.attr("autocomplete", "on").prop("disabled", false);
-                        }, 2000);
+                        }, res.wait * 1000);
                     }
                 }).fail(function (res) {
                     pageLoader('hide');
@@ -587,12 +587,14 @@ var Dolphin = function () {
      * @param $icon 图标，例如：'fa fa-user' 或 'glyphicon glyphicon-warning-sign'
      * @param $from 'top' 或 'bottom'
      * @param $align 'left', 'right', 'center'
+     * @param $delay
      * @author CaiWeiMing <314013107@qq.com>
      */
-    var tips = function ($msg, $type, $icon, $from, $align) {
+    var tips = function ($msg, $type, $icon, $from, $align, $delay) {
         $type  = $type || 'info';
         $from  = $from || 'top';
         $align = $align || 'center';
+        $delay = $delay || 3;
         $enter = $type === 'success' ? 'animated fadeInUp' : 'animated shake';
 
         jQuery.notify({
@@ -612,7 +614,7 @@ var Dolphin = function () {
             offset: 20,
             spacing: 10,
             z_index: 10800,
-            delay: 3000,
+            delay: $delay * 1000,
             timer: 1000,
             animate: {
                 enter: $enter,
@@ -709,8 +711,8 @@ var Dolphin = function () {
             pageLoader($mode);
         },
         // 页面小提示
-        notify: function ($msg, $type, $icon, $from, $align) {
-            tips($msg, $type, $icon, $from, $align);
+        notify: function ($msg, $type, $icon, $from, $align, $delay) {
+            tips($msg, $type, $icon, $from, $align, $delay);
         },
         // 启用图标搜索
         iconSearch: function () {
