@@ -57,10 +57,17 @@ class Builder
     /**
      * @var array 需要加载的js
      */
-    public $js = [];
+    public $js = [
+        "__LIBS__/select2/select2.full.min.js",
+        "__LIBS__/select2/i18n/zh-CN.js",
+        "selectgroup.js",
+    ];
 
     /**
      * @var array 需要加载的css
      */
-    public $css = [];
+    public $css = [
+        "__LIBS__/select2/select2.min.css",
+        "__LIBS__/select2/select2-bootstrap.min.css",
+    ];
 }

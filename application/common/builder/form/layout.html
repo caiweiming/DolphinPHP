@@ -355,12 +355,6 @@
     <link rel="stylesheet" href="{$vo}?v={:config('asset_version')}">
     {/volist}
 
-    {volist name="extend_css_list" id="vo"}
-        {volist name="vo" id="v"}
-        <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
-        {/volist}
-    {/volist}
-
     {// 额外CSS代码 }
     {$extra_css|raw|default=''}
 {/block}
@@ -377,12 +371,6 @@
 
     {volist name="js_list" id="vo"}
     <script src="{$vo}?v={:config('asset_version')}"></script>
-    {/volist}
-
-    {volist name="extend_js_list" id="vo"}
-        {volist name="vo" id="v"}
-        <script src="{$v}?v={:config('asset_version')}"></script>
-        {/volist}
     {/volist}
 
     {// 额外JS代码 }

@@ -45,6 +45,12 @@
         {/eq}
     {/notempty}
 
+    {volist name="extend_css_list" id="vo"}
+        {volist name="vo" id="v"}
+        <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
+        {/volist}
+    {/volist}
+
     {notempty name="_icons"}
         {volist name="_icons" id="icon"}
         <link rel="stylesheet" href="{$icon.url}">
@@ -471,6 +477,12 @@
         {/volist}
     {/eq}
 {/notempty}
+
+{volist name="extend_js_list" id="vo"}
+    {volist name="vo" id="v"}
+    <script src="{$v}?v={:config('asset_version')}"></script>
+    {/volist}
+{/volist}
 
 <script>
     jQuery(function () {
