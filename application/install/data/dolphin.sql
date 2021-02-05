@@ -602,7 +602,8 @@ CREATE TABLE `dp_admin_user` (
   `avatar` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '头像',
   `money` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '余额',
   `score` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
-  `role` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '角色ID',
+  `role` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '主角色ID',
+  `roles` varchar(255) NOT NULL DEFAULT '' COMMENT '副角色ID',
   `group` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '部门id',
   `signup_ip` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '注册ip',
   `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -617,4 +618,4 @@ CREATE TABLE `dp_admin_user` (
 -- ----------------------------
 -- Records of dp_admin_user
 -- ----------------------------
-INSERT INTO `dp_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$Brw6wmuSLIIx3Yabid8/Wu5l8VQ9M/H/CG3C9RqN9dUCwZW3ljGOK', '', '0', '', '0', '0', '0.00', '0', '1', '0', '0', '1476065410', '1477794539', '1477794539', '2130706433', '100', '1');
+INSERT INTO `dp_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$Brw6wmuSLIIx3Yabid8/Wu5l8VQ9M/H/CG3C9RqN9dUCwZW3ljGOK', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1477794539', '1477794539', '2130706433', '100', '1');

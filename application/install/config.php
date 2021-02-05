@@ -18,5 +18,5 @@ return array(
     'original_table_prefix'  => 'dp_', //默认表前缀
 
     // 安装配置
-    'install_table_total' => 254, // 安装时，需执行的sql语句数量
+    'install_table_total' => 255, // 安装时，需执行的sql语句数量
 );
