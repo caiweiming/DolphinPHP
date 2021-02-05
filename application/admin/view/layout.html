@@ -289,6 +289,11 @@
                             </a>
                         </li>
                         <li>
+                            <a tabindex="-1" href="javascript:void(0);" id="js-change-role">
+                                <i class="si si-users pull-right"></i>切换角色
+                            </a>
+                        </li>
+                        <li>
                             <a tabindex="-1" href="{:url('admin/message/index')}">
                                 <i class="si si-envelope-open pull-right"></i><span class="badge badge-primary pull-right">{$_message|default=0}</span>消息中心
                             </a>
@@ -490,6 +495,51 @@
 
 <script>
     jQuery(function () {
+        // 切换角色
+        $('#js-change-role').click(function () {
+            Dolphin.loading();
+            $.get('{:url("admin/ajax/getMyRoles")}', function (res) {
+                Dolphin.loading('hide');
+                if (res.code) {
+                    let options = '';
+                    $.each(res.data.roles, function (index, item) {
+                        options += '<option value="'+index+'" '+(res.data.curr == index ? 'selected' : '')+'>'+item+'</option>';
+                    });
+
+                    layer.open({
+                        type: 1,
+                        title: '<i class="si si-users"></i> 切换角色',
+                        area: ['300px', '180px'],
+                        btn: ['确定', '取消'],
+                        content: '<div class="form-group push-20-t">\n' +
+                            '<label class="col-xs-12" for="contact1-subject">当前角色</label>\n' +
+                            '<div class="col-xs-12">\n' +
+                            '    <select class="form-control" id="role-select" size="1">\n' + options +
+                            '    </select>\n' +
+                            '</div>\n' +
+                            '</div>',
+                        yes: function(index, layero){
+                            let role = $('#role-select').val();
+                            let loading = layer.load(2);
+                            $.post('{:url("admin/ajax/setMyRole")}', {id:role}, function (res) {
+                                layer.close(loading);
+                                if (res.code) {
+                                    layer.close(index);
+                                    layer.msg(res.msg);
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 1500);
+                                } else {
+                                    layer.msg(res.msg)
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Dolphin.notify(res.msg, 'danger');
+                }
+            });
+        });
         App.initHelpers(['appear', 'slimscroll', 'magnific-popup', 'table-tools']);
         {notempty name="_js_init"}
         App.initHelpers({$_js_init|raw});

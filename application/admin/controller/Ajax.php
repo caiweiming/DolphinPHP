@@ -240,4 +240,69 @@ class Ajax extends Common
             $this->error('文件不存在');
         }
     }
+
+    /**
+     * 获取我的角色集合
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function getMyRoles()
+    {
+        if (!is_signin()) {
+            $this->error('请先登录');
+        }
+
+        $user = Db::name('admin_user')->where('id', session('user_auth.uid'))->find();
+        !$user && $this->error('获取失败');
+
+        $roles = [$user['role']];
+        if ($user['roles'] != '') {
+            $roles = array_merge($roles, explode(',', $user['roles']));
+        }
+        $roles = array_unique($roles);
+        $roles = Db::name('admin_role')->where('id', 'in', $roles)->column('id,name');
+        $this->success('获取成功', null, [
+            'curr'  => session('user_auth.role'),
+            'roles' => $roles
+        ]);
+    }
+
+    /**
+     * 设置我的当前角色
+     * @param string $id
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function setMyRole($id = '')
+    {
+        if (!is_signin()) {
+            $this->error('请先登录');
+        }
+
+        $id == '' && $this->error('请选择要设置的角色');
+
+        // 读取当前用户能设置的角色
+        $user = Db::name('admin_user')->where('id', session('user_auth.uid'))->find();
+        !$user && $this->error('设置失败');
+
+        $roles = [$user['role']];
+        if ($user['roles'] != '') {
+            $roles = array_merge($roles, explode(',', $user['roles']));
+        }
+        $roles = array_unique($roles);
+
+        if (!in_array($id, $roles)) {
+            $this->error('无法设置当前角色');
+        }
+
+        cache('role_menu_auth_'.session('user_auth.role'), null);
+        session('user_auth.role', $id);
+        session('user_auth.role_name', Db::name('admin_role')->where('id', $id)->value('name'));
+        session('user_auth_sign', data_auth_sign(session('user_auth')));
+        $this->success('设置成功');
+    }
 }
