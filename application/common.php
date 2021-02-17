@@ -1053,9 +1053,10 @@ if (!function_exists('action_log')) {
 
             // 查询行为,判断是否执行
             $action_info = model('admin/action')->where('module', $module)->getByName($action);
-            if($action_info['status'] != 1){
+            if(!empty($action_info) &&  $action_info['status'] != 1){
                 return '该行为被禁用或删除';
             }
+            if(empty($action_info)) return false;
 
             // 插入行为日志
             $data = [
