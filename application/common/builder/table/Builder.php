@@ -1073,7 +1073,7 @@ class Builder extends ZBuilder
     }
 
     /**
-     * 固定左侧列数
+     * 固定右侧列数
      * @param int $num 数量
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
@@ -1085,7 +1085,7 @@ class Builder extends ZBuilder
     }
 
     /**
-     * 固定右侧列数
+     * 固定左侧列数
      * @param int $num 数量
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
