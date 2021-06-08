@@ -93,7 +93,7 @@ class Attachment extends Admin {
 		}
 
 		if ($from == 'ueditor') {
-			return $this->ueditor();
+			return $this->ueditor($module);
 		}
 
 		if ($from == 'jcrop') {
@@ -257,9 +257,10 @@ class Attachment extends Admin {
 	/**
 	 * 处理ueditor上传
 	 * @author 蔡伟明 <314013107@qq.com>
+     * @param string $module 来自哪个模块
 	 * @return string|\think\response\Json
 	 */
-	private function ueditor() {
+	private function ueditor($module = '') {
 		$action = $this->request->get('action');
 		$config_file = './static/libs/ueditor/php/config.json';
 		$config = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($config_file)), true);
@@ -271,21 +272,21 @@ class Attachment extends Admin {
 
 		/* 上传图片 */
 		case 'uploadimage':
-			return $this->saveFile('images', 'ueditor');
+			return $this->saveFile('images', 'ueditor', $module);
 			break;
 		/* 上传涂鸦 */
 		case 'uploadscrawl':
-			return $this->saveFile('images', 'ueditor_scrawl');
+			return $this->saveFile('images', 'ueditor_scrawl', $module);
 			break;
 
 		/* 上传视频 */
 		case 'uploadvideo':
-			return $this->saveFile('videos', 'ueditor');
+			return $this->saveFile('videos', 'ueditor', $module);
 			break;
 
 		/* 上传附件 */
 		case 'uploadfile':
-			return $this->saveFile('files', 'ueditor');
+			return $this->saveFile('files', 'ueditor', $module);
 			break;
 
 		/* 列出图片 */
@@ -351,7 +352,7 @@ class Attachment extends Admin {
 			'size' => $file->getSize(),
 			'md5' => $file->hash('md5'),
 			'sha1' => $file->hash('sha1'),
-			'module' => $this->request->module(),
+			'module' => $this->request->param('module', ''),
 			'width' => $img->width(),
 			'height' => $img->height(),
 		];
