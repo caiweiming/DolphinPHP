@@ -53,7 +53,7 @@ class Log extends Admin
             ])
             ->addOrder(['title' => 'admin_action', 'username' => 'admin_user', 'module_title' => 'admin_module.title'])
             ->addFilter(['admin_action.title', 'admin_user.username', 'module_title' => 'admin_module.title'])
-            ->addRightButton('edit', ['icon' => 'fa fa-eye', 'title' => '详情', 'href' => url('details', ['id' => '__id__'])])
+            ->addRightButton('details', ['icon' => 'fa fa-eye', 'title' => '详情', 'href' => url('details', ['id' => '__id__'])])
             ->setRowList($data_list) // 设置表格数据
             ->setPages($page) // 设置分页数据
             ->fetch(); // 渲染模板
