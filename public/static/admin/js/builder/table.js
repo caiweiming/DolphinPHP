@@ -493,7 +493,9 @@ jQuery(document).ready(function() {
             str.push(e.name + '=' + e.value)
         });
         str = str.join('|');
-        location.href = $(this).attr('action')+'?_s='+str+'&_o='+op;
+        var search_url = $(this).attr('action');
+        var separator = search_url.indexOf("?")==-1?"?":"&";
+        location.href = $(this).attr('action')+separator+'_s='+str+'&_o='+op;
         return false;
     });
 });
