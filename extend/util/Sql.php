@@ -118,11 +118,11 @@ class Sql
 
             // 只返回一条语句
             if ($string) {
-                return implode($pure_sql, "");
+                return implode("",$pure_sql);
             }
 
             // 以数组形式返回sql语句
-            $pure_sql = implode($pure_sql, "\n");
+            $pure_sql = implode("\n",$pure_sql);
             $pure_sql = explode(";\n", $pure_sql);
             return $pure_sql;
         } else {
