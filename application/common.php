@@ -1082,7 +1082,10 @@ if (!function_exists('action_log')) {
                     $replace = [];
                     foreach ($match[1] as $value){
                         $param = explode('|', $value);
-                        if(isset($param[1])){
+                        if(isset($param[1]) && $param[1] != ''){
+                            if (is_disable_func($param[1])) {
+                                continue;
+                            }
                             $replace[] = call_user_func($param[1], $log[$param[0]]);
                         }else{
                             $replace[] = $log[$param[0]];
@@ -1477,5 +1480,26 @@ if (!function_exists('dp_send_message')) {
 
         $MessageModel = model('user/message');
         return false !== $MessageModel->saveAll($list);
+    }
+}
+
+if (!function_exists('is_disable_func')) {
+    /**
+     * 是否是禁用函数
+     * @param string $func
+     * @return bool
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    function is_disable_func($func = '') {
+        if (!is_string($func) || $func == '') {
+            return false;
+        }
+
+        $disable_functions = config('system.disable_functions');
+        if (!$disable_functions) {
+            return false;
+        }
+
+        return in_array(strtolower($func), $disable_functions);
     }
 }
