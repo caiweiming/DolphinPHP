@@ -55,7 +55,13 @@ class Hook
         if ($hook_plugins) {
             foreach ($hook_plugins as $value) {
                 if (isset($hooks[$value['hook']]) && isset($plugins[$value['plugin']])) {
-                    \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
+                    if ($value['hook'] == 'upload_attachment') {
+                        if (strtolower(parse_name(config('upload_driver'), 1)) == strtolower($value['plugin'])) {
+                            \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
+                        }
+                    }else{
+                        \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
+                    }
                 }
             }
         }
