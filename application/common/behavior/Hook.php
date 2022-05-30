@@ -59,7 +59,7 @@ class Hook
                         if (strtolower(parse_name(config('upload_driver'), 1)) == strtolower($value['plugin'])) {
                             \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
                         }
-                    }else{
+                    } else {
                         \think\facade\Hook::add($value['hook'], get_plugin_class($value['plugin']));
                     }
                 }
