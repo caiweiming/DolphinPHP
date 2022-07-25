@@ -1663,7 +1663,7 @@ class Builder extends ZBuilder
      * @author 蔡伟明 <314013107@qq.com>
      * @return $this
      */
-    public function addTrClass($class = '', $field, $op = null, $condition = null)
+    public function addTrClass($class = '', $field = '', $op = null, $condition = null)
     {
         if ($class != '') {
             if (is_callable($field)) {
@@ -2116,7 +2116,7 @@ class Builder extends ZBuilder
                             $params = array_filter($params, function($v){return $v !== '';});
 
                             if (isset($row[$column['name']]) || array_key_exists($column['name'], $row)) {
-                                $params = array_merge([$row[$column['name']]], $params);
+                                $params = array_merge([$row[$column['name']]], array_values($params));
                             }
 
                             if (!empty($params)) {
