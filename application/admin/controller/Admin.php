@@ -136,7 +136,7 @@ class Admin extends Common
     final protected function setPageParam()
     {
         _system_check();
-        $list_rows = input('?param.list_rows') ? input('param.list_rows') : config('list_rows');
+        $list_rows = !empty(input('param.list_rows')) ? input('param.list_rows') : config('list_rows');
         config('paginate.list_rows', $list_rows);
         config('paginate.query', input('get.'));
     }
