@@ -301,17 +301,19 @@ class Builder extends ZBuilder
      * @param string $name 表单项名
      * @param string $title 标题
      * @param string $tips 提示
+     * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addArchive($name = '', $title = '', $tips = '', $extra_class = '')
+    public function addArchive($name = '', $title = '', $tips = '', $default = '' , $extra_class = '')
     {
         $item = [
             'type'        => 'archive',
             'name'        => $name,
             'title'       => $title,
             'tips'        => $tips,
+            'value'       => $default
             'extra_class' => $extra_class,
         ];
 
@@ -328,17 +330,19 @@ class Builder extends ZBuilder
      * @param string $name 表单项名
      * @param string $title 标题
      * @param string $tips 提示
+     * @param string $default 默认值
      * @param string $extra_class 额外css类名
      * @author 蔡伟明 <314013107@qq.com>
      * @return mixed
      */
-    public function addArchives($name = '', $title = '', $tips = '', $extra_class = '')
+    public function addArchives($name = '', $title = '', $tips = '', $default = '' , $extra_class = '')
     {
         $item = [
             'type'        => 'archives',
             'name'        => $name,
             'title'       => $title,
             'tips'        => $tips,
+            'value'       => $default,
             'extra_class' => $extra_class,
         ];
 
