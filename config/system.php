@@ -29,6 +29,7 @@ return [
         'readlink',
         'symlink',
         'popepassthru',
-        'phpinfo'
+        'phpinfo',
+        'shell_exec'
     ]
 ];
