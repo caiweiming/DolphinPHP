@@ -40,6 +40,10 @@ class Database extends Admin
             case 'export':
                 $data_list = Db::query("SHOW TABLE STATUS");
                 $data_list = array_map('array_change_key_case', $data_list);
+                // 过滤掉视图表
+                $data_list = array_filter($data_list, function($item) {
+                    return $item['comment'] !== 'VIEW';
+                });
 
                 // 自定义按钮
                 $btn_export = [
