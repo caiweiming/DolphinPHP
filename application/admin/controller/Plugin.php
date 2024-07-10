@@ -431,7 +431,7 @@ class Plugin extends Admin
     {
         // 更新配置
         if ($this->request->isPost()) {
-            $data = $this->request->post();
+            $data = $this->request->except(config('zbuilder.form_token_name'), 'post');
             $data = json_encode($data);
 
             if (false !== PluginModel::where('name', $name)->update(['config' => $data])) {
