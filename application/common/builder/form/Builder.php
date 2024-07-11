@@ -313,7 +313,7 @@ class Builder extends ZBuilder
             'name'        => $name,
             'title'       => $title,
             'tips'        => $tips,
-            'value'       => $default
+            'value'       => $default,
             'extra_class' => $extra_class,
         ];
 
