@@ -75,9 +75,21 @@ class Icon extends Admin
             $data['create_time'] = $this->request->time();
             $data['update_time'] = $this->request->time();
 
-            // 获取图标信息
+            // 组合图标地址
             $url = substr($data['url'], 0, 4) == 'http' ? $data['url'] : 'http:'.$data['url'];
-            $content = file_get_contents($url);
+
+            // 检查图标url是否合法
+            $result = check_icon_url($url);
+            if (true !== $result) {
+                $this->error($result['msg']);
+            }
+
+            // 获取图标内容
+            try {
+                $content = file_get_contents($url);
+            } catch (\Exception $e) {
+                $this->error('图标获取失败，请确认地址是否正确');
+            }
 
             // 获取字体名
             $font_family = '';
@@ -173,7 +185,11 @@ class Icon extends Admin
         $icon = IconModel::get($id);
         // 获取图标信息
         $url = substr($icon['url'], 0, 4) == 'http' ? $icon['url'] : 'http:'.$icon['url'];
-        $content = file_get_contents($url);
+        try {
+            $content = file_get_contents($url);
+        } catch (\Exception $e) {
+            $this->error('图标获取失败，请确认地址是否正确');
+        }
 
         // 获取字体名
         $font_family = '';
@@ -227,5 +243,26 @@ class Icon extends Admin
             }
         }
         $this->error('删除失败');
+    }
+
+    /**
+     * 快捷编辑
+     * @param array $record
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    public function quickEdit($record = [])
+    {
+        $url = $this->request->param('value', '');
+        $url == '' && $this->error('请填写图标地址');
+        // 组合图标地址
+        $url = substr($url, 0, 4) == 'http' ? $url : 'http:'.$url;
+
+        // 检查图标url是否合法
+        $result = check_icon_url($url);
+        if (true !== $result) {
+            $this->error($result['msg']);
+        }
+
+        parent::quickEdit($record);
     }
 }

@@ -1503,3 +1503,41 @@ if (!function_exists('is_disable_func')) {
         return in_array(strtolower($func), $disable_functions);
     }
 }
+
+if (!function_exists('check_icon_url')) {
+    /**
+     * 检查自定义图标地址是否合法
+     * @param string $url
+     * @return array|bool
+     * @author 蔡伟明 <314013107@qq.com>
+     */
+    function check_icon_url($url = '')
+    {
+        $url_info     = parse_url($url);
+        $icon_domains = config('icon.domains');
+        $icon_suffix  = config('icon.suffix');
+        if (!empty($icon_domains) && !in_array(strtolower($url_info['host']), array_map('strtolower', $icon_domains))) {
+            return [
+                'code' => 0,
+                'msg'  => '图标域名不合法，请在【config/icon.php】文件中配置对应域名！'
+            ];
+        }
+        if (!isset($url_info['path'])) {
+            return [
+                'code' => 0,
+                'msg'  => '图标地址不合法，未检测到地址路径！'
+            ];
+        }
+        if (!empty($icon_suffix)) {
+            $path_info = pathinfo($url_info['path']);
+            if (!isset($path_info['extension']) || !in_array($path_info['extension'], array_map('strtolower', $icon_suffix))) {
+                return [
+                    'code' => 0,
+                    'msg'  => '图标域名后缀不合法，请在【config/icon.php】文件中配置对应后缀！'
+                ];
+            }
+        }
+
+        return true;
+    }
+}

@@ -44,9 +44,18 @@ class Icon extends Model
     public static function getUrls()
     {
         $list = self::where('status', 1)->select();
+        $list = $list->toArray();
         if ($list) {
             foreach ($list as $key => $item) {
-                if ($item['icons']) {
+                $url = substr($item['url'], 0, 4) == 'http' ? $item['url'] : 'http:'.$item['url'];
+                // 检查图标url是否合法
+                $result = check_icon_url($url);
+                if (true !== $result) {
+                    unset($list[$key]);
+                    continue;
+                }
+
+                if (isset($item['icons'])) {
                     $html = '<ul class="js-icon-list items-push-2x text-center">';
                     foreach ($item['icons'] as $icon) {
                         $html .= '<li title="'.$icon['title'].'"><i class="'.$icon['class'].'"></i> <code>'.$icon['code'].'</code></li>';
@@ -58,6 +67,6 @@ class Icon extends Model
                 $list[$key]['html'] = $html;
             }
         }
-        return $list;
+        return array_values($list);
     }
 }
