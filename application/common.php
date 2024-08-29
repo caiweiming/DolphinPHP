@@ -1083,7 +1083,7 @@ if (!function_exists('action_log')) {
                     foreach ($match[1] as $value){
                         $param = explode('|', $value);
                         if(isset($param[1]) && $param[1] != ''){
-                            if (is_disable_func($param[1])) {
+                            if (!check_log_func($param[1])) {
                                 continue;
                             }
                             $replace[] = call_user_func($param[1], $log[$param[0]]);
@@ -1483,24 +1483,34 @@ if (!function_exists('dp_send_message')) {
     }
 }
 
-if (!function_exists('is_disable_func')) {
+if (!function_exists('check_log_func')) {
     /**
-     * 是否是禁用函数
+     * 检查日志函数是否合法
      * @param string $func
      * @return bool
      * @author 蔡伟明 <314013107@qq.com>
      */
-    function is_disable_func($func = '') {
+    function check_log_func($func = '') {
+        $func = ltrim($func, '\\');
+        $func = strtolower($func);
+
         if (!is_string($func) || $func == '') {
             return false;
         }
 
-        $disable_functions = config('system.disable_functions');
-        if (!$disable_functions) {
-            return false;
+        // 获取函数过滤模式
+        $function_filter = strtolower(config('system.function_filter'));
+
+        // 黑名单模式
+        if ($function_filter === 'black_list') {
+            $disable_functions = config('system.function_black_list') ?: [];
+            return !in_array($func, $disable_functions);
         }
 
-        return in_array(strtolower($func), $disable_functions);
+        // 白名单模式
+        $enable_functions = config('system.function_white_list') ?: [];
+        // 检查白名单是否为空，并判断函数是否在白名单中
+        return !empty($enable_functions) && in_array(strtolower($func), $enable_functions);
     }
 }
 
