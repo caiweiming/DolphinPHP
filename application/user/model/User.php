@@ -68,7 +68,7 @@ class User extends Model
         // 查找用户
         $user = $this::get($map);
         if (!$user) {
-            $this->error = '用户不存在或被禁用！';
+            $this->error = '账号或者密码错误！';
         } else {
             // 检查是否分配用户组
             if ($user['role'] == 0) {
