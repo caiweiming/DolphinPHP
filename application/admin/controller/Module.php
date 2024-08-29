@@ -106,6 +106,9 @@ class Module extends Admin
 
         // 模块配置信息
         $module_info = ModuleModel::getInfoFromFile($name);
+        if (empty($module_info)) {
+            $this->error('模块不存在！');
+        }
 
         if ($confirm == 0) {
             $need_module = [];
@@ -234,6 +237,9 @@ class Module extends Admin
 
         // 模块配置信息
         $module_info = ModuleModel::getInfoFromFile($name);
+        if (empty($module_info)) {
+            $this->error('模块不存在！');
+        }
 
         if ($confirm == 0) {
             $this->assign('name', $name);
@@ -355,6 +361,12 @@ class Module extends Admin
         if ($export_data == '') {
             $this->assign('page_title', '导出模块：'. $name);
             return $this->fetch();
+        }
+
+        // 模块信息
+        $module = ModuleModel::where('name', $name)->find();
+        if (!$module) {
+            $this->error('模块不存在');
         }
 
         // 模块导出目录
