@@ -8,15 +8,15 @@
 // +----------------------------------------------------------------------
 
 return [
-	// 产品信息
-	'product_name' => 'DolphinPHP',
-	'product_version' => '1.6.0',
-	'build_version' => '202407111120',
-	'product_website' => 'http://www.dolphinphp.com',
-	'product_update' => 'http://www.dolphinphp.com/checkUpdate',
-	'develop_team' => 'DolphinPHP',
+    // 产品信息
+    'product_name' => 'DolphinPHP',
+    'product_version' => '1.7.0',
+    'build_version' => '202408300938',
+    'product_website' => 'http://www.dolphinphp.com',
+    'product_update' => 'http://www.dolphinphp.com/checkUpdate',
+    'develop_team' => 'DolphinPHP',
 
-	// 公司信息
-	'company_name' => '广东卓锐软件有限公司',
-	'company_website' => 'http://www.zrthink.com',
+    // 公司信息
+    'company_name' => '广东卓锐软件有限公司',
+    'company_website' => 'http://www.zrthink.com',
 ];
