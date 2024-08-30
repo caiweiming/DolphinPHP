@@ -1837,7 +1837,7 @@ class Builder extends ZBuilder
      */
     public function __call($methodName, $argument)
     {
-        $type = strtolower(substr($methodName, 3));
+        $type = lcfirst(substr($methodName, 3));
 
         if ($type != '') {
             $class_name = 'form\\'.$type.'\\Builder';
