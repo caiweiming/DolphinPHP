@@ -25,7 +25,7 @@ CREATE TABLE `dp_admin_access` (
   `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `nid` varchar(16) NOT NULL DEFAULT '' COMMENT '授权节点id',
   `tag` varchar(16) NOT NULL DEFAULT '' COMMENT '分组标签'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='统一授权表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='统一授权表';
 
 -- ----------------------------
 -- Records of dp_admin_access
@@ -47,7 +47,7 @@ CREATE TABLE `dp_admin_action` (
   `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='系统行为表';
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='系统行为表';
 
 -- ----------------------------
 -- Records of dp_admin_action
@@ -121,7 +121,7 @@ CREATE TABLE `dp_admin_attachment` (
   `width` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '图片宽度',
   `height` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '图片高度',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='附件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件表';
 
 -- ----------------------------
 -- Records of dp_admin_attachment
@@ -155,7 +155,7 @@ CREATE TABLE `dp_admin_config` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态：0禁用，1启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='系统配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='系统配置表';
 
 -- ----------------------------
 -- Records of dp_admin_config
@@ -213,7 +213,7 @@ CREATE TABLE `dp_admin_hook` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='钩子表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='钩子表';
 
 -- ----------------------------
 -- Records of dp_admin_hook
@@ -249,7 +249,7 @@ CREATE TABLE `dp_admin_hook_plugin` (
   `sort` int(11) unsigned NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='钩子-插件对应表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='钩子-插件对应表';
 
 -- ----------------------------
 -- Records of dp_admin_hook_plugin
@@ -271,7 +271,7 @@ CREATE TABLE `dp_admin_icon` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='图标表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图标表';
 
 -- ----------------------------
 -- Records of dp_admin_icon
@@ -288,7 +288,7 @@ CREATE TABLE `dp_admin_icon_list` (
   `class` varchar(255) NOT NULL DEFAULT '' COMMENT '图标类名',
   `code` varchar(128) NOT NULL DEFAULT '' COMMENT '图标关键词',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='详细图标列表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='详细图标列表';
 
 -- ----------------------------
 -- Records of dp_admin_icon_list
@@ -312,7 +312,7 @@ CREATE TABLE `dp_admin_log` (
   KEY `action_ip_ix` (`action_ip`),
   KEY `action_id_ix` (`action_id`),
   KEY `user_id_ix` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
 
 -- ----------------------------
 -- Records of dp_admin_log
@@ -339,7 +339,7 @@ CREATE TABLE `dp_admin_menu` (
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   `params` varchar(255) NOT NULL DEFAULT '' COMMENT '参数',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=214 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=214 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of dp_admin_menu
@@ -475,7 +475,7 @@ CREATE TABLE `dp_admin_message` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `read_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '阅读时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='消息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息表';
 
 -- ----------------------------
 -- Records of dp_admin_message
@@ -503,7 +503,7 @@ CREATE TABLE `dp_admin_module` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='模块表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='模块表';
 
 -- ----------------------------
 -- Records of dp_admin_module
@@ -527,7 +527,7 @@ CREATE TABLE `dp_admin_packet` (
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='数据包表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据包表';
 
 -- ----------------------------
 -- Records of dp_admin_packet
@@ -554,7 +554,7 @@ CREATE TABLE `dp_admin_plugin` (
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='插件表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='插件表';
 
 -- ----------------------------
 -- Records of dp_admin_plugin
@@ -579,7 +579,7 @@ CREATE TABLE `dp_admin_role` (
   `access` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否可登录后台',
   `default_module` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '默认访问模块',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of dp_admin_role
@@ -612,8 +612,9 @@ CREATE TABLE `dp_admin_user` (
   `last_login_ip` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '登录ip',
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态：0禁用，1启用',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`) 
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of dp_admin_user
