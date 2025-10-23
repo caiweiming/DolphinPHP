@@ -612,10 +612,11 @@ CREATE TABLE `dp_admin_user` (
   `last_login_ip` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '登录ip',
   `sort` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态：0禁用，1启用',
+  `signin_token` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '登录token',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of dp_admin_user
 -- ----------------------------
-INSERT INTO `dp_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$Brw6wmuSLIIx3Yabid8/Wu5l8VQ9M/H/CG3C9RqN9dUCwZW3ljGOK', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1477794539', '1477794539', '2130706433', '100', '1');
+INSERT INTO `dp_admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$Brw6wmuSLIIx3Yabid8/Wu5l8VQ9M/H/CG3C9RqN9dUCwZW3ljGOK', '', '0', '', '0', '0', '0.00', '0', '1', '', '0', '0', '1476065410', '1477794539', '1477794539', '2130706433', '100', '1', '');

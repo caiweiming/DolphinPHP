@@ -13,6 +13,7 @@ use app\common\controller\Common;
 use app\user\model\User as UserModel;
 use app\user\model\Role as RoleModel;
 use app\admin\model\Menu as MenuModel;
+use think\Db;
 use think\facade\Hook;
 
 /**
@@ -146,9 +147,17 @@ class Publics extends Common
             }
         }
 
+        // 清除数据库中的signin_token
+        Db::name('admin_user')->where('id', session('user_auth.uid'))->setField('signin_token', '');
+
+        // 清除session
         session(null);
+
+        // 清除cookies
         cookie('uid', null);
         cookie('signin_token', null);
+        cookie('signin_ip', null);
+        cookie('signin_expire', null);
 
         $this->redirect('signin');
     }

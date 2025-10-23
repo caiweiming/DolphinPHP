@@ -22,8 +22,8 @@ if (is_file(Env::get('app_path') . 'function.php')) {
 if (!function_exists('is_signin')) {
     /**
      * 判断是否登录
+     * @return int
      * @author 蔡伟明 <314013107@qq.com>
-     * @return mixed
      */
     function is_signin()
     {
@@ -31,19 +31,48 @@ if (!function_exists('is_signin')) {
         if (empty($user)) {
             // 判断是否记住登录
             if (cookie('?uid') && cookie('?signin_token')) {
+                $uid          = cookie('uid');
+                $signin_token = cookie('signin_token');
+
+                // 基本验证：检查cookie是否过期
+                if (cookie('?signin_expire') && cookie('signin_expire') < time()) {
+                    // Cookie已过期，清除相关cookie
+                    cookie('uid', null);
+                    cookie('signin_token', null);
+                    cookie('signin_ip', null);
+                    cookie('signin_expire', null);
+                    return 0;
+                }
+
                 $UserModel = new User();
-                $user = $UserModel::get(cookie('uid'));
+                $user      = $UserModel::get($uid);
                 if ($user) {
-                    $signin_token = data_auth_sign($user['username'].$user['id'].$user['last_login_time']);
-                    if (cookie('signin_token') == $signin_token) {
+                    // 使用新的安全验证方法
+                    if ($UserModel->verifySecureSigninToken($signin_token, $uid)) {
+                        // 增加登录尝试限制（防止频繁验证攻击）
+                        $cache_key = 'signin_attempts_' . get_client_ip(1);
+                        $attempts  = cache($cache_key) ?: 0;
+
+                        if ($attempts > 10) { // 每小时最多10次自动登录尝试
+                            return 0;
+                        }
+
+                        cache($cache_key, $attempts + 1, 3600); // 1小时缓存
+
                         // 自动登录
                         $UserModel->autoLogin($user);
                         return $user['id'];
+                    } else {
+                        // token验证失败，清除相关cookie并记录安全日志
+                        cookie('uid', null);
+                        cookie('signin_token', null);
+                        cookie('signin_ip', null);
+                        cookie('signin_expire', null);
                     }
                 }
-            };
+            }
             return 0;
-        }else{
+        } else {
             return session('user_auth_sign') == data_auth_sign($user) ? $user['uid'] : 0;
         }
     }

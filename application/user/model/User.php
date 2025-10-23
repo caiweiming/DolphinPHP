@@ -9,6 +9,7 @@
 
 namespace app\user\model;
 
+use Exception;
 use think\Model;
 use think\helper\Hash;
 use app\user\model\Role as RoleModel;
@@ -139,11 +140,113 @@ class User extends Model
 
         // 记住登录
         if ($rememberme) {
-            $signin_token = $user->username.$user->id.$user->last_login_time;
-            cookie('uid', $user->id, 24 * 3600 * 7);
-            cookie('signin_token', data_auth_sign($signin_token), 24 * 3600 * 7);
+            // 生成安全的signin_token
+            $signin_token = $this->generateSecureSigninToken($user);
+            cookie('uid', $user['id'], 24 * 3600 * 7);
+            cookie('signin_token', $signin_token, 24 * 3600 * 7);
+            cookie('signin_ip', get_client_ip(1), 24 * 3600 * 7);
+            cookie('signin_expire', time() + (24 * 3600 * 7), 24 * 3600 * 7);
+
+            // 将token存储到数据库以供验证
+            Db::name('admin_user')->where('id', $user['id'])->setField('signin_token', $signin_token);
         }
 
         return $user->id;
+    }
+
+    /**
+     * 生成安全的登录token
+     * @param object $user 用户对象
+     * @return string
+     * @throws RandomException
+     * @throws Exception
+     */
+    private function generateSecureSigninToken($user)
+    {
+        // 使用更安全的随机盐值和用户信息
+        $salt = bin2hex(random_bytes(16)); // 生成32位随机盐值
+        $client_ip = get_client_ip(1);
+        $user_agent = request()->server('HTTP_USER_AGENT', '');
+        $timestamp = time();
+
+        // 构建token数据
+        $token_data = [
+            'uid'             => $user['id'],
+            'username'        => $user['username'],
+            'salt'            => $salt,
+            'ip'              => $client_ip,
+            'timestamp'       => $timestamp,
+            'user_agent_hash' => hash('sha256', $user_agent)
+        ];
+
+        // 使用HMAC-SHA256进行签名
+        $secret_key = config('data_auth_key') ?: 'default_secret_key_change_me';
+        $signature = hash_hmac('sha256', json_encode($token_data), $secret_key);
+
+        // 组合最终token
+        return base64_encode(json_encode([
+            'data'      => $token_data,
+            'signature' => $signature
+        ]));
+    }
+
+    /**
+     * 验证安全登录token
+     * @param string $token
+     * @param int $uid
+     * @return bool
+     */
+    public function verifySecureSigninToken($token, $uid): bool
+    {
+        try {
+            $decoded = json_decode(base64_decode($token), true);
+            if (!$decoded || !isset($decoded['data']) || !isset($decoded['signature'])) {
+                return false;
+            }
+
+            $data = $decoded['data'];
+            $signature = $decoded['signature'];
+
+            // 验证token基本信息
+            if ($data['uid'] != $uid) {
+                return false;
+            }
+
+            // 验证token是否过期（7天）
+            if (time() - $data['timestamp'] > 7 * 24 * 3600) {
+                return false;
+            }
+
+            // 验证IP地址（可选配置）
+            if (config('check_signin_ip') && $data['ip'] != get_client_ip(1)) {
+                return false;
+            }
+
+            // 验证User-Agent（可选配置）
+            if (config('check_signin_user_agent')) {
+                $current_user_agent_hash = hash('sha256', request()->server('HTTP_USER_AGENT', ''));
+                if ($data['user_agent_hash'] != $current_user_agent_hash) {
+                    return false;
+                }
+            }
+
+            // 验证签名
+            $secret_key = config('data_auth_key') ?: 'default_secret_key_change_me';
+            $expected_signature = hash_hmac('sha256', json_encode($data), $secret_key);
+
+            if (!hash_equals($signature, $expected_signature)) {
+                return false;
+            }
+
+            // 验证数据库中的token是否一致（防止并发登录）
+            $db_token = Db::name('admin_user')->where('id', $uid)->value('signin_token');
+            if ($db_token !== $token) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

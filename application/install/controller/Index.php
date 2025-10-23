@@ -12,6 +12,7 @@ namespace app\install\controller;
 use think\Controller;
 use think\Db;
 use think\facade\Env;
+use app\install\helper\ConfigHelper;
 
 define('INSTALL_APP_PATH', realpath('./') . '/');
 
@@ -179,6 +180,13 @@ class Index extends Controller
         if (session('error')) {
             $this->error('安装出错，请重新安装！', $this->request->baseFile());
         } else {
+            // 写入data_auth_key
+            $data_auth_key = generate_rand_str(64, 5);
+            ConfigHelper::updateAppConfig(
+                'data_auth_key', // 配置项键名
+                $data_auth_key // 新值
+            );
+
             // 写入安装锁定文件(只能在最后一步写入锁定文件，因为锁定文件写入后安装模块将无法访问)
             file_put_contents('../data/install.lock', 'lock');
             session('step', null);
