@@ -1,0 +1,544 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .plugin-import-page,
+    .plugin-import-page * {
+        box-sizing: border-box;
+    }
+
+    .plugin-import-page {
+        padding: 0 18px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        min-height: 100%;
+    }
+
+    .plugin-import-card {
+        padding: 22px 22px 18px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06);
+    }
+
+    .plugin-import-title {
+        margin: 0 0 8px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .plugin-import-alert strong {
+        color: #1e3a8a;
+    }
+
+    .plugin-import-field {
+        margin-top: 18px;
+    }
+
+    .plugin-import-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .plugin-import-dropzone {
+        position: relative;
+        display: block;
+        padding: 22px 20px;
+        border: 1px dashed #93c5fd;
+        border-radius: 18px;
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 35%),
+            linear-gradient(180deg, #f8fbff 0%, #f1f7ff 100%);
+        cursor: pointer;
+        transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .plugin-import-dropzone:hover {
+        border-color: #60a5fa;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.10);
+    }
+
+    .plugin-import-dropzone.is-dragover,
+    .plugin-import-dropzone:focus-within {
+        border-color: #2563eb;
+        background:
+            radial-gradient(circle at top right, rgba(59, 130, 246, 0.22), transparent 36%),
+            linear-gradient(180deg, #eff6ff 0%, #e6f0ff 100%);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .plugin-import-dropzone.is-error {
+        border-color: #ef4444;
+        background:
+            radial-gradient(circle at top right, rgba(248, 113, 113, 0.18), transparent 36%),
+            linear-gradient(180deg, #fff7f7 0%, #fff1f2 100%);
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.10);
+    }
+
+    .plugin-import-dropzone.is-selected {
+        border-color: #22c55e;
+        background:
+            radial-gradient(circle at top right, rgba(74, 222, 128, 0.16), transparent 36%),
+            linear-gradient(180deg, #f4fff7 0%, #eefcf3 100%);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+    }
+
+    .plugin-import-dropzone-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .plugin-import-dropzone-icon {
+        flex: 0 0 auto;
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .plugin-import-dropzone.is-selected .plugin-import-dropzone-icon {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        box-shadow: 0 12px 24px rgba(34, 197, 94, 0.22);
+    }
+
+    .plugin-import-dropzone-body {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .plugin-import-dropzone-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .plugin-import-dropzone-desc {
+        margin: 6px 0 0;
+        color: #475569;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .plugin-import-dropzone-file {
+        display: none;
+        margin-top: 10px;
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.8;
+        font-weight: 700;
+        word-break: break-word;
+    }
+
+    .plugin-import-dropzone-file.is-visible {
+        display: block;
+    }
+
+    .plugin-import-input {
+        appearance: none;
+    }
+
+    .plugin-import-tips {
+        margin-top: 10px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .plugin-import-feedback {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .plugin-import-feedback.is-visible {
+        display: block;
+    }
+
+    .plugin-import-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .plugin-import-btn {
+        min-width: 110px;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .plugin-import-btn-secondary {
+        background: #e2e8f0;
+        color: #334155;
+    }
+
+    .plugin-import-btn-secondary:hover {
+        background: #cbd5e1;
+    }
+
+    .plugin-import-btn-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+    }
+
+    .plugin-import-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.3);
+    }
+
+    @media (max-width: 640px) {
+        .plugin-import-page {
+            padding: 0 12px;
+        }
+
+        .plugin-import-card {
+            padding: 18px 16px 16px;
+            border-radius: 14px;
+        }
+
+        .plugin-import-dropzone {
+            padding: 18px 16px;
+        }
+
+        .plugin-import-dropzone-head {
+            align-items: flex-start;
+        }
+
+        .plugin-import-dropzone-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+        }
+
+        .plugin-import-actions {
+            flex-direction: column-reverse;
+        }
+
+        .plugin-import-btn {
+            width: 100%;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="plugin-import-page">
+    <div class="plugin-import-card">
+        <h2 class="plugin-import-title">上传插件包</h2>
+
+        <form id="plugin-import-form" enctype="multipart/form-data" novalidate>
+            {:dp_token_field()}
+            <div class="plugin-import-field">
+                <label class="plugin-import-dropzone" id="plugin-import-dropzone" for="plugin-package-file">
+                    <input
+                        id="plugin-package-file"
+                        name="package"
+                        type="file"
+                        class="plugin-import-input"
+                        accept=".zip,application/zip"
+                        required
+                    >
+                    <div class="plugin-import-dropzone-head">
+                        <span class="plugin-import-dropzone-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 16v-9"/>
+                                <path d="M8.5 10.5 12 7l3.5 3.5"/>
+                                <path d="M20 16.5a3.5 3.5 0 0 0-3.2-3.49A5 5 0 0 0 7 12.5a4 4 0 0 0 .5 7.97H16"/>
+                            </svg>
+                        </span>
+                        <div class="plugin-import-dropzone-body">
+                            <h3 class="plugin-import-dropzone-title" id="plugin-import-title">拖入插件 ZIP，或点击这里选择文件</h3>
+                            <p class="plugin-import-dropzone-desc" id="plugin-import-desc">
+                                推荐直接上传系统导出的标准插件包。导入前会自动校验目录结构、`plugin.json` 和安全条目。
+                            </p>
+                            <div class="plugin-import-dropzone-file" id="plugin-import-file-display"></div>
+                        </div>
+                    </div>
+                </label>
+                <div class="plugin-import-feedback" id="plugin-import-feedback"></div>
+                <div class="plugin-import-tips">
+                    仅导入到插件目录，不自动安装、不自动启用。若存在同名插件目录，系统会直接拒绝导入。压缩包内部必须包含唯一的 <code>plugins/&lt;vendor&gt;/&lt;name&gt;/plugin.json</code>
+                </div>
+            </div>
+
+            <div class="plugin-import-actions">
+                <button type="button" class="plugin-import-btn plugin-import-btn-secondary" id="plugin-import-cancel">取消</button>
+                <button type="submit" class="plugin-import-btn plugin-import-btn-primary" id="plugin-import-submit">开始导入</button>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        const $form = $('#plugin-import-form');
+        const $submit = $('#plugin-import-submit');
+        const $cancel = $('#plugin-import-cancel');
+        const $dropzone = $('#plugin-import-dropzone');
+        const $feedback = $('#plugin-import-feedback');
+        const $title = $('#plugin-import-title');
+        const $desc = $('#plugin-import-desc');
+        const $fileDisplay = $('#plugin-import-file-display');
+        const fileInput = document.getElementById('plugin-package-file');
+        const allowedExtensions = {$allowedExtensionsJson|raw} || [];
+        const maxSizeBytes = Number('{$maxSizeBytes|default=0}');
+        let loading = false;
+
+        const defaultTitle = '拖入插件 ZIP，或点击这里选择文件';
+        const defaultDesc = '推荐直接上传系统导出的标准插件包。导入前会自动校验目录结构、`plugin.json` 和安全条目。';
+
+        function closePopup() {
+            if (window.parent && parent.layer) {
+                const index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        }
+
+        function handleSuccessResponse(res) {
+            Dolphin.success(res.msg || '插件包导入成功');
+            setTimeout(function () {
+                if (window.parent && parent.DolphinTable && parent.DolphinTable['dp_table']) {
+                    parent.DolphinTable['dp_table'].reloadData('dp_table');
+                }
+                closePopup();
+            }, 500);
+        }
+
+        function formatFileSize(size) {
+            const num = Number(size) || 0;
+            if (num <= 0) {
+                return '0 B';
+            }
+
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let value = num;
+            let index = 0;
+
+            while (value >= 1024 && index < units.length - 1) {
+                value /= 1024;
+                index += 1;
+            }
+
+            const fixed = index === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
+            return fixed + ' ' + units[index];
+        }
+
+        function setFeedback(message) {
+            $dropzone.addClass('is-error');
+            $feedback.text(message || '文件校验失败').addClass('is-visible');
+        }
+
+        function clearFeedback() {
+            $dropzone.removeClass('is-error');
+            $feedback.text('').removeClass('is-visible');
+        }
+
+        function applyIdleState() {
+            $dropzone.removeClass('is-selected');
+            $title.text(defaultTitle);
+            $desc.text(defaultDesc);
+            $fileDisplay.text('').removeClass('is-visible');
+        }
+
+        function applySelectedState(file) {
+            const fileText = file.name + ' · ' + formatFileSize(file.size);
+            $dropzone.addClass('is-selected');
+            $title.text('已选择插件包');
+            $desc.text('文件已就绪，点击上传区可重新选择，或直接开始导入。');
+            $fileDisplay.text(fileText).addClass('is-visible');
+        }
+
+        function resetSelectedFile() {
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            applyIdleState();
+        }
+
+        function validateFiles(files) {
+            if (!files || files.length === 0) {
+                return { ok: false, message: '请选择需要导入的 ZIP 插件包' };
+            }
+
+            if (files.length > 1) {
+                return { ok: false, message: '一次只允许上传一个插件 ZIP 包' };
+            }
+
+            const file = files[0];
+            const filename = String(file.name || '');
+            const extension = filename.includes('.') ? filename.split('.').pop().toUpperCase() : '';
+
+            if (!extension || (allowedExtensions.length > 0 && !allowedExtensions.includes(extension))) {
+                return { ok: false, message: '仅支持上传 ' + allowedExtensions.join(' / ') + ' 格式的插件包' };
+            }
+
+            if (maxSizeBytes > 0 && Number(file.size || 0) > maxSizeBytes) {
+                return { ok: false, message: '插件包大小不能超过 ' + formatFileSize(maxSizeBytes) };
+            }
+
+            return { ok: true, file };
+        }
+
+        function syncSelectedFile(file) {
+            if (!file) {
+                resetSelectedFile();
+                return;
+            }
+
+            clearFeedback();
+            applySelectedState(file);
+        }
+
+        function updateSelectedFile() {
+            if (!fileInput) {
+                return;
+            }
+
+            const result = validateFiles(fileInput.files);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                return;
+            }
+
+            syncSelectedFile(result.file);
+        }
+
+        $cancel.on('click', function () {
+            closePopup();
+        });
+
+        if (fileInput) {
+            fileInput.addEventListener('change', updateSelectedFile);
+        }
+
+        $dropzone.on('dragenter dragover', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            clearFeedback();
+            $dropzone.addClass('is-dragover');
+        });
+
+        $dropzone.on('dragleave dragend drop', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $dropzone.removeClass('is-dragover');
+        });
+
+        $dropzone.on('drop', function (event) {
+            if (!fileInput) {
+                return;
+            }
+
+            const originalEvent = event.originalEvent;
+            const files = originalEvent && originalEvent.dataTransfer ? originalEvent.dataTransfer.files : null;
+            if (!files || files.length === 0) {
+                return;
+            }
+
+            const result = validateFiles(files);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                Dolphin.error(result.message);
+                return;
+            }
+
+            if (typeof DataTransfer !== 'undefined') {
+                const transfer = new DataTransfer();
+                transfer.items.add(result.file);
+                fileInput.files = transfer.files;
+            } else {
+                fileInput.files = files;
+            }
+
+            syncSelectedFile(result.file);
+        });
+
+        $form.on('submit', function (event) {
+            event.preventDefault();
+            if (loading) {
+                return false;
+            }
+
+            const result = validateFiles(fileInput ? fileInput.files : null);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                Dolphin.error(result.message);
+                return false;
+            }
+
+            clearFeedback();
+            const formData = new FormData(this);
+            loading = true;
+            $submit.prop('disabled', true).addClass('btn-loading disabled');
+
+            Dolphin.ajax(window.location.href, 'POST', formData, {
+                processData: false,
+                contentType: false,
+                showDefaultMsg: false,
+                success: function (res) {
+                    if (res.code === 1) {
+                        handleSuccessResponse(res);
+                        return false;
+                    }
+
+                    setFeedback(res.msg || '插件包导入失败');
+                    Dolphin.error(res.msg || '插件包导入失败');
+                    Dolphin.refreshToken();
+                    return false;
+                },
+                error: function (err) {
+                    let message = '插件包导入失败';
+                    if (err && err.responseJSON && err.responseJSON.message) {
+                        message = err.responseJSON.message;
+                    }
+                    setFeedback(message);
+                    Dolphin.fail(err);
+                    Dolphin.refreshToken();
+                    return false;
+                },
+                complete: function () {
+                    loading = false;
+                    $submit.prop('disabled', false).removeClass('btn-loading disabled');
+                }
+            });
+
+            return false;
+        });
+    })();
+</script>
+{/block}

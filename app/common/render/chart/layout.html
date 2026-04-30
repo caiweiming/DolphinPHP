@@ -1,0 +1,29 @@
+<div class="card {$dp_chart_class|default='dp-chart-card'}" {$dp_chart_attr|default=''|raw}>
+    {if !empty($dp_chart_title) || !empty($dp_chart_subtitle)}
+    <div class="card-header">
+        <div>
+            {notempty name="dp_chart_title"}
+            <h3 class="card-title">{$dp_chart_title|default=''}</h3>
+            {/notempty}
+            {notempty name="dp_chart_subtitle"}
+            <div class="card-subtitle text-secondary">{$dp_chart_subtitle|default=''}</div>
+            {/notempty}
+        </div>
+    </div>
+    {/if}
+    <div class="card-body">
+        <div class="dp-chart-wrapper">
+            <div id="{$dp_chart_id|default=''}"
+                 class="dp-chart"
+                 style="{$dp_chart_style|default=''}"
+                 data-map-key="{$dp_chart_map_key|default=''}"
+                 data-chart="{$dp_chart_payload|default=''|raw}"></div>
+            <div class="dp-chart-empty-state d-none">
+                <div class="empty">
+                    <p class="empty-title">{$dp_chart_empty.title|default='暂无数据'}</p>
+                    <p class="empty-subtitle text-secondary">{$dp_chart_empty.description|default='当前图表暂无可展示的数据'}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

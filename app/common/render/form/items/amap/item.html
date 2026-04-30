@@ -1,0 +1,25 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="amap">
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|dp_clean|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div class="dp-form-amap" data-options="{$options|default=''|raw}" data-address-field="{$address_field|default=''}" data-readonly="{$readonly|default=0}">
+        <div class="input-group mb-2">
+            <input type="text" class="form-control dp-amap-search" placeholder="{$placeholder|default='搜索地址'}" {if $readonly}readonly{/if} />
+            {if !$readonly}<button type="button" class="btn dp-amap-clear">清除</button>{/if}
+        </div>
+        {if !$readonly}
+        <div class="dp-amap-suggest list-group mb-2" style="display:none"></div>
+        {/if}
+        <div class="dp-amap-canvas" style="height: {$height|default=360}px;"></div>
+    </div>
+
+    <input type="hidden" class="dp-amap-value" id="{$id|default=''}" {if !$readonly}name="{$id|default=''}"{/if} value="{$value|default=''}">
+    <input type="hidden" class="dp-amap-address-input" {if !$readonly}name="{$address_field|default=''}"{/if} value="{$address_value|default=''}">
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

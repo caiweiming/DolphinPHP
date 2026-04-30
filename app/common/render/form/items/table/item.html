@@ -1,0 +1,61 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div class="{$wrapper_class|default='table-responsive'}">
+        <table class="{$table_class|default='table table-bordered table-striped table-vcenter'}" {$props|default=''|raw}>
+            {notempty name="headers"}
+            <thead>
+                {volist name="headers" id="headerRow"}
+                <tr>
+                    {volist name="headerRow" id="cell"}
+                        {empty name="cell.skip"}
+                    <th
+                        {$cell.colspan > 1 ? 'colspan="'.$cell.colspan.'"' : ''}
+                        {$cell.rowspan > 1 ? 'rowspan="'.$cell.rowspan.'"' : ''}
+                        {$cell.class ? 'class="'.$cell.class.'"' : ''}
+                        {$cell.style ? 'style="'.$cell.style.'"' : ''}
+                        {$cell.attrs|default=''|raw}>
+                        {notempty name="cell.raw"}{$cell.content|default=''|raw}{else/}{$cell.content|default=''}{/notempty}
+                    </th>
+                        {/empty}
+                    {/volist}
+                </tr>
+                {/volist}
+            </thead>
+            {/notempty}
+
+            <tbody>
+                {notempty name="rows"}
+                    {volist name="rows" id="row"}
+                    <tr>
+                        {volist name="row" id="cell"}
+                            {empty name="cell.skip"}
+                        <td
+                            {$cell.colspan > 1 ? 'colspan="'.$cell.colspan.'"' : ''}
+                            {$cell.rowspan > 1 ? 'rowspan="'.$cell.rowspan.'"' : ''}
+                            {$cell.class ? 'class="'.$cell.class.'"' : ''}
+                            {$cell.style ? 'style="'.$cell.style.'"' : ''}
+                            {$cell.attrs|default=''|raw}>
+                            {notempty name="cell.raw"}{$cell.content|default=''|raw}{else/}{$cell.content|default=''}{/notempty}
+                        </td>
+                            {/empty}
+                        {/volist}
+                    </tr>
+                    {/volist}
+                {else/}
+                    <tr>
+                        <td colspan="{$column_count|default='1'}" class="text-muted text-center py-3">{$empty_text|default='暂无数据'}</td>
+                    </tr>
+                {/notempty}
+            </tbody>
+        </table>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

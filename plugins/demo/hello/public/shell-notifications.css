@@ -1,0 +1,14 @@
+.plugin-demo-hello-notifications {
+    min-width: 22rem;
+}
+
+.plugin-demo-hello-notifications .list-group-item-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+.plugin-demo-hello-notifications .list-group-item-actions.is-active .dp-icon {
+    color: #f59e0b !important;
+}

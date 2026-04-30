@@ -1,0 +1,35 @@
+<div class="mb-3 {$width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true"
+              data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs {$fill ?= 'nav-fill'} {$right ?= ' flex-row-reverse'}" data-bs-toggle="tabs">
+                {volist name="options" id="option"}
+                <li class="nav-item {$option.right ?= 'ms-auto'}">
+                    <a href="#{$id}-{$key}" class="nav-link {$key == 0 ?= 'active'} {$option.disabled ?= ' disabled'}" data-bs-toggle="tab">
+                        {$option.icon|default=''|raw}
+                        {$option.title|default=''}
+                    </a>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                {volist name="options" id="option"}
+                <div class="tab-pane {$key == 0 ?= 'active show'}" id="{$id}-{$key}">
+                    {$option.content|raw}
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

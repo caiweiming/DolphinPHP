@@ -1,0 +1,58 @@
+<!-- 工作台快捷入口卡片主体 -->
+{php}
+$__quickLinks = is_array($__card['links'] ?? null) ? $__card['links'] : [];
+$__candidates = is_array($__card['candidates'] ?? null) ? $__card['candidates'] : [];
+$__stateJson = json_encode([
+    'links'      => $__quickLinks,
+    'candidates' => $__candidates,
+    'count'      => (int)($__card['count'] ?? count($__quickLinks)),
+    'limit'      => (int)($__card['limit'] ?? 12),
+    'is_empty'   => (bool)($__card['is_empty'] ?? ($__quickLinks === [])),
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+{/php}
+<div class="dp-workspace-quick-links" data-dp-workspace-quick-links data-state='{$__stateJson|raw}'>
+    <div class="dp-workspace-quick-links-grid" data-dp-quick-links-grid>
+        {volist name="__quickLinks" id="item"}
+        <div class="dp-workspace-quick-link" data-dp-quick-link-item data-key="{$item.key}">
+            <button type="button" class="dp-workspace-quick-link-handle" data-dp-quick-link-handle aria-label="拖拽排序 {$item.title}">
+                <i class="ti ti-grip-vertical"></i>
+            </button>
+            <button type="button" class="dp-workspace-quick-link-remove" data-dp-quick-link-remove data-key="{$item.key}" aria-label="移除 {$item.title}">
+                <i class="ti ti-x"></i>
+            </button>
+            <a
+                class="dp-workspace-quick-link-target"
+                href="{$item.url}"
+                data-dp-quick-link-target
+                data-title="{$item.title}"
+                data-url="{$item.url}"
+                data-iframe-url="{$item.iframe_url|default=$item.url}"
+                data-icon="{$item.icon|default='ti ti-point'}"
+                data-app-name="{$item.app_name|default=''}"
+                data-is-workspace="{$item.is_workspace ? 1 : 0}"
+            >
+                <span class="dp-workspace-quick-link-body">
+                    <span class="dp-workspace-quick-link-icon"><i class="{$item.icon|default='ti ti-point'}"></i></span>
+                    <span class="dp-workspace-quick-link-title">{$item.title}</span>
+                </span>
+            </a>
+        </div>
+        {/volist}
+    </div>
+    <div class="empty dp-workspace-quick-links-empty{if !($__card['is_empty'] ?? false)} d-none{/if}" data-dp-quick-links-empty>
+        <div class="empty-icon"><i class="ti ti-layout-grid-add icon"></i></div>
+        <p class="empty-title">还没有快捷入口</p>
+        <p class="empty-subtitle text-secondary mb-0">点击“添加快捷入口”，把高频菜单固定到工作台。</p>
+        <div class="mt-3">
+            <button
+                type="button"
+                class="btn btn-primary"
+                data-action="open-panel"
+                aria-controls="dp-workspace-quick-links-panel"
+                aria-expanded="false"
+            >
+                <i class="ti ti-plus me-1"></i>添加快捷入口
+            </button>
+        </div>
+    </div>
+</div>

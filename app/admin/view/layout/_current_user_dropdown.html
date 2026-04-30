@@ -1,0 +1,40 @@
+{php}
+$__dpCurrentUser = is_array($dp_admin_current_user ?? null) ? $dp_admin_current_user : [];
+$__dpDisplayName = trim((string)($__dpCurrentUser['display_name'] ?? '管理员'));
+$__dpSecondaryText = trim((string)($__dpCurrentUser['secondary_text'] ?? '当前登录用户'));
+$__dpAvatarUrl = trim((string)($__dpCurrentUser['avatar_url'] ?? '/static/img/avatar.jpg'));
+$__dpProfileUrl = trim((string)($__dpCurrentUser['profile_url'] ?? ''));
+$__dpProfileMenuItem = is_array($__dpCurrentUser['profile_menu_item'] ?? null) ? $__dpCurrentUser['profile_menu_item'] : [];
+$__dpLogoutUrl = trim((string)($__dpCurrentUser['logout_url'] ?? '/admin/logout/index.html'));
+$__dpHasUserMenuSlots = !empty($dp_admin_user_menu_slots) && is_array($dp_admin_user_menu_slots);
+{/php}
+<div class="nav-item dropdown" data-dp-current-user-dropdown="1">
+    <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
+        <span class="avatar avatar-sm" data-dp-current-user-avatar="1" style="background-image: url({$__dpAvatarUrl})"></span>
+        <div class="d-none d-xl-block ps-2">
+            <div data-dp-current-user-display-name="1">{$__dpDisplayName}</div>
+            <div class="mt-1 small text-secondary" data-dp-current-user-secondary-text="1">{$__dpSecondaryText}</div>
+        </div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+        {if $__dpProfileUrl !== ''}
+        <a href="{$__dpProfileUrl}"
+           class="dropdown-item"
+           data-open-admin-menu="1"
+           data-title="{$__dpProfileMenuItem.title|default='账号管理'}"
+           data-url="{$__dpProfileMenuItem.url|default=$__dpProfileUrl}"
+           data-iframe-url="{$__dpProfileMenuItem.iframe_url|default=$__dpProfileUrl}"
+           data-icon="{$__dpProfileMenuItem.icon|default='ti ti-user-circle'}"
+           data-app-name="{$__dpProfileMenuItem.app_name|default='admin'}"
+           data-route="{$__dpProfileMenuItem.route|default='admin/profile/index'}">账号管理</a>
+        {/if}
+        {if $__dpProfileUrl !== '' && $__dpHasUserMenuSlots}
+        <div class="dropdown-divider"></div>
+        {/if}
+        {include file="$dp_admin_user_menu_slots_template" /}
+        {if $__dpProfileUrl !== '' || $__dpHasUserMenuSlots}
+        <div class="dropdown-divider"></div>
+        {/if}
+        <a href="{$__dpLogoutUrl}" class="dropdown-item">退出</a>
+    </div>
+</div>

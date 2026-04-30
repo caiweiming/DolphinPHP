@@ -1,0 +1,180 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .user-info-alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        background: #cff4fc;
+        border: 1px solid #b6effb;
+        color: #055160;
+    }
+
+    .user-info-alert strong {
+        font-weight: 600;
+        margin-right: 5px;
+    }
+
+    .role-checkbox-group {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 15px;
+        border: 1px solid #d9dee3;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .role-checkbox-item {
+        display: block;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .role-checkbox-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .role-checkbox-item input[type="checkbox"] {
+        margin-right: 8px;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+    }
+
+    .role-checkbox-item label {
+        cursor: pointer;
+        margin: 0;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .form-actions {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        text-align: right;
+    }
+
+    .btn {
+        padding: 8px 24px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+        margin-left: 10px;
+    }
+
+    .btn-primary {
+        background: #0d6efd;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #0b5ed7;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: #5c636a;
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="assign-role-container">
+    <!-- 用户信息提示 -->
+    <div class="user-info-alert">
+        <div><strong>用户名:</strong>{$username}</div>
+        <div><strong>昵称:</strong>{$nickname ?: '-'}</div>
+    </div>
+
+    <!-- 角色选择区域 -->
+    <div class="role-checkbox-group" id="roleCheckboxGroup">
+        {volist name="roles" id="role"}
+        <label class="role-checkbox-item">
+            <input type="checkbox"
+                   name="role_ids[]"
+                   value="{$role.id}"
+                   {in name="role.id" value="$userRoleIds"}checked{/in}>
+            {$role.name}
+            {if $role.remark}
+            <small style="color: #666; margin-left: 10px;">({$role.remark})</small>
+            {/if}
+        </label>
+        {/volist}
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closePopup()">取消</button>
+        <button type="button" class="btn btn-primary" onclick="saveRoleAssignment()">保存</button>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    /**
+     * 保存角色分配
+     */
+    function saveRoleAssignment() {
+        // 获取选中的角色ID
+        const roleIds = [];
+        document.querySelectorAll('input[name="role_ids[]"]:checked').forEach(checkbox => {
+            roleIds.push(parseInt(checkbox.value));
+        });
+
+        // 发送AJAX请求
+        Dolphin.ajax(window.location.href, 'POST', {
+            role_ids: roleIds
+        }, {
+            success: function(res) {
+                Dolphin.success(res.msg || '角色分配成功');
+                // 延迟关闭弹窗,让用户看到成功提示
+                setTimeout(function() {
+                    closePopup();
+                }, 500);
+            },
+            error: function(err) {
+                Dolphin.error(err.msg || '角色分配失败');
+            }
+        });
+    }
+
+    /**
+     * 关闭弹窗
+     */
+    function closePopup() {
+        // 获取父窗口的layer对象并关闭当前弹窗
+        const index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    // 回车键保存
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            saveRoleAssignment();
+        }
+    });
+
+    // ESC键取消
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closePopup();
+        }
+    });
+</script>
+{/block}

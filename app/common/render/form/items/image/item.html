@@ -1,0 +1,64 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="image-upload">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help"
+              data-bs-toggle="popover"
+              data-bs-placement="top"
+              data-bs-html="true"
+              data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="dp-form-upload-image"
+         id="{$id|default=''}"
+         data-name="{$name|default=''}"
+         data-driver="{$driver|default=''}"
+         data-dir="{$dir|default=''}"
+         data-max-files="{$maxFiles|default='1'}"
+         data-options="{$options|default=''|raw}">
+
+        <div class="dp-form-upload-image-items">
+            {volist name="value" id="vo"}
+            <div class="dp-form-upload-image-item">
+                {empty name="readonly"}
+                <input type="hidden" name="{$name|default=''}" value="{$vo.id}">
+                {/empty}
+                <a data-fslightbox="dp-gallery-{$id}" href="{$vo.url}">
+                    <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url({$vo.url})"></div>
+                </a>
+                {notempty name="delete"}
+                <span class="dp-form-upload-button-delete" data-bs-toggle="tooltip" data-bs-placement="top" title="删除">
+                    <i class="fas fa-times-circle"></i>
+                </span>
+                {/notempty}
+            </div>
+            {/volist}
+
+            {notempty name="upload"}
+            <div title="上传图片" class="dp-form-upload-image-item-add" style="{$maxFiles === 1 && !empty($value) ? 'display:none' : ''}">
+                <div class="dp-form-upload-image-button-upload">
+                    <input type="file"/>
+                </div>
+            </div>
+            {/notempty}
+
+            {notempty name="browser"}
+            <div title="浏览图片" class="dp-form-upload-image-item-select" style="{$maxFiles === 1 && !empty($value) ? 'display:none' : ''}">
+                <div class="dp-form-upload-image-button-select">
+                    浏览...
+                </div>
+            </div>
+            {/notempty}
+
+            {notempty name="clear"}
+            <div title="清空图片" class="dp-form-upload-image-item-clear" style="display:none">
+                <div class="dp-form-upload-image-button-clear">
+                    清空
+                </div>
+            </div>
+            {/notempty}
+        </div>
+    </div>
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

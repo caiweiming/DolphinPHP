@@ -1,0 +1,35 @@
+<!-- 选择表格自定义表单项 -->
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=$name|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}</label>
+
+    <div class="dp-select-table js-select-table {$table_class|default=''}" data-name="{$name|default=''}">
+        <script type="application/json" class="js-select-table-columns">{$columns_json|default='[]'|raw}</script>
+        <script type="application/json" class="js-select-table-rows">{$rows_json|default='[]'|raw}</script>
+        <script type="application/json" class="js-select-table-config">{$config_json|raw}</script>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-vcenter mb-0">
+                <thead>
+                <tr>
+                    {volist name="columns" id="column"}
+                    <th>{$column.title|default=''|raw}</th>
+                    {/volist}
+                    <th class="dp-select-table-op-col">操作</th>
+                </tr>
+                </thead>
+                <tbody class="js-select-table-body"></tbody>
+            </table>
+        </div>
+
+        <div class="dp-select-table-empty js-select-table-empty">{$empty_text|default='暂无已选数据，请点击“选择数据”'|raw}</div>
+        <div class="js-select-table-inputs"></div>
+
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2 js-select-table-open">
+            <i class="fa-regular fa-square-plus me-1"></i>{$button_text|default='选择数据'|raw}
+        </button>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

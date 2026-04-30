@@ -1,0 +1,47 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="linkages">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div class="dp-form-linkages" data-options="{$linkages_options|default=''|raw}">
+        <div class="row g-2">
+            {php}$levelCount = isset($levels) ? count($levels) : 0;{/php}
+            {volist name="levels" id="level" key="index"}
+            {php}
+                $isLast = ($index == $levelCount);
+                $isMultipleLast = !empty($multiple) && $isLast;
+                $fieldName = '';
+                if (!empty($submit_all)) {
+                    $fieldName = $name . '[' . $level['key'] . ']';
+                    if ($isMultipleLast) {
+                        $fieldName .= "[]";
+                    }
+                } elseif ($isLast) {
+                    $fieldName = $isMultipleLast ? "{$name}[]" : $name;
+                }
+            {/php}
+            <div class="col-12 col-md">
+                <select class="form-select {$size|default=''} {$class|default=''}"
+                        data-level-key="{$level.key}"
+                        data-placeholder="{$level.placeholder|default='请选择'}"
+                        {notempty name="fieldName"}name="{$fieldName}"{/notempty}
+                        {if condition="$isMultipleLast"}multiple{/if}
+                        {$disabled ?= 'disabled '}
+                        {$props|default=''|raw}>
+                    <option value="">{$level.placeholder|default='请选择'}</option>
+                </select>
+            </div>
+            {/volist}
+        </div>
+    </div>
+
+    {notempty name="error_message"}
+    <small class="form-hint text-danger">{$error_message|raw}</small>
+    {/notempty}
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

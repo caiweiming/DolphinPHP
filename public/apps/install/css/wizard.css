@@ -1,0 +1,1510 @@
+html,
+body {
+    min-height: 100%;
+    background: #f7fafc;
+}
+
+.install-body {
+    margin: 0;
+    min-height: 100vh;
+    color: #0f172a;
+    background: #f7fafc;
+}
+
+.install-wizard-shell {
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px;
+    background: linear-gradient(180deg, #edf3f8 0%, #f7fafc 100%);
+}
+
+.install-wizard-frame {
+    display: flex;
+    max-width: 1120px;
+    min-height: 760px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+}
+
+.install-sidebar {
+    width: 288px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 30px 0;
+    color: #ffffff;
+    background: url("../img/bg.png") center center / cover no-repeat;
+}
+
+.install-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 30px;
+}
+
+.install-sidebar-logo {
+    width: 50px;
+    height: auto;
+    object-fit: contain;
+}
+
+.install-sidebar-brand-text {
+    display: grid;
+    gap: 4px;
+}
+
+.install-sidebar-brand-text strong {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: #ffffff;
+}
+
+.install-sidebar-brand-text strong span {
+    color: #f4b243;
+}
+
+.install-sidebar-brand-text > span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.install-sidebar-steps {
+    display: grid;
+    gap: 4px;
+    padding: 8px 0 0;
+}
+
+.install-sidebar-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 60px;
+    padding: 0 30px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.install-sidebar-step:not(:last-child)::after {
+    position: absolute;
+    top: 42px;
+    left: 45px;
+    bottom: -18px;
+    border-left: 1px dashed rgba(255, 255, 255, 0.2);
+    content: "";
+}
+
+.install-sidebar-step.is-active {
+    margin-right: 20px;
+    color: #ffffff;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.install-sidebar-step.is-complete {
+    color: #ffffff;
+}
+
+.install-sidebar-step-marker {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.install-sidebar-step.is-active .install-sidebar-step-marker {
+    color: #0c4d87;
+    border-color: #ffffff;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.install-sidebar-step.is-complete .install-sidebar-step-marker {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.82);
+}
+
+.install-sidebar-step-label {
+    position: relative;
+    z-index: 1;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.install-sidebar-footer {
+    margin-top: auto;
+    padding: 0 30px;
+}
+
+.install-sidebar-footer-title,
+.install-sidebar-footer-text {
+    margin: 0;
+    color: #ffffff;
+}
+
+.install-sidebar-footer-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.install-sidebar-footer-text {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.install-main {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    background: #ffffff;
+}
+
+.install-content-header {
+    padding: 40px 40px 0;
+}
+
+.install-content-body {
+    flex: 1;
+    padding: 16px 40px 0;
+}
+
+.install-action-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 40px 32px;
+    border-top: 1px solid rgba(226, 232, 240, 0.9);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), #ffffff);
+}
+
+.install-global-footer {
+    padding: 0 40px 24px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.install-panel-card {
+    padding: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+}
+
+.install-form-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.install-status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid transparent;
+}
+
+.install-status-chip.is-pass {
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.22);
+    background: rgba(236, 253, 245, 0.98);
+}
+
+.install-status-chip.is-fail {
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.22);
+    background: rgba(254, 242, 242, 0.98);
+}
+
+.install-status-chip.is-pending {
+    color: #92400e;
+    border-color: rgba(245, 158, 11, 0.22);
+    background: rgba(255, 251, 235, 0.98);
+}
+
+.install-eyebrow,
+.install-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.install-eyebrow {
+    min-height: 2.1rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
+
+.install-eyebrow.is-primary,
+.install-badge.is-primary {
+    background: rgba(239, 246, 255, 0.98);
+    border-color: rgba(59, 130, 246, 0.18);
+    color: #1d4ed8;
+}
+
+.install-eyebrow.is-info,
+.install-badge.is-info,
+.install-badge.is-neutral {
+    background: rgba(241, 245, 249, 0.98);
+    border-color: rgba(148, 163, 184, 0.2);
+    color: #334155;
+}
+
+.install-eyebrow.is-success,
+.install-badge.is-success {
+    background: rgba(236, 253, 245, 0.98);
+    border-color: rgba(16, 185, 129, 0.18);
+    color: #047857;
+}
+
+.install-eyebrow.is-danger,
+.install-badge.is-danger {
+    background: rgba(254, 242, 242, 0.98);
+    border-color: rgba(239, 68, 68, 0.18);
+    color: #b91c1c;
+}
+
+.install-eyebrow.is-warning,
+.install-badge.is-warning {
+    background: rgba(255, 247, 237, 0.98);
+    border-color: rgba(249, 115, 22, 0.18);
+    color: #c2410c;
+}
+
+.install-panel {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.install-panel-hero {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.install-panel-hero-title {
+    margin: 0;
+    font-size: 1.9rem;
+    line-height: 1.18;
+    color: #0f172a;
+}
+
+.install-panel-hero-text {
+    margin: 0;
+    max-width: 52rem;
+    color: #64748b;
+    font-size: 0.98rem;
+}
+
+.install-page-step {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(12, 91, 158, 0.08);
+    color: #0c5b9e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.install-page-title {
+    margin: 18px 0 0;
+    font-size: 34px;
+    line-height: 1.18;
+    color: #0f172a;
+}
+
+.install-page-subtitle {
+    margin: 14px 0 0;
+    max-width: 760px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.install-page-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    margin-bottom: 18px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(12, 91, 158, 0.08);
+    color: #0c5b9e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.install-page-tag.is-success {
+    background: rgba(236, 253, 245, 0.98);
+    color: #047857;
+}
+
+.install-page-tag.is-danger {
+    background: rgba(254, 242, 242, 0.98);
+    color: #b91c1c;
+}
+
+.install-page-tag.is-muted {
+    background: rgba(241, 245, 249, 0.98);
+    color: #334155;
+}
+
+.install-action-footer-start,
+.install-action-footer-end {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.install-action-footer-end {
+    margin-left: auto;
+}
+
+.install-welcome-title {
+    margin: 0 0 15px;
+    color: #333333;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.install-welcome-subtitle {
+    margin: 0;
+    max-width: 760px;
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.install-section-title {
+    margin: 0 0 15px;
+    color: #333333;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.install-section-subtitle {
+    margin: 0;
+    max-width: 760px;
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.install-intro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.install-intro-item {
+    padding: 22px;
+    border: 1px solid rgba(226, 232, 240, 0.94);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.94), #ffffff);
+}
+
+.install-intro-icon {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(12, 91, 158, 0.1);
+    color: #0c5b9e;
+    font-size: 20px;
+}
+
+.install-intro-item h3 {
+    margin: 18px 0 8px;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.install-intro-item p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.75;
+    font-size: 14px;
+}
+
+.install-intro-summary {
+    display: grid;
+    gap: 12px;
+}
+
+.install-agreement-panel {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+}
+
+.install-agreement-title {
+    margin: 0 0 18px;
+    color: #333333;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.agreement-box {
+    height: 300px;
+    margin-bottom: 20px;
+    padding: 20px;
+    overflow-y: auto;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    background: #fafafa;
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.agreement-box p {
+    margin: 0 0 10px;
+}
+
+.agreement-box p:last-child {
+    margin-bottom: 0;
+}
+
+.agreement-box .ag-title {
+    margin-top: 15px;
+    color: #333333;
+    font-weight: 700;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    color: #333333;
+    font-size: 14px;
+    line-height: 1.6;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.checkbox-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.checkbox-custom::after {
+    display: none;
+    width: 4px;
+    height: 8px;
+    margin-bottom: 2px;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    transform: rotate(45deg);
+    content: "";
+}
+
+.checkbox-label input:checked + .checkbox-custom {
+    border-color: #0c5b9e;
+    background: #0c5b9e;
+}
+
+.checkbox-label input:checked + .checkbox-custom::after {
+    display: block;
+}
+
+.checkbox-label a {
+    color: #0c5b9e;
+    text-decoration: none;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+.install-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.install-summary-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.install-summary-row:last-child {
+    padding-bottom: 0;
+}
+
+.install-environment-panel {
+    display: grid;
+    gap: 18px;
+}
+
+.install-status-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden;
+    padding: 15px 20px;
+    border-radius: 8px;
+}
+
+.install-status-banner.is-success {
+    border: 1px solid #a7f3d0;
+    background-color: #ecfdf5;
+}
+
+.install-status-banner.is-danger {
+    border: 1px solid #fecaca;
+    background-color: #fef2f2;
+}
+
+.install-status-banner-icon {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    font-size: 24px;
+}
+
+.install-status-banner.is-success .install-status-banner-icon {
+    color: #10b981;
+}
+
+.install-status-banner.is-danger .install-status-banner-icon {
+    color: #ef4444;
+}
+
+.install-status-banner-text {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+.install-status-banner-text h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.install-status-banner.is-success .install-status-banner-text h4 {
+    color: #10b981;
+}
+
+.install-status-banner.is-danger .install-status-banner-text h4 {
+    color: #ef4444;
+}
+
+.install-status-banner-text p {
+    margin: 0;
+    color: #666666;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.install-status-banner-bg-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 60px;
+    line-height: 1;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.install-status-banner.is-success .install-status-banner-bg-icon {
+    color: #10b981;
+}
+
+.install-status-banner.is-danger .install-status-banner-bg-icon {
+    color: #ef4444;
+}
+
+.install-table-wrap {
+    overflow-x: auto;
+}
+
+.install-env-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+}
+
+.install-env-col-item {
+    width: 33%;
+}
+
+.install-env-col-current {
+    width: 27%;
+}
+
+.install-env-col-required {
+    width: 18%;
+}
+
+.install-env-col-status {
+    width: 22%;
+}
+
+.install-env-table thead th {
+    padding: 12px 15px;
+    border-bottom: 2px solid #eaeaea;
+    color: #999999;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.install-env-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eaeaea;
+    color: #333333;
+    font-size: 14px;
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+.install-env-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.install-table-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    margin-bottom: 12px;
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.install-form-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.install-database-panel {
+    display: grid;
+    gap: 20px;
+}
+
+.install-database-form {
+    display: grid;
+    gap: 18px;
+}
+
+.install-form-field {
+    display: grid;
+    gap: 8px;
+}
+
+.install-form-field--full {
+    grid-column: 1 / -1;
+}
+
+.install-field-help {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.install-checkbox-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #333333;
+    font-size: 14px;
+}
+
+.install-password-toggle {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.install-password-toggle:focus {
+    outline: none;
+}
+
+.install-checkbox-row input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.install-note-box {
+    display: grid;
+    gap: 8px;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.install-note-box p {
+    margin: 0;
+}
+
+.install-note-box--info {
+    border: 1px solid #bfdbfe;
+    background-color: #eff6ff;
+    color: #666666;
+}
+
+.install-note-box-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0c5b9e;
+    font-weight: 500;
+}
+
+.install-note-box-list {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.install-note-box-list li + li {
+    margin-top: 4px;
+}
+
+.install-inline-test-button {
+    justify-self: start;
+    margin-top: -5px;
+    margin-bottom: 12px;
+}
+
+.install-admin-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+}
+
+.install-admin-form {
+    display: grid;
+    align-content: start;
+    width: 100%;
+}
+
+.install-admin-form-inner,
+.install-admin-form-grid {
+    display: grid;
+    width: 100%;
+    gap: 20px;
+}
+
+.install-admin-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.status-banner {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.success-banner {
+    background-color: rgba(236, 253, 245, 0.95);
+    border: 1px solid #a7f3d0;
+}
+
+.info-banner {
+    background-color: rgba(239, 246, 255, 0.95);
+    border: 1px solid #bfdbfe;
+}
+
+.danger-banner {
+    background-color: rgba(254, 242, 242, 0.95);
+    border: 1px solid #fecaca;
+}
+
+.banner-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    z-index: 1;
+}
+
+.success-banner .banner-icon {
+    color: #10b981;
+}
+
+.info-banner .banner-icon {
+    color: #2563eb;
+}
+
+.danger-banner .banner-icon {
+    color: #ef4444;
+}
+
+.banner-text {
+    z-index: 1;
+}
+
+.banner-text h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.success-banner .banner-text h4 {
+    color: #10b981;
+}
+
+.info-banner .banner-text h4 {
+    color: #2563eb;
+}
+
+.danger-banner .banner-text h4 {
+    color: #ef4444;
+}
+
+.banner-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #666666;
+}
+
+.banner-bg-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 60px;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.success-banner .banner-bg-icon {
+    color: #10b981;
+}
+
+.info-banner .banner-bg-icon {
+    color: #2563eb;
+}
+
+.danger-banner .banner-bg-icon {
+    color: #ef4444;
+}
+
+.progress-section {
+    margin: 30px 0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.progress-text {
+    font-weight: 700;
+    color: #0c5b9e;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 8px;
+    background: #eaeaea;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    background: #0c5b9e;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-list li {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #333333;
+}
+
+.pass-icon {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+.task-status {
+    margin-left: auto;
+    font-size: 13px;
+}
+
+.task-status.is-pending {
+    color: #94a3b8;
+}
+
+.task-status.is-running {
+    color: #2563eb;
+}
+
+.task-status.is-complete {
+    color: #10b981;
+}
+
+.task-status.is-fail {
+    color: #ef4444;
+}
+
+.task-list li .pass-icon.fa-circle-check {
+    color: #10b981;
+}
+
+.task-list li .pass-icon.fa-spinner {
+    color: #2563eb;
+}
+
+.task-list li .pass-icon.fa-circle-xmark {
+    color: #ef4444;
+}
+
+.summary-box {
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #333333;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 13px;
+    color: #666666;
+}
+
+.summary-grid div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.summary-grid i {
+    color: #0c5b9e;
+    font-size: 16px;
+}
+
+.warning-box {
+    background-color: rgba(255, 251, 235, 0.95);
+    border: 1px solid #fde68a;
+    color: #b45309;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.install-progress-hero {
+    margin-bottom: 20px;
+}
+
+.install-task-list {
+    display: grid;
+    gap: 14px;
+}
+
+.install-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 16px;
+    background: rgba(248, 250, 252, 0.86);
+}
+
+.install-task-item > div {
+    min-width: 0;
+}
+
+.install-task-item strong {
+    display: block;
+    color: #0f172a;
+    font-size: 15px;
+}
+
+.install-task-item span {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.install-summary-card {
+    display: grid;
+    gap: 0;
+    margin-top: 24px;
+    padding: 22px 24px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 18px;
+    background: rgba(248, 250, 252, 0.9);
+}
+
+.install-complete-panel {
+    text-align: center;
+}
+
+.install-tips-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #475569;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.install-highlight-grid,
+.install-check-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.install-highlight-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.install-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.install-hero-main,
+.install-hero-aside {
+    min-width: 0;
+}
+
+.install-hero-aside-card {
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: 1.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 1rem;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.94), rgba(255, 255, 255, 0.98));
+}
+
+.install-hero-aside-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.install-hero-aside-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(226, 232, 240, 0.88);
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.install-inline-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 1rem;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.98));
+}
+
+.install-inline-status-main {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.install-inline-status-main i {
+    width: 2.35rem;
+    height: 2.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.8rem;
+    background: rgba(219, 234, 254, 0.72);
+    color: #2563eb;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.install-inline-status-main strong {
+    display: block;
+    color: #0f172a;
+    font-size: 0.98rem;
+}
+
+.install-inline-status-main span {
+    display: block;
+    margin-top: 0.15rem;
+    color: #64748b;
+    font-size: 0.92rem;
+}
+
+.install-check-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.install-feature-card,
+.install-check-card,
+.install-form-card,
+.install-execution-card {
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.install-feature-card,
+.install-check-card {
+    padding: 1.25rem;
+}
+
+.install-form-card,
+.install-execution-card {
+    padding: 1.5rem;
+    background: linear-gradient(180deg, rgba(250, 252, 253, 0.96), rgba(255, 255, 255, 0.98));
+}
+
+.install-feature-card i,
+.install-check-card i {
+    display: inline-flex;
+    width: 2.35rem;
+    height: 2.35rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.85rem;
+    border-radius: 0.8rem;
+    background: rgba(219, 234, 254, 0.72);
+    color: #2563eb;
+    font-size: 1.15rem;
+}
+
+.install-feature-card h3,
+.install-check-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.install-feature-card p,
+.install-check-card p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9375rem;
+}
+
+.install-info-list {
+    display: grid;
+    gap: 0.875rem;
+}
+
+.install-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 0.9rem;
+    background: rgba(248, 250, 252, 0.92);
+}
+
+.install-info-item > div:first-child {
+    min-width: 0;
+}
+
+.install-info-item strong {
+    display: block;
+    color: #0f172a;
+}
+
+.install-info-item span,
+.install-info-item code {
+    color: #64748b;
+}
+
+.install-info-item .install-badge {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.install-inline-code {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(219, 234, 254, 0.74);
+    color: #1d4ed8;
+    font-size: 0.8125rem;
+    font-family: var(--tblr-font-monospace);
+}
+
+.install-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.install-form-help {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.install-execution-card {
+    display: grid;
+    gap: 1rem;
+}
+
+.install-complete-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+}
+
+.install-complete-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0 auto 1.1rem;
+    border-radius: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #16a34a;
+    background: rgba(220, 252, 231, 0.92);
+}
+
+.install-illustration {
+    max-width: 13rem;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.w-fit-content {
+    width: fit-content;
+}
+
+@media (min-width: 768px) {
+    .install-highlight-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .install-hero-grid,
+    .install-check-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .install-inline-status {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .install-panel-hero-title {
+        font-size: 1.55rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .install-wizard-frame {
+        min-height: auto;
+        flex-direction: column;
+    }
+
+    .install-sidebar {
+        width: 100%;
+        gap: 20px;
+        padding-bottom: 24px;
+    }
+
+    .install-sidebar-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0 30px;
+    }
+
+    .install-sidebar-step {
+        min-height: 54px;
+        padding: 0 16px;
+        margin-right: 0;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .install-sidebar-step:not(:last-child)::after {
+        display: none;
+    }
+
+    .install-content-header,
+    .install-content-body,
+    .install-action-footer,
+    .install-global-footer {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .install-intro-grid,
+    .install-form-grid--two,
+    .install-admin-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .install-wizard-shell {
+        padding: 12px;
+    }
+
+    .install-sidebar-brand,
+    .install-sidebar-steps,
+    .install-sidebar-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .install-sidebar-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .install-content-header,
+    .install-content-body,
+    .install-action-footer,
+    .install-global-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .install-content-header {
+        padding-top: 28px;
+    }
+
+    .install-page-title {
+        font-size: 28px;
+    }
+
+    .install-action-footer,
+    .install-action-footer-start,
+    .install-action-footer-end {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .install-action-footer-end {
+        margin-left: 0;
+    }
+
+    .install-action-footer .btn,
+    .install-action-footer-start .btn,
+    .install-action-footer-end .btn {
+        width: 100%;
+    }
+
+    .install-summary-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

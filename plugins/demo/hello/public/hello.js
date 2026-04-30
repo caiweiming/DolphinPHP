@@ -1,0 +1,3 @@
+window.DolphinPluginDemoHello = {
+    ready: true
+};

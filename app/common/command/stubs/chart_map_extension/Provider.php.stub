@@ -1,0 +1,89 @@
+<?php
+declare(strict_types=1);
+
+namespace chart_map\{{namespace}};
+
+use app\common\abstract\ChartMapProvider;
+
+/**
+ * {{label}} 地图专项扩展 Provider
+ */
+class Provider extends ChartMapProvider
+{
+    /**
+     * @inheritDoc
+     */
+    public function meta(array $context = []): array
+    {
+        return [
+            'title'       => '{{label}}',
+            'description' => '请根据业务补充 {{label}} 的地图资源与归一化逻辑',
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function definition(array $context = []): array
+    {
+        return [
+            'registerName' => '{{slug}}',
+            'geoJsonUrl'   => dp_static_extend_chart_map_path() . '{{dir}}/{{slug}}.geo.json',
+            'specialAreas' => [],
+            'nameMap'      => [],
+            'aliasMap'     => [],
+            'codeMap'      => [],
+            'regionCoords' => [],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize(array $data, array $context = []): array
+    {
+        $definition = $this->definition($context);
+        $regions = [];
+
+        foreach ((array)($data['regions'] ?? []) as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $name = $this->normalizeRegionName((string)($item['name'] ?? ''), (string)($item['code'] ?? ''), $definition);
+            if ($name === '') {
+                continue;
+            }
+
+            unset($item['code']);
+            $item['name'] = $name;
+            $regions[] = $item;
+        }
+
+        return [
+            'dimension' => $data['dimension'] ?? [],
+            'regions'   => $regions,
+            'visualMap' => is_array($data['visualMap'] ?? null) ? $data['visualMap'] : [],
+            'overlays'  => is_array($data['overlays'] ?? null) ? $data['overlays'] : [],
+            'view'      => is_array($data['view'] ?? null) ? $data['view'] : [],
+            'tooltip'   => is_array($data['tooltip'] ?? null) ? $data['tooltip'] : [],
+            'geo'       => is_array($data['geo'] ?? null) ? $data['geo'] : [],
+            'mapSeries' => is_array($data['mapSeries'] ?? null) ? $data['mapSeries'] : [],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function assets(array $context = []): array
+    {
+        return [
+            'css' => [
+                dp_static_extend_chart_map_path() . '{{dir}}/{{slug}}.css',
+            ],
+            'js'  => [
+                dp_static_extend_chart_map_path() . '{{dir}}/{{slug}}.js',
+            ],
+        ];
+    }
+}

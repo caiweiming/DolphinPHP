@@ -1,0 +1,12 @@
+{
+    "name": "admin",
+    "title": "系统管理",
+    "description": "系统后台管理应用",
+    "version": "1.0.0",
+    "app_api_version": "1.0",
+    "author": "广东卓锐软件",
+    "dependencies": [],
+    "require": {
+        "php": ">=8.2.0"
+    }
+}

@@ -1,0 +1,27 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="{$class|default=''}" {$props|default=''|raw}>
+        {notempty name="options"}
+        {volist name="options" id="option"}
+        <label class="form-check form-switch {$inline ?= 'form-check-inline'}">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="{$key}"
+                   id="{$id}{$option.id}"
+                   value="1"
+                   {eq name="option.value" value="1"}checked {/eq}
+            {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
+            <span class="form-check-label">{$option.label|default=''|raw}</span>
+        </label>
+        {/volist}
+        {/notempty}
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

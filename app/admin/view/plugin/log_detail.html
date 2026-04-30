@@ -1,0 +1,204 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    {include file="plugin/_tab_style" /}
+
+    .plugin-log-detail-page {
+        padding: 0 18px 18px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        min-height: 100%;
+    }
+
+    .plugin-log-detail-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .plugin-log-detail-card {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .plugin-log-detail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 15px 18px;
+        border-bottom: 1px solid #eef2f7;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .plugin-log-detail-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .plugin-log-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 72px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .plugin-log-status-success {
+        color: #166534;
+        background: #dcfce7;
+    }
+
+    .plugin-log-status-danger {
+        color: #b91c1c;
+        background: #fee2e2;
+    }
+
+    .plugin-log-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 16px 18px 18px;
+    }
+
+    .plugin-log-detail-item {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #edf2f7;
+    }
+
+    .plugin-log-detail-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+    }
+
+    .plugin-log-detail-value {
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.7;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .plugin-log-content {
+        padding: 18px;
+    }
+
+    .plugin-log-content-title {
+        margin: 0 0 10px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .plugin-log-code {
+        margin: 0;
+        padding: 14px 16px;
+        max-height: 360px;
+        overflow: auto;
+        background: #0f172a;
+        color: #dbeafe;
+        font-size: 13px;
+        line-height: 1.7;
+        font-family: Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .plugin-log-detail-page {
+            padding: 12px;
+        }
+
+        .plugin-log-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .plugin-log-content {
+            padding: 14px;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="plugin-log-detail-page">
+    <div class="plugin-log-detail-stack">
+        <section class="plugin-log-detail-card">
+            <div class="plugin-log-detail-head">
+                <h3 class="plugin-log-detail-title">{$pluginLogTitle|htmlspecialchars}</h3>
+                <span class="plugin-log-status plugin-log-status-{$statusClass}">{$statusText|htmlspecialchars}</span>
+            </div>
+
+            <div class="plugin-admin-tabs">
+                <ul class="nav nav-tabs" id="pluginLogDetailTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="plugin-log-overview-tab" data-bs-toggle="tab"
+                                data-bs-target="#plugin-log-overview" type="button" role="tab"
+                                aria-controls="plugin-log-overview" aria-selected="true">
+                            概览
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="plugin-log-message-tab" data-bs-toggle="tab"
+                                data-bs-target="#plugin-log-message" type="button" role="tab"
+                                aria-controls="plugin-log-message" aria-selected="false">
+                            消息
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="plugin-log-context-tab" data-bs-toggle="tab"
+                                data-bs-target="#plugin-log-context" type="button" role="tab"
+                                aria-controls="plugin-log-context" aria-selected="false">
+                            上下文
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane fade plugin-admin-tab-pane active show" id="plugin-log-overview" role="tabpanel"
+                     aria-labelledby="plugin-log-overview-tab">
+                    <div class="plugin-log-detail-grid">
+                        {foreach $detailRows as $item}
+                        <div class="plugin-log-detail-item">
+                            <span class="plugin-log-detail-label">{$item.label|htmlspecialchars}</span>
+                            <div class="plugin-log-detail-value">{$item.value|htmlspecialchars}</div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+
+                <div class="tab-pane fade plugin-admin-tab-pane" id="plugin-log-message" role="tabpanel"
+                     aria-labelledby="plugin-log-message-tab">
+                    <div class="plugin-log-content">
+                        <h4 class="plugin-log-content-title">消息</h4>
+                        <pre class="plugin-log-code">{$messageText|htmlspecialchars}</pre>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade plugin-admin-tab-pane" id="plugin-log-context" role="tabpanel"
+                     aria-labelledby="plugin-log-context-tab">
+                    <div class="plugin-log-content">
+                        <h4 class="plugin-log-content-title">上下文</h4>
+                        <pre class="plugin-log-code">{$contextText|htmlspecialchars}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{/block}

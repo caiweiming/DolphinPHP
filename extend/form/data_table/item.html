@@ -1,0 +1,37 @@
+<!-- 数据表格自定义表单项 -->
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=$name|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}</label>
+
+    <div class="dp-data-table js-data-table {$table_class|default=''}" data-name="{$name|default=''}">
+        <script type="application/json" class="js-data-table-columns">{$columns_json|default='[]'|raw}</script>
+        <script type="application/json" class="js-data-table-rows">{$rows_json|default='[]'|raw}</script>
+        <script type="application/json" class="js-data-table-config">{$config_json|raw}</script>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-vcenter">
+                <thead>
+                <tr>
+                    {if condition="$sortable"}
+                    <th class="dp-data-table-sort-col"></th>
+                    {/if}
+                    {volist name="columns" id="column"}
+                    <th>{$column.title|default=''|raw}</th>
+                    {/volist}
+                    <th class="dp-data-table-op-col">操作</th>
+                </tr>
+                </thead>
+                <tbody class="js-data-table-body"></tbody>
+            </table>
+        </div>
+
+        <div class="dp-data-table-empty js-data-table-empty">{$empty_text|default='暂无数据，请点击“添加新行”'|raw}</div>
+
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2 js-data-table-add">
+            <i class="fa-regular fa-square-plus me-1"></i>{$add_text|default='添加新行'|raw}
+        </button>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

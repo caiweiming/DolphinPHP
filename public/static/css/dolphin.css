@@ -1,0 +1,2184 @@
+/*!
+ * DolphinPHP 默认样式文件
+ *
+ * 文件说明: 本文件包含 DolphinPHP 后台管理系统的核心样式定义
+ * 作者: CaiWeiMing <314013107@qq.com>
+ * 版本: 1.0
+ * 最后更新: 2025-11-28
+ */
+
+/* =======================================================
+   1. CSS变量定义层 - 设计令牌系统
+   ======================================================= */
+
+:root {
+    /* 布局尺寸变量 - Layout Dimensions */
+    --dp-sidebar-width-expanded: 240px;
+    --dp-sidebar-width-collapsed: 0px;
+    --dp-sidebar-width: var(--dp-sidebar-width-expanded);
+
+    /* 顶部区域高度变量 - Header Heights */
+    --dp-header-height-desktop: 93px;
+    --dp-header-height-tablet: 93px;
+    --dp-header-height-mobile: 93px;
+    --dp-header-height: var(--dp-header-height-desktop);
+
+    /* 组件高度变量 - Component Heights */
+    --dp-navbar-height: 72px;
+    --dp-navbar-tabs-height: 48px;
+
+    /* Z-index层级变量 - Z-Index Layers */
+    --dp-z-sidebar: 1030;
+    --dp-z-header: 1020;
+    --dp-z-loading: 1058;
+    --dp-z-context-menu: 1060;
+    --dp-z-content: 1;
+}
+
+
+/* =======================================================
+   2. 基础样式层 - 全局重置和基础样式
+   ======================================================= */
+
+/* 全局字体设置 - 优先使用中文字体 */
+body {
+    font: 14px/var(--tblr-body-line-height) "PingFang SC", "微软雅黑", "Microsoft YaHei", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;
+}
+
+/* 桌面端布局微调 - 移除默认边距 */
+@media (min-width: 992px) {
+    :host, :root {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* 图标系统样式 - Icons */
+.dp-icon.ti {
+    font-size: 20px;
+}
+
+/* 按钮图标样式 - Button Icons */
+.btn .dp-icon {
+    margin: 0 0.5rem 0 -0.25rem;
+}
+
+.btn.dp-btn-no-title i,
+.btn.dp-btn-no-title svg {
+    margin: 0;
+}
+
+.btn .dp-icon.ti {
+    font-size: 18px;
+    margin-top: -2px;
+}
+
+.btn-empty .dp-icon {
+    margin: 3px 0 3px 0;
+}
+
+.btn-empty .dp-icon.ti {
+    margin: -1px -0.2rem 1px -0.2rem;
+    padding: 1px 0;
+}
+
+/* 下拉菜单图标样式 - Dropdown Icons */
+.dropdown-item .dp-icon {
+    font-size: 1.25rem;
+}
+
+.dropdown-item .dp-icon.fa {
+    font-size: 1rem;
+    margin-bottom: -3px;
+}
+
+/* 操作按钮图标样式 - Action Button Icons */
+.btn-action .dp-icon {
+    font-size: 1.25rem;
+}
+
+.btn-action .dp-icon.fa {
+    font-size: 1rem;
+}
+
+.card-actions .btn-action {
+    vertical-align: middle;
+}
+
+/* 警告框图标样式 - Alert Icons */
+.alert .alert-icon {
+    font-size: 20px;
+    display: inline-block;
+    margin-top: -2px;
+}
+
+/* 导航栏基础层级 - Navbar Base Z-Index */
+.navbar {
+    z-index: 1;
+}
+
+.navbar .dropdown-menu {
+    z-index: 1021;
+}
+
+
+/* =======================================================
+   3. 布局系统层 - iframe模式固定布局
+   ======================================================= */
+
+/* iframe模式 - 主体容器固定定位布局 */
+.iframe-mode .page-body {
+    position: fixed;
+    top: var(--dp-header-height);
+    left: var(--dp-sidebar-width);
+    right: 0;
+    bottom: 49px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* 标签页内容容器 - Tab Content Container */
+.iframe-mode .tab-content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 标签页面板容器 - Tab Pane Container */
+.iframe-mode .tab-pane.iframe-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.iframe-mode .dp-home-tab-pane {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.iframe-mode .home {
+    margin-top: var(--tblr-page-padding-y);
+    padding-bottom: var(--tblr-page-padding-y);
+}
+
+/* iframe样式优化 - Content IFrame Optimization */
+.content-iframe {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.content-iframe[src]:not([src=""]) {
+    display: block;
+    opacity: 1;
+}
+
+.content-iframe[src=""],
+.content-iframe:not([src]) {
+    opacity: 0;
+}
+
+/* 页脚布局 - Footer Layout */
+.footer {
+    padding: 14px 0;
+    border-top: 1px solid var(--tblr-border-color);
+}
+
+.iframe-mode .footer {
+    position: fixed;
+    left: 240px;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+/* 加载指示器 - Loading Indicator */
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+}
+
+/* 首页标签特殊样式 - Home Tab Special Order */
+.home-tab {
+    order: -1;
+}
+
+.dp-workspace-metric-avatar {
+    color: var(--tblr-primary);
+    background: rgba(var(--tblr-primary-rgb), 0.12);
+    box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), 0.08);
+}
+
+.dp-workspace-metric-avatar .ti,
+.dp-workspace-metric-avatar .fa {
+    font-size: 1.125rem;
+}
+
+.dp-workspace-quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dp-workspace-quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link {
+    display: flex;
+    position: relative;
+    max-height: 104px;
+    min-height: 104px;
+    border: 1px solid var(--tblr-border-color);
+    border-radius: 14px;
+    background: var(--tblr-bg-surface);
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link:hover,
+.dp-workspace-quick-links .dp-workspace-quick-link:focus-within {
+    background: rgba(var(--tblr-primary-rgb), 0.035);
+    border-color: rgba(var(--tblr-primary-rgb), 0.35);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    transform: translateY(-1px);
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-target {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 104px;
+    padding: 1.125rem 0.875rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-target:hover,
+.dp-workspace-quick-links .dp-workspace-quick-link-target:focus {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    text-align: center;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.8125rem;
+    background: rgba(var(--tblr-primary-rgb), 0.08);
+    color: var(--tblr-primary);
+    font-size: 1.05rem;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-title {
+    display: block;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--tblr-body-color);
+}
+
+.dp-workspace-quick-links-empty {
+    margin: 0;
+    height: 100%;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.dp-workspace-quick-links-empty .empty-icon {
+    margin-bottom: 0.75rem;
+}
+
+.dp-workspace-quick-links-empty .empty-title {
+    margin-bottom: 0.375rem;
+}
+
+.dp-workspace-quick-links-empty .empty-subtitle {
+    max-width: 24rem;
+}
+
+.dp-workspace-quick-links-empty .mt-3 {
+    margin-top: 1rem !important;
+}
+
+.dp-workspace-quick-links-action {
+    display: inline-flex;
+    align-items: center;
+    min-width: 4.5rem;
+    justify-content: center;
+}
+
+.dp-home-tab-pane {
+    position: relative;
+}
+
+.dp-home-workspace-shell {
+    position: relative;
+    isolation: isolate;
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-shell {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-overlay {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: rgba(15, 23, 42, 0.08);
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(100%, 420px);
+    display: flex;
+    flex-direction: column;
+    background: var(--tblr-bg-surface);
+    border: 1px solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius-lg);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+    opacity: 0;
+    transform: translateX(calc(100% + 1rem));
+    transition: transform .22s ease, opacity .22s ease;
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1rem 0.875rem;
+    border-bottom: 1px solid var(--tblr-border-color);
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-panel-header .btn-close {
+    margin: 0;
+}
+
+.dp-home-tab-pane .dp-workspace-quick-links-panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.dp-workspace-quick-links.is-editing .dp-workspace-quick-link {
+    background: rgba(var(--tblr-primary-rgb), 0.03);
+    border-color: rgba(var(--tblr-primary-rgb), 0.28);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.dp-workspace-quick-links.is-editing .dp-workspace-quick-link:hover {
+    transform: none;
+}
+
+.dp-workspace-quick-links.is-editing .dp-workspace-quick-link-target {
+    pointer-events: none;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-handle,
+.dp-workspace-quick-links .dp-workspace-quick-link-remove {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 0;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease, background .15s ease, color .15s ease;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-handle {
+    top: 0.5rem;
+    left: 0.5rem;
+    color: var(--tblr-secondary);
+    background: rgba(var(--tblr-secondary-rgb), 0.08);
+    cursor: grab;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-remove {
+    top: 0.5rem;
+    right: 0.5rem;
+    color: var(--tblr-danger);
+    background: rgba(var(--tblr-danger-rgb), 0.10);
+}
+
+.dp-workspace-quick-links.is-editing .dp-workspace-quick-link-handle,
+.dp-workspace-quick-links.is-editing .dp-workspace-quick-link-remove {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-handle:hover,
+.dp-workspace-quick-links .dp-workspace-quick-link-handle:focus {
+    color: var(--tblr-body-color);
+    background: rgba(var(--tblr-secondary-rgb), 0.16);
+}
+
+.dp-workspace-quick-links .dp-workspace-quick-link-remove:hover,
+.dp-workspace-quick-links .dp-workspace-quick-link-remove:focus {
+    color: var(--tblr-danger);
+    background: rgba(var(--tblr-danger-rgb), 0.18);
+}
+
+.dp-home-tab-pane.is-quick-links-panel-open .dp-workspace-quick-links-shell {
+    pointer-events: auto;
+}
+
+.dp-home-tab-pane.is-quick-links-panel-open .dp-workspace-quick-links-overlay {
+    opacity: 1;
+}
+
+.dp-home-tab-pane.is-quick-links-panel-open .dp-workspace-quick-links-panel {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.dp-quick-links-candidates {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.dp-home-tab-pane .dp-quick-links-candidate-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    background: var(--tblr-bg-surface);
+}
+
+.dp-home-tab-pane .dp-quick-links-candidate-item-main {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+}
+
+.dp-home-tab-pane .dp-quick-links-candidate-item-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dp-quick-links-sortable-ghost {
+    opacity: 0.45;
+}
+
+.dp-quick-links-empty-state {
+    padding: 1rem 0;
+    text-align: center;
+    color: var(--tblr-secondary);
+}
+
+.dp-home-tab-pane .dp-quick-links-candidate-item .btn[disabled] {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+@media (max-width: 991.98px) {
+    .dp-workspace-quick-links-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .dp-workspace-quick-links-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dp-home-tab-pane .dp-workspace-quick-links-panel {
+        width: 100%;
+    }
+}
+
+
+/* =======================================================
+   4. 组件样式层 - UI组件样式定义
+   ======================================================= */
+
+/* --------------------------
+   4.1 加载图标组件
+   -------------------------- */
+
+#dp-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--dp-z-loading);
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* 旋转动画定义 - Spinner Animation */
+@-webkit-keyframes dp-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dp-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dp-spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: 5px;
+    vertical-align: -0.125em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: 0.75s linear infinite dp-spinner;
+    animation: 0.75s linear infinite dp-spinner;
+}
+
+/* --------------------------
+   4.2 横向标签导航栏
+   -------------------------- */
+
+/* 标签栏容器样式 - Navbar Tabs Container */
+.navbar-tabs-container {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    min-height: 36px;
+    overflow: visible;
+    padding: 0;
+    position: relative;
+}
+
+.navbar-tabs-container .container-xl {
+    display: flex;
+    align-items: center;
+}
+
+/* 标签栏渐变效果 - 增加视觉深度 */
+.navbar-tabs-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+}
+
+/* 标签工具按钮通用样式 - Tab Tool Buttons */
+.tab-scroll-btn,
+.tab-actions-btn {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    cursor: pointer;
+    z-index: 1041;
+}
+
+.tab-scroll-btn:hover,
+.tab-actions-btn:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.tab-scroll-btn:active,
+.tab-actions-btn:active {
+    transform: scale(0.95);
+}
+
+.tab-scroll-btn:disabled,
+.tab-actions-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tab-scroll-left {
+    display: none;
+    margin-right: 8px;
+}
+
+.tab-scroll-right {
+    display: none;
+    margin-left: 8px;
+}
+
+/* 标签批量操作按钮容器 - Tab Actions Dropdown */
+.tab-actions-dropdown {
+    position: relative;
+    margin-left: 4px;
+}
+
+/* 下拉菜单样式优化 - Dropdown Menu Enhancement */
+.tab-actions-dropdown .dropdown-menu {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 8px 0;
+    margin-top: 4px;
+}
+
+.tab-actions-dropdown .dropdown-item {
+    padding: 8px 16px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    transition: all 0.15s ease;
+}
+
+.tab-actions-dropdown .dropdown-item:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.tab-actions-dropdown .dropdown-item.text-danger:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.tab-actions-dropdown .dropdown-item svg {
+    flex-shrink: 0;
+}
+
+.tab-actions-dropdown .dropdown-divider {
+    margin: 8px 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* 标签页布局 - Tabs Layout */
+.tabs-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+}
+
+.tabs-wrapper .nav-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+}
+
+.tabs-wrapper .nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* 标签页导航样式 - Nav Tabs */
+.navbar-tabs-container .nav-tabs {
+    border-bottom: none;
+    margin-bottom: 0;
+    flex-wrap: nowrap;
+    gap: 0;
+    min-height: 36px;
+    align-items: center;
+}
+
+/* 标签页链接样式 - 紧凑设计 */
+.navbar-tabs-container .nav-link {
+    padding: 6px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    border: none;
+    border-radius: 6px 6px 0 0;
+    max-width: 180px;
+    background-color: transparent;
+    color: #6b7280;
+    margin-right: 2px;
+    margin-bottom: 0;
+    position: relative;
+    transition: all 0.15s ease;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+/* 标签页悬停效果 - Hover Effect */
+.navbar-tabs-container .nav-link:hover {
+    background-color: rgba(var(--tblr-primary-rgb), 0.08);
+    color: var(--tblr-primary);
+    border-radius: 6px;
+}
+
+/* 活跃标签页样式 - Active State */
+.navbar-tabs-container .nav-link.active {
+    color: var(--tblr-primary);
+    font-weight: 500;
+    border-radius: 6px;
+    background-color: rgba(var(--tblr-primary-rgb), 0.1);
+    box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), 0.18);
+}
+
+.navbar-tabs-container .nav-link.active .icon {
+    color: var(--tblr-primary);
+}
+
+/* 标签页标题样式 - Tab Title */
+.navbar-tabs-container .tab-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+}
+
+/* 关闭按钮样式 - Close Button */
+.navbar-tabs-container .btn-close-tab {
+    padding: 0;
+    font-size: 8px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.navbar-tabs-container .btn-close-tab:hover {
+    opacity: 1;
+    background-color: #ef4444;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.navbar-tabs-container .nav-link.active .btn-close-tab:hover {
+    background-color: #dc2626;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* 标签页图标样式 - Tab Icon */
+.navbar-tabs-container .nav-link .icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.navbar-tabs-container .pinned-tabs .icon-wrapper {
+    margin-right: 0;
+}
+
+.navbar-tabs-container .nav-link .icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+}
+
+/* 标签加载状态 - Tab Loading State */
+.navbar-tabs-container .nav-link .icon-loading-ring {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(59, 130, 246, 0.25);
+    border-top-color: var(--tblr-primary);
+    animation: tab-icon-spin 0.8s linear infinite;
+    display: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.navbar-tabs-container .nav-link.loading .icon-loading-ring {
+    display: block;
+}
+
+.navbar-tabs-container .nav-link.loading .icon {
+    color: var(--tblr-primary);
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.navbar-tabs-container .nav-link.loading .icon-wrapper {
+    transform: scale(0.85);
+    transition: transform 0.2s ease;
+}
+
+@keyframes tab-icon-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 标签页内容区域样式优化 - Tab Content */
+.page-body .tab-content {
+    border-top: none;
+}
+
+/* 滚动条样式优化 - Scrollbar Styling */
+.navbar-tabs-container::-webkit-scrollbar {
+    height: 2px;
+}
+
+.navbar-tabs-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.navbar-tabs-container::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 1px;
+}
+
+.navbar-tabs-container::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* 标签栏与主导航的视觉连接 - Visual Connection */
+.sticky-top {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* --------------------------
+   4.3 收藏栏组件
+   -------------------------- */
+
+.favorite-bar {
+    min-height: 30px;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.favorite-items {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.favorite-item {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: rgba(99, 102, 241, 0.08);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.favorite-item:hover,
+.favorite-item.active {
+    background-color: rgba(var(--tblr-primary-rgb), 0.1);
+    color: var(--tblr-primary);
+}
+
+.favorite-item .favorite-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    background-color: #ef4444;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+}
+
+.favorite-item:hover .favorite-remove {
+    opacity: 1;
+}
+
+.favorite-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px dashed var(--tblr-border-color);
+    color: var(--tblr-secondary);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.favorite-add-btn:hover {
+    color: var(--tblr-primary);
+    border-color: var(--tblr-primary);
+}
+
+/* --------------------------
+   4.4 菜单搜索组件
+   -------------------------- */
+
+.menu-search-wrapper {
+    position: relative;
+    width: 220px;
+}
+
+.menu-search-wrapper .input-icon {
+    cursor: text;
+}
+
+.menu-search-wrapper .input-icon-addon.cursor-pointer {
+    pointer-events: auto;
+}
+
+.menu-search-results {
+    width: 100%;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.menu-search-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-search-item .menu-search-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tblr-muted);
+}
+
+.menu-search-item .menu-search-title {
+    font-size: 13px;
+    color: var(--tblr-body-color);
+}
+
+.menu-search-item .menu-search-path {
+    font-size: 11px;
+    color: var(--tblr-muted);
+}
+
+.menu-search-empty {
+    font-size: 12px;
+}
+
+.menu-search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.menu-search-title {
+    min-width: 0;
+    font-weight: 600;
+}
+
+.menu-search-path {
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--tblr-secondary);
+    word-break: break-all;
+}
+
+.menu-search-badge {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    color: var(--tblr-secondary);
+    background: rgba(98, 105, 118, 0.12);
+}
+
+.menu-search-badge.is-current {
+    color: var(--tblr-primary);
+    background: rgba(var(--tblr-primary-rgb), 0.12);
+}
+
+.menu-search-badge.is-public {
+    color: #b45309;
+    background: rgba(217, 119, 6, 0.12);
+}
+
+.menu-search-badge.is-workspace {
+    color: #0f766e;
+    background: rgba(13, 148, 136, 0.12);
+}
+
+.menu-search-badge.is-external {
+    color: #475569;
+    background: rgba(71, 85, 105, 0.12);
+}
+
+/* --------------------------
+   4.5 附件浏览器组件
+   -------------------------- */
+
+.dp-js-browser .img-responsive,
+.dp-js-browser .dp-browser-file {
+    cursor: pointer;
+    opacity: 0.64;
+    transition: opacity .3s;
+}
+
+.dp-js-browser .dp-browser-file {
+    padding: 0;
+}
+
+.dp-js-browser .dp-browser-file .fa-file {
+    padding: 14px 10px;
+}
+
+.dp-js-browser .img-responsive:hover {
+    opacity: 1;
+}
+
+.dp-js-browser .img-responsive.active {
+    border: 1px solid rgb(32, 107, 196)!important;
+    position: relative;
+    opacity: 1;
+}
+
+/* 选中文件的对勾标记 - Selected File Checkmark */
+.dp-js-browser .img-responsive.active:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #fff;
+    height: 0;
+    width: 0;
+    border-bottom: 32px solid transparent;
+    border-right: 32px solid rgb(32, 107, 196);
+    border-top-right-radius: 2px;
+}
+
+.dp-js-browser .img-responsive.active:after {
+    font-family: "Font Awesome 6 Free", serif;
+    content: '\f00c';
+    position: absolute;
+    right: 2px;
+    top: 0;
+    color: #fff;
+}
+
+.dp-js-browser .empty {
+    min-width: 100%;
+    color: var(--tblr-muted);
+    padding: 1rem;
+}
+
+.dp-js-browser .empty i {
+    margin-bottom: 5px;
+}
+
+.dp-browser-search {
+    display: none;
+}
+
+.dp-browser-search.active {
+    display: block;
+}
+
+/* --------------------------
+   4.6 右键菜单组件
+   -------------------------- */
+
+.context-menu {
+    position: fixed;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: var(--dp-z-context-menu);
+    min-width: 150px;
+    padding: 4px 0;
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.context-menu-item:hover {
+    background-color: #f8fafc;
+    color: var(--tblr-primary);
+}
+
+.context-menu-divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 4px 0;
+}
+
+
+/* =======================================================
+   5. 交互功能层 - 用户交互增强
+   ======================================================= */
+
+/* --------------------------
+   5.1 侧边栏折叠功能
+   -------------------------- */
+
+#sidebarToggleBtn {
+    margin-left: -12px;
+}
+
+#sidebarToggleBtn:hover {
+    background: none;
+}
+
+#sidebarToggleBtn .icon-state {
+    display: none;
+}
+
+body.sidebar-collapsed #sidebarToggleBtn .icon-expand {
+    display: inline-block;
+}
+
+body.sidebar-expanded #sidebarToggleBtn .icon-collapse,
+body:not(.sidebar-collapsed) #sidebarToggleBtn .icon-collapse {
+    display: inline-block;
+}
+
+/* 侧边栏状态控制类 - Sidebar State Classes */
+.sidebar-collapsed {
+    --dp-sidebar-width: var(--dp-sidebar-width-collapsed) !important;
+}
+
+.sidebar-expanded {
+    --dp-sidebar-width: var(--dp-sidebar-width-expanded) !important;
+}
+
+.sidebar-collapsed aside.navbar.navbar-vertical {
+    width: var(--dp-sidebar-width-collapsed) !important;
+    min-width: var(--dp-sidebar-width-collapsed) !important;
+    overflow: hidden;
+    transition: width 0.2s ease;
+}
+
+.sidebar-expanded aside.navbar.navbar-vertical {
+    transition: width 0.2s ease;
+}
+
+.sidebar-collapsed .page-wrapper {
+    margin-left: 0 !important;
+    transition: margin-left 0.2s ease;
+}
+
+.sidebar-expanded .page-wrapper {
+    z-index: 0;
+    transition: margin-left 0.2s ease;
+}
+
+.sidebar-collapsed .page-body {
+    left: 0;
+}
+
+/* 侧边栏下拉菜单项active状态 - Active State */
+.navbar-vertical .dropdown-item.active {
+    color: #ffffff;
+    background-color: var(--tblr-primary);
+}
+
+.navbar-vertical .dropdown-item.active:hover {
+    color: #ffffff;
+    background-color: #0052a3;
+}
+
+.navbar-vertical .dropdown-item.active .dp-icon {
+    color: #ffffff;
+}
+
+/* --------------------------
+   5.3 固定标签功能
+   -------------------------- */
+
+/* 固定标签区域 - Pinned Tabs Area */
+.pinned-tabs {
+    display: flex !important;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.pinned-tabs .nav-item {
+    min-width: auto;
+}
+
+.pinned-tabs .nav-link {
+    padding: 6px;
+    font-size: 11px;
+    background-color: transparent;
+    border: 1px solid var(--tblr-border-color);
+    border-radius: 6px;
+    margin-right: 2px;
+    min-width: 32px;
+    justify-content: center;
+    position: relative;
+}
+
+.pinned-tabs .nav-link.active {
+    background-color: rgba(var(--tblr-primary-rgb), 0.1);
+    color: var(--tblr-primary);
+    border-color: rgba(var(--tblr-primary-rgb), 0.24);
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.pinned-tabs .nav-link:hover {
+    background-color: rgba(var(--tblr-primary-rgb), 0.08);
+    color: var(--tblr-primary);
+    border-color: var(--tblr-border-color);
+}
+
+/* 固定标签只显示图标 - Icon Only */
+.pinned-tabs .tab-title {
+    display: none;
+}
+
+.pinned-tabs .btn-close-tab {
+    display: none;
+}
+
+.pinned-tabs .nav-link .icon {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+/* 标签分隔线 - Tabs Separator */
+.tabs-separator {
+    width: 1px;
+    height: 24px;
+    margin: 0 8px;
+    background-color: #d1d5db;
+    flex-shrink: 0;
+}
+
+.separator-line {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 20%, #d1d5db 50%, transparent 80%);
+}
+
+/* 普通标签区域调整 - Normal Tabs Area */
+.normal-tabs {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* --------------------------
+   5.4 智能内存管理 - iframe暂停
+   -------------------------- */
+
+/* iframe暂停状态的标签页样式 - Paused State */
+.nav-link.iframe-paused {
+    opacity: 0.82;
+}
+
+.nav-link.iframe-paused .tab-title {
+    color: #6c757d;
+}
+
+.nav-link.iframe-paused:hover {
+    opacity: 0.9;
+}
+
+.nav-link.iframe-paused .icon {
+    color: #6c757d !important;
+}
+
+.nav-link.iframe-paused .icon-wrapper {
+    transform: none;
+}
+
+.nav-link.iframe-paused .icon-wrapper::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background-color: #6b7280;
+    /* 两条竖线，表达暂停状态 */
+    background-image:
+        linear-gradient(#ffffff, #ffffff),
+        linear-gradient(#ffffff, #ffffff);
+    background-size: 2px 6px, 2px 6px;
+    background-position: 2px 2px, 6px 2px;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 0 1px #ffffff;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 1;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.nav-link.iframe-paused:hover .icon-wrapper::after {
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+
+/* =======================================================
+   6. 响应式适配层 - 多设备断点适配
+   ======================================================= */
+
+/* --------------------------
+   6.1 平板端适配 (768px - 1024px)
+   -------------------------- */
+
+@media (max-width: 1024px) {
+    :root {
+        --dp-header-height: var(--dp-header-height-tablet);
+        --dp-sidebar-width: var(--dp-sidebar-width-collapsed);
+    }
+}
+
+/* --------------------------
+   6.2 平板端适配 (max-width: 768px)
+   -------------------------- */
+
+@media (max-width: 768px) {
+    :root {
+        --dp-header-height: var(--dp-header-height-tablet);
+        --dp-sidebar-width: 0;
+    }
+
+    .iframe-mode .page-body {
+        left: 0;
+        bottom: 58px;
+    }
+
+    .footer {
+        left: 0!important;
+    }
+
+    .sidebar-collapsed aside.navbar.navbar-vertical {
+        width: auto!important;
+    }
+
+    .navbar-tabs-container {
+        min-height: 32px;
+    }
+
+    .navbar-tabs-container .nav-tabs {
+        padding: 0;
+    }
+
+    .navbar-tabs-container .nav-link {
+        max-width: 120px;
+        padding: 4px 6px;
+        font-size: 11px;
+        height: 26px;
+    }
+
+    .navbar-tabs-container .tab-title {
+        font-size: 11px;
+    }
+
+    .navbar-tabs-container .btn-close-tab {
+        width: 12px;
+        height: 12px;
+        margin-left: 2px;
+    }
+}
+
+/* --------------------------
+   6.3 移动端适配 (max-width: 767px)
+   -------------------------- */
+
+@media (max-width: 767px) {
+    :root {
+        --dp-header-height: var(--dp-header-height-mobile);
+        --dp-sidebar-width: 0;
+    }
+
+    .iframe-mode .page-body {
+        left: 0;
+        bottom: 58px;
+    }
+
+    /* 移动端页脚优化 - Footer Optimization */
+    .footer {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+}
+
+/* --------------------------
+   6.4 小屏移动设备 (max-width: 480px)
+   -------------------------- */
+
+@media (max-width: 480px) {
+    :root {
+        --dp-header-height: calc(var(--dp-header-height-mobile));
+    }
+}
+
+
+/* =======================================================
+   7. 主题样式层 - 深色主题适配
+   ======================================================= */
+
+/* --------------------------
+   7.1 标签导航栏深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .navbar-tabs-container {
+    background-color: #1f2937;
+    border-bottom-color: #374151;
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link:hover:not(.active) {
+    background-color: #374151;
+    color: #f3f4f6;
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active {
+    background-color: #374151;
+    color: var(--tblr-navbar-active-color);
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active:hover {
+    background-color: #4b5563;
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .btn-close-tab:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active .btn-close-tab:hover {
+    background-color: #dc2626;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active .icon {
+    color: var(--tblr-navbar-active-color);
+}
+
+/* --------------------------
+   7.2 标签工具按钮深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .tab-scroll-btn,
+[data-bs-theme="dark"] .tab-actions-btn {
+    background: transparent;
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .tab-scroll-btn:hover,
+[data-bs-theme="dark"] .tab-actions-btn:hover {
+    background-color: #4b5563;
+    color: #f3f4f6;
+}
+
+/* --------------------------
+   7.3 下拉菜单深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .tab-actions-dropdown .dropdown-menu {
+    background-color: #374151;
+    border-color: #4b5563;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    z-index: 1050;
+}
+
+[data-bs-theme="dark"] .tab-actions-dropdown .dropdown-item {
+    color: #d1d5db;
+}
+
+[data-bs-theme="dark"] .tab-actions-dropdown .dropdown-item:hover {
+    background-color: #4b5563;
+    color: #f3f4f6;
+}
+
+[data-bs-theme="dark"] .tab-actions-dropdown .dropdown-item.text-danger:hover {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+[data-bs-theme="dark"] .tab-actions-dropdown .dropdown-divider {
+    border-top-color: #4b5563;
+}
+
+/* --------------------------
+   7.4 固定标签深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .pinned-tabs .nav-link {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: var(--tblr-border-color);
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .pinned-tabs .nav-link.active {
+    background-color: rgba(var(--tblr-primary-rgb), 0.22);
+    color: var(--tblr-navbar-active-color);
+    border-color: rgba(var(--tblr-primary-rgb), 0.35);
+    font-weight: 500;
+    box-shadow: none;
+}
+
+[data-bs-theme="dark"] .pinned-tabs .nav-link:hover:not(.active) {
+    background-color: rgba(var(--tblr-primary-rgb), 0.18);
+    color: var(--tblr-navbar-active-color);
+    border-color: var(--tblr-border-color);
+}
+
+[data-bs-theme="dark"] .pinned-tabs .nav-link.active:hover {
+    background-color: rgba(var(--tblr-primary-rgb), 0.28);
+}
+
+[data-bs-theme="dark"] .tabs-separator {
+    background-color: #4b5563;
+}
+
+[data-bs-theme="dark"] .separator-line {
+    background: linear-gradient(to bottom, transparent 20%, #4b5563 50%, transparent 80%);
+}
+
+/* --------------------------
+   7.5 右键菜单深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .context-menu {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+[data-bs-theme="dark"] .context-menu-item {
+    color: #d1d5db;
+}
+
+[data-bs-theme="dark"] .context-menu-item:hover {
+    background-color: #374151;
+    color: var(--tblr-navbar-active-color);
+}
+
+[data-bs-theme="dark"] .context-menu-divider {
+    background-color: #4b5563;
+}
+
+/* --------------------------
+   7.7 侧边栏下拉菜单深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .navbar-vertical .dropdown-item.active {
+    color: #ffffff;
+    background-color: var(--tblr-navbar-active-color);
+}
+
+[data-bs-theme="dark"] .navbar-vertical .dropdown-item.active:hover {
+    color: #ffffff;
+    background-color: #3b82f6;
+}
+
+[data-bs-theme="dark"] .navbar-vertical .dropdown-item.active .dp-icon {
+    color: #ffffff;
+}
+
+/* --------------------------
+   7.8 iframe暂停状态深色主题
+   -------------------------- */
+
+[data-bs-theme="dark"] .nav-link.iframe-paused .tab-title {
+    color: #adb5bd;
+}
+
+[data-bs-theme="dark"] .nav-link.iframe-paused .icon {
+    color: #adb5bd !important;
+}
+
+[data-bs-theme="dark"] .nav-link.iframe-paused .icon-wrapper::after {
+    background-color: #94a3b8;
+    box-shadow: 0 0 0 1px #1f2937;
+}
+
+
+/* =======================================================
+   8. 兼容性处理层 - 浏览器降级和特殊适配
+   ======================================================= */
+
+/* --------------------------
+   8.1 CSS变量不支持时的降级方案
+   -------------------------- */
+
+@supports not (--css: variables) {
+    .iframe-mode .page-body {
+        position: fixed;
+        top: 120px;
+        left: 280px;
+        right: 0;
+        bottom: 0;
+    }
+
+    /* 移动端降级 */
+    @media (max-width: 767px) {
+        .iframe-mode .page-body {
+            top: 140px;
+            left: 0;
+        }
+    }
+}
+
+/* --------------------------
+   8.2 IE11特殊兼容性处理
+   -------------------------- */
+
+/* IE11使用相对定位替代固定定位,避免渲染问题 */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .iframe-mode .page-body {
+        position: relative;
+        height: calc(100vh - 120px);
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+    }
+}
+
+/* --------------------------
+   8.3 iOS Safari 地址栏兼容性
+   -------------------------- */
+
+/* 解决iOS Safari地址栏导致的100vh计算问题 */
+@supports (-webkit-touch-callout: none) {
+    .iframe-mode .page-body {
+        height: 100vh;
+    }
+}
+
+/* --------------------------
+   8.4 打印样式优化
+   -------------------------- */
+
+@media print {
+    .navbar-tabs-container {
+        display: none !important;
+    }
+}
+
+/*tabs*/
+.nav-link > i {
+    --tblr-icon-size: 1.25rem;
+    font-size: var(--tblr-icon-size);
+    vertical-align: bottom;
+    stroke-width: 1.5;
+    margin-right: .3rem;
+    text-align: center;
+}
+.nav-link > svg {
+    margin-right: .3rem;
+}
+.nav-tabs .nav-link {
+    line-height: 21px;
+    display: inline-block;
+}
+.nav-item .mr-0 {
+    margin-right: 0!important;
+}
+
+/* 左侧当前应用信息 */
+
+.dp-sidebar-brand-app-link,
+.dp-sidebar-brand-app-empty {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dp-sidebar-brand-app-link:hover,
+.dp-sidebar-brand-app-link:focus,
+.dp-sidebar-brand-app-link:active {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dp-sidebar-brand-app-link:hover *,
+.dp-sidebar-brand-app-link:focus *,
+.dp-sidebar-brand-app-link:active * {
+    text-decoration: none;
+}
+
+.dp-sidebar-brand-app-media {
+    flex: 0 0 auto;
+}
+
+.dp-sidebar-app-summary-image,
+.dp-app-switcher-app-image {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+}
+
+.dp-sidebar-app-summary-icon,
+.dp-app-switcher-app-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.12);
+    color: currentColor;
+    font-size: 1.1rem;
+}
+
+.dp-app-switcher-app-icon {
+    background: rgba(var(--tblr-primary-rgb), 0.08);
+}
+
+.dp-sidebar-brand-app-title {
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.15;
+}
+
+.dp-sidebar-brand-app-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.58);
+    flex: 0 0 auto;
+}
+
+.dp-sidebar-brand-app-summary {
+    margin: -0.35rem 0 0.45rem;
+    position: relative;
+    z-index: 3;
+}
+
+.dp-sidebar-brand-app-link,
+.dp-sidebar-brand-app-empty {
+    display: block;
+    padding: 0.1rem 0 0;
+}
+
+.dp-sidebar-brand-app-empty {
+    padding: 2px 10px;
+}
+
+.dp-sidebar-brand-app-main {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.3rem 0.5rem 0 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: calc(var(--tblr-border-radius-lg) - 0.15rem);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dp-sidebar-brand-app-link:hover {
+    color: inherit;
+}
+
+.dp-sidebar-brand-app-link:hover .dp-sidebar-brand-app-main {
+    background: rgba(255, 255, 255, 0.085);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+}
+
+.dp-sidebar-brand-app-link[aria-expanded="true"] .dp-sidebar-brand-app-main {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.dp-sidebar-brand-app-link[aria-expanded="true"] .dp-sidebar-brand-app-action {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.dp-sidebar-brand-app-summary .dp-sidebar-app-summary-image,
+.dp-sidebar-brand-app-summary .dp-sidebar-app-summary-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.5rem;
+}
+
+.dp-sidebar-brand-app-summary .dp-sidebar-app-summary-image {
+    padding: 0.18rem;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.dp-sidebar-brand-app-summary .dp-sidebar-app-summary-icon {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.dp-sidebar-brand-app-title {
+    min-width: 0;
+    flex: 1 1 auto;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dp-sidebar-brand-app-menu {
+    width: 15.75rem;
+    min-width: 15.75rem;
+    padding: 0;
+    margin-top: 0 !important;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.dp-sidebar-brand-app-menu[data-bs-popper] {
+    top: 0;
+    left: 100%;
+    right: auto;
+    margin-left: 0.85rem;
+}
+
+.dp-sidebar-brand-app-menu .card {
+    margin: 0;
+    border: 0;
+    overflow: hidden;
+    border-radius: 0.95rem;
+    background: linear-gradient(180deg, rgba(28, 38, 54, 0.98), rgba(18, 25, 39, 0.99));
+    box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.dp-sidebar-brand-app-menu .card-header {
+    display: none;
+    padding: 0.75rem 0.875rem 0.625rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+}
+
+.dp-sidebar-brand-app-menu .card-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.dp-sidebar-brand-app-menu .card-body {
+    max-height: min(50vh, 24rem);
+    padding: 0.5rem 0.45rem !important;
+}
+
+.dp-sidebar-brand-app-menu [data-dp-sidebar-app-switcher-body] > .row {
+    margin: 0;
+}
+
+.dp-sidebar-brand-app-menu [data-dp-sidebar-app-switcher-body] .col-4 {
+    width: 100%;
+    padding: 0;
+}
+
+.dp-sidebar-brand-app-menu [data-dp-sidebar-app-switcher-body] .col-4 + .col-4 {
+    margin-top: 0.18rem;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    position: relative;
+    gap: 0.5rem;
+    min-height: 0;
+    padding: 0.54rem 0.62rem 0.54rem 0.8rem !important;
+    border-radius: 0.52rem;
+    text-align: left !important;
+    color: rgba(255, 255, 255, 0.68) !important;
+    background: transparent;
+    box-shadow: none;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry::before {
+    content: "";
+    position: absolute;
+    left: 0.34rem;
+    top: 50%;
+    width: 0.14rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: transparent;
+    transform: translateY(-50%);
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry:hover,
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry.is-current {
+    background: rgba(255, 255, 255, 0.025);
+    color: #ffffff !important;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry:hover::before {
+    background: rgba(255, 255, 255, 0.16);
+    opacity: 1;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry.is-current {
+    background: rgba(var(--tblr-primary-rgb), 0.045);
+    box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), 0.08);
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry.is-current::before {
+    background: rgb(var(--tblr-primary-rgb));
+    opacity: 1;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-app-icon,
+.dp-sidebar-brand-app-menu .dp-app-switcher-app-image {
+    width: 1.58rem;
+    height: 1.58rem;
+    margin: 0 !important;
+    flex: 0 0 auto;
+    border-radius: 0.45rem;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-app-icon {
+    border-radius: 0.45rem;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-app-image {
+    padding: 0.16rem;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry.is-current .dp-app-switcher-app-image {
+    background: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), 0.12);
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry.is-current .dp-app-switcher-app-icon {
+    background: rgba(var(--tblr-primary-rgb), 0.12);
+    box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), 0.16);
+    color: #ffffff;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-entry .h5 {
+    margin: 0 !important;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: inherit;
+}
+
+.dp-sidebar-brand-app-menu .dp-app-switcher-empty {
+    padding: 0.9rem 0.75rem !important;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.dp-sidebar-brand-app-menu .card-header,
+.dp-sidebar-brand-app-menu [data-dp-sidebar-app-switcher-title] {
+    display: none !important;
+}
+
+@media (min-width: 992px) {
+    .navbar-vertical.navbar-expand-lg,
+    .navbar-vertical.navbar-expand-lg > .container-fluid {
+        overflow: visible;
+    }
+
+    .navbar-vertical.navbar-expand-lg > .container-fluid {
+        height: 100%;
+        min-height: 100%;
+    }
+
+    .navbar-vertical.navbar-expand-lg .navbar-collapse {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+    }
+
+    .dp-sidebar-brand-app-summary {
+        display: block;
+    }
+
+    .sidebar-collapsed .dp-sidebar-brand-app-summary {
+        display: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .dp-sidebar-brand-app-summary {
+        display: none !important;
+    }
+}
+
+.dp-app-switcher-entry {
+    border-radius: var(--tblr-border-radius-lg);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dp-app-switcher-entry:hover,
+.dp-app-switcher-entry.is-current {
+    background: rgba(var(--tblr-primary-rgb), 0.08);
+}
+
+.dp-app-switcher-empty {
+    font-size: 0.875rem;
+}
+
+.dp-mobile-app-switcher-trigger {
+    margin-left: 0.5rem;
+}
+
+.dp-mobile-app-switcher-modal .modal-dialog {
+    max-width: min(28rem, calc(100vw - 1rem));
+    margin: 0.75rem auto;
+}
+
+.dp-mobile-app-switcher-modal .modal-body {
+    background: var(--tblr-bg-surface);
+}
+
+.dp-mobile-app-switcher-modal .card {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.dp-mobile-app-switcher-modal .card-header {
+    display: none;
+}
+
+.dp-mobile-app-switcher-modal .card-body {
+    max-height: none !important;
+    padding: 0.75rem !important;
+}
+
+.dp-mobile-app-switcher-modal .link-hoverable {
+    min-height: 5.5rem;
+    border-radius: var(--tblr-border-radius-lg);
+}
+
+@media (max-width: 992px) {
+    .navbar-vertical.navbar-expand-lg > .container-fluid {
+        position: relative;
+    }
+
+    .dp-mobile-app-switcher-trigger {
+        position: absolute;
+        top: 1.5rem;
+        left: 2.75rem;
+        z-index: 2;
+        margin-left: 0;
+        transform: translateY(-50%);
+    }
+
+    .navbar-vertical .navbar-toggler + .dp-mobile-app-switcher-trigger {
+        margin-right: 0.25rem;
+    }
+
+    .dp-mobile-app-switcher-modal .modal-content {
+        overflow: hidden;
+    }
+
+    .dp-mobile-app-switcher-modal .modal-body .row {
+        margin: 0;
+    }
+}

@@ -1,0 +1,47 @@
+<?php
+declare(strict_types=1);
+
+namespace table\{{namespace}};
+
+use app\common\abstract\TableItem;
+use app\common\render\Table as TableRender;
+use Exception;
+
+/**
+ * {{label}}列组件
+ */
+class Item extends TableItem
+{
+    /**
+     * 处理列配置并注入模板脚本
+     * @param array $column
+     * @param TableRender $table
+     * @return array
+     * @throws Exception
+     */
+    public function handle(array $column, TableRender $table): array
+    {
+        // 需要资源依赖时可在此添加
+        // $table->addJsUrl('...');
+        // $table->addCssUrl('...');
+
+        $table->addExtraJs($this->createTemplet($column, [
+            // 传递到 item.html 的变量
+            'options' => $column['options'] ?? [],
+        ]));
+
+        return $column;
+    }
+
+    /**
+     * 处理单元格值（服务端）
+     * @param mixed $data
+     * @param array $column
+     * @return mixed
+     */
+    public function handleValue(mixed $data, array $column = []): mixed
+    {
+        // 在这里做服务端值转换，例如映射、格式化、补默认值等
+        return $data;
+    }
+}

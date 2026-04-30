@@ -1,0 +1,142 @@
+<div class="dp-form-cropper-interface mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="cropper">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div class="dp-form-cropper-preview"></div>
+    <div class="dp-form-cropper-image">
+        <input type="hidden" name="{$name|default=''}" value="{$value|default=''}" class="visually-hidden">
+        <a data-fslightbox="gallery-{$name}" class="dp-form-cropper-gallery" href="{$value|dp_get_file_path|default='javascript:void(0);'}">
+            <img src="{$value|dp_get_file_path}" alt="">
+        </a>
+    </div>
+
+    <div class="my-3">
+        {notempty name="buttons"}
+        {volist name="buttons" id="button"}
+        {eq name="button" value="upload"}
+        <label class="btn btn-primary dp-form-cropper-upload mb-2 disabled">
+            <input type="file" class="sr-only" accept="image/*">
+            <i class="dp-icon fas fa-upload fa-fw"></i>
+            上传图片
+        </label>
+        {/eq}
+        {eq name="button" value="url"}
+        <a href="javascript:void(0);" class="btn btn-secondary dp-form-cropper-url mb-2 disabled">
+            <i class="dp-icon fas fa-link fa-fw"></i>
+            网络图片
+        </a>
+        {/eq}
+        {eq name="button" value="select"}
+        <a href="javascript:void(0);" class="btn btn-info dp-form-cropper-select mb-2 disabled">
+            <i class="dp-icon fas fa-images fa-fw"></i>
+            在线图片
+        </a>
+        {/eq}
+        {eq name="button" value="delete"}
+        <a href="javascript:void(0);" class="btn btn-danger dp-form-cropper-delete mb-2 disabled">
+            <i class="dp-icon far fa-times fa-fw"></i>
+            删除图片
+        </a>
+        {/eq}
+        {/volist}
+        {/notempty}
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+
+    <div class="modal modal-blur fade modal-upload" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">图片裁剪</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="dp-form-cropper"
+                         id="{$id|default=''}"
+                         data-id="dp-form-cropper-image-{$name|default=''}"
+                         data-driver="{$driver|default=''}"
+                         data-dir="{$dir|default=''}"
+                         data-options="{$options|default=''|raw}">
+                        <img id="dp-form-cropper-image-{$name|default=''}" src="{$value|dp_get_file_path}">
+                    </div>
+                    {notempty name="actions"}
+                    <div class="text-center dp-form-cropper-buttons">
+                        {if in_array('zoom-in', $actions) || in_array('zoom-out', $actions)}
+                        <div class="btn-group mt-3" role="group">
+                            {if in_array('zoom-in', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="zoom" data-params="0.1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="放大" type="button">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            {/if}
+                            {if in_array('zoom-out', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="zoom" data-params="-0.1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="缩小" type="button">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            {/if}
+                        </div>
+                        {/if}
+                        {if in_array('rotate-left', $actions) || in_array('rotate-right', $actions)}
+                        <div class="btn-group mt-3" role="group">
+                            {if in_array('rotate-left', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="rotate" data-params="-45deg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="逆时针旋转" type="button">
+                                <i class="fas fa-undo-alt"></i>
+                            </button>
+                            {/if}
+                            {if in_array('rotate-right', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="rotate" data-params="45deg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="顺时针旋转" type="button">
+                                <i class="fa fa-redo-alt"></i>
+                            </button>
+                            {/if}
+                        </div>
+                        {/if}
+                        {if in_array('scale-x', $actions) || in_array('scale-y', $actions)}
+                        <div class="btn-group mt-3" role="group">
+                            {if in_array('scale-x', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="scale" data-params="-1,1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="水平翻转" type="button">
+                                <i class="fas fa-left-right"></i>
+                            </button>
+                            {/if}
+                            {if in_array('scale-y', $actions)}
+                            <button class="btn btn-primary btn-icon" data-method="scale" data-params="1,-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="垂直翻转" type="button">
+                                <i class="fas fa-up-down"></i>
+                            </button>
+                            {/if}
+                        </div>
+                        {/if}
+                    </div>
+                    {/notempty}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary dp-form-cropper-crop"><i class="dp-icon fas fa-cut"></i> 裁剪&上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-blur fade modal-url" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加网络图片</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="w-100">
+                        <input type="text" id="dp-form-cropper-url-input-{$id|default=''}" class="form-control dp-form-cropper-url-input" placeholder="输入网络图片链接">
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary dp-form-cropper-add"><i class="dp-icon fas fa-check"></i> 确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

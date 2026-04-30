@@ -1,0 +1,31 @@
+<?php
+
+// 系统语言包
+return [
+    'dp#undefined handle method'                                 => '类 [{:class}] 未定义 handle 方法',
+    'dp#must return a string'                                    => '类 [{:class}] 返回的数据必须是字符串',
+    'dp#undefined item method'                                   => '类 [{:class}] 未定义 item 方法',
+    'dp#undefined class'                                         => '类 [{:class}] 不存在',
+    'dp#undefined item class'                                    => ' [{:type}] 未定义处理类',
+    'dp#layout template not exists'                              => '布局模板文件不存在：{:file}',
+    'dp#undefined name attribute'                                => '未定义 name 属性',
+    'dp#undefined type attribute'                                => '未定义 type 属性',
+    'dp#undefined field attribute'                               => '未定义 field 属性',
+    'dp#template not exists'                                     => '模板文件 [{:file}] 不存在',
+    'dp#template not set'                                        => '表单项 [{:type}] 未设置模板',
+    'dp#invalid form id format'                                  => '无效的表单id格式 [{:id}]',
+    'dp#invalid page id format'                                  => '无效的页面id格式 [{:id}]',
+    'dp#closure must return an array'                            => '闭包必须返回一个数组',
+    'dp#form item rendering failed'                              => '表单项渲染失败：{:msg}',
+    'dp#invalid form item'                                       => '无效的表单项 [{:type}]',
+    'dp#invalid table column item'                               => '无效的表格项类型 [{:type}]，未定义处理类',
+    'dp#invalid upload driver'                                   => '无效的上传驱动 [{:class}]',
+    'dp#variable name cannot be empty'                           => '获取模板变量时，名称不能为空',
+    'dp#method data does not exist'                              => '{:method} 方法不存在，类：[{:class}]',
+    'dp#undefined table id'                                      => '未定义表格id',
+    'dp#undefined form id'                                       => '未定义表单id',
+    'dp#table actions config error'                              => '右侧按钮参数配置错误',
+    'dp#grid columns must be between 1 and 12'                   => '网格列必须介于1和12之间',
+    'dp#grid columns for {:breakpoint} must be between 1 and 12' => '{:breakpoint}的网格列必须介于1和12之间',
+    'dp#class {:class} must extend FormItem'                     => '类 {:class} 必须继承FormItem',
+];

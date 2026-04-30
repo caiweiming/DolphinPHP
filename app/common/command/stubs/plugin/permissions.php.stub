@@ -1,0 +1,16 @@
+<?php
+declare(strict_types=1);
+
+return [
+    'items' => [
+        [
+            'name'   => '{{plugin_title}}',
+            'code'   => '{{permission_prefix}}',
+            'type'   => 'menu',
+            'route'  => '{{plugin_route}}',
+            'icon'   => 'ti ti-plug',
+            'sort'   => 100,
+            'remark' => '{{plugin_title}} 菜单入口',
+        ],
+    ],
+];

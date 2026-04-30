@@ -1,0 +1,321 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    {include file="plugin/_tab_style" /}
+
+    .log-detail-page {
+        padding: 0 18px 18px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        min-height: 100%;
+    }
+
+    .log-detail-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .log-detail-card {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .log-detail-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 18px;
+        border-bottom: 1px solid #eef2f7;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .log-detail-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .log-detail-name {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #64748b;
+    }
+
+    .log-detail-tools {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .log-detail-tool {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border: 1px solid #dbeafe;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .log-level-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 84px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .02em;
+        white-space: nowrap;
+    }
+
+    .log-level-debug {
+        color: #475569;
+        background: #e2e8f0;
+    }
+
+    .log-level-info {
+        color: #1d4ed8;
+        background: #dbeafe;
+    }
+
+    .log-level-warning {
+        color: #b45309;
+        background: #fef3c7;
+    }
+
+    .log-level-error {
+        color: #b91c1c;
+        background: #fee2e2;
+    }
+
+    .log-overview-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 16px 18px 18px;
+    }
+
+    .log-overview-item {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #edf2f7;
+    }
+
+    .log-overview-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+    }
+
+    .log-overview-value {
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.7;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .log-pane-section {
+        padding: 18px;
+    }
+
+    .log-content-block {
+        border: 1px solid #edf2f7;
+        border-radius: 12px;
+        background: #fbfdff;
+        overflow: hidden;
+    }
+
+    .log-content-block-head {
+        padding: 12px 14px;
+        border-bottom: 1px solid #edf2f7;
+        font-size: 13px;
+        font-weight: 700;
+        color: #334155;
+        background: #f8fafc;
+    }
+
+    .log-content-list {
+        padding: 14px;
+    }
+
+    .log-content-row {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .log-content-row:last-child {
+        border-bottom: none;
+    }
+
+    .log-content-key {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .log-content-value {
+        color: #111827;
+        font-size: 13px;
+        line-height: 1.7;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .log-code {
+        margin: 0;
+        padding: 16px 18px;
+        max-height: 680px;
+        overflow: auto;
+        background: #0f172a;
+        color: #dbeafe;
+        font-size: 13px;
+        line-height: 1.7;
+        font-family: Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .log-empty {
+        padding: 20px 18px;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+        .log-detail-page {
+            padding: 12px;
+        }
+
+        .log-detail-head,
+        .log-overview-grid {
+            grid-template-columns: 1fr;
+            display: grid;
+        }
+
+        .log-detail-head {
+            gap: 12px;
+        }
+
+        .log-pane-section {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .log-content-row {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="log-detail-page">
+    <div class="log-detail-stack">
+        <section class="log-detail-card">
+            <div class="log-detail-head">
+                <div>
+                    <h3 class="log-detail-title">{$logTitle}</h3>
+                    <div class="log-detail-name">{$logSubtitle}</div>
+                </div>
+                <div class="log-detail-tools">
+                    <span class="log-detail-tool">
+                        <i class="ti ti-braces"></i>
+                        {$contentTypeText}
+                    </span>
+                    <span class="log-level-badge log-level-{$statusClass}">{$statusText}</span>
+                </div>
+            </div>
+
+            <div class="plugin-admin-tabs">
+                <ul class="nav nav-tabs" id="logDetailTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="log-detail-overview-tab" data-bs-toggle="tab"
+                                data-bs-target="#log-detail-overview" type="button" role="tab"
+                                aria-controls="log-detail-overview" aria-selected="true">
+                            概览
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="log-detail-structured-tab" data-bs-toggle="tab"
+                                data-bs-target="#log-detail-structured" type="button" role="tab"
+                                aria-controls="log-detail-structured" aria-selected="false">
+                            结构化
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="log-detail-raw-tab" data-bs-toggle="tab"
+                                data-bs-target="#log-detail-raw" type="button" role="tab"
+                                aria-controls="log-detail-raw" aria-selected="false">
+                            原始内容
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane fade plugin-admin-tab-pane active show" id="log-detail-overview" role="tabpanel"
+                     aria-labelledby="log-detail-overview-tab">
+                    <div class="log-overview-grid">
+                        {volist name="detailRows" id="row"}
+                        <div class="log-overview-item">
+                            <span class="log-overview-label">{$row.label}</span>
+                            <div class="log-overview-value">{$row.value|default='-'}</div>
+                        </div>
+                        {/volist}
+                    </div>
+                </div>
+
+                <div class="tab-pane fade plugin-admin-tab-pane" id="log-detail-structured" role="tabpanel"
+                     aria-labelledby="log-detail-structured-tab">
+                    <div class="log-pane-section">
+                        <div class="log-content-block">
+                            <div class="log-content-block-head">结构化视图</div>
+                            {if $isJsonContent && !empty($structuredRows)}
+                            <div class="log-content-list">
+                                {volist name="structuredRows" id="row"}
+                                <div class="log-content-row">
+                                    <div class="log-content-key">{$row.label}</div>
+                                    <div class="log-content-value">{$row.value}</div>
+                                </div>
+                                {/volist}
+                            </div>
+                            {else /}
+                            <div class="log-empty">当前日志内容不是 JSON，无法生成结构化视图。</div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade plugin-admin-tab-pane" id="log-detail-raw" role="tabpanel"
+                     aria-labelledby="log-detail-raw-tab">
+                    <div class="log-pane-section">
+                        <pre class="log-code">{$prettyContent|htmlspecialchars}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{/block}

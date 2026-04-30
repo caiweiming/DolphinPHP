@@ -1,0 +1,20 @@
+(function ($) {
+    'use strict';
+
+    $(function () {
+        $('.js-{{type_identifier}}').each(function () {
+            const $input = $(this);
+            const options = $input.data('options') || {};
+
+            if ($input.data('dp{{slug}}Inited')) {
+                return;
+            }
+
+            $input.data('dp{{slug}}Inited', true);
+
+            void options;
+
+            // 在这里编写 {{label}} 的前端初始化逻辑
+        });
+    });
+})(jQuery);

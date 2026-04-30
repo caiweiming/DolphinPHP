@@ -1,0 +1,19 @@
+{
+    "name": "demo/hello",
+    "title": "插件机制示例",
+    "description": "用于演示框架级插件协议、能力注册与资源接入链路的最小示例插件。",
+    "version": "1.0.0",
+    "plugin_api_version": "1.0",
+    "author": "DolphinPHP Team",
+    "provider": "Plugins\\Demo\\Hello\\ServiceProvider",
+    "main": "Plugins\\Demo\\Hello\\Plugin",
+    "dependencies": [],
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plugins\\Demo\\Hello\\": "src/"
+        }
+    }
+}

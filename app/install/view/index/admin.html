@@ -1,0 +1,112 @@
+{extend name="layout/wizard" /}
+
+{block name="title"}配置管理员 - DolphinPHP 安装向导{/block}
+
+{block name="header"}
+<h1 class="install-section-title">配置管理员</h1>
+<p class="install-section-subtitle">
+    安装完成后，您将使用这里设置的账号进入后台。该账号会覆盖默认的超级管理员记录。
+</p>
+{/block}
+
+{block name="content"}
+<div class="install-admin-layout">
+    <section class="install-admin-form">
+        <form id="admin-form" class="install-admin-form-inner" autocomplete="off">
+            {:dp_token_field()}
+            <div class="install-admin-form-grid">
+                <div class="install-form-field">
+                    <label class="form-label">管理员账号</label>
+                    <input type="text" name="username" class="form-control" value="{$values.username|default='admin'}" placeholder="请输入管理员账号">
+                    <span class="install-field-help">4-20 个字符，建议使用英文、数字或下划线组合</span>
+                </div>
+                <div class="install-form-field">
+                    <label class="form-label">昵称</label>
+                    <input type="text" name="nickname" class="form-control" value="{$values.nickname|default='超级管理员'}" placeholder="请输入管理员昵称">
+                    <span class="install-field-help">将在系统中显示的名称</span>
+                </div>
+                <div class="install-form-field install-form-field--full">
+                    <label class="form-label">电子邮箱</label>
+                    <input type="email" name="email" class="form-control" value="{$values.email|default=''}" placeholder="请输入有效的电子邮箱地址">
+                    <span class="install-field-help">用于接收系统通知与找回密码，可选填写</span>
+                </div>
+                <div class="install-form-field">
+                    <label class="form-label">登录密码</label>
+                    <div class="input-icon input-icon-end">
+                        <input type="password" id="admin-password" name="password" class="form-control" value="" placeholder="请输入登录密码">
+                        <button type="button" class="input-icon-addon install-password-toggle" data-role="password-toggle" data-target="admin-password" aria-label="显示或隐藏密码" aria-pressed="false">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="install-field-help">6-64 个字符，建议使用高强度密码</span>
+                </div>
+                <div class="install-form-field">
+                    <label class="form-label">确认密码</label>
+                    <div class="input-icon input-icon-end">
+                        <input type="password" id="admin-password-confirm" name="password_confirm" class="form-control" value="" placeholder="请再次输入登录密码">
+                        <button type="button" class="input-icon-addon install-password-toggle" data-role="password-toggle" data-target="admin-password-confirm" aria-label="显示或隐藏密码" aria-pressed="false">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="install-field-help">请与上面的密码保持一致</span>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+{/block}
+
+{block name="actions"}
+<div class="install-action-footer-start">
+    <a href="/install/index/database" class="btn btn-outline-secondary">上一步</a>
+</div>
+<div class="install-action-footer-end">
+    <button type="submit" form="admin-form" class="btn btn-primary" data-role="save-admin">下一步</button>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        var form = document.getElementById('admin-form');
+        var saveButton = document.querySelector('[data-role="save-admin"]');
+
+        if (!form || !saveButton) {
+            return;
+        }
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            saveButton.disabled = true;
+            saveButton.classList.add('btn-loading', 'disabled');
+
+            try {
+                var formData = new FormData(form);
+                window.InstallWizard.appendToken(formData);
+                var response = await fetch('/install/index/saveAdmin', {
+                    method: 'POST',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: formData
+                });
+                var result = await response.json();
+                if (result.code === 1) {
+                    window.InstallWizard.notify('success', result.msg || '操作成功');
+                    if (result.url) {
+                        setTimeout(function () {
+                            window.location.href = result.url;
+                        }, 500);
+                    }
+                    return;
+                }
+
+                window.InstallWizard.notify('error', result.msg || '操作失败');
+            } catch (error) {
+                window.InstallWizard.notify('error', error && error.message ? error.message : '请求失败，请稍后重试');
+            } finally {
+                saveButton.disabled = false;
+                saveButton.classList.remove('btn-loading', 'disabled');
+            }
+        });
+    })();
+</script>
+{/block}

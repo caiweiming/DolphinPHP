@@ -1,8 +1,35 @@
-.idea
+*.log
+.env
+/config/install.lock
+composer.phar
 composer.lock
-/runtime/
-/.settings/
-/composer.lock
+.DS_Store
+Thumbs.db
+runtime
+/.idea
+/.vscode
+/.settings
 /.buildpath
 /.project
-*.log
+/public/static/avatars
+/public/static/photos
+/public/static/static
+/public/uploads
+/public/preview
+
+# PHPUnit
+.phpunit.cache
+coverage
+
+# AI assistant local instructions
+AGENTS.md
+CLAUDE.md
+
+# Local plugin package workspace
+/dev/*
+!/dev/plugin-packages/
+/dev/plugin-packages/*
+!/dev/plugin-packages/.gitkeep
+
+# Local git worktrees
+/.worktrees/

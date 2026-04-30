@@ -1,0 +1,14 @@
+<script type="text/html" id="{$id|default=''}">
+    {{# d.{$field}.forEach(function(item) { }}
+    <a data-fslightbox="lightbox-{$field}-{{= d.LAY_INDEX}}" href="{{= item }}">
+        <div class="avatar avatar-sm" style="background-image: url({{= item }})"></div>
+    </a>
+    {{# }); }}
+</script>
+<script>
+    // 注册全局回调（tableId 为空表示全局）
+    DolphinTableOn('', 'done', 'image-lightbox', refreshFsLightbox);
+
+    // 监听树形表格展开事件（只在展开时刷新，收起时不需要）
+    DolphinTableOn('', 'expand', 'image-lightbox', refreshFsLightbox);
+</script>

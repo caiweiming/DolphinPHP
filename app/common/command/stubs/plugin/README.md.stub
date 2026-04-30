@@ -1,0 +1,53 @@
+# {{plugin_name}}
+
+{{plugin_description}}
+
+## 插件用途
+
+- 在此说明该插件解决的问题和主要使用场景。
+- 如果插件会扩展后台菜单、表单、表格、图表、上传驱动或 AI 能力，请在这里明确写出。
+
+## 安装与启用
+
+1. 如需通过 Composer 分发，请先发布本目录下的 `composer.json`，并确保宿主项目已接入 `dolphinphp-plugin` 安装器规则。
+2. 安装插件：`php think plugin:install {{plugin_name}}`
+3. 启用插件：`php think plugin:enable {{plugin_name}}`
+4. 升级插件：替换目录代码后执行 `php think plugin:upgrade {{plugin_name}}`
+5. 如插件包含静态资源，请确认 `public/plugins` 对 Web 进程可写。
+
+## 配置说明
+
+- 如需配置，请在 `config/` 目录新增配置文件，并在这里列出配置项用途和默认值。
+- 如果无需配置，请明确写“本插件默认无额外配置”。
+
+## 入口与使用方式
+
+- 后台入口：在此填写菜单路径或页面地址。
+- 路由入口：例如 `{{plugin_route}}`
+- 命令入口：如有命令，请在这里列出命令名和参数。
+- 接口说明：如有 API，请补充请求方式、参数和返回格式。
+
+## 文档资源写法
+
+- 如果需要在 README 中展示截图，请把图片放到插件 `public/docs/` 目录。
+- 推荐写法：
+  - `![后台入口截图](docs/overview.png)`
+  - `[查看静态说明页](docs/guide.html)`
+- 系统会把 README 中指向插件 `public/` 目录的相对链接和图片自动重写为插件静态资源 URL。
+- 出于安全考虑，后台详情页默认不展示外链图片，也不支持 SVG。
+
+## 目录说明
+
+- `composer.json`：Composer 分发元数据，要求与 `plugin.json` 对齐
+- `plugin.json`：插件元数据
+- `src/Plugin.php`：生命周期主类
+- `src/ServiceProvider.php`：服务注册入口
+- `routes.php`：路由声明
+- `permissions.php`：权限声明
+- `view/index.html`：默认示例页面
+
+## 开发备注
+
+- 生成时间：{{generated_date}}
+- 插件作者：{{plugin_author}}
+- 当前骨架建议在首次提交前补齐说明文档，方便后台“插件详情”页直接展示用途和使用方式。

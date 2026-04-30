@@ -1,0 +1,80 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="script"}
+<script>
+/**
+ * 分配角色处理函数
+ * @param {Object} table - 表格实例
+ * @param {String} tableId - 表格ID
+ * @param {Object} obj - layui事件对象,包含data(行数据)
+ * @param {jQuery} self - 按钮jQuery对象
+ */
+window.handleAssignRole = function(table, tableId, obj, self) {
+    const rowData = obj.data;
+
+    if (!rowData || !rowData.id) {
+        Dolphin.error('未获取到用户信息');
+        return;
+    }
+
+    // 打开分配角色弹窗
+    Dolphin.pop(
+        '{:url("assignRole")}?id=' + rowData.id + '&_pop=1',
+        '分配角色 - ' + rowData.username,
+        {
+            area: ['600px', '500px'],
+            success: function(layero, index) {
+                // 弹窗加载成功后的回调
+                console.log('分配角色弹窗已打开');
+            },
+            end: function() {
+                // 关闭弹窗后刷新表格
+                table.reload(tableId);
+            }
+        }
+    );
+};
+
+/**
+ * 重置密码处理函数
+ * @param {Object} table - 表格实例
+ * @param {String} tableId - 表格ID
+ * @param {Object} obj - layui事件对象,包含data(行数据)
+ * @param {jQuery} self - 按钮jQuery对象
+ */
+window.handleResetPassword = function(table, tableId, obj, self) {
+    const rowData = obj.data;
+
+    if (!rowData || !rowData.id) {
+        Dolphin.error('未获取到用户信息');
+        return;
+    }
+
+    // 不能重置自己的密码(可选,根据业务需求)
+    // if (rowData.id == '{:session("user_id")}') {
+    //     Dolphin.error('不能重置自己的密码');
+    //     return;
+    // }
+
+    // 确认重置密码
+    Dolphin.confirm(
+        '重置密码确认',
+        '确定要重置用户"' + rowData.username + '"的密码吗？<br>新密码将重置为默认密码: <strong>123456</strong>',
+        function() {
+            // 发送重置密码请求
+            Dolphin.ajax('{:url("resetPassword")}', 'POST', {
+                id: rowData.id
+            }, {
+                success: function(res) {
+                    Dolphin.success(res.msg || '密码重置成功');
+                    // 不需要刷新表格,因为重置密码不影响列表显示
+                },
+                error: function(err) {
+                    Dolphin.error(err.msg || '密码重置失败');
+                }
+            });
+        }
+    );
+};
+</script>
+{/block}

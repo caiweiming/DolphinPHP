@@ -1,0 +1,200 @@
+{volist name="dp_form_alert_top" id="alert"}
+<div class="alert alert-{$alert.type|default='info'} {$alert.close ?= ' alert-dismissible'}" role="alert">
+    {notempty name="alert.icon"}
+    <div class="alert-icon">
+        {switch alert.type }
+        {case success}<i class="ti ti-check"></i>{/case}
+        {case warning}<i class="ti ti-alert-triangle"></i>{/case}
+        {case danger}<i class="ti ti-alert-circle"></i>{/case}
+        {default /}<i class="ti ti-info-circle"></i>
+        {/switch}
+    </div>
+    {/notempty}
+    <div>
+        {notempty name="alert.title"}
+        <h4 class="alert-heading">{$alert.title}</h4>
+        {/notempty}
+        <div class="{$alert.title ?= 'alert-description'}">
+            {$alert.content|raw}
+        </div>
+    </div>
+    {$alert.close ?= '<a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>'}
+</div>
+{/volist}
+
+{volist name="dp_form_extra_html.top" id="html"}
+{$html|default=''|raw}
+{/volist}
+
+<form role="form" id="{$dp_form_id|default=''}" action="{$dp_form_action|default=''}" method="{$dp_form_method|default='post'}" class="{$dp_form_class|default='dp-form'}" data-when-rules="{$dp_form_when_rules|default=''}" {$dp_form_prop|default=""|raw}>
+    {:dp_token_field()}
+    <div class="card">
+        {notempty name="dp_form_header"}
+        <div class="card-header {$dp_form_sticky.top >= 0 ? 'sticky-top' : ''}" {$dp_form_sticky.top >= 0 ? 'style="top:'.$dp_form_sticky['top'].'px"' : ''}>
+            {eq name="dp_form_header" value="true"}
+            <div class="card-title">{$dp_form_title|raw|default='表单'}</div>
+
+            {notempty name="dp_form_header_action"}
+            <div class="card-actions">
+                {volist name="dp_form_header_action" id="_action"}
+                {switch _action.type }
+                {case btn}
+                <a href="{$_action.href|default='#'}" class="btn btn-{$_action.color|default='primary'} {$_action.text ? '' : 'btn-empty'} {$_action.class|default=''}" {$_action.prop|default=''|raw}>
+                    {notempty name="_action.icon"}<i class="dp-icon {$_action.icon}"></i>{/notempty}
+                    {$_action.text|default=''}
+                </a>
+                {/case}
+                {case icon}
+                <a href="{$_action.href|default='#'}" class="btn-action {$_action.class|default=''}" {$_action.prop|default=''|raw}>
+                    <i class="dp-icon {$_action.icon|default=''}"></i>
+                </a>
+                {/case}
+                {case dropdown}
+                <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="dp-icon ti ti-dots-vertical"></i>
+                </a>
+                {notempty name="_action.items"}
+                <div class="dropdown-menu dropdown-menu-end">
+                    {volist name="_action.items" id="item"}
+                    {eq name="item" value="-"}
+                    <div class="dropdown-divider"></div>
+                    {else/}
+                    <a class="dropdown-item text-{$item.color|default='default'} {$item.class|default=''}" href="{$item.href|default='#'}" {$prop|default=""|raw}>
+                        {notempty name="item.icon"}<i class="dp-icon dropdown-item-icon {$item.icon}"></i>{/notempty}
+                        {$item.text|default=''}
+                    </a>
+                    {/eq}
+                    {/volist}
+                </div>
+                {/notempty}
+                {/case}
+                {default /}
+                {$_action.content|raw|default=''}
+                {/switch}
+                {/volist}
+            </div>
+            {/notempty}
+            {else/}
+            {$dp_form_header|raw|default=''}
+            {/eq}
+        </div>
+        {/notempty}
+
+        <div class="card-body">
+            {volist name="dp_form_extra_html.inner_top" id="html"}
+            {$html|default=''|raw}
+            {/volist}
+
+            {empty name="dp_form_rows"}
+            <div class="empty">
+                <p class="empty-title">暂无表单项</p>
+                <p class="empty-subtitle text-secondary">当前表单页面未添加任何表单项</p>
+            </div>
+            {/empty}
+
+            {volist name="dp_form_rows" id="row"}
+            <div class="row {$row.class|default=''}" {$row.attr|default=""|raw}>
+                {volist name="row.cols" id="col"}
+                {eq name="col" value="-"}
+                {$dp_form_newline|raw}
+                {else/}
+                <div class="{$col.class|default='col'}" {$col.attr|default=""|raw}>{$col.content|raw|default=''}</div>
+                {/eq}
+                {/volist}
+            </div>
+            {/volist}
+
+            {volist name="dp_form_extra_html.inner_bottom" id="html"}
+            {$html|default=''|raw}
+            {/volist}
+        </div>
+
+        {notempty name="dp_form_footer"}
+        <div class="card-footer {$dp_form_sticky.bottom >= 0 ? 'sticky-bottom' : ''}" {$dp_form_sticky.bottom >= 0 ? 'style="bottom:'.$dp_form_sticky['bottom'].'px"' : ''}>
+            {eq name="dp_form_footer" value="true"}
+            <div class="row align-items-center">
+                <div class="col">
+                    {volist name="dp_form_action_left" id="vo"}
+                        {switch vo.type }
+                            {case submit}
+                            <button type="submit" class="{$dp_form_submit_type|default=''} btn btn-{$vo.content.color|default='primary'} {$vo.content.style|default=''}"  data-form-confirm="{$dp_form_confirm|raw|default=''}">
+                                {$vo.content.text|raw|default='提 交'}
+                            </button>
+                            {/case}
+                            {case back}
+                                {neq name="Request.get._pop" value="1"}
+                                <button type="button" onclick="history.back();return false;" class="btn btn-{$dp_form_button_back.color|default='ghost-info'} {$button_back.type|default=''}">
+                                    {$dp_form_button_back.text|raw|default='返 回'}
+                                </button>
+                                {else/}
+                                <button type="button" id="dp-form-close-pop" class="btn btn-ghost-info">
+                                    关 闭
+                                </button>
+                                {/neq}
+                            {/case}
+                            {default /}
+                            {$vo.content|raw|default=''}
+                        {/switch}
+                    {/volist}
+                </div>
+                <div class="col-auto">
+                    {volist name="dp_form_action_right" id="vo"}
+                    {switch vo.type }
+                    {case submit}
+                    <button type="submit" class="{$dp_form_submit_type|default=''} btn btn-{$vo.content.color|default='primary'} {$vo.content.style|default=''}" data-form-confirm="{$dp_form_confirm|raw|default='false'}">
+                        {$vo.content.text|raw|default='提 交'}
+                    </button>
+                    {/case}
+                    {case back}
+                    {neq name="Request.get._pop" value="1"}
+                    <button type="button" onclick="history.back();return false;" class="btn btn-{$dp_form_button_back.color|default='ghost-info'} {$button_back.type|default=''}">
+                        {$button_back.text|raw|default='返 回'}
+                    </button>
+                    {else/}
+                    <button type="button" id="dp-form-close-pop" class="btn btn-ghost-info">
+                        关 闭
+                    </button>
+                    {/neq}
+                    {/case}
+                    {default /}
+                    {$vo.content|raw|default=''}
+                    {/switch}
+                    {/volist}
+                </div>
+            </div>
+            {else/}
+            {$dp_form_footer|raw|default=''}
+            {/eq}
+        </div>
+        {/notempty}
+    </div>
+</form>
+
+{volist name="dp_form_alert_bottom" id="alert"}
+<div class="alert alert-{$alert.type|default='info'} {$alert.close ?= ' alert-dismissible'}" role="alert">
+    <div class="d-flex">
+        {notempty name="alert.icon"}
+        <div>
+            {switch alert.type }
+            {case success}<i class="ti ti-check icon alert-icon"></i>{/case}
+            {case warning}<i class="ti ti-alert-triangle icon alert-icon"></i>{/case}
+            {case danger}<i class="ti ti-alert-circle icon alert-icon"></i>{/case}
+            {default /}<i class="ti ti-info-circle icon alert-icon"></i>
+            {/switch}
+        </div>
+        {/notempty}
+
+        <div>
+            {notempty name="alert.title"}
+            <h4 class="alert-title">{$alert.title}</h4>
+            {/notempty}
+            <div>{$alert.content|raw}</div>
+        </div>
+    </div>
+    {$alert.close ?= '<a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>'}
+</div>
+{/volist}
+
+{volist name="dp_form_extra_html.bottom" id="html"}
+{$html|default=''|raw}
+{/volist}

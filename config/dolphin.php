@@ -2,21 +2,21 @@
 // +----------------------------------------------------------------------
 // | 海豚PHP框架 [ DolphinPHP ]
 // +----------------------------------------------------------------------
-// | 版权所有 2016~2019 广东卓锐软件有限公司 [ http://www.zrthink.com ]
+// | 版权所有 2016~2017 河源市卓锐科技有限公司 [ http://www.zrthink.com ]
 // +----------------------------------------------------------------------
 // | 官方网站: http://dolphinphp.com
+// +----------------------------------------------------------------------
+// | 产品许可：公开源码可访问，个人非商业免费，商业使用按域名授权
 // +----------------------------------------------------------------------
 
 return [
     // 产品信息
-    'product_name' => 'DolphinPHP',
-    'product_version' => '1.8.0',
-    'build_version' => '202510231213',
-    'product_website' => 'http://www.dolphinphp.com',
-    'product_update' => 'http://www.dolphinphp.com/checkUpdate',
-    'develop_team' => 'DolphinPHP',
+    'name'      => 'DolphinPHP',
+    'version'   => '2.0.0-dev',
+    'website'   => 'https://www.dolphinphp.com',
+    'update'    => 'https://www.dolphinphp.com/checkUpdate',
 
     // 公司信息
-    'company_name' => '广东卓锐软件有限公司',
+    'company_name'    => '广东卓锐软件有限公司',
     'company_website' => 'http://www.zrthink.com',
 ];

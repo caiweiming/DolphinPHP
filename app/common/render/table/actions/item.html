@@ -1,0 +1,191 @@
+<script type="text/html" id="{$id|default=''}">
+    {{# var buttons = d.{$field} || []; }}
+    <div class="layui-clear-space">
+        {{# layui.each(buttons, function(index, button) { }}
+        {{# if (button && button.type !== '-') { }}
+        {{# var buttonClass = button.class || 'layui-btn layui-btn-xs layui-btn-default'; }}
+        {{# if (button.disabled) { buttonClass += ' layui-disabled dp-table-action-disabled'; } }}
+        {{# var buttonTitle = button.disabled && button.remark ? button.remark : (button.title || ''); }}
+        {{# var buttonConfig = encodeURIComponent(JSON.stringify(button || {})); }}
+        <a class="{{= buttonClass }}"
+           lay-event="{{= button.event || '' }}"
+           title="{{= buttonTitle }}"
+           target="{{= button.target || '_self' }}"
+           data-config="{{= buttonConfig }}"
+           data-disabled="{{= button.disabled ? '1' : '' }}">
+            {{# if (button.icon) { }}
+            <i class="{{= button.title ? 'dp-icon ' : '' }}{{= button.icon }}"></i>
+            {{# } }}
+            {{= button.title || '' }}
+            {{# if (button.dropdown && button.dropdown.length) { }}
+            <i class="layui-icon layui-icon-down"></i>
+            {{# } }}
+        </a>
+        {{# } }}
+        {{# }); }}
+    </div>
+</script>
+<script>
+    DolphinTableOn('{$tableId}', 'done', 'actions-{$field}', function(table, tableId) {
+        const dropdown = layui.dropdown;
+        const crudToken = '{$crudToken|default=""}';
+
+        const appendToken = (sourceUrl) => {
+            if (!sourceUrl || !crudToken || sourceUrl.indexOf('_t=') > -1) {
+                return sourceUrl;
+            }
+            if (/^https?:\/\//i.test(sourceUrl)) {
+                try {
+                    const u = new URL(sourceUrl, window.location.origin);
+                    if (u.host !== window.location.host) {
+                        return sourceUrl;
+                    }
+                } catch (e) {
+                    return sourceUrl;
+                }
+            }
+            return sourceUrl + (sourceUrl.indexOf('?') > -1 ? '&' : '?') + '_t=' + encodeURIComponent(crudToken);
+        };
+
+        const parseActionConfig = (elem) => {
+            const encoded = $(elem).attr('data-config') || '';
+            if (!encoded) {
+                return {};
+            }
+
+            try {
+                return JSON.parse(decodeURIComponent(encoded));
+            } catch (e) {
+                console.error('解析操作按钮配置失败:', e);
+                return {};
+            }
+        };
+
+        const notifyDisabledRemark = (remark) => {
+            if (!remark) {
+                return;
+            }
+
+            if (window.Dolphin && typeof Dolphin.info === 'function') {
+                Dolphin.info(remark);
+                return;
+            }
+
+            if (window.Dolphin && typeof Dolphin.warning === 'function') {
+                Dolphin.warning(remark);
+            }
+        };
+
+        // 处理操作的通用函数
+        const handleAction = (url, target, ajax, options, title) => {
+            url = appendToken(url);
+
+            if (!$.isEmptyObject(options)) {
+                return Dolphin.pop(url, title, options);
+            } else if (!$.isEmptyObject(ajax)) {
+                if (!ajax.data) {
+                    ajax.data = {};
+                }
+                if (crudToken && ajax.data._t === undefined) {
+                    ajax.data._t = crudToken;
+                }
+                ajax.success = function (res) {
+                    if (res.code) {
+                        table.reloadData(tableId);
+                    }
+                }
+                return Dolphin.ajax(url, '', {}, ajax);
+            } else {
+                window.open(url, target);
+                return $.Deferred().resolve();
+            }
+        };
+
+        // 处理操作后的回调
+        const handleActionCallback = (actionResult, event, obj) => {
+            if (!actionResult || typeof actionResult.done !== 'function') {
+                return;
+            }
+
+            actionResult.done(res => {
+                if (event === 'delete' && res && res.code) {
+                    // 删除成功，移除表格行
+                    obj.del();
+                }
+            }).fail(err => {
+                // 统一的错误处理
+                console.error('操作失败:', err);
+            });
+        };
+
+        // 执行操作的统一方法
+        const executeAction = (button, obj) => {
+            if (button.disabled) {
+                notifyDisabledRemark(button.remark || '');
+                return;
+            }
+
+            const url = button.url || '';
+            const target = button.target || '_self';
+            const ajax = button.ajax || {};
+            const pop = button.pop || {};
+            const title = button.title || '默认';
+            const confirm = button.confirm || [];
+            const event = button.event || 'default';
+
+            const action = () => {
+                const actionResult = handleAction(url, target, ajax, pop, title);
+                handleActionCallback(actionResult, event, obj);
+            };
+
+            if (!$.isEmptyObject(confirm)) {
+                Dolphin.confirm(confirm[0] ?? '', confirm[1] ?? '', action);
+            } else {
+                action();
+            }
+        };
+
+        // 触发单元格工具事件
+        table.on('tool('+tableId+')', function(obj){
+            const button = parseActionConfig(this);
+
+            if ($.isEmptyObject(button)) {
+                return;
+            }
+
+            if (button.disabled) {
+                notifyDisabledRemark(button.remark || '');
+                return;
+            }
+
+            // 处理更多下拉菜单
+            if (obj.event === 'more') {
+                const dropdownData = button.dropdown || [];
+                if (!dropdownData.length) {
+                    return;
+                }
+
+                dropdown.render({
+                    elem: this,
+                    show: true,
+                    data: dropdownData,
+                    customName: { event: 'id' },
+                    click: function(menu){
+                        if (menu.disabled) {
+                            notifyDisabledRemark(menu.remark || '');
+                            return;
+                        }
+
+                        executeAction(menu, obj);
+                    },
+                    id: 'dropdown-table-tool',
+                    align: 'right',
+                    style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);'
+                });
+                return;
+            }
+
+            executeAction(button, obj);
+        });
+    });
+</script>

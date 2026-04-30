@@ -1,0 +1,41 @@
+<?php
+declare(strict_types=1);
+
+namespace form\{{namespace}};
+
+use app\common\abstract\FormItem;
+
+/**
+ * {{label}}表单扩展项
+ */
+class Item extends FormItem
+{
+    /**
+     * 处理渲染参数
+     * @param array $params
+     * @return array
+     */
+    public function handle(array $params = []): array
+    {
+        $params['props'] = dp_parse_options($params['props'] ?? []);
+        $params['input_attr'] = dp_parse_options($params['input_attr'] ?? []);
+        return $params;
+    }
+
+    /**
+     * 获取表单项资源
+     * @return array
+     */
+    public function getAssets(): array
+    {
+        return [
+            'js' => [
+                '__EXTEND_FORM__/{{dir}}/{{slug}}.js',
+            ],
+            'css' => [
+                '__EXTEND_FORM__/{{dir}}/{{slug}}.css',
+            ],
+            'init' => [],
+        ];
+    }
+}

@@ -1,0 +1,183 @@
+<!-- 后台工作台卡片模板 -->
+{php}
+$__card = is_array($card ?? null) ? $card : [];
+$__type = (string)($__card['type'] ?? 'list');
+$__span = max(1, min(12, (int)($__card['span'] ?? 12)));
+$__status = strtolower((string)($__card['status'] ?? 'ready'));
+$__title = trim((string)($__card['title'] ?? '未命名卡片'));
+$__icon = trim((string)($__card['icon'] ?? 'ti ti-layout-grid'));
+$__description = trim((string)($__card['description'] ?? ''));
+$__items = is_array($__card['items'] ?? null) ? $__card['items'] : [];
+$__value = $__card['value'] ?? '';
+$__contentHtml = (string)($__card['content_html'] ?? '');
+$__colClass = $__span >= 12 ? 'col-12' : 'col-12 col-md-6 col-xl-' . $__span;
+$__showStatusBadge = !in_array($__status, ['ok', 'ready'], true) || !empty($__card['show_status']);
+$__statusConfig = [
+    'ok' => ['label' => '正常', 'badge' => 'bg-green-lt text-green', 'avatar' => 'bg-green text-white', 'dot' => 'bg-green'],
+    'ready' => ['label' => '正常', 'badge' => 'bg-green-lt text-green', 'avatar' => 'bg-green text-white', 'dot' => 'bg-green'],
+    'warning' => ['label' => '关注', 'badge' => 'bg-yellow-lt text-yellow', 'avatar' => 'bg-yellow text-white', 'dot' => 'bg-yellow'],
+    'danger' => ['label' => '异常', 'badge' => 'bg-red-lt text-red', 'avatar' => 'bg-red text-white', 'dot' => 'bg-red'],
+    'error' => ['label' => '异常', 'badge' => 'bg-red-lt text-red', 'avatar' => 'bg-red text-white', 'dot' => 'bg-red'],
+    'info' => ['label' => '信息', 'badge' => 'bg-azure-lt text-azure', 'avatar' => 'bg-azure text-white', 'dot' => 'bg-azure'],
+];
+$__statusMeta = $__statusConfig[$__status] ?? $__statusConfig['info'];
+{/php}
+<div class="{$__colClass}">
+    {if $__type === 'metric'}
+    <div class="card card-sm h-100">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <span class="avatar dp-workspace-metric-avatar">
+                        <i class="{$__icon}"></i>
+                    </span>
+                </div>
+                <div class="col">
+                    <div class="d-flex align-items-center justify-content-between gap-2">
+                        <div class="text-secondary">{$__title}</div>
+                        {if $__showStatusBadge}
+                        <span class="badge {$__statusMeta.badge}">{$__statusMeta.label}</span>
+                        {/if}
+                    </div>
+                    <div class="h1 mb-1 mt-2">{$__value}</div>
+                    {notempty name="__description"}
+                    <div class="text-secondary">{$__description}</div>
+                    {/notempty}
+                </div>
+            </div>
+        </div>
+    </div>
+    {elseif $__type === 'view'}
+    <div class="card h-100">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="{$__icon} me-2"></i>{$__title}
+            </h3>
+            {if $__showStatusBadge}
+            <div class="card-actions">
+                <span class="badge {$__statusMeta.badge}">{$__statusMeta.label}</span>
+            </div>
+            {/if}
+        </div>
+        <div class="card-body">
+            {if $__contentHtml !== ''}
+            {$__contentHtml|raw}
+            {else /}
+            <div class="empty">
+                <div class="empty-title">暂无内容</div>
+                <p class="empty-subtitle text-secondary mb-0">该卡片未返回可渲染视图。</p>
+            </div>
+            {/if}
+        </div>
+    </div>
+    {elseif $__type === 'quick_links'}
+    <div class="card h-100">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="{$__icon} me-2"></i>{$__title}
+            </h3>
+            <div class="card-actions d-flex align-items-center gap-2">
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary dp-workspace-quick-links-action"
+                    data-action="open-panel"
+                    aria-controls="dp-workspace-quick-links-panel"
+                    aria-expanded="false"
+                >
+                    <i class="ti ti-plus me-1"></i>添加
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger dp-workspace-quick-links-action d-none"
+                    data-action="clear-all"
+                >
+                    <i class="ti ti-trash me-1"></i>清空
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary dp-workspace-quick-links-action"
+                    data-action="toggle-edit"
+                    data-default-text="整理"
+                    data-editing-text="完成"
+                    aria-pressed="false"
+                ><i class="ti ti-edit me-1"></i>整理</button>
+            </div>
+        </div>
+        <div class="card-body">
+            {include file="$dp_admin_workspace_quick_links_template" /}
+        </div>
+        {notempty name="__description"}
+        <div class="card-footer text-secondary small">{$__description}</div>
+        {/notempty}
+    </div>
+    {else /}
+    <div class="card h-100">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="{$__icon} me-2"></i>{$__title}
+            </h3>
+            {if $__showStatusBadge}
+            <div class="card-actions">
+                <span class="badge {$__statusMeta.badge}">{$__statusMeta.label}</span>
+            </div>
+            {/if}
+        </div>
+        <div class="list-group list-group-flush list-group-hoverable">
+            {volist name="__items" id="item"}
+            {php}
+            $__itemStatus = strtolower((string)($item['status'] ?? $__status));
+            $__itemMeta = $__statusConfig[$__itemStatus] ?? $__statusMeta;
+            $__itemTitle = trim((string)($item['title'] ?? '未命名项'));
+            $__itemDescription = trim((string)($item['description'] ?? ''));
+            $__itemMetaText = trim((string)($item['meta'] ?? ''));
+            $__itemUrl = trim((string)($item['url'] ?? ''));
+            $__itemBadge = trim((string)($item['badge'] ?? ''));
+            {/php}
+            <div class="list-group-item">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <span class="status-dot {$__itemMeta.dot} d-block"></span>
+                    </div>
+                    <div class="col text-truncate">
+                        {if $__itemUrl !== ''}
+                        <a href="{$__itemUrl}" class="text-body d-block">{$__itemTitle}</a>
+                        {else /}
+                        <div class="text-body d-block">{$__itemTitle}</div>
+                        {/if}
+                        {if $__itemDescription !== '' || $__itemMetaText !== ''}
+                        <div class="d-flex align-items-center gap-2 text-secondary small">
+                            {notempty name="__itemDescription"}
+                            <span class="text-truncate">{$__itemDescription}</span>
+                            {/notempty}
+                            {notempty name="__itemMetaText"}
+                            <span>{$__itemMetaText}</span>
+                            {/notempty}
+                        </div>
+                        {/if}
+                    </div>
+                    {notempty name="__itemBadge"}
+                    <div class="col-auto">
+                        <span class="badge bg-secondary-lt">{$__itemBadge}</span>
+                    </div>
+                    {/notempty}
+                </div>
+            </div>
+            {/volist}
+            {empty name="__items"}
+            <div class="list-group-item">
+                <div class="text-secondary small">
+                    {if $__type === 'links'}
+                    当前没有可展示的快捷入口。
+                    {else /}
+                    当前没有可展示的记录。
+                    {/if}
+                </div>
+            </div>
+            {/empty}
+        </div>
+        {notempty name="__description"}
+        <div class="card-footer text-secondary small">{$__description}</div>
+        {/notempty}
+    </div>
+    {/if}
+</div>

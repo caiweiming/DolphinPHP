@@ -1,0 +1,563 @@
+.input-group + .valid-feedback,
+.input-group + .invalid-feedback,
+.input-icon + .valid-feedback,
+.input-icon + .invalid-feedback {
+    display: block;
+    margin-top: .5rem;
+}
+
+.input-group.input-group-rounded {
+    border-radius: 10rem!important;
+}
+.input-group-rounded .input-group-text:first-child {
+    border-top-left-radius: 10rem!important;
+    border-bottom-left-radius: 10rem!important;
+}
+
+.input-group-rounded .input-group-text:last-child {
+    border-top-right-radius: 10rem!important;
+    border-bottom-right-radius: 10rem!important;
+}
+
+.form-selectgroup .form-selectgroup-item.select-group-disabled {
+    color: var(--tblr-gray-400);
+}
+
+span + .form-hint,
+div + .form-hint {
+    margin-top: .5rem;
+}
+
+.input-group-text a {
+    display: flex;
+}
+.input-group-text a:hover {
+    text-decoration: none;
+}
+.input-group-text .ti {
+    font-size: 20px;
+}
+.dp-form + .alert {
+    margin-top: 1em;
+}
+.dp-form .sticky-top,
+.dp-form .sticky-bottom {
+    z-index: 1019;
+}
+.dp-form .dropdown-menu.show {
+    z-index: 1021;
+}
+
+/*select2*/
+.select2-container--bootstrap-5 .select2--small.select2-selection--single {
+    line-height: 1.5;
+    min-height: 40px;
+}
+.select2-container--bootstrap-5 .select2--small.select2-selection {
+    padding: .5625rem 1rem;
+    border-radius: var(--tblr-border-radius);
+    border-color: #e5e6eb;
+}
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-search {
+    margin-top: 2px;
+}
+.select2-container--bootstrap-5 .select2--small.select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+    padding: .15em .65em;
+}
+.select2-container--bootstrap-5 .select2--small.select2-dropdown .select2-results__options .select2-results__option[role=group] .select2-results__options--nested .select2-results__option {
+    padding: .25rem 2rem;
+}
+.select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered .select2-selection__placeholder,
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-search .select2-search__field::placeholder {
+    color: var(--tblr-body-color);
+}
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple {
+    min-height: 40px;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple .select2-selection__rendered {
+    display: inline-flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .25rem;
+    padding: 0;
+    margin: 0;
+    width: auto !important;
+    flex: 0 1 auto;
+}
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple .select2-selection__choice {
+    margin: 0;
+    padding: .1rem .5rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple .select2-search,
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple .select2-search--inline {
+    float: none !important;
+    display: inline-flex !important;
+    align-items: center;
+    margin: 4px 0 0 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+}
+.select2-container--bootstrap-5 .dp-linkage-select2-multiple.select2-selection--multiple .select2-search__field {
+    width: auto !important;
+    min-width: 2ch;
+    margin: 0 !important;
+    line-height: 1.2;
+    padding: 0;
+}
+
+/*图片选择*/
+.form-imagecheck-input:disabled + span {
+    opacity: .2;
+    cursor: not-allowed;
+}
+
+/*颜色选择*/
+.form-colorinput-input:disabled + span {
+    opacity: .2;
+    cursor: not-allowed;
+}
+
+/*coloris*/
+.clr-picker.clr-open {
+    z-index: 1020;
+}
+.clr-field button {
+    height: 70%;
+}
+.coloris .clr-field {
+    display: block;
+}
+.clr-picker {
+    width: 210px!important;
+}
+.clr-picker.clr-pill {
+    width: 381px!important;
+}
+
+/*air-datepicker*/
+.air-datepicker-global-container {
+    z-index: 1020!important;
+}
+.air-datepicker-inline .input-icon-addon {
+    display: inline-block;
+    margin: 4px 0 0 10px;
+}
+.air-datepicker-inline .dp-js-date-picker {
+    display: none!important;
+}
+
+/*tagify*/
+.tagify {
+    border-radius: 4px!important;
+    min-height: 40px;
+}
+.tagify__tag,
+.tagify__input {
+    line-height: 20px;
+}
+.tagify.tagify--focus {
+    color: var(--tblr-body-color);
+    background-color: var(--tblr-bg-forms);
+    border-color: #80aad3;
+    outline: 0;
+    box-shadow: var(--tblr-box-shadow-input), 0 0 0 .25rem rgba(var(--tblr-primary-rgb), .25);
+}
+.tagify__tag>div>[contenteditable] {
+    margin: -2px 0;
+    padding: 2px 0;
+}
+
+/*图片上传*/
+.dp-form-upload-image-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: calc(-.5 * 1rem);
+    margin-left: calc(-.5 * 1rem);
+    margin-top: -1rem;
+}
+
+.dp-form-upload-image-item-select,
+.dp-form-upload-image-item-clear,
+.dp-form-upload-image-item-add {
+    min-width: 0;
+    position: relative;
+    width: 70px;
+    padding-right: calc(1rem * .5);
+    padding-left: calc(1rem * .5);
+    margin-top: 1rem;
+}
+
+.dp-form-upload-image-item {
+    min-width: 0;
+    flex: 0 0 auto;
+    width: 70px;
+    padding-right: calc(1rem * .5);
+    padding-left: calc(1rem * .5);
+    margin-top: 1rem;
+    position: relative;
+}
+
+.dp-form-upload-image-item a {
+    opacity: 0.64;
+    transition: opacity .3s;
+}
+.dp-form-upload-image-item a:hover {
+    opacity: 1;
+}
+.dp-form-upload-image-item .img-responsive {
+    position: relative;
+}
+.dp-form-upload-image-item .progress {
+    position: absolute;
+    top: 48%;
+    display: none;
+}
+.dp-form-upload-image-item.uploading .progress {
+    display: block;
+}
+.dp-form-upload-image-loading,
+.dp-form-upload-button-retry {
+    position: absolute;
+    top: calc(50% - 12px);
+    left: calc(50% - 12px);
+    line-height: 0;
+    background: #0c0c0cbf;
+    padding: 4px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1rem;
+    display: none;
+    cursor: pointer;
+}
+.dp-form-upload-image-item.error .dp-form-upload-button-retry {
+    display: block;
+}
+.dp-form-upload-image-item.checking .dp-form-upload-image-loading {
+    display: block;
+}
+
+.dp-form-upload-button-delete {
+    position: absolute;
+    right: 2px;
+    top: -6px;
+    font-size: 1rem;
+    background: #fff;
+    border-radius: 50%;
+    line-height: 16px;
+    color: #d63939;
+    cursor: pointer;
+}
+
+.dp-form-upload-button-delete:hover {
+    color: #d63939;
+}
+
+.dp-form-upload-image-button-select,
+.dp-form-upload-image-button-clear,
+.dp-form-upload-image-button-upload {
+    position: relative;
+    height: 56px;
+    border: 2px dashed #e0e0e0;
+    background-color: #F6F8FB;
+    color: #4c4e53;
+    border-radius: 0.35em;
+    transition: border-color ease-in .2s;
+    cursor: pointer;
+}
+
+.dp-form-upload-image-button-upload:hover {
+    border-color: var(--tblr-primary);
+}
+
+.dp-form-upload-image-button-upload:after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 2px;
+    width: 40%;
+    margin-left: 30%;
+    margin-top: calc(50% - 1px);
+    background-color: #e0e0e0;
+    cursor: pointer;
+    transition: background-color ease-in .2s;
+}
+.dp-form-upload-image-button-upload:before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 2px;
+    height: 40%;
+    margin-top: 30%;
+    margin-left: calc(50% - 1px);
+    background-color: #e0e0e0;
+    cursor: pointer;
+    transition: background-color ease-in .2s;
+}
+
+.dp-form-upload-image-button-upload:hover:after, .dp-form-upload-image-button-upload:hover:before {
+    background-color: var(--tblr-primary);
+}
+
+.dp-form-upload-image-button-upload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    text-indent: -200%;
+    cursor: pointer;
+}
+
+.dp-form-upload-image-button-clear,
+.dp-form-upload-image-button-select {
+    text-align: center;
+    line-height: 52px;
+    color: #bebebe;
+    transition: all ease-in .2s;
+}
+
+.dp-form-upload-image-button-select:hover {
+    border-color: var(--tblr-primary);
+    color: var(--tblr-primary);
+}
+
+/* vditor */
+.dp-form-vditor {
+}
+pre.vditor-reset {
+    border-radius: 0;
+}
+
+/*文件上传*/
+.dp-form-upload-file-items {
+    margin-bottom: .5rem;
+}
+.dp-form-upload-file-item {
+    position: relative;
+    margin-bottom: 2px;
+    background-color: #E9F1FA;
+    border-radius: 4px;
+}
+.dp-form-upload-file-item .progress {
+    height: 2rem;
+    position: absolute;
+    display: none;
+}
+.dp-form-upload-file-info {
+    position: relative;
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 .5rem;
+}
+.dp-form-upload-file-info .tips {
+    float: right;
+    font-size: 12px;
+}
+.dp-form-upload-file-info .file-name {
+    width: 70%;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.dp-form-upload-file-info .file-name .ti-grip-vertical {
+    cursor: move;
+}
+.dp-form-upload-file-item-add {
+    position: relative;
+}
+.dp-form-upload-file-button-upload input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    text-indent: -200%;
+    cursor: pointer;
+}
+.dp-form-upload-file-delete,
+.dp-form-upload-file-download {
+    cursor: pointer;
+    float: right;
+    margin-top: 8px;
+    margin-left: 5px;
+    color: #1d273b;
+}
+
+.dp-form-upload-file-item.success {
+    background-color: #2fb344;
+    color: #ffffff;
+    border-radius: 4px;
+}
+.dp-form-upload-file-item.error {
+    background-color: #d63939;
+    color: #ffffff;
+    border-radius: 4px;
+}
+.dp-form-upload-file-item.error .progress {
+    display: none;
+}
+.dp-form-upload-file-item.uploading .progress {
+    display: block;
+}
+.dp-form-upload-file-item.error .dp-form-upload-file-download,
+.dp-form-upload-file-item.uploading .dp-form-upload-file-delete,
+.dp-form-upload-file-item.uploading .dp-form-upload-file-download {
+    display: none!important;
+}
+
+.dp-form-upload-file-item.error .dp-form-upload-file-delete,
+.dp-form-upload-file-item.success .dp-form-upload-file-delete,
+.dp-form-upload-file-item.success .dp-form-upload-file-download {
+    color: #ffffff;
+}
+
+/*cropper*/
+.dp-form-cropper img {
+    display: block;
+    max-width: 100%;
+}
+.dp-form-cropper-preview {
+    height: 100px;
+    overflow: hidden;
+    display: none;
+}
+.dp-form-cropper-gallery {
+    display: inline-block;
+}
+.dp-form-cropper-image {
+    position: relative;
+    overflow: hidden;
+}
+.dp-form-cropper-image img {
+    max-height: 100px;
+    opacity: 0.64;
+    transition: opacity .3s;
+}
+.dp-form-cropper-image img:hover {
+    opacity: 1;
+}
+.dp-form-cropper-image img:before {
+    font-family: "Font Awesome 6 Free";
+    content: '\f05e  暂无图片';
+    display: block;
+    font-size: 12px;
+    color: #aaa;
+}
+
+cropper-canvas {
+    height: 320px;
+}
+
+/*ueditor*/
+.CodeMirror pre {
+    color: #170!important;
+}
+
+/*图标选择器*/
+body.modal-open {
+    overflow: hidden;
+}
+.dp-icon-modal .tab-content {
+    max-height: 360px;
+    overflow: auto;
+    display: block;
+    contain: layout style paint;
+}
+.dp-icon-modal .dp-icon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    gap: 8px;
+    contain: layout style;
+    padding-top: 12px;
+}
+.dp-icon-modal .dp-icon-pane-body {
+    position: relative;
+}
+.dp-icon-modal .dp-icon-render-status {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(2px);
+    border-radius: 0.5rem;
+}
+.dp-icon-modal .dp-icon-render-status.is-visible {
+    display: flex;
+}
+.dp-icon-modal .dp-icon-item {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+}
+.dp-icon-modal .dp-icon-item:hover {
+    background: #f8fafc;
+}
+.dp-icon-modal .dp-icon-item i {
+    font-size: 18px;
+}
+/* 图标库标题 */
+.dp-icon-modal .dp-icon-lib-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--tblr-body-color);
+    margin: 0;
+    padding: 12px 0 8px 0;
+    border-bottom: 1px solid var(--tblr-border-color);
+    display: none;
+}
+/* 搜索时显示标题 */
+.dp-icon-modal .tab-content.dp-icon-filtering .dp-icon-lib-title {
+    display: block;
+}
+/* 搜索时显示所有 tab 面板 */
+.dp-icon-modal .tab-content.dp-icon-filtering .tab-pane {
+    display: block !important;
+    opacity: 1 !important;
+}
+/* 搜索时批量显示所有图标 */
+.dp-icon-modal .tab-content:not(.dp-icon-filtering) .dp-icon-item {
+    display: flex !important;
+}
+/* 无搜索结果提示（每个图标库内部） */
+.dp-icon-modal .dp-icon-no-result {
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+}
+.dp-icon-focus-proxy {
+    position: fixed !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

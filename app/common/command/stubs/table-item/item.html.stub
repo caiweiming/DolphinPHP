@@ -1,0 +1,19 @@
+<!--
+  {{label}}列模板骨架
+  注意：
+  1. 由 createTemplet 自动注入 id/field/title/tableId/crudToken
+  2. Layui 模板变量格式：{{= d.field }}
+-->
+
+<script type="text/html" id="{$id|default=''}">
+    <span class="dp-table-cell-{{type_identifier}}">
+        {{= d.{$field} }}
+    </span>
+</script>
+
+<script>
+    DolphinTableOn('{$tableId}', 'done', '{{type_identifier}}-{$field}', function(table, tableId) {
+        // 在这里写本列的初始化逻辑
+        // 示例：为当前列 DOM 绑定交互
+    });
+</script>

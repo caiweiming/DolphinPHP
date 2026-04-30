@@ -1,0 +1,18 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="ueditor">
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|dp_clean|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div id="ueditor-{$id|default=''}"
+         class="dp-form-ueditor"
+         data-driver="{$driver|default=''}"
+         data-dir="{$dir|default=''}"
+         data-options="{$options|default=''|raw}"></div>
+    <textarea id="{$id|default=''}" name="{$id|default=''}" style="display:none">{$value|default=''}</textarea>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

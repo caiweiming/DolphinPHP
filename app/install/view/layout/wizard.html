@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="description" content="DolphinPHP 安装向导"/>
+    {:dp_token_meta()}
+    <title>{block name="title"}DolphinPHP 安装向导{/block}</title>
+    <link href="__LIBS__/fontawesome/css/fontawesome.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/fontawesome/css/solid.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/tabler-icons/tabler-icons.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/notyf/notyf.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler-themes.min.css" rel="stylesheet"/>
+    <link href="__CSS__/dolphin.css" rel="stylesheet"/>
+    <link href="__APP_CSS__/wizard.css" rel="stylesheet"/>
+    <script src="__THEME_JS__/tabler-theme.min.js"></script>
+    {block name="style"}{/block}
+</head>
+<body class="install-body">
+<div class="install-wizard-shell">
+    <div class="install-wizard-frame">
+        <aside class="install-sidebar">
+            <div class="install-sidebar-brand">
+                <img src="__APP_IMG__/logo-white@2x.png" alt="DolphinPHP" class="install-sidebar-logo">
+                <div class="install-sidebar-brand-text">
+                    <strong>Dolphin <span>PHP</span></strong>
+                    <span>轻量 · 高效 · 灵活</span>
+                </div>
+            </div>
+            <div class="install-sidebar-steps" aria-label="安装步骤">
+                {volist name="wizardSteps" id="step" key="index"}
+                <div class="install-sidebar-step {if $index < $currentStep}is-complete{elseif $index == $currentStep /}is-active{else /}is-pending{/if}">
+                    <span class="install-sidebar-step-marker">
+                        {if $index < $currentStep}
+                        <i class="ti ti-check"></i>
+                        {else /}
+                        {$index}
+                        {/if}
+                    </span>
+                    <span class="install-sidebar-step-label">{$step}</span>
+                </div>
+                {/volist}
+            </div>
+            <div class="install-sidebar-footer">
+                <p class="install-sidebar-footer-title">快速完成</p>
+                <p class="install-sidebar-footer-text">DolphinPHP 安装配置</p>
+            </div>
+        </aside>
+
+        <main class="install-main">
+            <header class="install-content-header">
+                {block name="header"}{/block}
+            </header>
+            <section class="install-content-body">
+                {block name="content"}{/block}
+            </section>
+            <div class="install-action-footer">
+                {block name="actions"}{/block}
+            </div>
+            <footer class="install-global-footer">
+                DolphinPHP Installation Wizard
+            </footer>
+        </main>
+    </div>
+</div>
+
+<script src="__LIBS__/jquery/dist/jquery.min.js"></script>
+<script src="__LIBS__/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="__LIBS__/notyf/notyf.min.js"></script>
+<script src="__THEME_JS__/tabler.min.js"></script>
+<script src="__JS__/dolphin.js"></script>
+<script>
+    window.InstallWizard = {
+        tokenName: '{:config("csrf.token_name")}',
+        getToken: function () {
+            var meta = document.querySelector('meta[name="csrf-token"]');
+            return meta ? meta.getAttribute('content') : '';
+        },
+        appendToken: function (formData) {
+            if (!formData.has(this.tokenName)) {
+                formData.append(this.tokenName, this.getToken());
+            }
+
+            return formData;
+        },
+        notify: function (type, message) {
+            if (!message) {
+                return;
+            }
+
+            if (window.Dolphin && typeof Dolphin[type] === 'function') {
+                Dolphin[type](message);
+                return;
+            }
+
+            if (type === 'error') {
+                Swal.fire({icon: 'error', text: message});
+                return;
+            }
+
+            Swal.fire({icon: 'success', text: message, timer: 1800, showConfirmButton: false});
+        },
+        bindPasswordToggles: function (scope) {
+            var root = scope || document;
+            var toggles = root.querySelectorAll('[data-role="password-toggle"]');
+
+            toggles.forEach(function (toggle) {
+                if (toggle.dataset.bound === '1') {
+                    return;
+                }
+
+                var targetId = toggle.getAttribute('data-target');
+                var input = targetId ? document.getElementById(targetId) : null;
+                var icon = toggle.querySelector('i');
+
+                if (!input || !icon) {
+                    return;
+                }
+
+                toggle.dataset.bound = '1';
+                toggle.addEventListener('click', function () {
+                    var isPassword = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPassword ? 'text' : 'password');
+                    toggle.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+                    icon.classList.toggle('fa-eye', !isPassword);
+                    icon.classList.toggle('fa-eye-slash', isPassword);
+                });
+            });
+        },
+        bindSubmit: function (selector, url, options) {
+            var form = document.querySelector(selector);
+            if (!form) {
+                return;
+            }
+
+            var settings = options || {};
+            var button = settings.buttonSelector ? form.querySelector(settings.buttonSelector) : form.querySelector('[type="submit"]');
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                if (button) {
+                    button.disabled = true;
+                    button.classList.add('btn-loading', 'disabled');
+                }
+
+                try {
+                    var formData = new FormData(form);
+                    window.InstallWizard.appendToken(formData);
+                    var response = await fetch(url, {
+                        method: 'POST',
+                        headers: {'X-Requested-With': 'XMLHttpRequest'},
+                        body: formData
+                    });
+                    var result = await response.json();
+                    if (result.code === 1) {
+                        window.InstallWizard.notify('success', result.msg || '操作成功');
+                        if (result.url) {
+                            setTimeout(function () {
+                                window.location.href = result.url;
+                            }, settings.redirectDelay || 500);
+                        }
+                        return;
+                    }
+
+                    window.InstallWizard.notify('error', result.msg || '操作失败');
+                    if (window.Dolphin && typeof Dolphin.refreshToken === 'function') {
+                        Dolphin.refreshToken();
+                    }
+                } catch (error) {
+                    window.InstallWizard.notify('error', error && error.message ? error.message : '请求失败，请稍后重试');
+                    if (window.Dolphin && typeof Dolphin.refreshToken === 'function') {
+                        Dolphin.refreshToken();
+                    }
+                } finally {
+                    if (button) {
+                        button.disabled = false;
+                        button.classList.remove('btn-loading', 'disabled');
+                    }
+                }
+            });
+        }
+    };
+    window.InstallWizard.bindPasswordToggles(document);
+</script>
+{block name="script"}{/block}
+</body>
+</html>

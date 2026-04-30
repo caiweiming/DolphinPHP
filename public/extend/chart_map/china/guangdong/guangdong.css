@@ -1,0 +1,7 @@
+/* 广东省地图专项扩展示例样式 */
+.dp-chart-wrapper .dp-chart[data-map-key="china/guangdong"] {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(31, 122, 77, 0.08), transparent 42%),
+        linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(241, 245, 249, 0.92));
+    border-radius: 0.75rem;
+}

@@ -1,0 +1,28 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    {notempty name="options"}
+    <div class="form-selectgroup {$rounded ?= ' form-selectgroup-pills '} {$class|default=''}" {$props|default=''|raw}>
+        {volist name="options" id="option"}
+        {php}$key = (string)$key;{/php}
+        <label class="form-selectgroup-item">
+            <input class="form-selectgroup-input"
+                   type="checkbox"
+                   name="{$name}[]"
+                   id="{$id}-{$key}"
+                   value="{$key}"
+                   {in name="key" value="$value"} checked {/in}
+            {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
+            <span class="form-selectgroup-label">{$option|default=''|raw}</span>
+        </label>
+        {/volist}
+    </div>
+    {/notempty}
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

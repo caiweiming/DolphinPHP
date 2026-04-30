@@ -1,0 +1,44 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <select class="form-select {$class|default=''}"
+            name="{$name|default=''}"
+            id="{$id|default=''}"
+            data-placeholder="{$placeholder|default='请选择'.strip_tags($label)}"
+            {$multiple ? 'multiple data-close-on-select="false"' : 'data-allow-clear="true"'}
+            {$disabled ?= 'disabled '}
+            {$props|default=''|raw}>
+        <option></option>
+
+        {notempty name="options"}
+            {volist name="options" id="option"}
+                {php}$key = (string)$key;{/php}
+                <option value="{$key}"
+                        {in name="key" value="$value"}selected {/in}
+                {present name="optionDisabled"}{in name="key" value="$optionDisabled"}disabled {/in}{/present}
+                >{$option|raw}</option>
+            {/volist}
+        {else/}
+            {notempty name="group"}
+                {volist name="group" id="vo"}
+                <optgroup label="{$key}">
+                    {volist name="vo" id="option"}
+                        {php}$key = (string)$key;{/php}
+                        <option value="{$key}"
+                                {in name="key" value="$value"}selected {/in}
+                        {present name="optionDisabled"}{in name="key" value="$optionDisabled"}disabled{/in}{/present}
+                        >{$option|raw}</option>
+                    {/volist}
+                </optgroup>
+                {/volist}
+            {/notempty}
+        {/notempty}
+    </select>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

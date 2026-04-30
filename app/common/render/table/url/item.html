@@ -1,0 +1,15 @@
+<script type="text/html" id="{$id|default=''}">
+    {if $href == null}
+    <a href="{{= d.{$field} }}"
+       title="{{= d.{$field} }}"
+       class="{$dialog ?= 'dp-pop'}"
+       data-layer="{$dialog|default=[]|dp_parse_options|raw}"
+       target="{$target|default='_blank'}">{{= d.{$field} }}</a>
+    {else/}
+    <a href="{$href|default=''}"
+       title="{{= d.{$field} }}"
+       class="{$dialog ?= 'dp-pop'}"
+       data-layer="{$dialog|default=[]|dp_parse_options|raw}"
+       target="{$target|default='_blank'}">{{= d.{$field} }}</a>
+    {/if}
+</script>

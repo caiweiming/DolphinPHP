@@ -1,0 +1,124 @@
+
+<div class="dp-table {$dp_table_class|default=''}">
+    {volist name="dp_table_alert_top" id="alert"}
+    <div class="alert alert-{$alert.type|default='info'} {$alert.close ?= ' alert-dismissible'}" role="alert">
+        {notempty name="alert.icon"}
+        <div class="alert-icon">
+            {switch alert.type }
+            {case success}<i class="ti ti-check"></i>{/case}
+            {case warning}<i class="ti ti-alert-triangle"></i>{/case}
+            {case danger}<i class="ti ti-alert-circle"></i>{/case}
+            {default /}<i class="ti ti-info-circle"></i>
+            {/switch}
+        </div>
+        {/notempty}
+        <div>
+            {notempty name="alert.title"}
+            <h4 class="alert-heading">{$alert.title}</h4>
+            {/notempty}
+            <div class="{$alert.title ?= 'alert-description'}">
+                {$alert.content|raw}
+            </div>
+        </div>
+        {$alert.close ?= '<a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>'}
+    </div>
+    {/volist}
+
+    {volist name="dp_table_extra_html.search_top" id="html"}
+    {$html|default=''|raw}
+    {/volist}
+    {if !empty($dp_table_search.fields)}
+    <form class="{$dp_table_search.class|default='layui-form layui-row layui-col-space16 dp-table-search-form'}"
+          data-table-id="{$dp_table_id|default=''}">
+        {volist name="dp_table_search.fields" id="field"}
+        <div class="{$field.col_class|default='layui-col-md4'}">
+            {if !empty($field.label)}
+            <label class="layui-form-label">{$field.label|default=''}</label>
+            {/if}
+            <div class="layui-input-wrap">
+                {switch name="field.type"}
+                {case value="select"}
+                <select name="{$field.name|default=''}" {$field.attrs|default=[]|dp_arr2str|raw}>
+                    <option value="">{$field.placeholder|default='请选择'}</option>
+                    {volist name="field.options" id="optionLabel"}
+                    <option value="{$key}" {if condition="$field.value == $key"}selected{/if}>{$optionLabel|default=''}</option>
+                    {/volist}
+                </select>
+                {/case}
+                {case value="date"}
+                <input type="text"
+                       name="{$field.name|default=''}"
+                       value="{$field.value|default=''}"
+                       placeholder="{$field.placeholder|default='请选择日期'}"
+                       class="layui-input dp-table-search-date"
+                       data-format="{$field.format|default='yyyy-MM-dd'}"
+                       data-range="{$field.range ? 'true' : 'false'}"
+                       {$field.attrs|default=[]|dp_arr2str|raw}>
+                {/case}
+                {default /}
+                <input type="text"
+                       name="{$field.name|default=''}"
+                       value="{$field.value|default=''}"
+                       placeholder="{$field.placeholder|default='请输入'}"
+                       class="layui-input"
+                       lay-affix="clear"
+                       {$field.attrs|default=[]|dp_arr2str|raw}>
+                {/switch}
+            </div>
+        </div>
+        {/volist}
+
+        <div class="layui-btn-container {$dp_table_search.button_col_class|default='layui-col-xs12'}">
+            {if !empty($dp_table_search.buttons.submit.show)}
+            <button type="submit"
+                    class="{$dp_table_search.buttons.submit.class|default='layui-btn'}">
+                {$dp_table_search.buttons.submit.text|default='搜索'}
+            </button>
+            {/if}
+            {if !empty($dp_table_search.buttons.reset.show)}
+            <button type="reset"
+                    class="{$dp_table_search.buttons.reset.class|default='layui-btn layui-btn-primary'}">
+                {$dp_table_search.buttons.reset.text|default='重置'}
+            </button>
+            {/if}
+        </div>
+    </form>
+    {/if}
+
+    {volist name="dp_table_extra_html.top" id="html"}
+    {$html|default=''|raw}
+    {/volist}
+    <table class="layui-hide"
+           id="{$dp_table_id|default=''}"
+           lay-filter="{$dp_table_id|default=''}"
+           data-tree="{$dp_table_tree ? 'true' : 'false'}"
+           data-options="{$dp_table_options|default=''|raw}">
+    </table>
+    {volist name="dp_table_extra_html.bottom" id="html"}
+    {$html|default=''|raw}
+    {/volist}
+
+    {volist name="dp_table_alert_bottom" id="alert"}
+    <div class="alert alert-{$alert.type|default='info'} {$alert.close ?= ' alert-dismissible'} mt-3" role="alert">
+        {notempty name="alert.icon"}
+        <div class="alert-icon">
+            {switch alert.type }
+            {case success}<i class="ti ti-check"></i>{/case}
+            {case warning}<i class="ti ti-alert-triangle"></i>{/case}
+            {case danger}<i class="ti ti-alert-circle"></i>{/case}
+            {default /}<i class="ti ti-info-circle"></i>
+            {/switch}
+        </div>
+        {/notempty}
+        <div>
+            {notempty name="alert.title"}
+            <h4 class="alert-heading">{$alert.title}</h4>
+            {/notempty}
+            <div class="{$alert.title ?= 'alert-description'}">
+                {$alert.content|raw}
+            </div>
+        </div>
+        {$alert.close ?= '<a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>'}
+    </div>
+    {/volist}
+</div>

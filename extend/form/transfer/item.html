@@ -1,0 +1,21 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}</label>
+    <div class="mb-2">
+        <select name="{$name|default=''}[]" id="{$name|default=''}" class="js-transfer" multiple="multiple" data-options="{$props|default=''|raw}">
+            {notempty name="options"}
+            {volist name="options" id="option"}
+            {php}$key = (string)$key;{/php}
+            <option value="{$key}"
+                    {in name="key" value="$value"}selected{/in}
+            {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}
+            >{$option|raw}
+            </option>
+            {/volist}
+            {/notempty}
+        </select>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

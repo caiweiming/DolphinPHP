@@ -1,0 +1,7 @@
+{if !empty($dp_admin_user_menu_slots)}
+{volist name="dp_admin_user_menu_slots" id="slotItem"}
+<a href="{$slotItem.url|default='#'}" class="dropdown-item">
+    <i class="dp-icon {$slotItem.icon|default='ti ti-link'} me-2"></i>{$slotItem.title|default=''}
+</a>
+{/volist}
+{/if}

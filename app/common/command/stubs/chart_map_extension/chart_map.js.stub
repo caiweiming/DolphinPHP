@@ -1,0 +1,12 @@
+(function (window) {
+    'use strict';
+
+    window.DpChartMapHooks = window.DpChartMapHooks || {};
+
+    window.DpChartMapHooks['{{map}}'] = function (context) {
+        const option = context.option || {};
+
+        // 在这里补充 {{label}} 的地图 option 二次处理逻辑
+        return option;
+    };
+})(window);

@@ -1,0 +1,63 @@
+<script type="text/html" id="{$id|default=''}">
+    <select name="{$field|default=''}"
+            lay-filter="{$id|default=''}"
+            lay-append-to="body"
+            lay-search="">
+        <option value="">请选择</option>
+        {volist name="options" id="option"}
+        {php} if (is_array($option)):{/php}
+        <optgroup label="{$key}">
+            {volist name="option" id="v"}
+                <option value="{$key}" {{= '{$key}' == d.{$field} ? 'selected' : '' }}>{$v}</option>
+            {/volist}
+        </optgroup>
+        {php} else:{/php}
+        <option value="{$key}" {{= '{$key}' == d.{$field} ? 'selected' : '' }}>{$option}</option>
+        {php} endif;{/php}
+        {/volist}
+    </select>
+</script>
+<script>
+    layui.use(['form', 'table'], function () {
+        const form = layui.form;
+        const table = layui.table;
+        form.on('select({$id|default=""})', function(obj){
+            const tableId = '{$tableId|default=""}';
+            const field = "{$field|default=''}";
+            const value = obj.value;
+            const index = $(obj.elem).closest('tr').data('index');
+            const data = table.cache[tableId][index] || {};
+            const id = data['dp_pk'];
+
+            Dolphin.loading('处理中...');
+
+            // 提交更新请求
+            $.ajax({
+                url: DolphinConfig.url.quickEdit,
+                type: 'POST',
+                data: {
+                    id: id,
+                    field: field,
+                    value: value,
+                    _t: '{$crudToken|default=""}'
+                },
+                dataType: 'json',
+                success: function (res) {
+                    Dolphin.loading('hide')
+
+                    if (res.code !== 1) {
+                        Dolphin.error(res.msg || '修改失败');
+                        $(obj.elem).val(data[field]);
+                        form.render('select');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Dolphin.loading('hide');
+                    Dolphin.error('网络错误，修改失败');
+                    $(obj.elem).val(data[field]);
+                    form.render('select');
+                }
+            });
+        });
+    });
+</script>

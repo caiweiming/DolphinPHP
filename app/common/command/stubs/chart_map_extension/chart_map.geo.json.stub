@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "示例区域"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [100.0, 30.0],
+            [108.0, 30.0],
+            [108.0, 24.0],
+            [100.0, 24.0],
+            [100.0, 30.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

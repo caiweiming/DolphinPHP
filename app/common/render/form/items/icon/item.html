@@ -1,0 +1,68 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="icon">
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|dp_clean|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <div class="dp-form-icon" data-options="{$options|default=''|raw}">
+        <div class="input-group">
+            <span class="input-group-text dp-icon-preview"><i class="{$default_icon|default='fa fa-icons'}"></i></span>
+            <input type="text" class="form-control dp-icon-input" id="{$id|default=''}" name="{$id|default=''}" value="{$value|default=''}" placeholder="{$placeholder|default='请选择图标'}" />
+            <button type="button" class="btn dp-icon-picker"><i class="ti ti-selector"></i> 选择</button>
+            <button type="button" class="btn dp-icon-clear"><i class="ti ti-x"></i> 清除</button>
+        </div>
+    </div>
+    <div class="modal modal-blur fade dp-icon-modal" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">选择图标</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="dp-icon-search mb-3">
+                        <div class="input-group input-group-flat">
+                            <input type="text" class="form-control dp-icon-filter" placeholder="搜索图标" />
+                            <span class="input-group-text">
+                                <a href="#" class="link-secondary dp-icon-search-clear" data-bs-toggle="tooltip" aria-label="清空搜索" data-bs-original-title="清空搜索"><!-- Download SVG icon from http://tabler.io/icons/icon/x -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                    <path d="M18 6l-12 12"></path>
+                                    <path d="M6 6l12 12"></path>
+                                    </svg>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    {if condition="!$icon_empty"}
+                    <ul class="nav nav-tabs" data-bs-toggle="tabs" role="tablist">
+                        {volist name="icon_libraries" id="lib" key="index"}
+                        <li class="nav-item" role="presentation">
+                            <a href="#tab-icon-{$id|default=''}-{$lib.id}" class="nav-link {$index == 1 ? 'active' : ''}" data-bs-toggle="tab" role="tab" aria-controls="tab-icon-{$id|default=''}-{$lib.id}" aria-selected="{$index == 1 ? 'true' : 'false'}">{$lib.label|default=''|dp_clean|raw}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                    <div class="tab-content">
+                        {volist name="icon_libraries" id="lib" key="index"}
+                        <div class="tab-pane fade {$index == 1 ? 'show active' : ''}" id="tab-icon-{$id|default=''}-{$lib.id}" role="tabpanel" data-lib-id="{$lib.id|default=''}">
+                            <h4 class="dp-icon-lib-title">{$lib.label|default=''|dp_clean|raw}</h4>
+                            <div class="dp-icon-pane-body">
+                                <div class="dp-icon-render-status text-muted">加载中...</div>
+                                <div class="dp-icon-list" data-lib="{$lib.id|default=''}"></div>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                    <script type="application/json" class="dp-icon-libraries-json">{$icon_libraries_json|raw}</script>
+                    {else/}
+                    <div class="alert alert-warning mb-0">暂无可用图标库，请在 <code>app/common/render/form/items/icon/libs</code>、<code>config/icon.php</code> 或后台“图标管理”中配置图标库。</div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

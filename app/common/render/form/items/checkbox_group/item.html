@@ -1,0 +1,35 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    {notempty name="options"}
+    <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column {$class|default=''}" {$props|default=''|raw}>
+        {volist name="options" id="option"}
+        {php}$key = (string)$key;{/php}
+        <label class="form-selectgroup-item flex-fill {present name="disabled"}{in name="key" value="$disabled"}select-group-disabled{/in}{/present}">
+            <input class="form-selectgroup-input"
+                   type="checkbox"
+                   name="{$name}[]"
+                   id="{$id}-{$key}"
+                   value="{$key}"
+                   {in name="key" value="$value"} checked {/in}
+            {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
+            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                <div class="me-3">
+                    <span class="form-selectgroup-check"></span>
+                </div>
+                <div>
+                    {$option|default=''|raw}
+                </div>
+            </div>
+        </label>
+        {/volist}
+    </div>
+    {/notempty}
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

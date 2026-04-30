@@ -1,0 +1,55 @@
+<?php
+declare(strict_types=1);
+
+namespace chart\{{namespace}};
+
+use app\common\abstract\ChartType;
+
+/**
+ * {{label}}图扩展类型
+ */
+class Type extends ChartType
+{
+    /**
+     * 构建基础 option
+     * @param array<string, mixed> $context
+     * @return array<string, mixed>
+     */
+    public function build(array $context): array
+    {
+        return $this->buildCartesianOption(
+            $context,
+            'scatter',
+            ['type' => 'value', 'scale' => true],
+            ['type' => 'value', 'scale' => true],
+            'item'
+        );
+    }
+
+    /**
+     * 声明扩展资源
+     * @param array<string, mixed> $context
+     * @return array<string, array>
+     */
+    public function assets(array $context): array
+    {
+        return [
+            'css' => [
+                dp_static_extend_chart_path() . '{{dir}}/{{slug}}.css',
+            ],
+            'js'  => [
+                dp_static_extend_chart_path() . '{{dir}}/{{slug}}.js',
+            ],
+        ];
+    }
+
+    /**
+     * 下发给前端 hook 的额外载荷
+     * @param array<string, mixed> $context
+     * @return array<string, mixed>
+     */
+    public function payload(array $context): array
+    {
+        return [];
+    }
+}

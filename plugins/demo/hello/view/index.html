@@ -1,0 +1,11 @@
+{extend name="$dp_page_layout" /}
+
+{block name="container"}
+<div class="card plugin-demo-hello">
+    <div class="card-body">
+        <h2 class="card-title">{:lang('plugin_hello_title')}</h2>
+        <p class="text-secondary mb-3">{$greeting|default=''}</p>
+        <a href="/plugin/demo/hello/ping" class="btn btn-primary">Ping</a>
+    </div>
+</div>
+{/block}

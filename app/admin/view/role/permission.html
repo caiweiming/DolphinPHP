@@ -1,0 +1,798 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .permission-container {
+        padding: 10px 10px 80px;
+    }
+
+    /* 空状态样式 */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--tblr-bg-surface);
+        border-radius: var(--tblr-border-radius-lg);
+        box-shadow: var(--tblr-box-shadow);
+    }
+
+    .empty-state-icon {
+        margin-bottom: 20px;
+        text-align: center;
+        line-height: 1;
+    }
+
+    .empty-state-icon i {
+        font-size: 80px;
+        color: var(--tblr-secondary);
+        opacity: 0.5;
+        font-style: normal;
+    }
+
+    .empty-state h3 {
+        margin: 20px 0 10px;
+        color: var(--tblr-secondary);
+    }
+
+    .empty-state p {
+        color: var(--tblr-muted);
+        margin-bottom: 30px;
+    }
+
+    .permission-tree {
+        max-height: calc(100vh - 350px);
+        min-height: 400px;
+        overflow-y: auto;
+        border: var(--tblr-border-width) solid var(--tblr-border-color);
+        border-radius: var(--tblr-border-radius);
+        padding: 10px;
+        background: var(--tblr-bg-surface);
+    }
+
+    .tree-node {
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+
+    .tree-node-root {
+        padding-left: 0;
+    }
+
+    .tree-node-item:hover {
+        background-color: var(--tblr-active-bg);
+    }
+
+    /* 禁用状态样式 */
+    .tree-node-disabled .tree-node-item {
+        opacity: 0.5;
+        background-color: var(--tblr-bg-surface-secondary);
+    }
+
+    .tree-node-disabled .tree-node-label {
+        color: var(--tblr-muted);
+    }
+
+    .tree-node-disabled .tree-node-label > i {
+        opacity: 0.4;
+    }
+
+    .tree-node-disabled .tree-node-item:hover {
+        background-color: var(--tblr-bg-surface-secondary);
+        opacity: 0.6;
+    }
+
+    .tree-node-disabled .form-check-input {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .tree-node-expand {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 5px;
+        cursor: pointer;
+        color: var(--tblr-secondary);
+        user-select: none;
+        transition: transform 0.2s ease;
+    }
+
+    .tree-node-expand i {
+        font-size: 16px;
+    }
+
+    .tree-node-expand.collapsed {
+        transform: rotate(0deg);
+    }
+
+    .tree-node-expand.expanded {
+        transform: rotate(90deg);
+    }
+
+    .tree-node-expand.no-children {
+        visibility: hidden;
+    }
+
+    .tree-node-check {
+        margin: 0 8px 0 0;
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        min-height: auto;
+    }
+
+    .tree-node-check .form-check-input {
+        margin: 0;
+        cursor: pointer;
+        float: none;
+    }
+
+    .tree-node-item {
+        display: flex;
+        align-items: center;
+        padding: 6px 0;
+        transition: background-color 0.2s;
+        border-radius: var(--tblr-border-radius-sm);
+    }
+
+    .tree-node-label {
+        flex: 1;
+        font-size: 14px;
+        color: var(--tblr-body-color);
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .tree-node-label > i {
+        color: var(--tblr-primary);
+        font-size: 16px;
+    }
+
+    .tree-node-route {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: var(--tblr-border-radius-sm);
+        font-size: 12px;
+        background: var(--tblr-bg-surface-secondary);
+        color: var(--tblr-muted);
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+        margin-left: 4px;
+    }
+
+    .tree-children {
+        margin-left: 0;
+    }
+
+    .tree-children.collapsed {
+        display: none;
+    }
+
+    /* 搜索时隐藏不匹配的节点 */
+    .tree-node.search-hidden {
+        display: none;
+    }
+
+    /* 搜索框清除按钮 */
+    .input-icon {
+        position: relative;
+    }
+
+    #searchClear {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: pointer;
+        z-index: 10;
+        color: var(--tblr-secondary);
+        transition: color 0.2s;
+    }
+
+    #searchClear:hover {
+        color: var(--tblr-primary);
+    }
+
+    /* 加载旋转动画 */
+    .spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .permission-toolbar {
+        margin-bottom: 15px;
+        padding: 12px 0;
+        background: var(--tblr-bg-surface-secondary);
+        border-radius: var(--tblr-border-radius);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .permission-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px 20px;
+        background: var(--tblr-bg-surface);
+        border-top: 2px solid var(--tblr-primary);
+        box-shadow: 0 -2px 10px rgba(var(--tblr-body-color-rgb), 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* 弹窗模式下的底部栏调整 */
+    .layui-layer-iframe .permission-actions {
+        position: absolute;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn i {
+        margin-right: 4px;
+    }
+
+    .selected-count {
+        color: var(--tblr-body-color);
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .selected-count strong {
+        color: var(--tblr-primary);
+        font-size: 20px;
+    }
+
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: var(--tblr-border-radius);
+    }
+
+    .alert-info {
+        background: var(--tblr-info-bg-subtle);
+        border: var(--tblr-border-width) solid var(--tblr-info-border-subtle);
+        color: var(--tblr-info-text-emphasis);
+    }
+
+    /* 响应式优化 */
+    @media (max-width: 768px) {
+        .permission-container {
+            padding: 10px 10px 100px;
+        }
+
+        .alert-info {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .role-info-item {
+            display: block;
+        }
+
+        .role-info-divider {
+            display: none;
+        }
+
+        .alert-info strong {
+            margin-bottom: 0;
+        }
+
+        .permission-toolbar {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .permission-toolbar .input-icon {
+            flex: 1 1 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 5px;
+        }
+
+        .permission-toolbar .btn {
+            flex: 1 1 calc(33.333% - 6px);
+            min-width: 0;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+
+        .permission-toolbar .btn i {
+            margin-right: 2px;
+            font-size: 16px;
+        }
+
+        .permission-tree {
+            max-height: calc(100vh - 380px);
+            min-height: 300px;
+        }
+
+        .tree-node-label {
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+
+        .tree-node-route {
+            font-size: 11px;
+            padding: 1px 6px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 6px;
+        }
+
+        .permission-actions {
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px 15px;
+        }
+
+        .selected-count {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .selected-count strong {
+            font-size: 18px;
+        }
+
+        .permission-actions .btn {
+            width: 100%;
+            padding: 10px 20px;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="permission-container">
+    {if condition="$noPermissionData"}
+    <!-- 无权限数据提示 -->
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="ti ti-folder-off"></i>
+        </div>
+        <h3>暂无权限数据</h3>
+        <p>
+            系统中还没有权限数据，请先创建权限。
+        </p>
+        <div>
+            <a href="{:dp_url('permission/index')}" class="btn btn-primary">
+                <i class="ti ti-plus"></i> 前往权限管理
+            </a>
+        </div>
+    </div>
+    {else}
+    <!-- 正常的权限树 -->
+    <div class="alert alert-info">
+        <span class="role-info-item"><strong>角色信息：</strong>{$roleName}</span>
+        <span class="role-info-divider">|</span>
+        <span class="role-info-item"><strong>当前已分配权限：</strong><span id="current-count">{$count}</span> 个</span>
+    </div>
+
+    <!-- 顶部工具栏 -->
+    <div class="permission-toolbar">
+        <div class="input-icon" style="flex: 1; max-width: 300px;">
+            <span class="input-icon-addon">
+                <i class="ti ti-search"></i>
+            </span>
+            <input type="text"
+                   class="form-control"
+                   placeholder="搜索权限名称或路由..."
+                   id="searchInput"
+                   oninput="searchPermissions(this.value)"
+                   style="padding-right: 2.5rem;">
+            <span id="searchClear" onclick="clearSearch()">
+                <i class="ti ti-x"></i>
+            </span>
+        </div>
+        <button type="button" class="btn btn-success" onclick="expandAll()">
+            <i class="ti ti-arrows-maximize"></i> 全部展开
+        </button>
+        <button type="button" class="btn btn-warning" onclick="collapseAll()">
+            <i class="ti ti-arrows-minimize"></i> 全部折叠
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="toggleSelectAll()">
+            <i class="ti ti-checkbox"></i> 全选/取消
+        </button>
+    </div>
+
+    <div class="permission-tree" id="permissionTree">
+        <!-- 权限树将通过JavaScript动态渲染 -->
+    </div>
+
+    <!-- 底部固定操作栏 -->
+    <div class="permission-actions">
+        <div class="selected-count">
+            已选择 <strong id="selected-count">0</strong> 个权限
+        </div>
+        <button type="button" class="btn btn-primary" id="savePermissionBtn" onclick="savePermissions()">
+            <i class="ti ti-device-floppy"></i> <span>保存权限</span>
+        </button>
+    </div>
+    {/if}
+</div>
+{/block}
+
+{block name="script"}
+{if condition="!$noPermissionData"}
+<script>
+    // 权限数据
+    const permissionData = {$permissionTreeJson|raw};
+    const rolePermissionIds = {$rolePermissionIdsJson|raw};
+    const roleId = {$roleId|raw};
+</script>
+{literal}
+<script>
+    // 权限类型映射
+    const typeMap = {
+        'menu': '菜单',
+        'button': '按钮',
+        'api': 'API'
+    };
+
+    // 渲染权限树
+    function renderPermissionTree(permissions, container, level = 0) {
+        permissions.forEach(permission => {
+            const node = document.createElement('div');
+            // 禁用状态下添加 tree-node-disabled 类
+            const baseClass = level === 0 ? 'tree-node tree-node-root' : 'tree-node';
+            const disabledClass = permission.status != 1 ? ' tree-node-disabled' : '';
+            node.className = baseClass + disabledClass;
+
+            const hasChildren = permission.children && permission.children.length > 0;
+            const isChecked = rolePermissionIds.includes(permission.id);
+
+            // 构建图标HTML
+            const iconHtml = permission.icon ? `<i class="${permission.icon}" style="margin-right: 6px;"></i>` : '';
+
+            // 构建路由/接口信息
+            const routeHtml = permission.route ? `<span class="tree-node-route">${permission.route}</span>` : '';
+
+            // 构建类型badge
+            const typeBadgeClass = {
+                'menu': 'badge bg-green-lt',
+                'button': 'badge bg-blue-lt',
+                'api': 'badge bg-orange-lt'
+            };
+            const typeBadge = `<span class="${typeBadgeClass[permission.type] || 'badge'}">${typeMap[permission.type] || permission.type}</span>`;
+
+            // 构建状态badge
+            const statusBadge = permission.status == 1
+                ? `<span class="badge bg-success-lt">启用</span>`
+                : `<span class="badge bg-danger text-white">禁用</span>`;
+
+            node.innerHTML = `
+            <div class="tree-node-item">
+                <span class="tree-node-expand ${hasChildren ? 'expanded' : 'no-children'}"
+                      onclick="toggleNode(this, event)">
+                    ${hasChildren ? '<i class="ti ti-chevron-right"></i>' : ''}
+                </span>
+                <label class="tree-node-check form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           data-id="${permission.id}"
+                           data-parent-id="${permission.parent_id || 0}"
+                           ${isChecked ? 'checked' : ''}
+                           onchange="handleCheckboxChange(this)">
+                </label>
+                <span class="tree-node-label">
+                    ${iconHtml}${permission.name}
+                    ${typeBadge}
+                    ${statusBadge}
+                    ${routeHtml}
+                </span>
+            </div>
+        `;
+
+            if (hasChildren) {
+                const childrenContainer = document.createElement('div');
+                childrenContainer.className = 'tree-children';
+                renderPermissionTree(permission.children, childrenContainer, level + 1);
+                node.appendChild(childrenContainer);
+            }
+
+            container.appendChild(node);
+        });
+    }
+
+    // 切换节点展开/折叠
+    function toggleNode(element, event) {
+        event.stopPropagation();
+        const treeNode = element.closest('.tree-node');
+        const children = treeNode.querySelector('.tree-children');
+
+        if (children) {
+            if (element.classList.contains('expanded')) {
+                element.classList.remove('expanded');
+                element.classList.add('collapsed');
+                children.classList.add('collapsed');
+            } else {
+                element.classList.remove('collapsed');
+                element.classList.add('expanded');
+                children.classList.remove('collapsed');
+            }
+        }
+    }
+
+    // 全部展开
+    function expandAll() {
+        document.querySelectorAll('.tree-node-expand.collapsed').forEach(el => {
+            el.classList.remove('collapsed');
+            el.classList.add('expanded');
+            const treeNode = el.closest('.tree-node');
+            const children = treeNode.querySelector('.tree-children');
+            if (children) {
+                children.classList.remove('collapsed');
+            }
+        });
+    }
+
+    // 全部折叠
+    function collapseAll() {
+        document.querySelectorAll('.tree-node-expand.expanded').forEach(el => {
+            el.classList.remove('expanded');
+            el.classList.add('collapsed');
+            const treeNode = el.closest('.tree-node');
+            const children = treeNode.querySelector('.tree-children');
+            if (children) {
+                children.classList.add('collapsed');
+            }
+        });
+    }
+
+    // 全选/反选切换
+    function toggleSelectAll() {
+        const allCheckboxes = document.querySelectorAll('.form-check-input');
+        const checkedCheckboxes = document.querySelectorAll('.form-check-input:checked');
+
+        // 如果全部选中，则取消全选；否则全选
+        if (allCheckboxes.length === checkedCheckboxes.length) {
+            unselectAll();
+        } else {
+            selectAll();
+        }
+    }
+
+    // 全选
+    function selectAll() {
+        document.querySelectorAll('.form-check-input').forEach(cb => {
+            cb.checked = true;
+        });
+        updateSelectedCount();
+    }
+
+    // 取消全选
+    function unselectAll() {
+        document.querySelectorAll('.form-check-input').forEach(cb => {
+            cb.checked = false;
+        });
+        updateSelectedCount();
+    }
+
+    // 处理复选框变化
+    function handleCheckboxChange(checkbox) {
+        const permissionId = parseInt(checkbox.dataset.id);
+        const isChecked = checkbox.checked;
+
+        // 如果选中,自动选中所有子节点
+        if (isChecked) {
+            const treeNode = checkbox.closest('.tree-node');
+            const childCheckboxes = treeNode.querySelectorAll('.tree-children .form-check-input');
+            childCheckboxes.forEach(cb => cb.checked = true);
+        } else {
+            // 如果取消选中,自动取消所有子节点
+            const treeNode = checkbox.closest('.tree-node');
+            const childCheckboxes = treeNode.querySelectorAll('.tree-children .form-check-input');
+            childCheckboxes.forEach(cb => cb.checked = false);
+        }
+
+        updateSelectedCount();
+    }
+
+    // 更新已选数量
+    function updateSelectedCount() {
+        const count = document.querySelectorAll('.form-check-input:checked').length;
+        document.getElementById('selected-count').textContent = count;
+    }
+
+    // 保存权限
+    function savePermissions() {
+        const saveBtn = document.getElementById('savePermissionBtn');
+        const btnIcon = saveBtn.querySelector('i');
+        const btnText = saveBtn.querySelector('span');
+
+        // 防止重复点击
+        if (saveBtn.disabled) {
+            return;
+        }
+
+        const selectedIds = Array.from(document.querySelectorAll('.form-check-input:checked'))
+            .map(cb => parseInt(cb.dataset.id));
+
+        // 设置加载状态
+        saveBtn.disabled = true;
+        btnIcon.className = 'ti ti-loader-2 spinner';
+        btnText.textContent = '保存中...';
+
+        // 发送AJAX请求
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                permission_ids: selectedIds
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 1) {
+                    Dolphin.success('权限分配成功！');
+                    // 更新当前权限数
+                    document.getElementById('current-count').textContent = selectedIds.length;
+                } else {
+                    Dolphin.error('权限分配失败：' + data.msg);
+                }
+            })
+            .catch(error => {
+                Dolphin.error('权限分配失败，请稍后重试');
+            })
+            .finally(() => {
+                // 恢复按钮状态
+                saveBtn.disabled = false;
+                btnIcon.className = 'ti ti-device-floppy';
+                btnText.textContent = '保存权限';
+            });
+    }
+
+    // 搜索权限
+    function searchPermissions(keyword) {
+        keyword = keyword.trim().toLowerCase();
+        const allNodes = document.querySelectorAll('.tree-node');
+        const clearBtn = document.getElementById('searchClear');
+
+        // 控制清除按钮显示/隐藏
+        if (keyword) {
+            clearBtn.style.display = 'flex';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+
+        if (!keyword) {
+            // 清空搜索，显示所有节点
+            allNodes.forEach(node => {
+                node.classList.remove('search-hidden');
+            });
+            return;
+        }
+
+        // 第一次遍历：先隐藏所有节点，并标记匹配的节点
+        const matchedNodes = new Set();
+        allNodes.forEach(node => {
+            // 获取节点数据
+            const checkbox = node.querySelector('.form-check-input');
+            if (!checkbox) return;
+
+            const permissionId = parseInt(checkbox.dataset.id);
+            const permission = findPermissionById(permissionData, permissionId);
+            if (!permission) return;
+
+            // 搜索匹配：权限名称、路由、代码、类型
+            const name = permission.name ? permission.name.toLowerCase() : '';
+            const route = permission.route ? permission.route.toLowerCase() : '';
+            const code = permission.code ? permission.code.toLowerCase() : '';
+            const type = permission.type ? permission.type.toLowerCase() : '';
+            const typeTranslation = typeMap[permission.type] ? typeMap[permission.type].toLowerCase() : '';
+
+            const isMatch = name.includes(keyword) ||
+                          route.includes(keyword) ||
+                          code.includes(keyword) ||
+                          type.includes(keyword) ||
+                          typeTranslation.includes(keyword);
+
+            if (isMatch) {
+                matchedNodes.add(node);
+            }
+
+            // 先隐藏所有节点
+            node.classList.add('search-hidden');
+        });
+
+        // 第二次遍历：显示匹配的节点及其所有父节点
+        matchedNodes.forEach(node => {
+            // 显示匹配的节点
+            node.classList.remove('search-hidden');
+
+            // 展开并显示所有父节点
+            let parent = node.parentElement;
+            while (parent) {
+                if (parent.classList.contains('tree-node')) {
+                    parent.classList.remove('search-hidden');
+                }
+                if (parent.classList.contains('tree-children')) {
+                    parent.classList.remove('collapsed');
+                    // 找到对应的展开按钮
+                    const parentNode = parent.parentElement;
+                    if (parentNode && parentNode.classList.contains('tree-node')) {
+                        const expandBtn = parentNode.querySelector(':scope > .tree-node-item > .tree-node-expand');
+                        if (expandBtn) {
+                            expandBtn.classList.remove('collapsed');
+                            expandBtn.classList.add('expanded');
+                        }
+                    }
+                }
+                parent = parent.parentElement;
+            }
+        });
+    }
+
+    // 清空搜索
+    function clearSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.value = '';
+        searchPermissions('');
+    }
+
+    // 根据ID查找权限
+    function findPermissionById(permissions, id) {
+        for (let permission of permissions) {
+            if (permission.id === id) {
+                return permission;
+            }
+            if (permission.children && permission.children.length > 0) {
+                const found = findPermissionById(permission.children, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('permissionTree');
+        renderPermissionTree(permissionData, container);
+        updateSelectedCount();
+    });
+</script>
+{/literal}
+{/if}
+{/block}

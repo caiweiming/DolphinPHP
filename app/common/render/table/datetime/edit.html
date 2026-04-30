@@ -1,0 +1,91 @@
+<script type="text/html" id="{$id|default=''}">
+    <input class="layui-input {$tableId}_datetime_{$field}"
+           id="{$tableId}_datetime_{$field}_{{= d.id}}"
+           type="text"
+           placeholder="选择{$title|default=''}"
+           lay-options="{$options|default=[]|dp_parse_options|raw}"
+           value="{{= d.{$field} || '' }}">
+</script>
+<script>
+    // 注册表格特定回调
+    DolphinTableOn('{$tableId}', 'done', 'datetime-{$field}', function(table, tableId) {
+        const laydate = layui.laydate;
+        const selector = '.{$tableId}_datetime_{$field}';
+
+        // 使用事件委托，监听所有时间输入框的点击事件
+        $(document).on('click', selector, function() {
+            const $input = $(this);
+
+            // 检查是否已初始化
+            if ($input.data('laydate-initialized')) {
+                return;
+            }
+
+            // 标记为已初始化
+            $input.data('laydate-initialized', true);
+
+            // 读取配置
+            let options = {
+                elem: this
+            };
+
+            // 处理回调函数
+            const callbacks = ['ready', 'change', 'done', 'onConfirm', 'onNow', 'onClear', 'close'];
+            callbacks.forEach(callback => {
+                if (options[callback] && typeof window[options[callback]] === 'function') {
+                    options[callback] = window[options[callback]];
+                } else {
+                    delete options[callback];
+                }
+            });
+
+            // 设置默认的 done 回调
+            if (!options['done']) {
+                options['done'] = function (value, date, endDate) {
+                    const field = "{$field|default=''}";
+                    const elem = this.elem;
+                    const data = table.getRowData(elem);
+                    const id = data['dp_pk'];
+                    const oldValue = data[field];
+
+                    Dolphin.loading('处理中...');
+
+                    // 提交更新请求
+                    $.ajax({
+                        url: DolphinConfig.url.quickEdit,
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            field: field,
+                            value: value,
+                            type: 'datetime',
+                            _t: '{$crudToken|default=""}'
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            Dolphin.loading('hide')
+
+                            if (res.code !== 1) {
+                                Dolphin.error(res.msg || '修改失败');
+                                elem.val(oldValue);
+                                laydate.render(options);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Dolphin.loading('hide');
+                            Dolphin.error('网络错误，修改失败');
+                            elem.val(oldValue);
+                            laydate.render(options);
+                        }
+                    });
+                };
+            }
+
+            // 渲染时间组件
+            laydate.render(options);
+
+            // 立即触发点击，打开日期选择器
+            $(this).trigger('click');
+        });
+    });
+</script>

@@ -1,0 +1,28 @@
+<!-- 工作台快捷入口内侧滑面板 -->
+<div class="dp-workspace-quick-links-shell" data-dp-quick-links-shell>
+    <button
+        type="button"
+        class="dp-workspace-quick-links-overlay"
+        data-dp-quick-links-overlay
+        aria-label="关闭快捷入口管理面板"
+        tabindex="-1"
+    ></button>
+    <aside
+        id="dp-workspace-quick-links-panel"
+        class="dp-workspace-quick-links-panel"
+        data-dp-quick-links-panel
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="dp-workspace-quick-links-title"
+        aria-hidden="true"
+    >
+        <div class="dp-workspace-quick-links-panel-header">
+            <h2 class="offcanvas-title mb-0" id="dp-workspace-quick-links-title">管理快捷入口</h2>
+            <button type="button" class="btn-close" data-dp-quick-links-panel-close aria-label="关闭"></button>
+        </div>
+        <div class="dp-workspace-quick-links-panel-body">
+            <input type="text" class="form-control" placeholder="搜索菜单标题" data-dp-quick-links-search>
+            <div class="dp-quick-links-candidates" data-dp-quick-links-candidates></div>
+        </div>
+    </aside>
+</div>

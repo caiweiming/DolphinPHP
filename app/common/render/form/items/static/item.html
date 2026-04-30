@@ -1,0 +1,20 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="form-control-plaintext" {$props|default=''|raw}>
+        {empty name="raw"}
+            {$value|default=''}
+        {else/}
+            {$value|default=''|raw}
+        {/empty}
+    </div>
+    {notempty name="send"}
+    <input type="hidden" name="{$name}" id="{$id}" value='{$send === true ? $value : $send}'>
+    {/notempty}
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

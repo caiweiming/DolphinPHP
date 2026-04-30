@@ -1,0 +1,20 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="{$group_class|default='btn-group'} {$class|default=''}" role="group">
+        {notempty name="options"}
+            {volist name="options" id="option"}
+            {php}$key = (string)$key;{/php}
+            <input type="radio" class="btn-check" name="{$name}" id="{$id}-{$key}" value="{$key}" autocomplete="off" {eq name="key" value="$value|default=''"}checked {/eq}>
+            <label for="{$id}-{$key}" class="btn {$icon ?= 'btn-icon'}">{$option|default=''|raw}</label>
+            {/volist}
+        {/notempty}
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

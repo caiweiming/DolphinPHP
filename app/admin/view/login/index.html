@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="keywords" content="{:dp_setting('site.admin_name', 'DolphinPHP')},后台管理,登录"/>
+    <meta name="description" content="{:dp_setting('site.admin_name', 'DolphinPHP')} 后台登录页"/>
+    {:dp_token_meta()}
+    <title>{:dp_setting('site.admin_name', 'DolphinPHP')} - 后台登录</title>
+    <!-- CSS files -->
+    <link href="__THEME_CSS__/tabler.min.css" rel="stylesheet"/>
+    <style>
+        .logo {
+            height: 60px;
+        }
+        .text-wechat {
+            color: #2AAE67 !important;
+        }
+
+        .captcha {
+            padding: 0;
+            cursor: pointer;
+            min-width: 144px;
+            height: 38px;
+            overflow: hidden;
+        }
+
+        .captcha img {
+            display: block;
+            width: 144px;
+            height: 46px;
+            margin-top: -4px;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body class=" d-flex flex-column">
+<div class="page page-center">
+    <div class="container container-normal py-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg">
+                <div class="container-tight">
+                    <div class="text-center mb-4">
+                        <img src="{:dp_admin_logo_path('/static/img/logo.png')}" height="48" alt="" class="logo">
+                    </div>
+                    <div class="card card-md">
+                        <div class="card-body">
+                            <h2 class="h2 text-center mb-4">{:dp_setting('login.welcome_title', '登录您的帐户')}</h2>
+                            <form id="login-form" method="post" autocomplete="off" novalidate>
+                                {:dp_token_field()}
+                                <input type="hidden" id="redirect" name="redirect" value="{$redirect_url|default=''}">
+                                <div class="mb-3">
+                                    <label class="form-label">账号</label>
+                                    <input type="text" id="username" class="form-control" placeholder="输入你的账号"
+                                           autocomplete="off">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">密码</label>
+                                    <div class="input-group input-group-flat">
+                                        <input type="password" id="password" class="form-control" placeholder="输入你的密码"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                {if $login_captcha_enabled}
+                                <div class="mb-3">
+                                    <label class="form-label" for="captcha">验证码</label>
+                                    <div class="input-group input-group-flat">
+                                        <input type="text" name="captcha" id="captcha" class="form-control"
+                                               placeholder="输入验证码"
+                                               maxlength="4"
+                                               autocomplete="off">
+                                        <span class="input-group-text captcha">
+                                            <img src="{:captcha_src()}" id="captcha-img" data-bs-toggle="tooltip"
+                                                 data-bs-placement="top"
+                                                 onclick="this.src='{:captcha_src()}?d='+Math.random();"
+                                                 title="点击刷新" alt="验证码">
+                                        </span>
+                                    </div>
+                                </div>
+                                {/if}
+                                <div class="mb-2">
+                                    <label class="form-check">
+                                        <input type="checkbox" id="auto-login" class="form-check-input"/>
+                                        <span class="form-check-label">7天内自动登录</span>
+                                    </label>
+                                </div>
+                                <div class="form-footer">
+                                    <button type="submit" id="btn-login" class="btn btn-primary w-100">登 录</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="hr-text">其他登录方式</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col"><a href="#" class="btn w-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-github" width="24"
+                                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                         fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"/>
+                                    </svg>
+                                    使用Github登录
+                                </a></div>
+                                <div class="col"><a href="#" class="btn w-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="icon icon-tabler icons-tabler-outline icon-tabler-brand-wechat text-wechat">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M16.5 10c3.038 0 5.5 2.015 5.5 4.5c0 1.397 -.778 2.645 -2 3.47l0 2.03l-1.964 -1.178a6.649 6.649 0 0 1 -1.536 .178c-3.038 0 -5.5 -2.015 -5.5 -4.5s2.462 -4.5 5.5 -4.5z"/>
+                                        <path d="M11.197 15.698c-.69 .196 -1.43 .302 -2.197 .302a8.008 8.008 0 0 1 -2.612 -.432l-2.388 1.432v-2.801c-1.237 -1.082 -2 -2.564 -2 -4.199c0 -3.314 3.134 -6 7 -6c3.782 0 6.863 2.57 7 5.785l0 .233"/>
+                                        <path d="M10 8h.01"/>
+                                        <path d="M7 8h.01"/>
+                                        <path d="M15 14h.01"/>
+                                        <path d="M18 14h.01"/>
+                                    </svg>
+                                    使用微信登录
+                                </a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg d-none d-lg-block">
+                <img src="__IMG__/boy-with-key.png" height="300" class="d-block mx-auto"
+                     alt="">
+            </div>
+        </div>
+        <div class="text-center text-secondary mt-5">
+            2016-2026 © <a href="https://www.dolphinphp.com" tabindex="-1">{:dp_setting('site.admin_name', 'DolphinPHP')}</a>
+        </div>
+    </div>
+</div>
+
+<script src="__LIBS__/jquery/dist/jquery.min.js"></script>
+<script src="__LIBS__/crypto-js/crypto-js.js"></script>
+<script src="__LIBS__/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="__THEME_JS__/tabler.min.js?1692870487" defer></script>
+<script src="__JS__/dolphin.js"></script>
+<script>
+    $(function () {
+        let $btnLogin = $('#btn-login');
+        let $captcha  = $('#captcha');
+        let $token    = $('input[name="{:config(\'csrf.token_name\')}"]');
+        let loading   = false;
+
+        $('#login-form').on('submit', () => {
+            if (loading) {
+                return false;
+            }
+
+            let data = {
+                username: Dolphin.encrypt($('#username').val(), '{$encrypt_key}', '{$encrypt_iv}'),
+                password: Dolphin.encrypt($('#password').val(), '{$encrypt_key}', '{$encrypt_iv}'),
+            }
+            if ($captcha.length) {
+                data['captcha'] = Dolphin.encrypt($captcha.val(), '{$encrypt_key}', '{$encrypt_iv}');
+            }
+            if ($token.length) {
+                data[$token.attr('name')] = $token.val();
+            }
+            const redirect = $('#redirect').val();
+            if (redirect) {
+                data['redirect'] = redirect;
+            }
+            if ($('#auto-login').prop('checked')) {
+                data['auto-login'] = 1;
+            }
+
+            $btnLogin.attr("autocomplete", "off").addClass('btn-loading disabled');
+            loading = true;
+            $.post('{:dp_url("index")}', data, function (res) {
+                if (res.code) {
+                    if (res.url !== '') {
+                        res.msg = res.msg + '，页面即将跳转...';
+                        setTimeout(function () {
+                            location.href = res.url;
+                        }, 2000);
+                    }
+                    Dolphin.success(res.msg);
+                } else {
+                    Dolphin.error(res.msg);
+                    Dolphin.refreshToken();
+                    setTimeout(function () {
+                        $btnLogin.removeClass('btn-loading disabled');
+                        loading = false;
+                    }, 2000);
+                }
+            }).fail(function (res) {
+                Dolphin.fail(res);
+                Dolphin.refreshToken();
+                setTimeout(function () {
+                    $btnLogin.removeClass('btn-loading disabled');
+                    loading = false;
+                }, 2000);
+            });
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

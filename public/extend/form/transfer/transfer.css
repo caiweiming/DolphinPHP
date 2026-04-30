@@ -1,0 +1,13 @@
+.bootstrap-duallistbox-container .clear1,
+.bootstrap-duallistbox-container .clear2 {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+.bootstrap-duallistbox-container .info {
+    margin-bottom: 10px;
+}
+.bootstrap-duallistbox-container .form-select[multiple] {
+    padding-right: 0
+}

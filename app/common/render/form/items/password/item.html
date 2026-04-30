@@ -1,0 +1,90 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="password">
+    {eq name="float" value="true"}
+    <div class="form-floating">
+        <input type="password" class="form-control {$class|default=''}" name="{$name|default=''}" id="{$name|default=''}" value="{$value|default=''}" autocomplete="off" {$props|default=''|raw}>
+        <label for="{$id|default=''}">{$label|default=''|dp_clean|raw}</label>
+    </div>
+    {else/}
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|dp_clean|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="input-normal {$input_class|default=''}">
+        {notempty name="prefix"}
+            {notempty name="span_class"}
+                <span class="{$span_class}">{$prefix|default=''|raw}</span>
+            {else/}
+                {$prefix|default=''|raw}
+            {/notempty}
+        {/notempty}
+
+        <input type="password"
+               list="{$name}-datalist"
+               class="form-control {$rounded ?= ' form-control-rounded'} {$flush ?= ' form-control-flush'} {$size|default=''} {$class|default=''}"
+               name="{$name|default=''}"
+               id="{$id|default=''}"
+               value="{$value|default=''}"
+               maxlength="{$max_length|default=''}"
+               minlength="{$min_length|default=''}"
+               autocomplete="off"
+               placeholder="{$placeholder !== null ? $placeholder : '请输入'.(isset($label) ? strip_tags($label) : '')}"
+               {$disabled ?="disabled "}
+               {$readonly ?="readonly "}
+               {$props|default=''|raw}>
+
+        {notempty name="switch"}
+        <span class="input-group-text">
+            <a href="javascript:void(0);" class="dp-icon-link link-secondary" data-bs-toggle="tooltip" aria-label="显示/隐藏密码" title="显示/隐藏密码">
+                <i class="dp-icon fa-solid fa-eye-slash"></i>
+            </a>
+        </span>
+        {/notempty}
+
+        {notempty name="datalist"}
+        <datalist id="{$name}-datalist">
+            {volist name="datalist" id="vo"}
+            <option value="{$vo}"/>
+            {/volist}
+        </datalist>
+        {/notempty}
+
+        {notempty name="suffix"}
+            {notempty name="span_class"}
+                <span class="{$span_class}">{$suffix|default=''|raw}</span>
+            {else/}
+                {$suffix|default=''|raw}
+            {/notempty}
+        {/notempty}
+    </div>
+    {/eq}
+
+    <!-- 密码强度提示 -->
+    {notempty name="strength"}
+    <div class="password-strength-wrapper mt-2" style="display: none;">
+        <!-- 强度进度条 -->
+        <div class="password-strength-bar mb-2">
+            <div class="progress" style="height: 4px;">
+                <div class="progress-bar password-strength-progress"
+                     role="progressbar"
+                     style="width: 0%"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+
+        <!-- 强度文字 -->
+        <div class="password-strength-text">
+            <small class="text-muted">
+                密码强度：<span class="password-strength-level fw-bold">未设置</span>
+            </small>
+        </div>
+    </div>
+    {/notempty}
+
+    {notempty name="tips"}
+    <small class="{$feedback_class ?: 'form-hint'}">{$tips|dp_clean|raw}</small>
+    {/notempty}
+</div>

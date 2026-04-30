@@ -1,0 +1,20 @@
+{
+    "name": "demo/hello",
+    "description": "用于演示 DolphinPHP 插件协议、能力注册与资源接入链路的示例插件。",
+    "type": "dolphinphp-plugin",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "DolphinPHP Team"
+        }
+    ],
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plugins\\Demo\\Hello\\": "src/"
+        }
+    }
+}

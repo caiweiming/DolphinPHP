@@ -1,0 +1,5 @@
+<script type="text/html" id="{$id|default=''}">
+    {{# var listLabel = {$label|default=[]|json_encode|raw}; }}
+    {{# var listColor = {$color|default=[]|json_encode|raw}; }}
+    <span class="layui-badge layui-bg{{= listColor[d.{$field}]}}">{{= listLabel[d.{$field}]}}</span>
+</script>

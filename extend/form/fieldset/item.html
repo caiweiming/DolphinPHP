@@ -1,0 +1,19 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}">
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <fieldset class="form-fieldset" id="{$id|default=''}">
+        {notempty name="options"}
+            {volist name="options" id="field"}
+                {$field|default=''|raw}
+            {/volist}
+        {/notempty}
+    </fieldset>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

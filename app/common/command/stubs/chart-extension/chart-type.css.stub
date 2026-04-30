@@ -1,0 +1,5 @@
+/*!
+ * {{label}} chart extension styles
+ */
+.dp-chart-wrapper .dp-chart {
+}

@@ -1,0 +1,15 @@
+<div class="mb-3 {$inner_width|default=''}">
+    {eq name="a" value="true"}
+    <a id="{$id|default=''}" title="{$title|default=''}" class="btn btn-{$color|default='primary'} {$shape ?= ' btn-'.$shape} {$disabled ?= ' disabled '} {$class|default=''}" target="{$target|default=''}" href="{$href|default='#'}" {$props|default=''|raw}>
+        {$icon|default=''|raw} {$label|default=''|raw}
+    </a>
+    {else /}
+    <button id="{$id|default=''}" title="{$title|default=''}" class="btn btn-{$color|default='primary'} {$shape ?= ' btn-'.$shape} {$disabled ?= ' disabled '} {$class|default=''}" type="button" {$props|default=''|raw}>
+        {$icon|default=''|raw} {$label|default=''|raw}
+    </button>
+    {/eq}
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

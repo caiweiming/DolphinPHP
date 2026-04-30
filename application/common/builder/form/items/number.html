@@ -1,9 +1,0 @@
-<div class="form-group col-lg-{$_layout[$form[type].name]['lg']|default='12'} col-md-{$_layout[$form[type].name]['md']|default='12'} col-sm-{$_layout[$form[type].name]['sm']|default='12'} col-xs-{$_layout[$form[type].name]['xs']|default='12'} {$form[type].extra_class|default=''}" id="form_group_{$form[type].name}">
-    <label class="col-xs-12" for="{$form[type].name}">{$form[type].title|htmlspecialchars}</label>
-    <div class="col-xs-12">
-        <input class="form-control" type="number" id="{$form[type].name}" name="{$form[type].name}" value="{$form[type].value|default=''}" placeholder="{$form[type].placeholder|default='请输入'.$form[type].title}" {php}if(isset($form[type]['min']) && $form[type]['min'] !== ''):{/php}min="{$form[type].min}"{php}endif;{/php} {php}if(isset($form[type]['max']) && $form[type]['max'] !== ''):{/php}max="{$form[type].max}"{php}endif;{/php} {php}if(isset($form[type]['step']) && $form[type]['step'] !== ''):{/php}step="{$form[type].step}"{php}endif;{/php} {$form[type].extra_attr|raw|default=''}>
-        {notempty name="form[type].tips"}
-        <div class="help-block">{$form[type].tips|raw|clear_js}</div>
-        {/notempty}
-    </div>
-</div>

@@ -1,0 +1,22 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+
+    <input type="text"
+           class="form-control"
+           data-mask="{$options}"
+           data-mask-visible="true"
+           name="{$name|default=''}"
+           id="{$id|default=''}"
+           value="{$value|default=''}"
+           autocomplete="off"
+           placeholder="{$options}"
+           {$props|default=''|raw}>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

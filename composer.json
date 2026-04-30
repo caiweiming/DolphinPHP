@@ -7,31 +7,88 @@
         "thinkphp",
         "ORM"
     ],
-    "homepage": "http://thinkphp.cn/",
+    "homepage": "https://www.thinkphp.cn/",
     "license": "Apache-2.0",
     "authors": [
         {
             "name": "liu21st",
             "email": "liu21st@gmail.com"
+        },
+        {
+            "name": "yunwuxin",
+            "email": "448901948@qq.com"
         }
     ],
     "require": {
-        "php": ">=5.6.0",
-        "topthink/framework": "5.1.*",
-        "topthink/think-captcha": "^2.0",
+        "php": ">=8.2.0",
+        "composer/installers": "^2.3",
+        "oomphinc/composer-installers-extender": "^2.0",
+        "topthink/framework": "^8.0",
+        "topthink/think-orm": "^3.0",
+        "topthink/think-filesystem": "^2.0|^3.0",
+        "topthink/think-multi-app": "^1.0",
+        "topthink/think-queue": "^3.0",
+        "topthink/think-captcha": "^3.0",
+        "topthink/think-throttle": "^2.0",
         "topthink/think-image": "^1.0",
-        "topthink/think-helper": "^1.0",
-        "ezyang/htmlpurifier": "^4.9"
+        "topthink/think-view": "^2.0",
+        "ezyang/htmlpurifier": "^4.0",
+        "php-curl-class/php-curl-class": "^9.19",
+        "nelexa/zip": "^4.0",
+        "phpmailer/phpmailer": "^6.9",
+        "phpoffice/phpspreadsheet": "^3.0",
+        "ext-openssl": "*",
+        "qiniu/php-sdk": "^7.14",
+        "ext-fileinfo": "*",
+        "ext-curl": "*",
+        "league/commonmark": "^2.5",
+        "ext-dom": "*",
+        "ext-libxml": "*"
+    },
+    "require-dev": {
+        "symfony/var-dumper": ">=4.2",
+        "topthink/think-trace": "^1.0",
+        "phpunit/phpunit": "^10.5",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "psr-4": {
-            "app\\": "application"
+            "app\\": "app"
+        },
+        "psr-0": {
+            "": "extend/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "composer/installers": true,
+            "oomphinc/composer-installers-extender": true
         }
     },
     "extra": {
-        "think-path": "thinkphp"
+        "installer-types": [
+            "dolphinphp-plugin"
+        ],
+        "installer-paths": {
+            "plugins/{$vendor}/{$name}/": [
+                "type:dolphinphp-plugin"
+            ]
+        }
     },
-    "config": {
-        "preferred-install": "dist"
+    "scripts": {
+        "post-autoload-dump": [
+            "@php think service:discover",
+            "@php think vendor:publish"
+        ]
+    },
+    "repositories": {
+        "local-plugin-packages": {
+            "type": "path",
+            "url": "dev/plugin-packages/*",
+            "options": {
+                "symlink": false
+            }
+        }
     }
 }

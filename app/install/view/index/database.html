@@ -1,0 +1,140 @@
+{extend name="layout/wizard" /}
+
+{block name="title"}数据库配置 - DolphinPHP 安装向导{/block}
+
+{block name="header"}
+<h1 class="install-section-title">数据库配置</h1>
+<p class="install-section-subtitle">
+    请填写数据库连接信息。开始执行安装时，向导会根据模板覆盖 <code>config/database.php</code>。
+</p>
+{/block}
+
+{block name="content"}
+<section class="install-database-panel">
+    <form id="database-form" class="install-database-form" autocomplete="off">
+        {:dp_token_field()}
+        <div class="install-form-grid install-form-grid--two">
+            <div class="install-form-field">
+                <label class="form-label">数据库主机</label>
+                <input type="text" name="hostname" class="form-control" value="{$values.hostname|default='localhost'}" placeholder="例如 localhost">
+                <span class="install-field-help">通常为 localhost 或 127.0.0.1</span>
+            </div>
+            <div class="install-form-field">
+                <label class="form-label">端口</label>
+                <input type="text" name="hostport" class="form-control" value="{$values.hostport|default='3306'}" placeholder="3306">
+                <span class="install-field-help">MySQL 默认端口为 3306</span>
+            </div>
+            <div class="install-form-field">
+                <label class="form-label">数据库名称</label>
+                <input type="text" name="database" class="form-control" value="{$values.database|default=''}" placeholder="例如 dolphin_install_test">
+                <span class="install-field-help">安装数据将导入到该数据库</span>
+            </div>
+            <div class="install-form-field">
+                <label class="form-label">用户名</label>
+                <input type="text" name="username" class="form-control" value="{$values.username|default='root'}" placeholder="root">
+                <span class="install-field-help">具有该数据库访问权限的用户名</span>
+            </div>
+            <div class="install-form-field">
+                <label class="form-label">密码</label>
+                <div class="input-icon input-icon-end">
+                    <input type="password" id="database-password" name="password" class="form-control" value="{$values.password|default=''}" placeholder="可留空">
+                    <button type="button" class="input-icon-addon install-password-toggle" data-role="password-toggle" data-target="database-password" aria-label="显示或隐藏密码" aria-pressed="false">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+                <span class="install-field-help">数据库账号对应的密码</span>
+            </div>
+            <div class="install-form-field">
+                <label class="form-label">表前缀</label>
+                <input type="text" name="prefix" class="form-control" value="{$values.prefix|default='dp_'}" placeholder="dp_">
+                <span class="install-field-help">同一数据库安装多个系统时请修改前缀</span>
+            </div>
+        </div>
+
+        <label class="install-checkbox-row">
+            <input type="checkbox" name="create_database" value="1" {if !empty($values.create_database)}checked{/if}>
+            <span>数据库不存在时自动创建</span>
+        </label>
+    </form>
+
+    <div class="install-note-box install-note-box--info">
+        <p class="install-note-box-title"><i class="fa-solid fa-circle-info"></i> 提示</p>
+        <ul class="install-note-box-list">
+            <li>真正执行安装时会把配置回写到 <code>config/database.php</code>。</li>
+            <li>如果勾选自动创建，仅会创建数据库本身，不会自动创建数据库用户。</li>
+        </ul>
+    </div>
+
+    <button type="button" class="btn btn-outline-secondary btn-sm install-inline-test-button" data-role="test-connection">
+        <i class="fa-solid fa-link"></i> 测试连接
+    </button>
+</section>
+{/block}
+
+{block name="actions"}
+<div class="install-action-footer-start">
+    <a href="/install/index/environment" class="btn btn-outline-secondary">上一步</a>
+</div>
+<div class="install-action-footer-end">
+    <button type="submit" form="database-form" class="btn btn-primary" data-role="save-database">保存并继续</button>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        var form = document.getElementById('database-form');
+        var testButton = document.querySelector('[data-role="test-connection"]');
+        var saveButton = document.querySelector('[data-role="save-database"]');
+
+        async function submit(url, button, redirect) {
+            if (!form || !button) {
+                return;
+            }
+
+            button.disabled = true;
+            button.classList.add('btn-loading', 'disabled');
+
+            try {
+                var formData = new FormData(form);
+                window.InstallWizard.appendToken(formData);
+                var response = await fetch(url, {
+                    method: 'POST',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: formData
+                });
+                var result = await response.json();
+                if (result.code === 1) {
+                    window.InstallWizard.notify('success', result.msg || '操作成功');
+                    if (redirect && result.url) {
+                        setTimeout(function () {
+                            window.location.href = result.url;
+                        }, 500);
+                    }
+                    return;
+                }
+
+                window.InstallWizard.notify('error', result.msg || '操作失败');
+            } catch (error) {
+                window.InstallWizard.notify('error', error && error.message ? error.message : '请求失败，请稍后重试');
+            } finally {
+                button.disabled = false;
+                button.classList.remove('btn-loading', 'disabled');
+            }
+        }
+
+        if (testButton) {
+            testButton.addEventListener('click', function () {
+                submit('/install/index/testDatabase', testButton, false);
+            });
+        }
+
+        if (form && saveButton) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                submit('/install/index/saveDatabase', saveButton, true);
+            });
+        }
+    })();
+</script>
+{/block}

@@ -1,0 +1,5 @@
+/* 示例插件工作台卡片样式 */
+.dp-demo-workspace-card {
+    border-left: 3px solid var(--tblr-primary);
+    padding-left: 0.75rem;
+}

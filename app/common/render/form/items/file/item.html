@@ -1,0 +1,65 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="file-upload">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help"
+              data-bs-toggle="popover"
+              data-bs-placement="top"
+              data-bs-html="true"
+              data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="dp-form-upload-file"
+         id="{$id|default=''}"
+         data-name="{$name|default=''}"
+         data-driver="{$driver|default=''}"
+         data-dir="{$dir|default=''}"
+         data-max-files="{$maxFiles|default='1'}"
+         data-options="{$options|default=''|raw}">
+        <div class="dp-form-upload-file-items">
+            {volist name="value" id="vo"}
+            <div class="dp-form-upload-file-item" id="dp-form-upload-file-item-{$id}">
+                {empty name="readonly"}
+                <input type="hidden" name="{$name|default=''}" value="{$vo.id}">
+                {/empty}
+                <div class="dp-form-upload-file-info">
+                    <span class="file-name">
+                        {neq name="maxFiles" value="1"}<i class="dp-form-upload-file-item-handle ti ti-grip-vertical"></i>{/neq}<i class="dp-icon ti ti-file"></i> {$vo.name} ({$vo.size|dp_format_size})
+                    </span>
+                    {notempty name="delete"}
+                    <i class="dp-form-upload-file-delete ti ti-trash-x" data-id="{$id}" data-bs-toggle="tooltip" aria-label="删除" data-bs-original-title="删除"></i>
+                    {/notempty}
+                    {notempty name="download"}
+                    <a href="{$vo.url}" download="{$vo.name}">
+                        <i class="dp-form-upload-file-download ti ti-square-rounded-arrow-down" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="下载" data-bs-original-title="下载"></i>
+                    </a>
+                    {/notempty}
+                </div>
+            </div>
+            {/volist}
+        </div>
+
+        {notempty name="upload"}
+        <button class="btn btn-primary ms-auto dp-form-upload-file-item-add" style="{$maxFiles == '1' && !empty($value) ? 'display:none' : ''}">
+            <i class="dp-icon ti ti-cloud-upload"></i> 上传文件
+            <div class="dp-form-upload-file-button-upload">
+                <input type="file"/>
+            </div>
+        </button>
+        {/notempty}
+
+        {notempty name="browser"}
+        <button class="btn btn-info ms-auto dp-form-upload-file-item-select" type="button" style="{$maxFiles == '1' && !empty($value) ? 'display:none' : ''}">
+            <i class="dp-icon ti ti-file-plus"></i> 浏览文件
+        </button>
+        {/notempty}
+
+        {notempty name="clear"}
+        <button class="btn btn-danger ms-auto dp-form-upload-file-item-clear" type="button" style="display:none">
+            <i class="dp-icon ti ti-trash-x"></i> 清空文件
+        </button>
+        {/notempty}
+    </div>
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

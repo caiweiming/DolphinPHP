@@ -1,0 +1,31 @@
+.dp-chart-card .card-body {
+    position: relative;
+}
+
+.dp-chart-wrapper {
+    position: relative;
+}
+
+.dp-chart {
+    width: 100%;
+}
+
+.dp-chart-empty-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+}
+
+.dp-chart-empty-state .empty {
+    margin: 0;
+}
+
+.dp-chart-empty-state.d-none {
+    display: none;
+}

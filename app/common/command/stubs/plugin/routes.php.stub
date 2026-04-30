@@ -1,0 +1,9 @@
+<?php
+declare(strict_types=1);
+
+use think\facade\Route;
+
+// 在此注册插件路由。
+// Route::get('{{plugin_route}}', function () {
+//     return 'ok';
+// });

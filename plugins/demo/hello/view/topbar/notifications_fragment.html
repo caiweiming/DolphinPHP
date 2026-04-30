@@ -1,0 +1,62 @@
+<div class="nav-item dropdown d-none d-md-flex plugin-demo-hello-notification-fragment">
+    <a
+            href="#"
+            class="nav-link px-0"
+            title="示例通知"
+            aria-label="示例通知"
+            data-bs-toggle="dropdown"
+            tabindex="-1"
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+    >
+        <i class="dp-icon ti ti-bell"></i>
+        <span class="badge bg-red"></span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+        <div class="card plugin-demo-hello-notifications" data-demo-hello-notifications>
+            <div class="card-header d-flex">
+                <h3 class="card-title">示例通知</h3>
+                <button type="button" class="btn-close ms-auto" aria-label="关闭通知" data-demo-notify-close></button>
+            </div>
+            <div class="list-group list-group-flush list-group-hoverable">
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
+                        <div class="col text-truncate">
+                            <a href="/plugin/demo/hello" class="text-body d-block">插件通知 1</a>
+                            <div class="d-block text-secondary text-truncate mt-n1">这是由插件提供的静态通知下拉示例。</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" class="list-group-item-actions" data-demo-notify-favorite>
+                                <i class="dp-icon ti ti-star text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto"><span class="status-dot d-block"></span></div>
+                        <div class="col text-truncate">
+                            <a href="/plugin/demo/hello" class="text-body d-block">插件通知 2</a>
+                            <div class="d-block text-secondary text-truncate mt-n1">点击右侧星标可由插件 JS 切换高亮状态。</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" class="list-group-item-actions" data-demo-notify-favorite>
+                                <i class="dp-icon ti ti-star text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto"><span class="status-dot d-block"></span></div>
+                        <div class="col text-truncate">
+                            <a href="/plugin/demo/hello" class="text-body d-block">插件通知 3</a>
+                            <div class="d-block text-secondary text-truncate mt-n1">顶部工具项的完整结构来自插件受控视图片段，而不是后台核心模板硬编码。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

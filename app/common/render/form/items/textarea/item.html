@@ -1,0 +1,22 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" {$max_length ?= 'data-component="textarea-max"'}>
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="max_length"}<span class="form-label-description"><span class="curr">{:strlen($value)}</span>/{$max_length}</span>{/notempty}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <textarea class="form-control {$flush ?= ' form-control-flush'} {$size|default=''} {$class|default=''}"
+              name="{$name|default=''}"
+              id="{$id|default=''}"
+              rows="{$rows|default=6}"
+              {$disabled ?="disabled "}
+              {$readonly ?="readonly "}
+              {$max_length ?= 'maxlength="'.$max_length.'"'}
+    {$autosize ?= 'data-bs-toggle="autosize"'}
+    placeholder="{$placeholder !== null ? $placeholder : '请输入'.(isset($label) ? strip_tags($label) : '')}"
+    {$props|default=''|raw}>{$value|default=''}</textarea>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

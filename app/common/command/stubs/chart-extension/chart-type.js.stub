@@ -1,0 +1,18 @@
+/*!
+ * {{label}} chart extension hook
+ */
+(function (window) {
+    'use strict';
+
+    window.DpChartTypeHooks = window.DpChartTypeHooks || {};
+
+    window.DpChartTypeHooks['{{type}}'] = function (context) {
+        const option = context.option || {};
+        const typePayload = context.typePayload || {};
+
+        void typePayload;
+
+        // 在这里修改最终 option
+        return option;
+    };
+})(window);

@@ -1,0 +1,19 @@
+{
+    "name": "{{plugin_name}}",
+    "title": "{{plugin_title}}",
+    "description": "{{plugin_description}}",
+    "version": "1.0.0",
+    "plugin_api_version": "{{plugin_api_version}}",
+    "author": "{{plugin_author}}",
+    "provider": "{{plugin_namespace_json}}\\ServiceProvider",
+    "main": "{{plugin_namespace_json}}\\Plugin",
+    "dependencies": [],
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "{{plugin_namespace_json}}\\": "src/"
+        }
+    }
+}

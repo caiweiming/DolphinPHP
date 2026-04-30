@@ -1,0 +1,500 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .store-client-page,
+    .store-client-page * {
+        box-sizing: border-box;
+    }
+
+    .store-client-page {
+        min-height: 100%;
+        padding: 0 18px;
+        background:
+            radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 34%),
+            linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    }
+
+    .store-client-panel {
+        padding: 24px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    .store-client-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #fef3c7;
+        color: #92400e;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .store-client-title {
+        margin: 16px 0 8px;
+        color: #111827;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .store-client-desc {
+        margin: 0;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.9;
+    }
+
+    .store-client-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+        gap: 18px;
+        margin-top: 22px;
+    }
+
+    .store-client-card {
+        padding: 18px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+    }
+
+    .store-client-card-title {
+        margin: 0 0 12px;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .store-client-field + .store-client-field {
+        margin-top: 14px;
+    }
+
+    .store-client-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .store-client-input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #dbe4f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #0f172a;
+        font-size: 13px;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .store-client-input:focus {
+        outline: none;
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.12);
+        background: #fff;
+    }
+
+    .store-client-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .store-client-btn {
+        min-width: 112px;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .store-client-btn-secondary {
+        background: #e2e8f0;
+        color: #334155;
+    }
+
+    .store-client-btn-primary {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(180, 83, 9, 0.22);
+    }
+
+    .store-client-list {
+        margin: 0;
+        padding-left: 18px;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.9;
+    }
+
+    .store-client-list li + li {
+        margin-top: 6px;
+    }
+
+    .store-client-state {
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .store-client-state strong {
+        color: #111827;
+    }
+
+    .store-client-purchases {
+        margin-top: 18px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .store-client-purchases-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .store-client-purchases-title {
+        margin: 0;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .store-client-refresh {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 999px;
+        background: #e2e8f0;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .store-client-purchases-body {
+        padding: 0;
+    }
+
+    .store-client-empty {
+        padding: 18px 16px;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .store-client-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .store-client-table th,
+    .store-client-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: left;
+        font-size: 13px;
+    }
+
+    .store-client-table th {
+        color: #475569;
+        font-weight: 700;
+        background: #fff;
+    }
+
+    .store-client-table td {
+        color: #0f172a;
+    }
+
+    .store-client-install-btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #0f766e 0%, #0f766e 35%, #115e59 100%);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(15, 118, 110, 0.18);
+    }
+
+    @media (max-width: 760px) {
+        .store-client-page {
+            padding: 0 12px;
+        }
+
+        .store-client-panel {
+            padding: 18px 16px;
+        }
+
+        .store-client-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .store-client-actions {
+            flex-direction: column;
+        }
+
+        .store-client-btn {
+            width: 100%;
+        }
+
+        .store-client-purchases-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .store-client-table thead {
+            display: none;
+        }
+
+        .store-client-table,
+        .store-client-table tbody,
+        .store-client-table tr,
+        .store-client-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .store-client-table tr {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .store-client-table td {
+            border-bottom: none;
+            padding: 6px 16px;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="store-client-page">
+    <div class="store-client-panel">
+        <span class="store-client-badge">官方商店客户端</span>
+        <h2 class="store-client-title">连接商店并准备本地安装</h2>
+        <p class="store-client-desc">
+            当前阶段已经打通后台与商店站点之间的登录、已购查询、受控下载与本地安装桥接链路。
+            商店仍只负责目录、账号、购买信息和安装包交付，本地后台继续负责真正的导入与安装动作。
+        </p>
+
+        <div class="store-client-grid">
+            <div class="store-client-card">
+                <h3 class="store-client-card-title">连接商店</h3>
+                <form id="store-client-form">
+                    {:dp_token_field()}
+                    <div class="store-client-field">
+                        <label class="store-client-label" for="store-client-base-url">商店地址</label>
+                        <input id="store-client-base-url" class="store-client-input" type="url" name="base_url" value="{$storeClientBaseUrl|default=''}" placeholder="https://store.example.com" required>
+                    </div>
+                    <div class="store-client-field">
+                        <label class="store-client-label" for="store-client-email">商店账号</label>
+                        <input id="store-client-email" class="store-client-input" type="email" name="email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="store-client-field">
+                        <label class="store-client-label" for="store-client-password">商店密码</label>
+                        <input id="store-client-password" class="store-client-input" type="password" name="password" placeholder="请输入商店密码" required>
+                    </div>
+                    <div class="store-client-actions">
+                        <button type="button" class="store-client-btn store-client-btn-secondary" id="store-client-close">关闭</button>
+                        <button type="submit" class="store-client-btn store-client-btn-primary">连接商店</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="store-client-card">
+                <h3 class="store-client-card-title">当前状态</h3>
+                <div class="store-client-state">
+                    <div><strong>已保存商店地址：</strong>{$storeClientBaseUrl !== '' ? $storeClientBaseUrl : '尚未设置'}</div>
+                    <div><strong>令牌状态：</strong>{$storeClientToken !== '' ? '已连接' : '未连接'}</div>
+                </div>
+
+                <h3 class="store-client-card-title" style="margin-top:16px;">本阶段能力</h3>
+                <ul class="store-client-list">
+                    <li>后台统一登录官方商店，保存站点地址和访问令牌。</li>
+                    <li>可查询当前商店账号下具备下载权限的应用与插件。</li>
+                    <li>应用安装继续复用现有导入与生命周期安装流程。</li>
+                    <li>插件安装继续复用现有导入与安装流程。</li>
+                    <li>暂不在本页引入新的支付、钱包或机器授权协议。</li>
+                </ul>
+
+                <div class="store-client-purchases">
+                    <div class="store-client-purchases-head">
+                        <h3 class="store-client-purchases-title">已购商品</h3>
+                        <button type="button" class="store-client-refresh" id="store-client-refresh">刷新列表</button>
+                    </div>
+                    <div class="store-client-purchases-body" id="store-client-purchases-body">
+                        <div class="store-client-empty">连接商店后可在此查看当前账号下的已购应用与插件，并直接触发本地安装。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        const $form = $('#store-client-form');
+        const $purchasesBody = $('#store-client-purchases-body');
+        const isConnected = {:json_encode($storeClientToken !== '')};
+
+        $('#store-client-close').on('click', function () {
+            if (window.parent && parent.layer) {
+                const index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                return;
+            }
+
+            window.close();
+        });
+
+        $form.on('submit', function (event) {
+            event.preventDefault();
+
+            $.post('{:dp_url("login")}', $form.serialize(), function (res) {
+                if ((res.code || 1) !== 0) {
+                    layer.msg(res.msg || '商店登录失败');
+                    return;
+                }
+
+                layer.msg(res.msg || '登录成功');
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 600);
+            }, 'json').fail(function () {
+                layer.msg('商店请求失败，请稍后重试');
+            });
+        });
+
+        $('#store-client-refresh').on('click', function () {
+            loadPurchases();
+        });
+
+        $purchasesBody.on('click', '[data-action="install"]', function () {
+            const $button = $(this);
+            const payload = Object.assign(csrfPayload(), {
+                product_id: $button.data('productId'),
+                version_id: $button.data('versionId'),
+                product_type: $button.data('productType'),
+                product_name: $button.data('productName')
+            });
+
+            const originalText = $button.text();
+            $button.prop('disabled', true).text('安装中...');
+
+            $.post('{:dp_url("install")}', payload, function (res) {
+                if ((res.code || 1) !== 0) {
+                    layer.msg(res.msg || '安装失败');
+                    $button.prop('disabled', false).text(originalText);
+                    return;
+                }
+
+                layer.msg(res.msg || '安装成功');
+                $button.prop('disabled', false).text(originalText);
+            }, 'json').fail(function () {
+                layer.msg('安装请求失败，请稍后重试');
+                $button.prop('disabled', false).text(originalText);
+            });
+        });
+
+        if (isConnected) {
+            loadPurchases();
+        }
+
+        function csrfPayload() {
+            const $tokenField = $form.find('input[type="hidden"]').first();
+            if (!$tokenField.length) {
+                return {};
+            }
+
+            return {
+                [$tokenField.attr('name')]: $tokenField.val()
+            };
+        }
+
+        function loadPurchases() {
+            if (!isConnected) {
+                renderEmpty('请先连接官方商店，再加载当前账号下的已购商品。');
+                return;
+            }
+
+            renderEmpty('正在加载已购商品...');
+
+            $.get('{:dp_url("purchases")}', function (res) {
+                if ((res.code || 1) !== 0) {
+                    renderEmpty(res.msg || '加载已购商品失败');
+                    return;
+                }
+
+                renderPurchases(Array.isArray(res.data) ? res.data : []);
+            }, 'json').fail(function () {
+                renderEmpty('商店请求失败，请稍后重试');
+            });
+        }
+
+        function renderPurchases(rows) {
+            if (!rows.length) {
+                renderEmpty('当前账号下暂无可下载商品，或尚未在商店完成购买。');
+                return;
+            }
+
+            const html = [
+                '<table class="store-client-table">',
+                '<thead><tr><th>类型</th><th>标识</th><th>版本</th><th>操作</th></tr></thead>',
+                '<tbody>',
+                rows.map(function (row) {
+                    return [
+                        '<tr>',
+                        '<td>' + escapeHtml(row.product_type || '') + '</td>',
+                        '<td>' + escapeHtml(row.product_name || '') + '</td>',
+                        '<td>' + escapeHtml(row.current_version || '-') + '</td>',
+                        '<td><button type="button" class="store-client-install-btn" data-action="install" data-product-id="' + escapeAttr(row.product_id) + '" data-version-id="' + escapeAttr(row.version_id) + '" data-product-type="' + escapeAttr(row.product_type || '') + '" data-product-name="' + escapeAttr(row.product_name || '') + '">下载并安装</button></td>',
+                        '</tr>'
+                    ].join('');
+                }).join(''),
+                '</tbody>',
+                '</table>'
+            ].join('');
+
+            $purchasesBody.html(html);
+        }
+
+        function renderEmpty(message) {
+            $purchasesBody.html('<div class="store-client-empty">' + escapeHtml(message) + '</div>');
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttr(value) {
+            return escapeHtml(value);
+        }
+    })();
+</script>
+{/block}

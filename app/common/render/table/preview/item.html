@@ -1,0 +1,21 @@
+<script type="text/html" id="{$id|default=''}">
+    {{# var item = d.{$field} || {}; }}
+    {{# if (item.kind === 'image' && item.thumbnail) { }}
+    <a class="dp-file-preview-card dp-file-preview-tone-sky"
+       data-fslightbox="lightbox-{$field}-{{= d.LAY_INDEX}}"
+       href="{{= item.action_url || item.thumbnail }}"
+       title="{{= item.title || '' }}">
+        <div class="dp-file-preview-thumb" style="background-image:url('{{= item.thumbnail }}')"></div>
+    </a>
+    {{# } else { }}
+    <div class="dp-file-preview-card dp-file-preview-tone-{{= item.tone || 'slate' }}" title="{{= item.title || '' }}">
+        <div class="dp-file-preview-icon">
+            <i class="{{= item.icon || 'ti ti-file' }}"></i>
+        </div>
+    </div>
+    {{# } }}
+</script>
+<script>
+    DolphinTableOn('', 'done', 'preview-lightbox-{$field}', refreshFsLightbox);
+    DolphinTableOn('', 'expand', 'preview-lightbox-{$field}', refreshFsLightbox);
+</script>

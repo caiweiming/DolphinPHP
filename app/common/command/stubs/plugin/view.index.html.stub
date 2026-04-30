@@ -1,0 +1,7 @@
+<div class="card">
+    <div class="card-body">
+        <h3>{{plugin_title}}</h3>
+        <p>{{plugin_description}}</p>
+        <p>插件骨架生成时间：{{generated_date}}</p>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+<script type="text/html" id="{$id|default=''}">
+    <div class="dp-table-colorpicker {$tableId}_color_picker_{$field}" lay-options="{color: '{{= d.{$field} }}'}"></div>
+</script>
+<script>
+    // 定义颜色选择器初始化函数
+    const initColorpicker_{$tableId}_{$field} = function(table) {
+        const colorpicker = layui.colorpicker;
+        const selector = '.{$tableId}_color_picker_{$field}';
+
+        // 只初始化未初始化的颜色选择器
+        $(selector).each(function() {
+            const $elem = $(this);
+
+            // 检查是否已初始化
+            if ($elem.data('colorpicker-initialized')) {
+                return; // 跳过已初始化的元素
+            }
+
+            // 标记为已初始化
+            $elem.data('colorpicker-initialized', true);
+
+            // 准备配置
+            let options = {
+                elem: this
+            };
+            $.extend(options, {$options|default=[]|json_encode|raw});
+
+            // 处理回调函数
+            const callbacks = ['done', 'cancel', 'close', 'change'];
+            callbacks.forEach(callback => {
+                if (options[callback] && typeof window[options[callback]] === 'function') {
+                    options[callback] = window[options[callback]];
+                } else {
+                    delete options[callback];
+                }
+            });
+
+            // 设置默认的 done 回调
+            if (options.done === undefined) {
+                options.done = function (value) {
+                    const field = "{$field|default=''}";
+                    const elem = this.elem;
+                    const data = table.getRowData(elem);
+                    const id = data['dp_pk'];
+                    const oldValue = data[field];
+
+                    Dolphin.loading('处理中...');
+
+                    // 提交更新请求
+                    $.ajax({
+                        url: DolphinConfig.url.quickEdit,
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            field: field,
+                            value: value,
+                            _t: '{$crudToken|default=""}'
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            Dolphin.loading('hide')
+
+                            if (res.code !== 1) {
+                                Dolphin.error(res.msg || '修改失败');
+                                elem.val(oldValue);
+                                colorpicker.render(options);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Dolphin.loading('hide');
+                            Dolphin.error('网络错误，修改失败');
+                            elem.val(oldValue);
+                            colorpicker.render(options);
+                        }
+                    });
+                }
+            }
+
+            // 渲染颜色选择器
+            colorpicker.render(options);
+        });
+    };
+
+    // 表格加载完成时初始化
+    DolphinTableOn('{$tableId}', 'done', 'colorpicker-{$field}', initColorpicker_{$tableId}_{$field});
+
+    // 树形表格展开时初始化新展开行中的颜色选择器
+    DolphinTableOn('{$tableId}', 'expand', 'colorpicker-{$field}', initColorpicker_{$tableId}_{$field});
+</script>

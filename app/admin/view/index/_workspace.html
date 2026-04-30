@@ -1,0 +1,27 @@
+<!-- 后台工作台主区域模板 -->
+{php}
+$__workspaceGeneratedAt = (string)($workspaceContext['meta']['generated_at'] ?? '');
+{/php}
+<div class="row row-cards">
+    {volist name="workspaceContext.summaryCards|default=[]" id="card"}
+    {include file="$dp_admin_workspace_card_template" /}
+    {/volist}
+</div>
+
+{notempty name="workspaceContext.regions.top"}
+<div class="row row-cards mt-1">
+    {volist name="workspaceContext.regions.top|default=[]" id="card"}
+    {include file="$dp_admin_workspace_card_template" /}
+    {/volist}
+</div>
+{/notempty}
+
+<div class="row row-cards mt-1">
+    <div class="col-12">
+        <div class="row row-cards">
+            {volist name="workspaceContext.regions.main_left|default=[]" id="card"}
+            {include file="$dp_admin_workspace_card_template" /}
+            {/volist}
+        </div>
+    </div>
+</div>

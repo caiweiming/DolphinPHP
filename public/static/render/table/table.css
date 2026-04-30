@@ -1,0 +1,228 @@
+@media (min-width: 992px) {
+    :host, :root {
+        margin-left: 0!important;
+        margin-right: 0;
+    }
+}
+
+a[data-fslightbox] {
+    display: inline-block;
+}
+
+a[data-fslightbox] .avatar {
+    float: left;
+}
+
+a[data-fslightbox]:hover .avatar {
+    box-shadow: inset 0 0 0 1px var(--tblr-primary);
+}
+
+.dp-table-view {
+    background: #ffffff;
+}
+.dp-table-view a:not(.layui-btn) {
+    color: var(--tblr-primary);
+}
+.layui-table thead tr {
+    background: var(--tblr-bg-surface-tertiary);
+}
+.layui-form-checked[lay-skin=primary]>i {
+    border-color: var(--tblr-primary) !important;
+    background-color: var(--tblr-primary);
+}
+.layui-table-click, .layui-table-hover, .layui-table[lay-even] tbody tr:nth-child(even) {
+    background-color: #F6F8FB;
+}
+.layui-form-checkbox[lay-skin=primary]:hover>i {
+    border-color: var(--tblr-primary);
+}
+.layui-form-checkbox[lay-skin=primary]>.layui-icon-indeterminate {
+    border-color: var(--tblr-primary);
+}
+.layui-table-checked {
+    background-color: #dbebfb;
+}
+.layui-table-checked.layui-table-click, .layui-table-checked.layui-table-hover {
+    background-color: #abd2f8;
+}
+.layui-form-radio:hover>*, .layui-form-radioed, .layui-form-radioed>i {
+    color: var(--tblr-primary) !important;
+}
+.layui-form-onswitch {
+    border-color: var(--tblr-primary);
+    background-color: var(--tblr-primary);
+}
+.layui-table-view .layui-table td[data-edit]:hover:after {
+    border: 1px solid var(--tblr-primary);
+}
+.layui-table-edit:focus {
+    border-color: var(--tblr-primary)!important
+}
+.layui-input:focus, .layui-textarea:focus {
+    border-color: var(--tblr-primary) !important;
+}
+.layui-form-select dl dd.layui-this {
+    color: var(--tblr-primary);
+}
+.layui-laypage input:focus, .layui-laypage select:focus {
+    border-color: var(--tblr-primary) !important;
+}
+.layui-laypage a:hover {
+    color: var(--tblr-primary) !important;
+}
+.layui-table-view .layui-table th {
+    color: var(--tblr-secondary);
+}
+.layui-table-tips-c:before {
+    right: 0;
+    top: -4px;
+}
+
+.layui-menu-body-panel ul {
+    padding: 0;
+}
+
+.layui-menu-body-panel {
+    margin: 0;
+}
+
+.layui-btn .dp-icon {
+    font-size: 14px;
+    padding: 0 2px;
+    margin-right: 3px;
+}
+
+.layui-btn+.layui-btn {
+    margin-left: 6px;
+}
+
+.layui-dropdown-menu a:hover {
+    text-decoration: none;
+}
+
+/*表格按钮*/
+.laytable-cell-actions .layui-btn:hover {
+    text-decoration: none;
+}
+
+.dp-table-action-disabled,
+.dp-table-action-disabled:hover {
+    opacity: .65;
+    text-decoration: none;
+}
+
+.layui-input, .layui-select, .layui-textarea {
+    height: 36px;
+}
+
+.layui-table-expanded .layui-table-cell {
+    max-height: inherit;
+}
+
+.layui-table-expanded .laytable-cell-images .avatar {
+    margin-bottom: 5px;
+}
+
+.laytable-cell-images .avatar {
+    height: 36px;
+    width: 36px;
+}
+
+.layui-dropdown ul {
+    padding: 0
+}
+
+.layui-form-select dl {
+    margin: 0
+}
+
+.layui-table-cell .layui-btn:hover {
+    text-decoration: none;
+}
+
+/*表格编辑*/
+.dp-table-fix-cell .layui-table-cell {
+    height: 48px;
+    line-height: 36px;
+}
+.dp-table-fix-cell .layui-table-cell .layui-colorpicker {
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+
+.dp-table-fix-cell .layui-table-cell select {
+    height: 36px;
+    padding: 0 5px;
+}
+
+/*取色器*/
+.dp-table-colorpicker {
+    vertical-align: baseline!important;
+}
+.layui-colorpicker-main {
+    box-sizing: content-box;
+}
+
+/*预览*/
+.dp-file-preview-card {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    text-decoration: none;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.dp-file-preview-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.dp-file-preview-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.dp-file-preview-tone-slate {
+    background: linear-gradient(180deg, #eef2f7 0%, #dfe7f0 100%);
+    color: #41546b;
+}
+
+.dp-file-preview-tone-blue {
+    background: linear-gradient(180deg, #e6f0ff 0%, #cfe1ff 100%);
+    color: #2159b8;
+}
+
+.dp-file-preview-tone-danger {
+    background: linear-gradient(180deg, #ffe9e7 0%, #ffd0ca 100%);
+    color: #b42318;
+}
+
+.dp-file-preview-tone-violet {
+    background: linear-gradient(180deg, #f1e9ff 0%, #e1d2ff 100%);
+    color: #6f42c1;
+}
+
+.dp-file-preview-tone-emerald {
+    background: linear-gradient(180deg, #e7fbf5 0%, #cdf4e8 100%);
+    color: #0f8b6d;
+}
+
+.dp-file-preview-tone-orange {
+    background: linear-gradient(180deg, #fff3e8 0%, #ffe2c2 100%);
+    color: #b25e09;
+}
+
+.dp-file-preview-tone-sky {
+    background: linear-gradient(180deg, #eef6ff 0%, #dbeaff 100%);
+    color: #1d4ed8;
+}

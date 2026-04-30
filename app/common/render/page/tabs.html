@@ -1,0 +1,30 @@
+<div class="card {$tabs_options.class|default=''}" id="{$tabs_id}" data-dp-page-tabs="1" data-dp-tabs-remember="{$tabs_remember|default=0}">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs {$tabs_options.fill ?= 'nav-fill'} {$tabs_options.right ?= 'flex-row-reverse'}">
+            {volist name="tabs" id="tab"}
+            <li class="nav-item {$tab.right ?= 'ms-auto'}">
+                <a href="{$tab.link|default='javascript:void(0);'}"
+                   class="nav-link {$tab.active ?= 'active'} {$tab.disabled ?= ' disabled'}"
+                   {eq name="tab.mode" value="content"}data-bs-toggle="tab"{/eq}
+                   data-dp-tab-mode="{$tab.mode}"
+                   data-dp-tab-key="{$tab.key}">
+                    {$tab.icon|default=''|raw}{$tab.title|default=''}
+                </a>
+            </li>
+            {/volist}
+        </ul>
+    </div>
+    {notempty name="has_content"}
+    <div class="card-body">
+        <div class="tab-content">
+            {volist name="tabs" id="tab"}
+            {eq name="tab.mode" value="content"}
+            <div class="tab-pane fade {$tab.active ?= 'show active'}" id="{$tab.target_id}">
+                {$tab.content|default=''|raw}
+            </div>
+            {/eq}
+            {/volist}
+        </div>
+    </div>
+    {/notempty}
+</div>

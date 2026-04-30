@@ -1,0 +1,38 @@
+{volist name="dp_admin_topbar_slots|default=[]" id="slotItem"}
+{php}$__dpSlotType = strtolower(trim((string)($slotItem['type'] ?? 'link')));{/php}
+{if $__dpSlotType === 'fragment'}
+{$slotItem.content_html|default=''|raw}
+{elseif $__dpSlotType === 'dropdown' /}
+<div class="nav-item dropdown d-none d-md-flex">
+    <a
+            href="#"
+            class="nav-link px-0"
+            title="{$slotItem.title|default=''}"
+            aria-label="{$slotItem.title|default=''}"
+            data-bs-toggle="dropdown"
+            tabindex="-1"
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+    >
+        <i class="dp-icon {$slotItem.icon|default='ti ti-link'}"></i>
+        {notempty name="slotItem.badge"}<span class="badge {$slotItem.badge|default=''}"></span>{/notempty}
+    </a>
+    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+        {$slotItem.content_html|default=''|raw}
+    </div>
+</div>
+{else /}
+<div class="nav-item d-none d-md-flex">
+    <a
+            href="{$slotItem.url|default='#'}"
+            class="nav-link px-0"
+            title="{$slotItem.title|default=''}"
+            aria-label="{$slotItem.title|default=''}"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+    >
+        <i class="dp-icon {$slotItem.icon|default='ti ti-link'}"></i>
+    </a>
+</div>
+{/if}
+{/volist}

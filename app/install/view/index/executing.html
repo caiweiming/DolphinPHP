@@ -1,0 +1,277 @@
+{extend name="layout/wizard" /}
+
+{block name="title"}执行安装 - DolphinPHP 安装向导{/block}
+
+{block name="header"}
+<h1 class="install-section-title">执行安装</h1>
+<p class="install-section-subtitle">
+    系统正在执行安装操作，请稍候，安装过程通常只需几分钟时间。
+</p>
+{/block}
+
+{block name="content"}
+<div class="install-progress-hero status-banner info-banner" id="install-status-banner">
+    <div class="banner-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+    <div class="banner-text">
+        <h4 id="install-status-title">准备执行安装</h4>
+        <p id="install-status-text">当前将安装到数据库 {$databaseValues.database|default='未填写'}，并创建超级管理员 {$adminValues.username|default='admin'}。</p>
+    </div>
+    <div class="banner-bg-icon"><i class="fa-solid fa-gears"></i></div>
+</div>
+
+<div class="progress-section">
+    <div class="progress-header">
+        <span>安装进度</span>
+    </div>
+    <div class="progress-bar-container">
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="install-progress-fill" style="width: {$progressState.progress_percent|default=0}%;"></div>
+        </div>
+        <span class="progress-text" id="install-progress-text">{$progressState.progress_percent|default=0}%</span>
+    </div>
+    <ul class="task-list" id="install-task-list">
+        {volist name="progressState.steps" id="item"}
+        <li data-step-key="{$item.key}">
+            <i class="fa-regular fa-circle pass-icon"></i>
+            {$item.label}
+            <span class="task-status is-pending">待执行</span>
+        </li>
+        {/volist}
+    </ul>
+</div>
+
+<div class="summary-box">
+    <p class="summary-title">安装信息摘要</p>
+    <div class="summary-grid">
+        <div><i class="fa-solid fa-cube"></i> 程序版本：DolphinPHP v1.0.0</div>
+        <div><i class="fa-solid fa-globe"></i> 网站地址：{:request()->domain(true)}</div>
+        <div><i class="fa-solid fa-database"></i> 配置文件：config/database.php</div>
+        <div><i class="fa-regular fa-clock"></i> 安装时间：<span id="install-finished-at">待安装</span></div>
+        <div><i class="fa-regular fa-user"></i> 管理员账号：{$adminValues.username|default='admin'}</div>
+    </div>
+</div>
+
+<div class="warning-box">
+    <i class="fa-solid fa-circle-exclamation"></i> 安装完成后将生成 <code>config/install.lock</code>，用于阻止安装向导再次执行。
+</div>
+{/block}
+
+{block name="actions"}
+<div class="install-action-footer-start" id="install-action-back">
+    <a href="/install/index/admin" class="btn btn-outline-secondary">上一步</a>
+</div>
+<div class="install-action-footer-end">
+    <button type="button" id="run-install" class="btn btn-primary btn-lg">开始安装</button>
+    <div id="install-success-actions" style="display: none;">
+        <a href="/" class="btn btn-outline-secondary btn-lg">访问首页</a>
+        <a href="/admin/login/index" class="btn btn-primary btn-lg">进入后台 &gt;</a>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        var button = document.getElementById('run-install');
+        var banner = document.getElementById('install-status-banner');
+        var bannerTitle = document.getElementById('install-status-title');
+        var bannerText = document.getElementById('install-status-text');
+        var progressFill = document.getElementById('install-progress-fill');
+        var progressText = document.getElementById('install-progress-text');
+        var finishedAt = document.getElementById('install-finished-at');
+        var backAction = document.getElementById('install-action-back');
+        var successActions = document.getElementById('install-success-actions');
+        var initialState = {:json_encode($progressState, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)};
+
+        function statusLabel(status) {
+            if (status === 'running') {
+                return '执行中';
+            }
+            if (status === 'complete') {
+                return '完成';
+            }
+            if (status === 'error') {
+                return '失败';
+            }
+
+            return '待执行';
+        }
+
+        function iconClass(status) {
+            if (status === 'running') {
+                return 'fa-solid fa-spinner fa-spin pass-icon';
+            }
+            if (status === 'complete') {
+                return 'fa-solid fa-circle-check pass-icon';
+            }
+            if (status === 'error') {
+                return 'fa-solid fa-circle-xmark pass-icon';
+            }
+
+            return 'fa-regular fa-circle pass-icon';
+        }
+
+        function statusClass(status) {
+            if (status === 'running') {
+                return 'task-status is-running';
+            }
+            if (status === 'complete') {
+                return 'task-status is-complete';
+            }
+            if (status === 'error') {
+                return 'task-status is-fail';
+            }
+
+            return 'task-status is-pending';
+        }
+
+        function setBannerMode(mode, title, text) {
+            if (!banner) {
+                return;
+            }
+
+            banner.classList.remove('info-banner', 'success-banner', 'danger-banner');
+            banner.classList.add(mode);
+
+            var icon = banner.querySelector('.banner-icon i');
+            var bgIcon = banner.querySelector('.banner-bg-icon i');
+            if (icon) {
+                icon.className = mode === 'success-banner'
+                    ? 'fa-solid fa-circle-check'
+                    : (mode === 'danger-banner' ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-hourglass-half');
+            }
+            if (bgIcon) {
+                bgIcon.className = mode === 'success-banner'
+                    ? 'fa-solid fa-shield-halved'
+                    : (mode === 'danger-banner' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-gears');
+            }
+            if (bannerTitle) {
+                bannerTitle.textContent = title;
+            }
+            if (bannerText) {
+                bannerText.textContent = text;
+            }
+        }
+
+        function toggleSuccessActions(finished) {
+            if (button) {
+                button.style.display = finished ? 'none' : '';
+            }
+
+            if (backAction) {
+                backAction.style.display = finished ? 'none' : '';
+            }
+
+            if (successActions) {
+                successActions.style.display = finished ? 'inline-flex' : 'none';
+                successActions.style.gap = '0.75rem';
+            }
+        }
+
+        function applyState(state) {
+            var steps = state && state.steps ? state.steps : [];
+            var currentStep = steps.find(function (item) {
+                return item.status === 'running';
+            });
+
+            steps.forEach(function (step) {
+                var task = document.querySelector('#install-task-list li[data-step-key="' + step.key + '"]');
+                if (!task) {
+                    return;
+                }
+
+                var icon = task.querySelector('i');
+                var status = task.querySelector('.task-status');
+                if (icon) {
+                    icon.className = iconClass(step.status);
+                }
+                if (status) {
+                    status.className = statusClass(step.status);
+                    status.textContent = statusLabel(step.status);
+                }
+            });
+
+            if (progressFill) {
+                progressFill.style.width = String(state.progress_percent || 0) + '%';
+            }
+            if (progressText) {
+                progressText.textContent = String(state.progress_percent || 0) + '%';
+            }
+
+            if (state.finished) {
+                toggleSuccessActions(true);
+                setBannerMode('success-banner', '安装完成，系统已准备就绪', 'DolphinPHP 已成功安装，感谢您选择 DolphinPHP！');
+                if (finishedAt) {
+                    finishedAt.textContent = new Date().toLocaleString('zh-CN', {hour12: false});
+                }
+                return;
+            }
+
+            toggleSuccessActions(false);
+
+            if (state.has_error) {
+                var failedStep = steps.find(function (item) {
+                    return item.status === 'error';
+                });
+                setBannerMode('danger-banner', '安装执行失败', failedStep && failedStep.message ? failedStep.message : '请根据错误提示修正问题后重新继续当前步骤。');
+                return;
+            }
+
+            if (currentStep) {
+                setBannerMode('info-banner', '正在执行：' + currentStep.label, '系统正在按顺序执行安装步骤，请勿刷新或关闭当前页面。');
+                return;
+            }
+
+            setBannerMode('info-banner', '准备执行安装', "当前将安装到数据库 {$databaseValues.database|default='未填写'}，并创建超级管理员 {$adminValues.username|default='admin'}。");
+        }
+
+        async function runNextStep() {
+            var formData = new FormData();
+            window.InstallWizard.appendToken(formData);
+
+            var response = await fetch('/install/index/runInstallStep', {
+                method: 'POST',
+                headers: {'X-Requested-With': 'XMLHttpRequest'},
+                body: formData
+            });
+            var result = await response.json();
+
+            if (result.state) {
+                applyState(result.state);
+            }
+
+            if (result.code !== 1) {
+                throw new Error(result.msg || '安装失败');
+            }
+
+            if (result.complete === true) {
+                window.InstallWizard.notify('success', result.msg || '安装成功');
+                return;
+            }
+
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 120);
+            });
+            return runNextStep();
+        }
+
+        applyState(initialState || {});
+
+        button.addEventListener('click', async function () {
+            button.disabled = true;
+            button.classList.add('btn-loading', 'disabled');
+
+            try {
+                await runNextStep();
+            } catch (error) {
+                window.InstallWizard.notify('error', error && error.message ? error.message : '安装请求失败');
+                if (window.Dolphin && typeof Dolphin.refreshToken === 'function') {
+                    Dolphin.refreshToken();
+                }
+                button.disabled = false;
+                button.classList.remove('btn-loading', 'disabled');
+            }
+        });
+    })();
+</script>
+{/block}

@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="keywords" content="{:dp_setting('site.admin_name', 'DolphinPHP')},后台管理,管理系统"/>
+    <meta name="description" content="{:dp_setting('site.admin_name', 'DolphinPHP')} 后台管理系统"/>
+    {:dp_token_meta()}
+    <title>{block name="title"}{notempty name="dp_page_title"}{$dp_page_title}{else/}{:dp_setting('site.admin_name', 'DolphinPHP')}{/notempty}{/block}</title>
+
+    <!-- CSS files -->
+    <link href="__LIBS__/fontawesome/css/fontawesome.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/fontawesome/css/solid.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/tabler-icons/tabler-icons.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/layui/css/layui.css" rel="stylesheet"/>
+    <link href="__LIBS__/notyf/notyf.min.css" rel="stylesheet"/>
+    <link href="__LIBS__/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="__THEME_CSS__/tabler-themes.min.css" rel="stylesheet">
+    <link href="__CSS__/dolphin.css" rel="stylesheet"/>
+
+    {volist name="dp_file_css|default=[]" id="css"}
+    <link rel="stylesheet" href="{$css|default=''}?v={:rand(111, 99999)}">
+    {/volist}
+    {volist name="dp_extra_css|default=[]" id="css"}
+        {$css|raw|default=''}
+    {/volist}
+
+    <!-- Page style -->
+    {block name="style"}{/block}
+
+    <!-- Custom style -->
+    <link rel="stylesheet" href="__CSS__/custom.css">
+
+    <script>
+        let DolphinConfig = {
+            url: {
+                upload: '{:dp_url("admin/api/upload")}',
+                checkFile: '{:dp_url("admin/api/checkFile")}',
+                saveFile: '{:dp_url("admin/api/saveFile")}',
+                getFiles: '{:dp_url("admin/api/getFiles")}',
+                rememberApp: '{:dp_url("admin/index/rememberApp")}',
+                workspaceQuickLinks: '{:dp_url("admin/index/workspaceQuickLinks")}',
+                addWorkspaceQuickLink: '{:dp_url("admin/index/addWorkspaceQuickLink")}',
+                clearWorkspaceQuickLinks: '{:dp_url("admin/index/clearWorkspaceQuickLinks")}',
+                removeWorkspaceQuickLink: '{:dp_url("admin/index/removeWorkspaceQuickLink")}',
+                sortWorkspaceQuickLinks: '{:dp_url("admin/index/sortWorkspaceQuickLinks")}',
+            },
+            upload: JSON.parse('{$dp_form_upload_config|default=[]|raw|json_encode}'),
+            dialog: JSON.parse('{$dp_table_dialog|default=[]|raw|json_encode}'),
+            tabs: JSON.parse('{$Think.config.system.tabs|default=[]|raw|json_encode}'),
+            tabMode: '{$Think.config.system.tab_mode|default="iframe"}',
+            navigation: JSON.parse('{$dp_navigation_context|default=[]|raw|json_encode}'),
+        }
+    </script>
+</head>
+<body class="layout-fluid {$Think.config.system.tab_mode == 'iframe' ? 'iframe-mode' : ''}">
+<!-- BEGIN GLOBAL THEME SCRIPT -->
+<script src="__THEME_JS__/tabler-theme.min.js"></script>
+<!-- END GLOBAL THEME SCRIPT -->
+<div class="page">
+    <!--  BEGIN SIDEBAR  -->
+    <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+        <div class="container-fluid">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sidebar-menu"
+                    aria-controls="sidebar-menu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <button
+                    class="navbar-toggler d-lg-none dp-mobile-app-switcher-trigger"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#mobile-app-switcher-modal"
+                    aria-controls="mobile-app-switcher-modal"
+                    aria-expanded="false"
+                    aria-label="打开应用切换"
+            >
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-1"
+                >
+                    <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                    <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                    <path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                    <path d="M14 7l6 0" />
+                    <path d="M17 4l0 6" />
+                </svg>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <h1 class="navbar-brand">
+                <a href=".">
+                    <img src="{:dp_admin_logo_path('/static/img/logo-white.png')}" width="110" height="32" alt="" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="dp-sidebar-brand-app-summary dropdown" data-dp-sidebar-app-summary>
+                {if !empty($navigationContext.currentApp)}
+                <a
+                        href="#"
+                        class="dp-sidebar-brand-app-link"
+                        data-bs-toggle="dropdown"
+                        data-bs-auto-close="outside"
+                        aria-expanded="false"
+                        aria-label="打开应用切换"
+                >
+                    <div class="dp-sidebar-brand-app-main">
+                        <div class="dp-sidebar-brand-app-media">
+                            {if !empty($navigationContext.currentApp.image)}
+                            <img src="{$navigationContext.currentApp.image}" alt="{$navigationContext.currentApp.title|default='当前应用'}" class="dp-sidebar-app-summary-image" />
+                            {else /}
+                            <span class="dp-sidebar-app-summary-icon">
+                                <i class="dp-icon {$navigationContext.currentApp.icon|default='ti ti-apps'}"></i>
+                            </span>
+                            {/if}
+                        </div>
+                        <div class="dp-sidebar-brand-app-title">{$navigationContext.currentApp.title|default='未命名应用'}</div>
+                        <span class="dp-sidebar-brand-app-action" aria-hidden="true">
+                            <i class="dp-icon ti ti-transfer"></i>
+                        </span>
+                    </div>
+                </a>
+                <div class="dropdown-menu dp-sidebar-brand-app-menu">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title" data-dp-sidebar-app-switcher-title>应用切换</div>
+                        </div>
+                        <div class="card-body scroll-y p-2" data-dp-sidebar-app-switcher-body style="max-height: 50vh"></div>
+                    </div>
+                </div>
+                {else /}
+                <div class="dp-sidebar-brand-app-empty">
+                    <div class="dp-sidebar-brand-app-label">当前应用</div>
+                    <div class="dp-sidebar-brand-app-title">暂无可访问应用</div>
+                </div>
+                {/if}
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row d-lg-none">
+                <div class="nav-item d-none d-lg-flex me-3">
+                    <div class="btn-list">
+                        <a href="https://github.com/tabler/tabler" class="btn btn-5" target="_blank" rel="noreferrer">
+                            <!-- Download SVG icon from http://tabler.io/icons/icon/brand-github -->
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-2"
+                            >
+                                <path
+                                        d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
+                                />
+                            </svg>
+                            Source code
+                        </a>
+                        <a href="https://github.com/sponsors/codecalm" class="btn btn-6" target="_blank" rel="noreferrer">
+                            <!-- Download SVG icon from http://tabler.io/icons/icon/heart -->
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon text-pink icon-2"
+                            >
+                                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                            </svg>
+                            Sponsor
+                        </a>
+                    </div>
+                </div>
+                <div class="d-none d-lg-flex">
+                    <div class="nav-item">
+                        <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <!-- Download SVG icon from http://tabler.io/icons/icon/moon -->
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-1"
+                            >
+                                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                            </svg>
+                        </a>
+                        <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <!-- Download SVG icon from http://tabler.io/icons/icon/sun -->
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-1"
+                            >
+                                <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {include file="$dp_admin_topbar_slots_template" /}
+                {include file="$dp_admin_current_user_dropdown_template" /}
+            </div>
+            <div class="collapse navbar-collapse" id="sidebar-menu">
+                {php}
+                $__dpEscape = static function (mixed $__value): string {
+                return htmlspecialchars((string)$__value, ENT_QUOTES, 'UTF-8');
+                };
+
+                $__dpHasChildren = static function (array $__node): bool {
+                return !empty($__node['children']) && is_array($__node['children']);
+                };
+
+                $__dpNodeIsActive = null;
+                $__dpNodeIsActive = static function (array $__node) use (&$__dpNodeIsActive, $__dpHasChildren): bool {
+                if (!empty($__node['active'])) {
+                return true;
+                }
+                if ($__dpHasChildren($__node)) {
+                foreach ($__node['children'] as $__childNode) {
+                if (is_array($__childNode) && $__dpNodeIsActive($__childNode)) {
+                return true;
+                }
+                }
+                }
+                return false;
+                };
+
+                $__dpBuildHref = static function (array $__node): string {
+                $__url = trim((string)($__node['url'] ?? ''));
+                if ($__url === '') {
+                return '#';
+                }
+                return $__url;
+                };
+
+                $__dpMenuUid = 0;
+                $__dpRenderDropdownItems = null;
+                $__dpRenderDropdownItems = static function (array $__items, int $__level = 1) use (&$__dpRenderDropdownItems, &$__dpMenuUid, $__dpEscape, $__dpHasChildren, $__dpNodeIsActive, $__dpBuildHref): string {
+                $__html = '';
+                foreach ($__items as $__idx => $__item) {
+                if (!is_array($__item)) {
+                continue;
+                }
+
+                $__name = $__dpEscape($__item['name'] ?? '');
+                $__iconClass = $__dpEscape($__item['icon'] ?? '');
+                $__hasChildren = $__dpHasChildren($__item);
+                $__isActive = $__dpNodeIsActive($__item);
+
+                if ($__hasChildren) {
+                $__rawId = (string)($__item['id'] ?? ('submenu-' . $__level . '-' . $__idx . '-' . (++$__dpMenuUid)));
+                $__submenuId = 'sidebar-' . trim((string)preg_replace('/[^a-zA-Z0-9\-_]+/', '-', $__rawId), '-');
+                if ($__submenuId === 'sidebar-') {
+                $__submenuId = 'sidebar-submenu-' . (++$__dpMenuUid);
+                }
+
+                $__html .= '<div class="dropend">';
+                $__html .= '<a class="dropdown-item dropdown-toggle" href="#' . $__dpEscape($__submenuId) . '" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="' . ($__isActive ? 'true' : 'false') . '">';
+                    if ($__iconClass !== '') {
+                    $__html .= '<i class="dp-icon ' . $__iconClass . '"></i>';
+                    }
+                    $__html .= $__name . '</a>';
+                $__html .= '<div class="dropdown-menu' . ($__isActive ? ' show' : '') . '">';
+                    $__html .= $__dpRenderDropdownItems($__item['children'], $__level + 1);
+                    $__html .= '</div></div>';
+                } else {
+                $__href = $__dpEscape($__dpBuildHref($__item));
+                $__html .= '<a class="dropdown-item' . ($__isActive ? ' active' : '') . '" href="' . $__href . '">';
+                if ($__iconClass !== '') {
+                $__html .= '<i class="dp-icon ' . $__iconClass . '"></i>';
+                }
+                $__html .= $__name . '</a>';
+                }
+                }
+                return $__html;
+                };
+
+                $__dpMenuHtml = '';
+                $__menusList = is_array($menus ?? null) ? $menus : [];
+                foreach ($__menusList as $__menuIndex => $__menu) {
+                if (!is_array($__menu)) {
+                continue;
+                }
+
+                $__menuName = $__dpEscape($__menu['name'] ?? '');
+                $__menuIcon = $__dpEscape($__menu['icon'] ?? 'ti ti-point');
+                $__menuActive = $__dpNodeIsActive($__menu);
+                $__menuHasChildren = $__dpHasChildren($__menu);
+
+                if ($__menuHasChildren) {
+                $__rawMenuId = (string)($__menu['id'] ?? ('menu-' . $__menuIndex . '-' . (++$__dpMenuUid)));
+                $__menuId = 'navbar-' . trim((string)preg_replace('/[^a-zA-Z0-9\-_]+/', '-', $__rawMenuId), '-');
+                if ($__menuId === 'navbar-') {
+                $__menuId = 'navbar-menu-' . (++$__dpMenuUid);
+                }
+
+                $__dpMenuHtml .= '<li class="nav-item dropdown' . ($__menuActive ? ' active' : '') . '">';
+                $__dpMenuHtml .= '<a class="nav-link dropdown-toggle' . ($__menuActive ? ' active' : '') . '" href="#' . $__dpEscape($__menuId) . '" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="' . ($__menuActive ? 'true' : 'false') . '">';
+                    $__dpMenuHtml .= '<span class="nav-link-icon d-md-none d-lg-inline-block"><i class="dp-icon ' . $__menuIcon . '"></i></span>';
+                    $__dpMenuHtml .= '<span class="nav-link-title">' . $__menuName . '</span>';
+                    $__dpMenuHtml .= '</a>';
+                $__dpMenuHtml .= '<div class="dropdown-menu' . ($__menuActive ? ' show' : '') . '"><div class="dropdown-menu-columns"><div class="dropdown-menu-column">';
+                    $__dpMenuHtml .= $__dpRenderDropdownItems($__menu['children'], 1);
+                    $__dpMenuHtml .= '</div></div></div>';
+                $__dpMenuHtml .= '</li>';
+                } else {
+                $__menuHref = $__dpEscape($__dpBuildHref($__menu));
+                $__workspaceAttr = ($__menu['code'] ?? '') === 'workspace' ? ' data-dp-workspace="1"' : '';
+                $__dpMenuHtml .= '<li class="nav-item' . ($__menuActive ? ' active' : '') . '">';
+                $__dpMenuHtml .= '<a class="nav-link' . ($__menuActive ? ' active' : '') . '" href="' . $__menuHref . '"' . $__workspaceAttr . '>';
+                $__dpMenuHtml .= '<span class="nav-link-icon d-md-none d-lg-inline-block"><i class="dp-icon ' . $__menuIcon . '"></i></span>';
+                $__dpMenuHtml .= '<span class="nav-link-title">' . $__menuName . '</span>';
+                $__dpMenuHtml .= '</a></li>';
+                }
+                }
+                {/php}
+                <ul class="navbar-nav pt-lg-3" data-dp-sidebar-menu-list>
+                    {$__dpMenuHtml|raw}
+                </ul>
+
+            </div>
+        </div>
+    </aside>
+    <!--  END SIDEBAR  -->
+
+    <div class="page-wrapper">
+        <div class="sticky-top">
+            <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+                <div class="container-xl">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-nav flex-row order-md-last">
+                        <div class="d-none d-md-flex">
+                        <div class="nav-item">
+                            <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                    <!-- Download SVG icon from http://tabler.io/icons/icon/moon -->
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="icon icon-1"
+                                    >
+                                        <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                                    </svg>
+                                </a>
+                                <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                    <!-- Download SVG icon from http://tabler.io/icons/icon/sun -->
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="icon icon-1"
+                                    >
+                                        <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                        <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        {if !empty($dp_admin_can_clear_cache)}
+                        <div class="nav-item d-none d-md-flex">
+                            <a href="{$dp_admin_clear_cache_url|default='#'}" class="nav-link px-0 dp-clear-cache-trigger" title="清空缓存" aria-label="清空缓存" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                <i class="dp-icon ti ti-trash"></i>
+                            </a>
+                        </div>
+                        {/if}
+                        {include file="$dp_admin_topbar_slots_template" /}
+                        {include file="$dp_admin_current_user_dropdown_template" /}
+                        <div class="d-none" data-dp-app-switcher-source>
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">应用切换</div>
+                                </div>
+                                <div class="card-body scroll-y p-2" style="max-height: 50vh">
+                                    <div class="row g-0">
+                                        {volist name="navigationContext.appSwitcherApps|default=[]" id="appItem"}
+                                        <div class="col-4">
+                                            <a
+                                                    href="{$appItem.url|default='#'}"
+                                                    class="d-flex flex-column flex-center text-center text-secondary py-2 px-2 link-hoverable dp-app-switcher-entry {if !empty($appItem.is_current)}is-current{/if}"
+                                                    data-dp-app-switch="1"
+                                                    data-dp-app-name="{$appItem.name|default=''}"
+                                                    data-dp-app-url="{$appItem.url|default=''}"
+                                                    data-dp-app-route="{$appItem.route|default=''}"
+                                                    data-dp-app-title="{$appItem.title|default=''}"
+                                                    data-dp-app-icon="{$appItem.icon|default='ti ti-apps'}"
+                                                    data-dp-app-image="{$appItem.image|default=''}"
+                                            >
+                                                {if !empty($appItem.image)}
+                                                <img src="{$appItem.image}" class="dp-app-switcher-app-image mx-auto mb-2" width="40" height="40" alt="{$appItem.title|default='应用'}" />
+                                                {else /}
+                                                <span class="dp-app-switcher-app-icon mx-auto mb-2">
+                    <i class="dp-icon {$appItem.icon|default='ti ti-apps'}"></i>
+                </span>
+                                                {/if}
+                                                <span class="h5 mb-0">{$appItem.title|default='未命名应用'}</span>
+                                            </a>
+                                        </div>
+                                        {/volist}
+
+                                        {if empty($navigationContext.appSwitcherApps)}
+                                        <div class="col-12">
+                                            <div class="dp-app-switcher-empty text-secondary text-center py-4">当前没有可切换的应用</div>
+                                        </div>
+                                        {/if}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <div class="collapse navbar-collapse">
+                            <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                                <div class="navbar-nav">
+                                    <div class="nav-item">
+                                        <a class="nav-link px-0" href="#" id="sidebarToggleBtn" title="切换侧栏" aria-label="切换侧栏">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1 icon-state icon-collapse">
+                                                <path d="M4 4h16v16H4z" fill="none" />
+                                                <path d="M9 4v16" />
+                                                <path d="M7 12l2 2v-4z" />
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1 icon-state icon-expand">
+                                                <path d="M4 4h16v16H4z" fill="none" />
+                                                <path d="M15 4v16" />
+                                                <path d="M17 12l-2 -2v4z" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="favorite-bar d-flex align-items-center mt-2 mt-md-0" id="favoriteBar">
+                                    <div class="favorite-items d-flex align-items-center" id="favoriteItems"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="me-2 menu-search">
+                            <div class="menu-search-wrapper dropdown">
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                                    </span>
+                                    <input type="text" value="" class="form-control" placeholder="搜索菜单…" aria-label="菜单搜索" id="menuSearchInput" autocomplete="off">
+                                    <span class="input-icon-addon cursor-pointer d-none" id="menuSearchClear" role="button" aria-label="清除搜索" title="清除搜索">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M18 6l-12 12"/>
+                                            <path d="M6 6l12 12"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="dropdown-menu menu-search-results shadow-sm" id="menuSearchResults"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {eq name="Think.config.system.tab_mode" value="iframe"}
+            <!-- BEGIN HORIZONTAL TAB MENU -->
+            <div class="navbar-tabs-container border-bottom d-print-none">
+                <div class="container-xl">
+                    <!-- 左滚动箭头 -->
+                    <button class="tab-scroll-btn tab-scroll-left" id="tabScrollLeft" aria-label="向左滚动标签页">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+
+                    <!-- 标签页容器 -->
+                    <div class="tabs-wrapper nav-tabs-scrollable">
+                        <!-- 固定标签区域 -->
+                        <ul class="nav nav-tabs pinned-tabs" id="pinnedTabs" role="tablist" data-bs-toggle="tabs">
+                        </ul>
+
+                        <!-- 分隔线 -->
+                        <div class="tabs-separator" id="tabsSeparator" style="display: none;">
+                            <div class="separator-line"></div>
+                        </div>
+
+                        <!-- 普通标签区域 -->
+                        <ul class="nav nav-tabs normal-tabs" id="openedTabs" role="tablist" data-bs-toggle="tabs">
+                            <!-- 工作台标签（固定不可关闭） -->
+                            <li class="nav-item home-tab" role="presentation" data-tab-id="dashboard" data-tab-permanent="true">
+                                <a href="#tab-home" class="nav-link active d-flex align-items-center"
+                                   data-bs-toggle="tab" role="tab" aria-controls="tab-home" aria-selected="true">
+                                    <span class="icon-wrapper">
+                                        <span class="icon-loading-ring"></span>
+                                        <i class="icon ti ti-layout-dashboard"></i>
+                                    </span>
+                                    <span class="tab-title">工作台</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 右滚动箭头 -->
+                    <button class="tab-scroll-btn tab-scroll-right" id="tabScrollRight" aria-label="向右滚动标签页">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </button>
+
+                    <!-- 标签批量操作下拉菜单 -->
+                    <div class="tab-actions-dropdown">
+                        <button class="tab-actions-btn" id="tabActionsBtn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="标签页批量操作">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" id="tabCloseCurrent">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <path d="m18 6-12 12"/>
+                                    <path d="m6 6 12 12"/>
+                                </svg>
+                                关闭当前
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" id="tabCloseOthers">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <path d="m18 6-12 12"/>
+                                    <path d="m6 6 12 12"/>
+                                </svg>
+                                关闭其他
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" id="tabCloseRight">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <path d="m18 6-12 12"/>
+                                    <path d="m6 6 12 12"/>
+                                </svg>
+                                关闭右侧
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="tabCloseAll">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                                    <path d="M3 6h18"/>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c0-1 1-2 2-2v2"/>
+                                    <path d="m9 11 6 0"/>
+                                    <path d="m9 15 6 0"/>
+                                </svg>
+                                关闭全部标签
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END HORIZONTAL TAB MENU -->
+            {/eq}
+        </div>
+
+        {eq name="dp_page_header" value='show'}
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        {notempty name="dp_page_pre_title"}
+                        <div class="page-pretitle">
+                            {$dp_page_pre_title}
+                        </div>
+                        {/notempty}
+                        {notempty name="dp_page_title"}
+                        <h2 class="page-title">
+                            {$dp_page_title}
+                        </h2>
+                        {/notempty}
+                    </div>
+                    <!-- Page title actions -->
+                    {notempty name="dp_page_action['top-right']"}
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            {volist name="dp_page_action['top-right']" id="vo"}
+                            <a href="{$vo.href|default='#'}" id="{$vo.id|default=''}" class="{$vo.class|default='btn'}" {$vo.props|default=""|raw}>
+                                {$vo.icon != '' ?= $vo.icon|raw}
+                                {$vo.title|default=''}
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                    {/notempty}
+                </div>
+            </div>
+        </div>
+        {/eq}
+        <!-- Page body - Tab Content -->
+        <div class="page-body">
+            <!-- 标签页内容容器 -->
+            <div class="tab-content" id="tabContent">
+                <!-- 控制面板内容 -->
+                <div class="tab-pane fade active show dp-home-tab-pane" id="tab-home" role="tabpanel" aria-labelledby="tab-home">
+                    <div class="dp-home-workspace-shell" data-dp-home-workspace-shell>
+                        <div class="container-xl home mt-4">
+                            {include file="$dp_admin_workspace_template" /}
+                        </div>
+                        {include file="$dp_admin_workspace_quick_links_offcanvas_template" /}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+            <div class="container-xl">
+                <div class="row text-center align-items-center flex-row-reverse">
+                    <div class="col-md-auto ms-md-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                                    <!-- Download SVG icon from http://tabler.io/icons/icon/heart -->
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="icon text-pink icon-inline icon-4"
+                                    >
+                                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                                    </svg>
+                                    广东卓锐软件有限公司
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-auto mt-1 mt-md-0">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                Copyright &copy; 2025
+                                <a href="." class="link-secondary">{:dp_app_setting('admin', 'layout.footer_text', dp_setting('site.admin_name', 'DolphinPHP') . ' V2.0.0')}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<div class="settings">
+    <a href="#" class="btn btn-floating btn-icon btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSettings">
+        <!-- Download SVG icon from http://tabler.io/icons/icon/brush -->
+        <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-1"
+        >
+            <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
+            <path d="M21 3a16 16 0 0 0 -12.8 10.2" />
+            <path d="M21 3a16 16 0 0 1 -10.2 12.8" />
+            <path d="M10.6 9a9 9 0 0 1 4.4 4.4" />
+        </svg>
+    </a>
+    <form class="offcanvas offcanvas-start offcanvas-narrow" tabindex="-1" id="offcanvasSettings">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title">主题设置</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div>
+                <div class="mb-4">
+                    <label class="form-label">外观模式</label>
+                    <p class="form-hint">为您的应用程序选择颜色模式。</p>
+                    <label class="form-check">
+                        <div class="form-selectgroup-item">
+                            <input type="radio" name="theme" value="light" class="form-check-input" checked />
+                            <div class="form-check-label">明亮</div>
+                        </div>
+                    </label>
+                    <label class="form-check">
+                        <div class="form-selectgroup-item">
+                            <input type="radio" name="theme" value="dark" class="form-check-input" />
+                            <div class="form-check-label">暗黑</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">配色方案</label>
+                    <p class="form-hint">为您的应用程序提供完美的颜色模式。</p>
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="blue" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-blue"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="azure" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-azure"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="indigo" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-indigo"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="purple" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-purple"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="pink" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-pink"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="red" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-red"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="orange" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-orange"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="yellow" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-yellow"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="lime" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-lime"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="green" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-green"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="teal" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-teal"></span>
+                            </label>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-colorinput">
+                                <input name="theme-primary" type="radio" value="cyan" class="form-colorinput-input" />
+                                <span class="form-colorinput-color bg-cyan"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">默认字体</label>
+                    <p class="form-hint">选择适合您应用程序的字体系列。</p>
+                    <div>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-font" value="sans-serif" class="form-check-input" checked />
+                                <div class="form-check-label">Sans-serif</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-font" value="serif" class="form-check-input" />
+                                <div class="form-check-label">Serif</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-font" value="monospace" class="form-check-input" />
+                                <div class="form-check-label">Monospace</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-font" value="comic" class="form-check-input" />
+                                <div class="form-check-label">Comic</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">主题基础</label>
+                    <p class="form-hint">为您的应用选择灰色色调。</p>
+                    <div>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-base" value="slate" class="form-check-input" />
+                                <div class="form-check-label">板岩灰</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-base" value="gray" class="form-check-input" checked />
+                                <div class="form-check-label">灰色</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-base" value="zinc" class="form-check-input" />
+                                <div class="form-check-label">锌灰</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-base" value="neutral" class="form-check-input" />
+                                <div class="form-check-label">中性灰</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-base" value="stone" class="form-check-input" />
+                                <div class="form-check-label">石灰色</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">圆角半径</label>
+                    <p class="form-hint">为您的应用选择边框圆角样式。</p>
+                    <div>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-radius" value="0" class="form-check-input" />
+                                <div class="form-check-label">0</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-radius" value="0.5" class="form-check-input" />
+                                <div class="form-check-label">0.5</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-radius" value="1" class="form-check-input" checked />
+                                <div class="form-check-label">1</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-radius" value="1.5" class="form-check-input" />
+                                <div class="form-check-label">1.5</div>
+                            </div>
+                        </label>
+                        <label class="form-check">
+                            <div class="form-selectgroup-item">
+                                <input type="radio" name="theme-radius" value="2" class="form-check-input" />
+                                <div class="form-check-label">2</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-auto space-y">
+                <button type="button" class="btn w-100" id="reset-changes">
+                    <!-- Download SVG icon from http://tabler.io/icons/icon/rotate -->
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-1"
+                    >
+                        <path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" />
+                    </svg>
+                    重 置
+                </button>
+                <a href="#" class="btn btn-primary w-100" data-bs-dismiss="offcanvas">
+                    <!-- Download SVG icon from http://tabler.io/icons/icon/settings -->
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-1"
+                    >
+                        <path
+                                d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"
+                        />
+                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                    </svg>
+                    保 存
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 标签右键菜单 -->
+<div id="tabContextMenu" class="context-menu" style="display: none;">
+    <div class="context-menu-item" data-action="refresh">
+        <i class="ti ti-refresh me-2"></i>
+        刷新标签
+    </div>
+    <div class="context-menu-item" data-action="pin">
+        <i class="ti ti-pin me-2"></i>
+        固定标签
+    </div>
+    <div class="context-menu-item" data-action="unpin" style="display: none;">
+        <i class="ti ti-pinned-off me-2"></i>
+        取消固定
+    </div>
+    <div class="context-menu-item" data-action="favorite-add">
+        <i class="ti ti-star me-2"></i>
+        收藏标签
+    </div>
+    <div class="context-menu-item" data-action="favorite-remove" style="display: none;">
+        <i class="ti ti-star-off me-2"></i>
+        移出收藏
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" data-action="close-current">
+        <i class="ti ti-x me-2"></i>
+        关闭当前
+    </div>
+    <div class="context-menu-item" data-action="close-others">
+        <i class="ti ti-x me-2"></i>
+        关闭其他
+    </div>
+    <div class="context-menu-item" data-action="close-right">
+        <i class="ti ti-x me-2"></i>
+        关闭右侧
+    </div>
+</div>
+
+<div class="modal modal-blur fade d-lg-none dp-mobile-app-switcher-modal" id="mobile-app-switcher-modal" role="dialog" aria-labelledby="mobile-app-switcher-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mobile-app-switcher-title" data-dp-mobile-app-switcher-title>应用切换</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭应用切换"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="dp-mobile-app-switcher-body" data-dp-mobile-app-switcher-body></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="__LIBS__/jquery/dist/jquery.min.js"></script>
+<script src="__LIBS__/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="__LIBS__/notyf/notyf.min.js"></script>
+<script src="__LIBS__/layui/layui.js"></script>
+<script src="__THEME_JS__/tabler.min.js?1692870487"></script>
+<script src="__JS__/dolphin.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const parsePageActionConfig = function (elem) {
+            const raw = jQuery(elem).attr('data-config') || '';
+            if (!raw) {
+                return {};
+            }
+
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                console.error('解析页面操作按钮配置失败:', e);
+                return {};
+            }
+        };
+
+        const triggerAjaxAction = function ($source, button) {
+            const ajax = button.ajax || {};
+            const method = String(ajax.type || ajax.method || 'post').toLowerCase() === 'get' ? 'get' : 'post';
+            const $temp = jQuery('<a></a>');
+
+            $temp.attr('href', button.url || $source.attr('href') || '');
+            $temp.addClass(method === 'get' ? 'dp-ajax-get' : 'dp-ajax-post');
+
+            if (ajax.form) {
+                $temp.attr('data-form', ajax.form);
+            }
+            if (ajax.no_refresh) {
+                $temp.addClass('no-refresh');
+            }
+            if (ajax.no_forward) {
+                $temp.addClass('no-forward');
+            }
+
+            jQuery('body').append($temp);
+            $temp.trigger('click');
+            setTimeout(function () {
+                $temp.remove();
+            }, 0);
+        };
+
+        const executePageAction = function ($source, button) {
+            const url = button.url || $source.attr('href') || '';
+            const target = button.target || $source.attr('target') || '_self';
+            const pop = button.pop || {};
+            const title = button.title || $source.attr('title') || '';
+
+            if (!jQuery.isEmptyObject(button.ajax || {})) {
+                triggerAjaxAction($source, button);
+                return;
+            }
+
+            if (!jQuery.isEmptyObject(pop)) {
+                Dolphin.pop(url, title, pop);
+                return;
+            }
+
+            if (url) {
+                window.open(url, target);
+            }
+        };
+
+        jQuery(document).on('click', 'a.dp-page-action', function () {
+            const $self = jQuery(this);
+            const button = parsePageActionConfig(this);
+
+            if (jQuery.isEmptyObject(button)) {
+                return false;
+            }
+
+            const action = function () {
+                executePageAction($self, button);
+            };
+
+            if (!jQuery.isEmptyObject(button.confirm || {})) {
+                Dolphin.confirm(
+                    button.confirm.title || '',
+                    button.confirm.text || '',
+                    action,
+                    button.confirm.options || {}
+                );
+            } else {
+                action();
+            }
+
+            return false;
+        });
+
+        jQuery(document).on('click', '.dp-clear-cache-trigger', function () {
+            const $trigger = jQuery(this);
+            if ($trigger.data('loading')) {
+                return false;
+            }
+
+            $trigger.data('loading', true)
+                .addClass('disabled')
+                .attr('aria-disabled', 'true');
+
+            Dolphin.ajax($trigger.attr('href'), 'POST', {}, {
+                success: function (res) {
+                    Dolphin.success((res && res.msg) || '缓存清理成功');
+                },
+                error: function (err) {
+                    Dolphin.error((err && err.msg) || '缓存清理失败');
+                },
+                complete: function () {
+                    $trigger.data('loading', false)
+                        .removeClass('disabled')
+                        .removeAttr('aria-disabled');
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+
+<script src="__LIBS__/sortable/Sortable.min.js"></script>
+<script src="__JS__/admin-workspace-quick-links.js"></script>
+
+{volist name="dp_file_js|default=[]" id="js"}
+<script src="{$js|default=''|raw}?v={:rand(111, 99999)}"></script>
+{/volist}
+
+{volist name="dp_extra_js|default=[]" id="js"}
+{$js|raw|default=''}
+{/volist}
+
+{notempty name="dp_init_js"}
+<script>
+    {volist name="dp_init_js" id="vo"}
+    {$key}.register({$vo|json_encode|raw});
+    {/volist}
+</script>
+{/notempty}
+
+<!-- Page Js -->
+{block name="script"}{/block}
+
+<!-- Custom JS -->
+<script src="__JS__/custom.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var themeConfig = {
+            theme: "light",
+            "theme-base": "gray",
+            "theme-font": "sans-serif",
+            "theme-primary": "blue",
+            "theme-radius": "1",
+        };
+        var url = new URL(window.location);
+        var form = document.getElementById("offcanvasSettings");
+        var resetButton = document.getElementById("reset-changes");
+        var checkItems = function () {
+            for (var key in themeConfig) {
+                var value = window.localStorage["tabler-" + key] || themeConfig[key];
+                if (!!value) {
+                    var radios = form.querySelectorAll(`[name="${key}"]`);
+                    if (!!radios) {
+                        radios.forEach((radio) => {
+                            radio.checked = radio.value === value;
+                        });
+                    }
+                }
+            }
+        };
+        form.addEventListener("change", function (event) {
+            var target = event.target,
+                name = target.name,
+                value = target.value;
+            for (var key in themeConfig) {
+                if (name === key) {
+                    document.documentElement.setAttribute("data-bs-" + key, value);
+                    window.localStorage.setItem("tabler-" + key, value);
+                    url.searchParams.set(key, value);
+                }
+            }
+            window.history.pushState({}, "", url);
+        });
+        resetButton.addEventListener("click", function () {
+            for (var key in themeConfig) {
+                var value = themeConfig[key];
+                document.documentElement.removeAttribute("data-bs-" + key);
+                window.localStorage.removeItem("tabler-" + key);
+                url.searchParams.delete(key);
+            }
+            checkItems();
+            window.history.pushState({}, "", url);
+        });
+        checkItems();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{extend name="layout/wizard" /}
+
+{block name="title"}环境检测 - DolphinPHP 安装向导{/block}
+
+{block name="header"}
+<h1 class="install-section-title">环境检测</h1>
+<p class="install-section-subtitle">
+    服务器环境符合要求后才能继续安装。以下内容均为当前服务器的真实检测结果。
+</p>
+{/block}
+
+{block name="content"}
+<section class="install-environment-panel">
+    <div class="install-status-banner {$report.all_passed ? 'is-success' : 'is-danger'}">
+        <div class="install-status-banner-icon">
+            <i class="fa-solid {$report.all_passed ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+        </div>
+        <div class="install-status-banner-text">
+            <h4>{$report.all_passed ? '环境检测通过，可继续安装' : '环境检测未通过，请先处理异常项'}</h4>
+            <p>
+                {$report.all_passed ? '您的服务器环境基本符合要求，建议根据提示优化可选项以获得最佳体验。' : '当前环境存在未通过项，请根据下表完成修复后再继续安装。'}
+            </p>
+        </div>
+        <div class="install-status-banner-bg-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+    </div>
+
+    <div class="install-table-wrap">
+        <table class="install-env-table">
+            <colgroup>
+                <col class="install-env-col-item">
+                <col class="install-env-col-current">
+                <col class="install-env-col-required">
+                <col class="install-env-col-status">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>检测项</th>
+                    <th>当前环境</th>
+                    <th>要求</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PHP 版本</td>
+                    <td>{$report.php.current|default=''}</td>
+                    <td>>= {$report.php.required|default='8.2.0'}</td>
+                    <td>
+                        <span class="install-status-chip {$report.php.passed ? 'is-pass' : 'is-fail'}">
+                            {$report.php.passed ? '通过' : '失败'}
+                        </span>
+                    </td>
+                </tr>
+                {volist name="report.extensions" id="item"}
+                <tr>
+                    <td>扩展：{$item.name}</td>
+                    <td>{$item.passed ? '已安装' : '未安装'}</td>
+                    <td>必须安装</td>
+                    <td>
+                        <span class="install-status-chip {$item.passed ? 'is-pass' : 'is-fail'}">
+                            {$item.passed ? '通过' : '失败'}
+                        </span>
+                    </td>
+                </tr>
+                {/volist}
+                {volist name="report.paths" id="item"}
+                <tr>
+                    <td>目录权限：{$item.label|default=$item.path}</td>
+                    <td>{$item.passed ? '可写' : '不可写'}</td>
+                    <td>可写</td>
+                    <td>
+                        <span class="install-status-chip {$item.passed ? 'is-pass' : 'is-fail'}">
+                            {$item.passed ? '通过' : '失败'}
+                        </span>
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+    </div>
+    <p class="install-table-note">
+        <i class="ti ti-info-circle"></i>
+        {if $report.all_passed}
+        当前环境满足安装要求，可以继续进入数据库配置。
+        {else /}
+        请先修复未通过的环境项，再点击“重新检测”。
+        {/if}
+    </p>
+</section>
+{/block}
+
+{block name="actions"}
+<div class="install-action-footer-start">
+    <a href="/install/index" class="btn btn-outline-secondary">上一步</a>
+</div>
+<div class="install-action-footer-end">
+    <a href="/install/index/environment" class="btn btn-outline-secondary">重新检测</a>
+    {if $report.all_passed}
+    <a href="/install/index/database" class="btn btn-primary">下一步</a>
+    {else /}
+    <button type="button" class="btn btn-primary" disabled>下一步</button>
+    {/if}
+</div>
+{/block}

@@ -1,32 +1,85 @@
-DolphinPHP
+![](https://www.thinkphp.cn/uploads/images/20230630/300c856765af4d8ae758c503185f8739.png)
+
+ThinkPHP 8.0
 ===============
 
-DophinPHP（海豚PHP）是一个基于ThinkPHP5.1.41 LTS开发的一套开源PHP快速开发框架，DophinPHP秉承极简、极速、极致的开发理念，为开发集成了基于数据-角色的权限管理机制，集成多种灵活快速构建工具，可方便快速扩展的模块、插件、钩子、数据包。统一了模块、插件、钩子、数据包之间的版本和依赖关系，进一步降低了代码和数据的沉余，以方便开发者快速构建自己的应用。
+## 特性
 
-## 功能特性
-### 万事俱备-ZBuilder构建神器
-使用DophinPHP（海豚PHP）自主开发的ZBuilder类，您可以轻松的应对复杂多变的表单、数据列表。数据列表集成类似EXCEL的快速筛选、排序、模糊搜索、AJAX编辑等功能，表单页集成常用的文本、下拉框、单选、多选、关键词、编辑器、文件上传、图片上传、图片裁切等控件，除此之外，您还可以灵活的扩展自己的控件，以便在自己的项目中重复使用。ZBuilder让您更加专注业务逻辑。
+* 基于PHP`8.0+`重构
+* 升级`PSR`依赖
+* 依赖`think-orm`3.0版本
+* `6.0`/`6.1`无缝升级
 
-### 相得益彰-模块化组合
-千变万化的事物之间总是有着千丝万缕的关系，在应用开发的时候，不同的功能、模块甚至数据之间也存在各种依赖关系。在保证模块、插件独立的同时，为了降低代码、数据的沉余，我们将每个模块、插件、数据包加上了唯一的标示和版本号以及彼此之间的依赖关系，保证了应用程序的高内聚低耦合。
 
-### 一举多得-夸平台支持
-DophinPHP（海豚PHP）集成BootStrap、JQuery、Xeditable、Select2等优秀的前端开源框架，基于ThinkPHP5出色的性能和REST支持、远程调试和更好的支持API开发。让您可以一次开发即可直接兼容PC、移动设备和微信界面，通过简单的配置即可快速构建属于自己的Android、IOS的APP。
+> ThinkPHP8.0的运行环境要求PHP8.0.0+
 
-## 鸣谢
-感谢[ThinkPHP](http://www.thinkphp.cn)、[JQuery](http://jquery.com/)、[Bootstrap](http://getbootstrap.com/)、[Xeditable](http://vitalets.github.io/x-editable)、[Select2](https://github.com/select2/select2)等优秀开源项目。
+现在开始，你可以使用官方提供的[ThinkChat](https://chat.topthink.com/)，让你在学习ThinkPHP的旅途中享受私人AI助理服务！
 
-## 官方网站
-[www.dolphinphp.com](http://www.dolphinphp.com)
+![](https://www.topthink.com/uploads/assistant/20230630/4d1a3f0ad2958b49bb8189b7ef824cb0.png)
+
+## 文档
+
+[完全开发手册](https://doc.thinkphp.cn)
+
+## 服务
+
+ThinkPHP生态服务由[顶想云](https://www.topthink.com)（TOPThink Cloud）提供，为生态提供专业的开发者服务和价值之选。
+
+## 赞助
+全新的[赞助计划](https://www.thinkphp.cn/sponsor)可以让你通过我们的网站、手册、欢迎页及GIT仓库获得巨大曝光，同时提升企业的品牌声誉，也更好保障ThinkPHP的可持续发展。
+
+[![](https://www.thinkphp.cn/uploads/images/20230630/48396092a0515886a3da6bd268131c8f.png)](http://github.crmeb.net/u/TPSY)
+
+[![](https://www.thinkphp.cn/uploads/images/20230630/a12bd248beee0e7491dd0f79dc4dd5e9.png)](https://www.thinkphp.cn/sponsor)
+
+[![](https://www.thinkphp.cn/uploads/images/20230630/e7f48d909d41dd5ebaf4a5aa982d0455.png)](https://www.thinkphp.cn/sponsor)
+
+## 安装
+
+~~~
+composer create-project topthink/think tp
+~~~
+
+### DolphinPHP 安装向导
+
+- 首次访问 `/` 或 `/admin` 时，如果项目根目录不存在 `install.lock`，系统会自动跳转到 `/install`
+- 安装向导会完成环境检测、数据库配置写入、`sql/dolphin.sql` 导入和超级管理员初始化
+- 安装完成后会在项目根目录生成 `install.lock`
+
+启动服务
+
+~~~
+cd tp
+php think run
+~~~
+
+然后就可以在浏览器中访问
+
+~~~
+http://localhost:8000
+~~~
+
+如果需要更新框架使用
+~~~
+composer update topthink/framework
+~~~
+
+## 命名规范
+
+`ThinkPHP`遵循PSR-2命名规范和PSR-4自动加载规范。
+
+## 参与开发
+
+直接提交PR或者Issue即可
 
 ## 版权信息
 
-DolphinPHP提供个人非商业用途免费使用，商业需授权。
+ThinkPHP遵循Apache2开源协议发布，并提供免费使用。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2016-2022 广东卓锐软件有限公司 (http://www.zrthink.com)
+版权所有Copyright © 2006-2023 by ThinkPHP (http://thinkphp.cn) All rights reserved。
 
-All rights reserved。
+ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
 
 更多细节参阅 [LICENSE.txt](LICENSE.txt)

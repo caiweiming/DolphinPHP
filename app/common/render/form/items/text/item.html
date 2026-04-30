@@ -1,0 +1,58 @@
+<div class="mb-3 {$inner_width|default=''}">
+    {notpresent name="float"}{php}$float = false;{/php}{/notpresent}
+    {eq name="float" value="true"}
+    <div class="form-floating">
+        <input type="text" class="form-control {$class|default=''}" name="{$name|default=''}" id="{$name|default=''}" value="{$value|default=''}" autocomplete="off" {$props|default=''|raw}>
+        <label>{$label|default=''|dp_clean|raw}</label>
+    </div>
+    {else/}
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|dp_clean|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="input-normal {$input_class|default=''}">
+        {notempty name="prefix"}
+            {notempty name="span_class"}
+                <span class="{$span_class}">{$prefix|default=''|raw}</span>
+            {else/}
+                {$prefix|default=''|raw}
+            {/notempty}
+        {/notempty}
+
+        <input type="text"
+               list="{$name}-datalist"
+               class="form-control {$rounded ?= ' form-control-rounded'} {$flush ?= ' form-control-flush'} {$size|default=''} {$class|default=''}"
+               name="{$name|default=''}"
+               id="{$id|default=''}"
+               value="{$value|default=''}"
+               maxlength="{$max_length|default=''}"
+               minlength="{$min_length|default=''}"
+               autocomplete="off"
+               placeholder="{$placeholder !== null ? $placeholder : '请输入'.(isset($label) ? strip_tags($label) : '')}"
+               {$disabled ?="disabled "}
+               {$readonly ?="readonly "}
+               {$props|default=''|raw}>
+
+        {notempty name="datalist"}
+        <datalist id="{$name}-datalist">
+            {volist name="datalist" id="vo"}
+            <option value="{$vo}"/>
+            {/volist}
+        </datalist>
+        {/notempty}
+
+        {notempty name="suffix"}
+            {notempty name="span_class"}
+                <span class="{$span_class}">{$suffix|default=''|raw}</span>
+            {else/}
+                {$suffix|default=''|raw}
+            {/notempty}
+        {/notempty}
+    </div>
+    {/eq}
+
+    {notempty name="tips"}
+    <small class="{$feedback_class ?: 'form-hint'}">{$tips|dp_clean|raw}</small>
+    {/notempty}
+</div>

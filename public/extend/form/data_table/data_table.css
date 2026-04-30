@@ -1,0 +1,60 @@
+/* 数据表格扩展项样式 */
+.dp-data-table .table {
+    margin-bottom: 0;
+}
+
+.dp-data-table-op-col {
+    width: 120px;
+    min-width: 120px;
+    text-align: center;
+}
+
+.dp-data-table-sort-col,
+.dp-data-table-sort-cell {
+    width: 44px;
+    min-width: 44px;
+    text-align: center;
+}
+
+.dp-data-table-drag-handle {
+    cursor: grab;
+}
+
+.dp-data-table-drag-handle:active {
+    cursor: grabbing;
+}
+
+.dp-data-table-drag-placeholder {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+}
+
+.dp-data-table-empty {
+    display: none;
+    padding: 10px 12px;
+    border: 1px dashed #d0d7de;
+    border-top: 0;
+    color: #6b7280;
+    font-size: 13px;
+    background: #fbfcfd;
+}
+
+.dp-data-table .form-control,
+.dp-data-table .form-select {
+    min-width: 120px;
+}
+
+.dp-data-table-row-sortable td {
+    user-select: none;
+}
+
+.dp-data-table-row-sortable input,
+.dp-data-table-row-sortable select,
+.dp-data-table-row-sortable button:not(.dp-data-table-drag-handle) {
+    user-select: auto;
+}
+
+.dp-data-table-sort-ghost {
+    background: rgba(79, 70, 229, 0.08);
+}

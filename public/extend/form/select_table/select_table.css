@@ -1,0 +1,23 @@
+/* select_table 扩展项样式 */
+.dp-select-table .table {
+    margin-bottom: 0;
+}
+
+.dp-select-table .table th,
+.dp-select-table .table td {
+    vertical-align: middle;
+}
+
+.dp-select-table-empty {
+    padding: 12px;
+    color: #6c757d;
+    border: 1px dashed #d9dee3;
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    font-size: 13px;
+}
+
+.dp-select-table-op-col {
+    width: 90px;
+    white-space: nowrap;
+}

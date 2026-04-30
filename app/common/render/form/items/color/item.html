@@ -1,0 +1,20 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=''}" data-component="color-picker">
+    <label for="{$id|default=''}" class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="input-color coloris {$group_class|default=''}">
+        <input type="text"
+               class="form-control {$size|default=''}"
+               name="{$name|default=''}"
+               id="{$id|default=''}"
+               value="{$value|default=''}"
+               data-options="{$options|default=''|raw}"
+               {$props|default=''|raw}>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

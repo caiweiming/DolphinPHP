@@ -1,0 +1,594 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .app-import-page,
+    .app-import-page * {
+        box-sizing: border-box;
+    }
+
+    .app-import-page {
+        padding: 0 18px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        min-height: 100%;
+    }
+
+    .app-import-card {
+        padding: 22px 22px 18px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06);
+    }
+
+    .app-import-title {
+        margin: 0 0 8px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .app-import-field {
+        margin-top: 18px;
+    }
+
+    .app-import-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        appearance: none;
+    }
+
+    .app-import-dropzone {
+        position: relative;
+        display: block;
+        padding: 22px 20px;
+        border: 1px dashed #93c5fd;
+        border-radius: 18px;
+        background:
+            radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 35%),
+            linear-gradient(180deg, #f8fbff 0%, #f1f7ff 100%);
+        cursor: pointer;
+        transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .app-import-dropzone:hover {
+        border-color: #60a5fa;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.10);
+    }
+
+    .app-import-dropzone.is-dragover,
+    .app-import-dropzone:focus-within {
+        border-color: #2563eb;
+        background:
+            radial-gradient(circle at top right, rgba(59, 130, 246, 0.22), transparent 36%),
+            linear-gradient(180deg, #eff6ff 0%, #e6f0ff 100%);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .app-import-dropzone.is-error {
+        border-color: #ef4444;
+        background:
+            radial-gradient(circle at top right, rgba(248, 113, 113, 0.18), transparent 36%),
+            linear-gradient(180deg, #fff7f7 0%, #fff1f2 100%);
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.10);
+    }
+
+    .app-import-dropzone.is-selected {
+        border-color: #22c55e;
+        background:
+            radial-gradient(circle at top right, rgba(74, 222, 128, 0.16), transparent 36%),
+            linear-gradient(180deg, #f4fff7 0%, #eefcf3 100%);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+    }
+
+    .app-import-dropzone-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .app-import-dropzone-icon {
+        flex: 0 0 auto;
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .app-import-dropzone.is-selected .app-import-dropzone-icon {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        box-shadow: 0 12px 24px rgba(34, 197, 94, 0.22);
+    }
+
+    .app-import-dropzone-body {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .app-import-dropzone-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .app-import-dropzone-desc {
+        margin: 6px 0 0;
+        color: #475569;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .app-import-dropzone-file {
+        display: none;
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.8;
+        font-weight: 700;
+        word-break: break-word;
+    }
+
+    .app-import-dropzone-file.is-visible {
+        display: block;
+    }
+
+    .app-import-tips {
+        margin-top: 10px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .app-import-feedback {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .app-import-feedback.is-visible {
+        display: block;
+    }
+
+    .app-import-feedback-actions {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .app-import-feedback-actions.is-visible {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .app-import-feedback-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border: 1px solid #fecaca;
+        border-radius: 999px;
+        background: #fff;
+        color: #b91c1c;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .app-import-feedback-link:hover {
+        background: #fff5f5;
+        border-color: #fca5a5;
+    }
+
+    .app-import-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .app-import-btn {
+        min-width: 110px;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .app-import-btn-secondary {
+        background: #e2e8f0;
+        color: #334155;
+    }
+
+    .app-import-btn-secondary:hover {
+        background: #cbd5e1;
+    }
+
+    .app-import-btn-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+    }
+
+    .app-import-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.3);
+    }
+
+    @media (max-width: 640px) {
+        .app-import-page {
+            padding: 0 12px;
+        }
+
+        .app-import-card {
+            padding: 18px 16px 16px;
+            border-radius: 14px;
+        }
+
+        .app-import-dropzone {
+            padding: 18px 16px;
+        }
+
+        .app-import-dropzone-head {
+            align-items: flex-start;
+        }
+
+        .app-import-dropzone-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+        }
+
+        .app-import-actions {
+            flex-direction: column-reverse;
+        }
+
+        .app-import-btn {
+            width: 100%;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="app-import-page">
+    <div class="app-import-card">
+        <h2 class="app-import-title">上传应用包</h2>
+
+        <form id="app-import-form" enctype="multipart/form-data" novalidate>
+            {:dp_token_field()}
+            <div class="app-import-field">
+                <label class="app-import-dropzone" id="app-import-dropzone" for="app-package-file">
+                    <input
+                        id="app-package-file"
+                        name="package"
+                        type="file"
+                        class="app-import-input"
+                        accept=".zip,application/zip"
+                        required
+                    >
+                    <div class="app-import-dropzone-head">
+                        <span class="app-import-dropzone-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 16v-9"/>
+                                <path d="M8.5 10.5 12 7l3.5 3.5"/>
+                                <path d="M20 16.5a3.5 3.5 0 0 0-3.2-3.49A5 5 0 0 0 7 12.5a4 4 0 0 0 .5 7.97H16"/>
+                            </svg>
+                        </span>
+                        <div class="app-import-dropzone-body">
+                            <h3 class="app-import-dropzone-title" id="app-import-title">拖入应用 ZIP，或点击这里选择文件</h3>
+                            <p class="app-import-dropzone-desc" id="app-import-desc">
+                                推荐直接上传系统导出的标准应用包。导入前会自动校验目录结构、`app.json` 和安全条目。
+                            </p>
+                            <div class="app-import-dropzone-file" id="app-import-file-display"></div>
+                        </div>
+                    </div>
+                </label>
+                <div class="app-import-feedback" id="app-import-feedback"></div>
+                <div class="app-import-feedback-actions" id="app-import-feedback-actions">
+                    <button type="button" class="app-import-feedback-link" id="app-import-view-logs">查看导入日志</button>
+                </div>
+                <div class="app-import-tips">
+                    仅导入到标准应用目录，不自动安装、不自动启用。若存在同名应用目录，系统会直接拒绝导入。压缩包内部必须包含唯一的 <code>app/&lt;name&gt;/app.json</code>
+                </div>
+            </div>
+
+            <div class="app-import-actions">
+                <button type="button" class="app-import-btn app-import-btn-secondary" id="app-import-cancel">取消</button>
+                <button type="submit" class="app-import-btn app-import-btn-primary" id="app-import-submit">开始导入</button>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    (function () {
+        const $form = $('#app-import-form');
+        const $submit = $('#app-import-submit');
+        const $cancel = $('#app-import-cancel');
+        const $dropzone = $('#app-import-dropzone');
+        const $feedback = $('#app-import-feedback');
+        const $feedbackActions = $('#app-import-feedback-actions');
+        const $viewLogs = $('#app-import-view-logs');
+        const $title = $('#app-import-title');
+        const $desc = $('#app-import-desc');
+        const $fileDisplay = $('#app-import-file-display');
+        const fileInput = document.getElementById('app-package-file');
+        const allowedExtensions = {$allowedExtensionsJson|raw} || [];
+        const maxSizeBytes = Number('{$maxSizeBytes|default=0}');
+        const importLogsUrl = '{$importLogsUrl|raw}';
+        let loading = false;
+
+        const defaultTitle = '拖入应用 ZIP，或点击这里选择文件';
+        const defaultDesc = '推荐直接上传系统导出的标准应用包。导入前会自动校验目录结构、`app.json` 和安全条目。';
+
+        function closePopup() {
+            if (window.parent && parent.layer) {
+                const index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        }
+
+        function handleSuccessResponse(res) {
+            Dolphin.success(res.msg || '应用包导入成功');
+            setTimeout(function () {
+                if (window.parent && parent.DolphinTable && parent.DolphinTable['dp_table']) {
+                    parent.DolphinTable['dp_table'].reloadData('dp_table');
+                }
+                closePopup();
+            }, 1800);
+        }
+
+        function formatFileSize(size) {
+            const num = Number(size) || 0;
+            if (num <= 0) {
+                return '0 B';
+            }
+
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let value = num;
+            let index = 0;
+
+            while (value >= 1024 && index < units.length - 1) {
+                value /= 1024;
+                index += 1;
+            }
+
+            const fixed = index === 0 ? value.toFixed(0) : value.toFixed(2).replace(/\.?0+$/, '');
+            return fixed + ' ' + units[index];
+        }
+
+        function setFeedback(message) {
+            $dropzone.addClass('is-error');
+            $feedback.text(message || '文件校验失败').addClass('is-visible');
+            $feedbackActions.addClass('is-visible');
+        }
+
+        function clearFeedback() {
+            $dropzone.removeClass('is-error');
+            $feedback.text('').removeClass('is-visible');
+            $feedbackActions.removeClass('is-visible');
+        }
+
+        function openImportLogs() {
+            if (window.parent && parent.layer) {
+                parent.layer.open({
+                    type: 2,
+                    title: '应用导入日志',
+                    shadeClose: true,
+                    shade: 0.2,
+                    area: ['980px', '760px'],
+                    content: importLogsUrl
+                });
+                return;
+            }
+
+            window.open(importLogsUrl, '_blank');
+        }
+
+        function applyIdleState() {
+            $dropzone.removeClass('is-selected');
+            $title.text(defaultTitle);
+            $desc.text(defaultDesc);
+            $fileDisplay.text('').removeClass('is-visible');
+        }
+
+        function applySelectedState(file) {
+            const fileText = file.name + ' · ' + formatFileSize(file.size);
+            $dropzone.addClass('is-selected');
+            $title.text('已选择应用包');
+            $desc.text('文件已就绪，点击上传区可重新选择，或直接开始导入。');
+            $fileDisplay.text(fileText).addClass('is-visible');
+        }
+
+        function resetSelectedFile() {
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            applyIdleState();
+        }
+
+        function validateFiles(files) {
+            if (!files || files.length === 0) {
+                return { ok: false, message: '请选择需要导入的 ZIP 应用包' };
+            }
+
+            if (files.length > 1) {
+                return { ok: false, message: '一次只允许上传一个应用 ZIP 包' };
+            }
+
+            const file = files[0];
+            const filename = String(file.name || '');
+            const extension = filename.includes('.') ? filename.split('.').pop().toUpperCase() : '';
+
+            if (!extension || (allowedExtensions.length > 0 && !allowedExtensions.includes(extension))) {
+                return { ok: false, message: '仅支持上传 ' + allowedExtensions.join(' / ') + ' 格式的应用包' };
+            }
+
+            if (maxSizeBytes > 0 && Number(file.size || 0) > maxSizeBytes) {
+                return { ok: false, message: '应用包大小不能超过 ' + formatFileSize(maxSizeBytes) };
+            }
+
+            return { ok: true, file };
+        }
+
+        function syncSelectedFile(file) {
+            if (!file) {
+                resetSelectedFile();
+                return;
+            }
+
+            clearFeedback();
+            applySelectedState(file);
+        }
+
+        function updateSelectedFile() {
+            if (!fileInput) {
+                return;
+            }
+
+            const result = validateFiles(fileInput.files);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                return;
+            }
+
+            syncSelectedFile(result.file);
+        }
+
+        $cancel.on('click', function () {
+            closePopup();
+        });
+
+        $viewLogs.on('click', function () {
+            openImportLogs();
+        });
+
+        if (fileInput) {
+            fileInput.addEventListener('change', updateSelectedFile);
+        }
+
+        $dropzone.on('dragenter dragover', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            clearFeedback();
+            $dropzone.addClass('is-dragover');
+        });
+
+        $dropzone.on('dragleave dragend drop', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $dropzone.removeClass('is-dragover');
+        });
+
+        $dropzone.on('drop', function (event) {
+            if (!fileInput) {
+                return;
+            }
+
+            const originalEvent = event.originalEvent;
+            const files = originalEvent && originalEvent.dataTransfer ? originalEvent.dataTransfer.files : null;
+            if (!files || files.length === 0) {
+                return;
+            }
+
+            const result = validateFiles(files);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                Dolphin.error(result.message);
+                return;
+            }
+
+            if (typeof DataTransfer !== 'undefined') {
+                const transfer = new DataTransfer();
+                transfer.items.add(result.file);
+                fileInput.files = transfer.files;
+            } else {
+                fileInput.files = files;
+            }
+
+            syncSelectedFile(result.file);
+        });
+
+        $form.on('submit', function (event) {
+            event.preventDefault();
+            if (loading) {
+                return false;
+            }
+
+            const result = validateFiles(fileInput ? fileInput.files : null);
+            if (!result.ok) {
+                resetSelectedFile();
+                setFeedback(result.message);
+                Dolphin.error(result.message);
+                return false;
+            }
+
+            clearFeedback();
+            const formData = new FormData(this);
+            loading = true;
+            $submit.prop('disabled', true).addClass('btn-loading disabled');
+
+            Dolphin.ajax(window.location.href, 'POST', formData, {
+                processData: false,
+                contentType: false,
+                showDefaultMsg: false,
+                success: function (res) {
+                    if (res.code === 1) {
+                        handleSuccessResponse(res);
+                        return false;
+                    }
+
+                    setFeedback(res.msg || '应用包导入失败');
+                    Dolphin.error(res.msg || '应用包导入失败');
+                    Dolphin.refreshToken();
+                    return false;
+                },
+                error: function (err) {
+                    let message = '应用包导入失败';
+                    if (err && err.responseJSON) {
+                        message = err.responseJSON.msg || err.responseJSON.message || message;
+                    }
+                    setFeedback(message);
+                    Dolphin.error(message);
+                    Dolphin.refreshToken();
+                    return false;
+                },
+                complete: function () {
+                    loading = false;
+                    $submit.prop('disabled', false).removeClass('btn-loading disabled');
+                }
+            });
+
+            return false;
+        });
+    })();
+</script>
+{/block}

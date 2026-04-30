@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DolphinPHP - 新一代高效 PHP 框架</title>
+    <meta name="description" content="使用 DolphinPHP 体验下一代 PHP 后端开发，将精美工程设计与极致效能完美融合。">
+    <link rel="stylesheet" href="__APP_CSS__/styles.css">
+</head>
+<body>
+
+    <!-- Extremely Subtle Grid Background -->
+    <div class="bg-grid"></div>
+
+    <!-- Header Navigation -->
+    <header class="header" id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="__APP_IMG__/logo-signin.png" style="height: 40px;">
+                <span>Dolphin<span style="color: #f5a623">PHP</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="#features">核心特性</a>
+                <a href="#showcase">开发者体验</a>
+                <a href="#">官方文档</a>
+            </nav>
+            <div style="display: flex; gap: 1rem;">
+                <a href="https://github.com/caiweiming/DolphinPHP" target="_blank" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">GitHub</a>
+                <a href="#" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">立即开始</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero container">
+            <div class="badge-pill reveal">
+                <span>✨ 探索全新 DolphinPHP v2.0-beta &rarr;</span>
+            </div>
+            <h1 class="reveal delay-100">
+                为现代开发者<br>
+                <span class="text-gradient">精心锻造</span>
+            </h1>
+            <p class="hero-subtitle reveal delay-200">
+                DolphinPHP2 彻底消除了后端开发中的繁冗摩擦。体验精美的工程设计、闪电般的性能，以及完全重构的极致开发体验。
+            </p>
+            <div class="hero-actions reveal delay-300">
+                <a href="#features" class="btn btn-outline">阅读开发文档</a>
+            </div>
+
+            <!-- "Show, Don't Tell" - Abstract UI Mockup -->
+            <div class="hero-mockup-wrapper reveal delay-300">
+                <div class="mockup-window" id="hero-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="mockup-sidebar">
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line short"></div>
+                            <br>
+                            <div class="mockup-line primary"></div>
+                            <div class="mockup-line short"></div>
+                            <div class="mockup-line short"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div class="mockup-line short" style="height: 24px; margin-bottom: 2rem;"></div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="mockup-card"></div>
+                                <div class="mockup-card"></div>
+                            </div>
+                            <div class="mockup-card" style="height: 120px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Grid Features Section -->
+        <section id="features" class="section bento-section container">
+            <div class="section-header reveal">
+                <h2>工程化的艺术表达</h2>
+                <p>为您构建高可扩展应用提供了一切所需，且被极其优雅地抽象封装。</p>
+            </div>
+            
+            <div class="bento-grid">
+                <!-- Card 1: 表单构建器 (Spans 2 cols) -->
+                <div class="bento-card col-span-2 reveal">
+                    <div class="bento-content bento-flex-row">
+                        <div class="bento-text-area">
+                            <div class="bento-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                            </div>
+                            <h3>表单构建器</h3>
+                            <p>极其优雅地将业务逻辑转化为表单组件。内置数十种基础及高级输入类型，支持动态联动与复杂校验。</p>
+                        </div>
+                        <div class="bento-visual bento-visual-form">
+                            <div class="micro-render-flow">
+                                <div class="flow-code">
+                                    <div class="fc-line"></div>
+                                    <div class="fc-line indent"></div>
+                                    <div class="fc-line"></div>
+                                </div>
+                                <div class="flow-arrow">&rarr;</div>
+                                <div class="flow-ui">
+                                    <div class="ui-input"></div>
+                                    <div class="ui-input"></div>
+                                    <div class="ui-btn"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: 权限引擎 (1 col) -->
+                <div class="bento-card reveal delay-100">
+                    <div class="bento-content">
+                        <div class="bento-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                <path d="M12 8v4"></path>
+                                <path d="M12 16h.01"></path>
+                            </svg>
+                        </div>
+                        <h3>自适应权限引擎</h3>
+                        <p>创新的注解驱动与动态同步系统，让复杂的 RBAC 权限网随代码实时自我演进和精确映射。</p>
+                        <div class="bento-visual bento-visual-auth">
+                            <div class="auth-mapping-visual">
+                                <div class="auth-core">
+                                    <div class="core-pulse"></div>
+                                </div>
+                                <div class="auth-nodes">
+                                    <div class="auth-node"><div class="node-dot"></div></div>
+                                    <div class="auth-node active"><div class="node-dot"></div></div>
+                                    <div class="auth-node"><div class="node-dot"></div></div>
+                                </div>
+                                <div class="auth-paths">
+                                    <div class="path-line"></div>
+                                    <div class="path-line"></div>
+                                    <div class="path-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: 表格构建器 (1 col) -->
+                <div class="bento-card reveal delay-200">
+                    <div class="bento-content">
+                        <div class="bento-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                                <line x1="3" y1="15" x2="21" y2="15"></line>
+                                <line x1="9" y1="9" x2="9" y2="21"></line>
+                            </svg>
+                        </div>
+                        <h3>表格构建器</h3>
+                        <p>快速装载海量数据。原生支持排序、筛选、分页与行内快速编辑，打造极致后台体验。</p>
+                        <div class="bento-visual bento-visual-table">
+                            <div class="micro-table">
+                                <div class="t-header">
+                                    <div class="t-check"></div><div class="t-col"></div><div class="t-col short"></div>
+                                </div>
+                                <div class="t-row">
+                                    <div class="t-check active"></div><div class="t-cell"></div><div class="t-cell short"></div>
+                                </div>
+                                <div class="t-row">
+                                    <div class="t-check"></div><div class="t-cell"></div><div class="t-cell short"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: 图表构建器 (1 col) -->
+                <div class="bento-card reveal delay-300">
+                    <div class="bento-content">
+                        <div class="bento-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </div>
+                        <h3>图表构建器</h3>
+                        <p>数据驱动的洞察力。通过简单且高度抽象的 API 即可渲染出高性能的交互式统计图表。</p>
+                        <div class="bento-visual bento-visual-chart">
+                            <div class="micro-chart">
+                                <div class="bar bar-1"></div>
+                                <div class="bar bar-2"></div>
+                                <div class="bar bar-3"></div>
+                                <div class="bar bar-4"></div>
+                                <div class="chart-axis"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: 插件系统 (1 col) -->
+                <div class="bento-card reveal delay-300">
+                    <div class="bento-content">
+                        <div class="bento-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <h3>插件系统</h3>
+                        <p>高度可扩展的底层架构。支持模块的热插拔，让您的系统功能随时无缝拓展，永不设限。</p>
+                        <div class="bento-visual bento-visual-plugin">
+                            <div class="puzzle-visual">
+                                <div class="puzzle-base">
+                                    <div class="p-piece p-base-1"></div>
+                                    <div class="p-piece p-base-2"></div>
+                                    <div class="p-piece p-base-3"></div>
+                                </div>
+                                <div class="p-piece p-plugin">
+                                    <div class="p-glow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dark Contrast Code Section -->
+        <section id="showcase" class="dark-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>用最少的代码，做最多的事。</h2>
+                    <p>体验如同写诗一般的编程接口。纯粹、优雅、毫无多余的样板代码。</p>
+                </div>
+                
+                <div class="code-window reveal delay-100">
+                    <div class="code-header">
+                        <div class="mockup-dots">
+                            <span style="background: #ef4444;"></span>
+                            <span style="background: #f59e0b;"></span>
+                            <span style="background: #10b981;"></span>
+                        </div>
+                        <div class="code-tabs">
+                            <button class="code-tab active" data-target="code-form">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                                表单构建
+                            </button>
+                            <button class="code-tab" data-target="code-table">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>
+                                表格构建
+                            </button>
+                            <button class="code-tab" data-target="code-chart">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                                图表构建
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Code Snippet -->
+                    <div id="code-form" class="code-body active">
+<span class="code-line"><span class="c-comment">// 在控制器中快速构建交互表单</span></span><span class="code-line"><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">form</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">item</span><span class="c-punctuation">([</span><span class="c-string">'type'</span> <span class="c-operator">=></span> <span class="c-string">'text'</span><span class="c-punctuation">,</span> <span class="c-string">'name'</span> <span class="c-operator">=></span> <span class="c-string">'username'</span><span class="c-punctuation">,</span> <span class="c-string">'label'</span> <span class="c-operator">=></span> <span class="c-string">'用户名'</span><span class="c-punctuation">])</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">item</span><span class="c-punctuation">([</span><span class="c-string">'type'</span> <span class="c-operator">=></span> <span class="c-string">'password'</span><span class="c-punctuation">,</span> <span class="c-string">'name'</span> <span class="c-operator">=></span> <span class="c-string">'pwd'</span><span class="c-punctuation">,</span> <span class="c-string">'label'</span> <span class="c-operator">=></span> <span class="c-string">'密码'</span><span class="c-punctuation">])</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">item</span><span class="c-punctuation">([</span><span class="c-string">'type'</span> <span class="c-operator">=></span> <span class="c-string">'image'</span><span class="c-punctuation">,</span> <span class="c-string">'name'</span> <span class="c-operator">=></span> <span class="c-string">'avatar'</span><span class="c-punctuation">,</span> <span class="c-string">'label'</span> <span class="c-operator">=></span> <span class="c-string">'头像'</span><span class="c-punctuation">])</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">item</span><span class="c-punctuation">([</span><span class="c-string">'type'</span> <span class="c-operator">=></span> <span class="c-string">'switch'</span><span class="c-punctuation">,</span> <span class="c-string">'name'</span> <span class="c-operator">=></span> <span class="c-string">'status'</span><span class="c-punctuation">,</span> <span class="c-string">'label'</span> <span class="c-operator">=></span> <span class="c-string">'状态'</span><span class="c-punctuation">]);</span></span><span class="code-line"></span><span class="code-line"><span class="c-comment">// 将表单实例装载入页面容器</span></span><span class="code-line"><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">page</span><span class="c-punctuation">-></span><span class="c-function">row</span><span class="c-punctuation">(</span><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">form</span><span class="c-punctuation">);</span></span><span class="code-line"></span><span class="code-line"><span class="c-keyword">return</span> <span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-function">fetch</span><span class="c-punctuation">();</span></span><span class="code-line"><span class="c-comment">// 极其高效的开发体验</span></span></div>
+
+                    <!-- Table Code Snippet -->
+                    <div id="code-table" class="code-body">
+<span class="code-line"><span class="c-comment">// 一行代码开启搜索、分页与排序</span></span><span class="code-line"><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">table</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">search</span><span class="c-punctuation">(</span><span class="c-string">'username,mobile,status'</span><span class="c-punctuation">)</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">columns</span><span class="c-punctuation">([</span></span><span class="code-line">        <span class="c-punctuation">[</span><span class="c-string">'id'</span><span class="c-punctuation">,</span> <span class="c-string">'ID'</span><span class="c-punctuation">],</span> <span class="c-punctuation">[</span><span class="c-string">'username'</span><span class="c-punctuation">,</span> <span class="c-string">'用户名'</span><span class="c-punctuation">],</span> <span class="c-punctuation">[</span><span class="c-string">'status'</span><span class="c-punctuation">,</span> <span class="c-string">'状态'</span><span class="c-punctuation">,</span> <span class="c-string">'switch'</span><span class="c-punctuation">]</span></span><span class="code-line">    <span class="c-punctuation">])</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">toolbar</span><span class="c-punctuation">([</span><span class="c-string">'add'</span><span class="c-punctuation">,</span> <span class="c-string">'enable'</span><span class="c-punctuation">,</span> <span class="c-string">'disable'</span><span class="c-punctuation">,</span> <span class="c-string">'delete'</span><span class="c-punctuation">]);</span></span><span class="code-line"></span><span class="code-line"><span class="c-comment">// 将表格实例装载入页面容器</span></span><span class="code-line"><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">page</span><span class="c-punctuation">-></span><span class="c-function">row</span><span class="c-punctuation">(</span><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">table</span><span class="c-punctuation">);</span></span><span class="code-line"></span><span class="code-line"><span class="c-keyword">return</span> <span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-function">fetch</span><span class="c-punctuation">();</span></span></div>
+
+                    <!-- Chart Code Snippet -->
+                    <div id="code-chart" class="code-body">
+<span class="code-line"><span class="c-comment">// 简单抽象，渲染高性能统计图表</span></span><span class="code-line"><span class="c-keyword">$chart</span> <span class="c-operator">=</span> <span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">chart</span><span class="c-punctuation">-></span><span class="c-function">init</span><span class="c-punctuation">(</span><span class="c-string">'sales_chart'</span><span class="c-punctuation">)</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">title</span><span class="c-punctuation">(</span><span class="c-string">'销售趋势'</span><span class="c-punctuation">)</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">type</span><span class="c-punctuation">(</span><span class="c-string">'bar'</span><span class="c-punctuation">)</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">height</span><span class="c-punctuation">(</span><span class="c-number">300</span><span class="c-punctuation">)</span></span><span class="code-line">    <span class="c-punctuation">-></span><span class="c-function">data</span><span class="c-punctuation">(</span><span class="c-keyword">$data</span><span class="c-punctuation">);</span></span><span class="code-line"></span><span class="code-line"><span class="c-comment">// 将图表实例装载入页面并渲染</span></span><span class="code-line"><span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-text">page</span><span class="c-punctuation">-></span><span class="c-function">row</span><span class="c-punctuation">(</span><span class="c-keyword">$chart</span><span class="c-punctuation">);</span></span><span class="code-line"></span><span class="code-line"><span class="c-keyword">return</span> <span class="c-keyword">$this</span><span class="c-punctuation">-></span><span class="c-function">fetch</span><span class="c-punctuation">();</span></span><span class="code-line"><span class="c-comment">// 自动适配多端显示</span></span></div>
+                </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 4rem;" class="reveal delay-200">
+                    <a href="#" class="btn btn-outline">探索完整 API 文档</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section container">
+            <div class="reveal">
+                <h2 class="text-gradient">准备好体验流式开发了吗？</h2>
+                <p style="margin-bottom: 2.5rem;">加入成千上万使用 DolphinPHP 的开发者，将灵感极速转化为卓越的 Web 应用。</p>
+                <a href="#" class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">免费获取 DolphinPHP2</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">
+                    <span>Dolphin<span style="color: #f5a623">PHP</span>2</span>
+                </div>
+                <p style="font-size: 0.95rem; max-width: 250px;">
+                    追求优雅与高效的现代 PHP 后台开发框架。
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>核心功能</h4>
+                <ul>
+                    <li><a href="#">表单构建器</a></li>
+                    <li><a href="#">表格渲染器</a></li>
+                    <li><a href="#">更新日志</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>开发者资源</h4>
+                <ul>
+                    <li><a href="#">官方文档</a></li>
+                    <li><a href="#">开发指南</a></li>
+                    <li><a href="#">API 参考</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>社区与支持</h4>
+                <ul>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">GitHub 仓库</a></li>
+                    <li><a href="#">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 DolphinPHP. All rights reserved.</span>
+            <div style="display: flex; gap: 1.5rem;">
+                <a href="#" style="color: inherit; text-decoration: none;">隐私政策</a>
+                <a href="#" style="color: inherit; text-decoration: none;">服务条款</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="__APP_JS__/main.js"></script>
+</body>
+</html>

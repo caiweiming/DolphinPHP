@@ -1,0 +1,18 @@
+<div class="mb-3 {$inner_width|default=''}" id="{$_form_id|default='dp'}-{$id|default=$name|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}</label>
+
+    <div class="dp-form-extend-{{type_identifier}}">
+        <input type="text"
+               class="form-control js-{{type_identifier}}"
+               name="{$name|default=''}"
+               id="{$id|default=$name|default=''}"
+               value="{$value|default=''}"
+               placeholder="{$placeholder|default=''}"
+               data-options="{$props|default=''|raw}"
+               {$input_attr|default=''|raw}>
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

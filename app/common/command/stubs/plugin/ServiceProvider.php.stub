@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+namespace {{plugin_namespace}};
+
+use app\common\plugin\AbstractPluginServiceProvider;
+
+/**
+ * {{plugin_title}} 服务提供者
+ */
+class ServiceProvider extends AbstractPluginServiceProvider
+{
+    /**
+     * 注册插件能力
+     * @return void
+     */
+    protected function registerPlugin(): void
+    {
+    }
+
+    /**
+     * 启动插件逻辑
+     * @return void
+     */
+    protected function bootPlugin(): void
+    {
+    }
+}

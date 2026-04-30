@@ -1,0 +1,24 @@
+<div class="mb-3 {$inner_width|default=''}">
+    <label class="form-label {$required ?= 'required'}">{$label|default=''|raw}
+        {notempty name="help"}
+        <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
+        {/notempty}
+    </label>
+    <div class="row g-2">
+        {notempty name="options"}
+        {volist name="options" id="option"}
+        {php}$key = (string)$key;{/php}
+        <div class="col-auto">
+            <label class="form-colorinput {$option.label_class|default=''}">
+                <input name="{$name}" type="{$multiple ? 'checkbox' : 'radio'}" value="{$key}" class="form-colorinput-input" {eq name="key" value="$value|default=''"}checked {/eq} {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
+                <span class="form-colorinput-color {$option.class|default=''} {$circle == true ? 'rounded-circle' : ''}" style="{$option.style|default=''}"></span>
+            </label>
+        </div>
+        {/volist}
+        {/notempty}
+    </div>
+
+    {notempty name="tips"}
+    <small class="form-hint">{$tips|raw}</small>
+    {/notempty}
+</div>

@@ -1,0 +1,156 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<style>
+    .app-log-detail-page {
+        padding: 0 18px 18px;
+        background: linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
+        min-height: 100%;
+    }
+
+    .app-log-detail-card {
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .app-log-detail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px;
+        border-bottom: 1px solid #eef2f7;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .app-log-detail-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .app-log-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 72px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .app-log-status-success {
+        color: #166534;
+        background: #dcfce7;
+    }
+
+    .app-log-status-danger {
+        color: #b91c1c;
+        background: #fee2e2;
+    }
+
+    .app-log-status-default {
+        color: #475569;
+        background: #e2e8f0;
+    }
+
+    .app-log-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 16px 18px;
+    }
+
+    .app-log-detail-item {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #edf2f7;
+    }
+
+    .app-log-detail-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+    }
+
+    .app-log-detail-value {
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.7;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .app-log-content {
+        padding: 0 18px 18px;
+    }
+
+    .app-log-content-title {
+        margin: 0 0 10px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .app-log-code {
+        margin: 0 0 14px;
+        padding: 14px 16px;
+        max-height: 320px;
+        overflow: auto;
+        background: #0f172a;
+        color: #dbeafe;
+        font-size: 13px;
+        line-height: 1.7;
+        font-family: Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .app-log-detail-page {
+            padding: 12px;
+        }
+
+        .app-log-detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{/block}
+
+{block name="container"}
+<div class="app-log-detail-page">
+    <section class="app-log-detail-card">
+        <div class="app-log-detail-head">
+            <h3 class="app-log-detail-title">{$appLogTitle|htmlspecialchars}</h3>
+            <span class="app-log-status app-log-status-{$statusClass}">{$statusText|htmlspecialchars}</span>
+        </div>
+
+        <div class="app-log-detail-grid">
+            {foreach $detailRows as $item}
+            <div class="app-log-detail-item">
+                <span class="app-log-detail-label">{$item.label|htmlspecialchars}</span>
+                <div class="app-log-detail-value">{$item.value|htmlspecialchars}</div>
+            </div>
+            {/foreach}
+        </div>
+
+        <div class="app-log-content">
+            <h4 class="app-log-content-title">消息</h4>
+            <pre class="app-log-code">{$messageText|htmlspecialchars}</pre>
+
+            <h4 class="app-log-content-title">上下文</h4>
+            <pre class="app-log-code">{$contextText|htmlspecialchars}</pre>
+        </div>
+    </section>
+</div>
+{/block}
