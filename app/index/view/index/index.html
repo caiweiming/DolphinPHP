@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DolphinPHP - 新一代高效 PHP 框架</title>
     <meta name="description" content="使用 DolphinPHP 体验下一代 PHP 后端开发，将精美工程设计与极致效能完美融合。">
-    <link rel="stylesheet" href="__APP_CSS__/styles.css">
+    <link rel="stylesheet" href="__APP_CSS__/styles.css?v={:filemtime(public_path() . 'apps/index/css/styles.css')}">
 </head>
 <body>
 
@@ -101,17 +101,52 @@
                             <p>极其优雅地将业务逻辑转化为表单组件。内置数十种基础及高级输入类型，支持动态联动与复杂校验。</p>
                         </div>
                         <div class="bento-visual bento-visual-form">
-                            <div class="micro-render-flow">
-                                <div class="flow-code">
-                                    <div class="fc-line"></div>
-                                    <div class="fc-line indent"></div>
-                                    <div class="fc-line"></div>
+                            <div class="form-builder-visual">
+                                <div class="builder-sidebar">
+                                    <div class="builder-pill"></div>
+                                    <div class="builder-field-group">
+                                        <div class="builder-field active">
+                                            <span class="field-dot"></span>
+                                            <span class="field-line"></span>
+                                        </div>
+                                        <div class="builder-field">
+                                            <span class="field-dot"></span>
+                                            <span class="field-line short"></span>
+                                        </div>
+                                        <div class="builder-field">
+                                            <span class="field-dot"></span>
+                                            <span class="field-line"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="flow-arrow">&rarr;</div>
-                                <div class="flow-ui">
-                                    <div class="ui-input"></div>
-                                    <div class="ui-input"></div>
-                                    <div class="ui-btn"></div>
+                                <div class="builder-link-flow">
+                                    <div class="builder-link builder-link-top"></div>
+                                    <div class="builder-link builder-link-mid"></div>
+                                    <div class="builder-link builder-link-bottom"></div>
+                                    <div class="builder-link-arrow"></div>
+                                </div>
+                                <div class="builder-preview">
+                                    <div class="preview-header">
+                                        <div class="preview-title"></div>
+                                        <div class="preview-badge"></div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-label"></div>
+                                        <div class="preview-input focused"></div>
+                                    </div>
+                                    <div class="preview-field split">
+                                        <div class="preview-input short"></div>
+                                        <div class="preview-toggle">
+                                            <span class="toggle-knob"></span>
+                                        </div>
+                                    </div>
+                                    <div class="preview-field">
+                                        <div class="preview-textarea"></div>
+                                    </div>
+                                    <div class="preview-footer">
+                                        <div class="preview-chip success"></div>
+                                        <div class="preview-button"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +335,7 @@
                 <div class="footer-brand">
                     <span>Dolphin<span style="color: #f5a623">PHP</span>2</span>
                 </div>
-                <p style="font-size: 0.95rem; max-width: 250px;">
+                <p class="footer-description">
                     追求优雅与高效的现代 PHP 后台开发框架。
                 </p>
             </div>
@@ -331,7 +366,7 @@
         </div>
         <div class="footer-bottom">
             <span>&copy; 2026 DolphinPHP. All rights reserved.</span>
-            <div style="display: flex; gap: 1.5rem;">
+            <div class="footer-meta-links">
                 <a href="#" style="color: inherit; text-decoration: none;">隐私政策</a>
                 <a href="#" style="color: inherit; text-decoration: none;">服务条款</a>
             </div>
