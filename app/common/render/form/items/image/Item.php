@@ -49,7 +49,7 @@ class Item extends FormItem
     public function handle(array $params = [], FormRender $formRender = null): array
     {
         // 默认上传驱动
-        $this->default['driver'] = config('upload.default');
+        $this->default['driver'] = dp_setting('upload.default_driver', config('upload.default', 'local'));
 
         // 合并参数
         $params = array_merge($this->default, $params);

@@ -837,7 +837,7 @@ class Form extends Common implements FormRenderInterface
             $item = UploadDriverManager::processItem($item);
 
             // 获取驱动名称和实例
-            $driverName = $item['driver'] ?? config('upload.default', 'local');
+            $driverName = $item['driver'] ?? dp_setting('upload.default_driver', config('upload.default', 'local'));
             $driver     = UploadDriverManager::driver($driverName, $item);
 
             // 使用AssetManager加载资源（保持原有行为）
@@ -874,7 +874,7 @@ class Form extends Common implements FormRenderInterface
      */
     private function parseUploadDriverLegacy(array $item = []): array
     {
-        $item['driver'] = $item['driver'] ?? Config::get('upload.default');
+        $item['driver'] = $item['driver'] ?? dp_setting('upload.default_driver', Config::get('upload.default', 'local'));
 
         // 安全检查：防止类名注入
         $allowedDrivers = Config::get('upload.allowed_drivers', []);

@@ -213,7 +213,7 @@ class UploadDriverManager
      */
     public static function processItem(array $item, string $driver = null): array
     {
-        $driver         = $driver ?: $item['driver'] ?? config('upload.default', 'local');
+        $driver         = $driver ?: $item['driver'] ?? dp_setting('upload.default_driver', config('upload.default', 'local'));
         $driverInstance = self::driver($driver, $item);
 
         // 调用驱动处理

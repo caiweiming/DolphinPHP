@@ -593,9 +593,9 @@ class Config extends Auth
                 'name'        => 'driver',
                 'label'       => '上传驱动',
                 'options'     => $this->configService->getUploadDriverOptions(),
-                'value'       => (string)config('upload.default', 'local'),
+                'value'       => (string)dp_setting('upload.default_driver', config('upload.default', 'local')),
                 'placeholder' => '请选择上传驱动',
-                'tips'        => '仅图片或文件上传类配置需要设置。',
+                'tips'        => '仅图片或文件上传类配置需要设置。未显式配置时，上传类表单项会优先回退到“默认上传驱动”。',
                 'when'        => $this->buildTypeWhen($editorTypeMap['driver']),
             ],
             [
