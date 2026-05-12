@@ -276,10 +276,7 @@ class File extends Auth
     private function buildAttachmentUploadTip(): string
     {
         $limits   = config('upload.size_limit', []);
-        $template = (string)dp_setting(
-            'upload.attachment_tip',
-            '图片 {image_limit}，视频 {video_limit}，音频 {audio_limit}，文件 {file_limit}。文件上传成功后会自动写入附件表。'
-        );
+        $template = '当前默认驱动：本地存储。图片 {image_limit}，视频 {video_limit}，音频 {audio_limit}，文件 {file_limit}。文件上传成功后会自动写入附件表。';
 
         $replacements = [
             '{image_limit}' => dp_format_size((int)($limits['image'] ?? 0)),
