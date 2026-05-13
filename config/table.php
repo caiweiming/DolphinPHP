@@ -37,12 +37,12 @@ return [
             'submit' => [
                 'show'  => true,
                 'text'  => '搜索',
-                'class' => 'layui-btn',
+                'class' => 'layui-btn layui-btn-primary',
             ],
             'reset'  => [
                 'show'  => true,
                 'text'  => '重置',
-                'class' => 'layui-btn layui-btn-primary',
+                'class' => 'layui-btn',
             ],
         ],
     ],

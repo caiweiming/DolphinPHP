@@ -71,13 +71,13 @@
         <div class="layui-btn-container {$dp_table_search.button_col_class|default='layui-col-xs12'}">
             {if !empty($dp_table_search.buttons.submit.show)}
             <button type="submit"
-                    class="{$dp_table_search.buttons.submit.class|default='layui-btn'}">
+                    class="{$dp_table_search.buttons.submit.class|default='layui-btn layui-btn-primary'}">
                 {$dp_table_search.buttons.submit.text|default='搜索'}
             </button>
             {/if}
             {if !empty($dp_table_search.buttons.reset.show)}
             <button type="reset"
-                    class="{$dp_table_search.buttons.reset.class|default='layui-btn layui-btn-primary'}">
+                    class="{$dp_table_search.buttons.reset.class|default='layui-btn'}">
                 {$dp_table_search.buttons.reset.text|default='重置'}
             </button>
             {/if}

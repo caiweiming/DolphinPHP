@@ -101,14 +101,94 @@ a[data-fslightbox]:hover .avatar {
 }
 
 /*表格按钮*/
+.dp-table .layui-btn {
+    color: var(--tblr-secondary);
+    border: 1px solid var(--tblr-border-color);
+    background: var(--tblr-bg-surface);
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.dp-table .layui-btn:focus,
+.dp-table .layui-btn:hover {
+    color: var(--tblr-primary);
+    border-color: rgba(var(--tblr-primary-rgb), 0.35);
+    background: rgba(var(--tblr-primary-rgb), 0.08);
+    text-decoration: none;
+}
+
+.dp-table .layui-btn:active,
+.dp-table .layui-btn.layui-this {
+    color: var(--tblr-primary);
+    border-color: rgba(var(--tblr-primary-rgb), 0.4);
+    background: rgba(var(--tblr-primary-rgb), 0.16);
+}
+
+.dp-table .layui-btn.layui-btn-primary,
+.dp-table .layui-btn.layui-btn-normal {
+    color: var(--tblr-white);
+    border-color: var(--tblr-primary);
+    background: var(--tblr-primary);
+}
+
+.dp-table .layui-btn.layui-btn-primary:focus,
+.dp-table .layui-btn.layui-btn-primary:hover,
+.dp-table .layui-btn.layui-btn-normal:focus,
+.dp-table .layui-btn.layui-btn-normal:hover {
+    color: var(--tblr-white);
+    border-color: var(--tblr-link-hover-color);
+    background: var(--tblr-link-hover-color);
+}
+
+.dp-table .layui-btn.layui-btn-primary:active,
+.dp-table .layui-btn.layui-btn-normal:active {
+    color: var(--tblr-white);
+    border-color: var(--tblr-link-hover-color);
+    background: var(--tblr-link-hover-color);
+    box-shadow: inset 0 2px 4px rgba(var(--tblr-black-rgb), 0.08);
+}
+
+.dp-table .layui-btn.layui-btn-danger,
+.dp-table .layui-btn.layui-btn-warm {
+    color: var(--tblr-white);
+    border-color: var(--tblr-danger);
+    background: var(--tblr-danger);
+}
+
+.dp-table .layui-btn.layui-btn-danger:focus,
+.dp-table .layui-btn.layui-btn-danger:hover,
+.dp-table .layui-btn.layui-btn-warm:focus,
+.dp-table .layui-btn.layui-btn-warm:hover {
+    color: var(--tblr-white);
+    border-color: rgba(var(--tblr-danger-rgb), 0.92);
+    background: rgba(var(--tblr-danger-rgb), 0.92);
+}
+
+.dp-table .layui-btn.layui-btn-danger:active,
+.dp-table .layui-btn.layui-btn-warm:active {
+    color: var(--tblr-white);
+    border-color: rgba(var(--tblr-danger-rgb), 0.96);
+    background: rgba(var(--tblr-danger-rgb), 0.96);
+    box-shadow: inset 0 2px 4px rgba(var(--tblr-black-rgb), 0.08);
+}
+
+.dp-table .layui-btn.layui-btn-default {
+    color: var(--tblr-secondary);
+    border-color: var(--tblr-border-color);
+    background: var(--tblr-bg-surface);
+}
+
 .laytable-cell-actions .layui-btn:hover {
     text-decoration: none;
 }
 
-.dp-table-action-disabled,
-.dp-table-action-disabled:hover {
+.dp-table .dp-table-action-disabled,
+.dp-table .dp-table-action-disabled:hover {
+    color: var(--tblr-secondary) !important;
+    border-color: var(--tblr-border-color) !important;
+    background: rgba(var(--tblr-secondary-rgb), 0.08) !important;
     opacity: .65;
     text-decoration: none;
+    box-shadow: none;
 }
 
 .layui-input, .layui-select, .layui-textarea {
