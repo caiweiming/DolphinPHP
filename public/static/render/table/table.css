@@ -345,6 +345,10 @@ a[data-fslightbox]:hover .avatar {
     color: #374050;
 }
 
+.layui-form-checkbox[lay-skin=primary]>.layui-icon-indeterminate:before {
+    background-color: var(--tblr-primary);
+}
+
 [data-bs-theme="dark"] .dp-table-view {
     background: var(--tblr-body-bg);
     color: var(--tblr-body-color);
