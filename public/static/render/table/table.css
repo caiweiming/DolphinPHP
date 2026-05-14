@@ -39,9 +39,6 @@ a[data-fslightbox]:hover .avatar {
 .layui-form-checkbox[lay-skin=primary]>.layui-icon-indeterminate {
     border-color: var(--tblr-primary);
 }
-.layui-form-checkbox[lay-skin=primary]>div {
-    color: #ffffff;
-}
 .layui-table-checked {
     background-color: #dbebfb;
 }
@@ -379,6 +376,10 @@ a[data-fslightbox]:hover .avatar {
 [data-bs-theme="dark"] .layui-table-fixed-r {
     border-left-color: var(--tblr-border-color);
     box-shadow: -1px 0 8px rgba(var(--tblr-black-rgb), 0.08);
+}
+
+[data-bs-theme="dark"] .layui-form-checkbox[lay-skin=primary]>div {
+    color: #ffffff;
 }
 
 [data-bs-theme="dark"] .layui-table,

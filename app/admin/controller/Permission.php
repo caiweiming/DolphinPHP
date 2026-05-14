@@ -88,6 +88,26 @@ class Permission extends Auth
         // 配置表格
         $this->table
             ->tree(true)
+            ->search([
+                [
+                    'name'        => 'keyword',
+                    'placeholder' => '权限名称 / 权限标识 / 路由',
+                    'op'          => 'like',
+                    'fields'      => ['name', 'code', 'route'],
+                ],
+                [
+                    'name'        => 'type',
+                    'type'        => 'select',
+                    'placeholder' => '类型',
+                    'options'     => PermissionModel::getTypeList(),
+                ],
+                [
+                    'name'        => 'status',
+                    'type'        => 'select',
+                    'placeholder' => '状态',
+                    'options'     => [1 => '启用', 0 => '禁用'],
+                ],
+            ])
             ->columns([
                 ['id', 'ID', 80],
                 ['name', '权限名称'],
@@ -140,8 +160,87 @@ class Permission extends Auth
      */
     protected function data(): array
     {
-        // 获取权限树形数据
-        return $this->model->getTree(0, null, false);
+        $tree    = $this->model->getTree(0, null, false);
+        $search  = $this->getSearchData(['keyword', 'type', 'status']);
+        $keyword = trim((string)($search['keyword'] ?? ''));
+        $type    = trim((string)($search['type'] ?? ''));
+        $status  = trim((string)($search['status'] ?? ''));
+
+        if ($keyword === '' && $type === '' && $status === '') {
+            return $tree;
+        }
+
+        if ($status !== '') {
+            $tree = $this->filterPermissionTree($tree, static function (array $node) use ($status): bool {
+                return (string)($node['status'] ?? '') === $status;
+            });
+        }
+
+        if ($type !== '') {
+            $tree = $this->filterPermissionTree($tree, static function (array $node) use ($type): bool {
+                return (string)($node['type'] ?? '') === $type;
+            });
+        }
+
+        if ($keyword === '') {
+            return $tree;
+        }
+
+        return $this->filterPermissionTree($tree, function (array $node) use ($keyword): bool {
+            return $this->permissionNodeMatchesKeyword($node, $keyword);
+        });
+    }
+
+    /**
+     * 通用权限树过滤器
+     * @param array $tree
+     * @param callable $matcher
+     * @return array
+     */
+    private function filterPermissionTree(array $tree, callable $matcher): array
+    {
+        $filtered = [];
+
+        foreach ($tree as $node) {
+            if (!is_array($node)) {
+                continue;
+            }
+
+            $children = [];
+            if (!empty($node['children']) && is_array($node['children'])) {
+                $children = $this->filterPermissionTree($node['children'], $matcher);
+            }
+
+            if ($matcher($node) || $children !== []) {
+                $node['children'] = $children;
+                $filtered[]       = $node;
+            }
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * 判断权限节点是否命中关键字
+     * @param array $node
+     * @param string $keyword
+     * @return bool
+     */
+    private function permissionNodeMatchesKeyword(array $node, string $keyword): bool
+    {
+        $haystacks = [
+            (string)($node['name'] ?? ''),
+            (string)($node['code'] ?? ''),
+            (string)($node['route'] ?? ''),
+        ];
+
+        foreach ($haystacks as $haystack) {
+            if ($haystack !== '' && mb_stripos($haystack, $keyword) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
