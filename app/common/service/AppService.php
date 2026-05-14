@@ -781,11 +781,8 @@ class AppService
                 continue;
             }
 
-            $appConfigPath  = $path . DIRECTORY_SEPARATOR . 'app.php';
-            $controllerPath = $path . DIRECTORY_SEPARATOR . 'controller';
-            $isRealAppDir   = is_file($appConfigPath) || is_dir($controllerPath);
-
-            if (!$isRealAppDir) {
+            $appConfigPath = $path . DIRECTORY_SEPARATOR . 'app.php';
+            if (!is_file($appConfigPath)) {
                 continue;
             }
 
