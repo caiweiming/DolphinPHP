@@ -1,0 +1,32 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ 8.0, 8.1, 8.2, 8.3 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+      - name: PHP version and modules
+        run: |
+          php --version
+          php -m
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Run test suite
+        run: php ./vendor/bin/phpunit tests

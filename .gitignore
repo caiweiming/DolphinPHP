@@ -21,10 +21,6 @@ runtime
 .phpunit.cache
 coverage
 
-# AI assistant local instructions
-AGENTS.md
-CLAUDE.md
-
 # Local plugin package workspace
 /dev/*
 !/dev/plugin-packages/
