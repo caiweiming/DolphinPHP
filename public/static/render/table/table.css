@@ -562,8 +562,8 @@ a[data-fslightbox]:hover .avatar {
     border-color: var(--tblr-border-color);
 }
 
-[data-bs-theme="dark"] .layui-laypage .layui-laypage-curr .layui-laypage-em,
-[data-bs-theme="dark"] .layui-laypage .layui-laypage-curr em:not(.layui-laypage-em) {
+.layui-laypage .layui-laypage-curr .layui-laypage-em,
+.layui-laypage .layui-laypage-curr em:not(.layui-laypage-em) {
     background: var(--tblr-primary) !important;
     color: var(--tblr-white) !important;
 }
