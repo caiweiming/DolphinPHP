@@ -797,6 +797,8 @@ body {
     padding: 0;
     font-size: 8px;
     opacity: 0.5;
+    visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.2s ease, background-color 0.2s ease;
     border-radius: 50%;
     width: 14px;
@@ -819,6 +821,14 @@ body {
     background-color: #dc2626;
     color: #ffffff;
     transform: scale(1.1);
+}
+
+.navbar-tabs-container .nav-link:hover .btn-close-tab,
+.navbar-tabs-container .nav-link:focus-within .btn-close-tab,
+.navbar-tabs-container .nav-link.active .btn-close-tab {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* 标签页图标样式 - Tab Icon */
@@ -1521,17 +1531,19 @@ body:not(.sidebar-collapsed) #sidebarToggleBtn .icon-collapse {
 }
 
 [data-bs-theme="dark"] .navbar-tabs-container .nav-link:hover:not(.active) {
-    background-color: #374151;
-    color: #f3f4f6;
-}
-
-[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active {
-    background-color: #374151;
+    background-color: rgba(var(--tblr-primary-rgb), 0.16);
     color: var(--tblr-navbar-active-color);
 }
 
+[data-bs-theme="dark"] .navbar-tabs-container .nav-link.active {
+    background-color: rgba(var(--tblr-primary-rgb), 0.22);
+    color: var(--tblr-navbar-active-color);
+    border-color: rgba(var(--tblr-primary-rgb), 0.35);
+    box-shadow: none;
+}
+
 [data-bs-theme="dark"] .navbar-tabs-container .nav-link.active:hover {
-    background-color: #4b5563;
+    background-color: rgba(var(--tblr-primary-rgb), 0.28);
 }
 
 [data-bs-theme="dark"] .navbar-tabs-container .btn-close-tab:hover {
