@@ -1,0 +1,90 @@
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你参与测试版反馈。
+
+        如果这是故障或异常问题，请尽量填写完整信息，尤其是版本、环境、复现步骤和日志，这会显著提高排查效率。
+  - type: input
+    id: version
+    attributes:
+      label: 当前版本
+      description: 请填写你正在使用的 DolphinPHP 版本
+      placeholder: 例如 1.0.0-beta.1
+    validations:
+      required: true
+  - type: input
+    id: php_version
+    attributes:
+      label: PHP 版本
+      placeholder: 例如 8.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install_mode
+    attributes:
+      label: 安装方式
+      options:
+        - 全新安装
+        - 升级安装
+        - 插件安装后出现
+        - 不确定
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 请填写系统、Web 服务、数据库、部署方式等信息
+      placeholder: |
+        例如：
+        - OS: Ubuntu 22.04
+        - Web: Nginx 1.24
+        - DB: MySQL 8.0
+        - 部署方式: 宝塔 / Docker / 手动部署
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请按顺序描述如何触发该问题
+      placeholder: |
+        1. 打开后台
+        2. 进入插件管理
+        3. 点击启用某插件
+        4. 出现报错
+    validations:
+      required: true
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: 实际结果
+      placeholder: 实际发生了什么？
+    validations:
+      required: true
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: 期望结果
+      placeholder: 你原本期望发生什么？
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志或截图
+      description: 请粘贴关键错误日志，或补充截图、控制台报错、接口响应等信息
+      render: shell
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: 是否稳定复现
+      options:
+        - 每次都能复现
+        - 偶发
+        - 只出现过一次
+        - 暂不确定
+    validations:
+      required: true

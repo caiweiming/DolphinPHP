@@ -1,0 +1,58 @@
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你提交功能建议。
+
+        请尽量说明使用场景和当前痛点，避免只留下“建议支持 XXX”这一类过于简略的信息。
+  - type: input
+    id: title
+    attributes:
+      label: 需求标题
+      description: 请用一句话概括你的建议
+      placeholder: 例如：建议插件管理支持批量启用
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景
+      description: 请说明你在什么情况下需要这个能力
+      placeholder: 例如：在测试多个插件时，需要频繁逐个启用，效率较低
+    validations:
+      required: true
+  - type: textarea
+    id: pain_point
+    attributes:
+      label: 当前痛点
+      description: 现有流程哪里不顺，或者成本太高
+      placeholder: 例如：当前只能单个操作，步骤重复，容易漏点
+    validations:
+      required: true
+  - type: textarea
+    id: expected_solution
+    attributes:
+      label: 希望的解决方式
+      description: 请描述你理想中的方案
+      placeholder: 例如：支持多选插件后批量启用、批量禁用
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: 当前是否有临时替代方案
+      description: 如果有，请说明当前是如何绕过去的；如果没有，也可以填写“无”
+      placeholder: 例如：目前只能人工逐个操作
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 你认为的优先级
+      options:
+        - 高
+        - 中
+        - 低
+    validations:
+      required: true
