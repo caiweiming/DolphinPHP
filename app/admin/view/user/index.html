@@ -23,10 +23,6 @@ window.handleAssignRole = function(table, tableId, obj, self) {
         '分配角色 - ' + rowData.username,
         {
             area: ['600px', '500px'],
-            success: function(layero, index) {
-                // 弹窗加载成功后的回调
-                console.log('分配角色弹窗已打开');
-            },
             end: function() {
                 // 关闭弹窗后刷新表格
                 table.reload(tableId);

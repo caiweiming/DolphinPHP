@@ -18,10 +18,6 @@ $(function () {
              * @returns {object} 返回一个对象，该对象中的键值对将被合并到上传请求的表单数据中。
              */
             async before(file, fileItem) {
-                // 打印调试信息，方便追踪驱动的执行情况
-                console.log(`[Local Driver] 文件即将上传: ${file.name}`);
-                console.log(`[Local Driver] fileItem: `, fileItem);
-
                 // 返回需要附加到上传请求的额外参数。
                 // 例如，可以指定文件保存的分类、来源等信息。
                 // return {
@@ -37,7 +33,6 @@ $(function () {
              * @param {DolphinFileUploadItem} fileItem - 文件项实例。
              */
             async success(file, result, fileItem) {
-                console.log(`[Local Driver] 文件 ${file.name} 上传成功。`, result);
                 // 可以在这里根据服务器返回的结果执行进一步操作，
                 // 例如更新UI、显示成功消息等。
             },

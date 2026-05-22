@@ -95,7 +95,7 @@ class User extends Base
 
     /**
      * 获取用户信息
-     * @param string $username 用户名/手机号/邮箱
+     * @param string $username 用户名
      * @param bool $withPassword 是否包含密码字段（用于登录验证）
      * @return Model|array|null|User
      * @throws DataNotFoundException
@@ -104,7 +104,6 @@ class User extends Base
      */
     public function getInfo(string $username = '', bool $withPassword = false): Model|array|null|User
     {
-        // TODO:增加手机号、邮箱登录
         $query = $this->where('username', $username);
 
         // 默认不输出password字段
