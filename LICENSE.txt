@@ -1,32 +1,62 @@
+DolphinPHP 产品许可协议
 
-ThinkPHP遵循Apache2开源协议发布，并提供免费使用。
-版权所有Copyright © 2006-2023 by ThinkPHP (http://thinkphp.cn)
-All rights reserved。
-ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
+版权所有 Copyright © 广东卓锐软件有限公司。保留所有权利。
 
-Apache Licence是著名的非盈利开源组织Apache采用的协议。
-该协议和BSD类似，鼓励代码共享和尊重原作者的著作权，
-允许代码修改，再作为开源或商业软件发布。需要满足
-的条件： 
-1． 需要给代码的用户一份Apache Licence ；
-2． 如果你修改了代码，需要在被修改的文件中说明；
-3． 在延伸的代码中（修改和有源代码衍生的代码中）需要
-带有原来代码中的协议，商标，专利声明和其他原来作者规
-定需要包含的说明；
-4． 如果再发布的产品中包含一个Notice文件，则在Notice文
-件中需要带有本协议内容。你可以在Notice中增加自己的
-许可，但不可以表现为对Apache Licence构成更改。 
-具体的协议参考：http://www.apache.org/licenses/LICENSE-2.0
+本许可协议适用于随本文件一同发布、分发或明确引用本文件的 DolphinPHP 后续新版本。
+在本协议生效前已经对外发布的历史版本，其权利义务仍按该版本发布时附带或声明的许可文本执行，不因本文件而被追溯改变。
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
+一、许可模式
+
+1. DolphinPHP 后续新版本采用“公开源码可访问，但受本协议约束”的产品许可模式。
+2. 用户可以查看、下载、安装、运行、学习、测试、修改并基于 DolphinPHP 进行二次开发。
+3. 公开源码可访问不等同于标准开源授权，也不当然意味着任何主体均可自由商业再分发、转售或改名后再次发布。
+
+二、个人免费使用
+
+1. 自然人用户可在非商业前提下免费使用 DolphinPHP。
+2. 个人免费使用包括个人学习、研究、测试、技术验证、个人作品、个人网站及其他非商业用途。
+3. 个人免费使用不包括以营利、经营、客户交付、组织运营、商业服务、商业 SaaS、收费部署、定制开发交付或其他商业目的进行的使用。
+
+三、商业使用与授权
+
+1. 企业、团队、工作室、个体经营者或其他主体将 DolphinPHP 用于商业目的时，应事先取得广东卓锐软件有限公司的商业授权。
+2. 商业授权按部署域名计费。每个用于商业用途的正式部署域名，应按卓锐软件公布的授权规则单独取得授权。
+3. 与已授权正式域名对应的合理本地开发、测试和预发布环境，可在不突破授权范围的前提下作为配套环境使用；具体边界以授权文件、订单文件或官方说明为准。
+4. 未取得有效商业授权的，不得将 DolphinPHP 用于商业运营、商业交付或其他需付费授权的场景。
+
+四、允许的修改与二次开发
+
+1. 用户可基于 DolphinPHP 进行功能扩展、适配、重构和业务定制。
+2. 用户基于 DolphinPHP 开发自身业务系统、网站、后台、插件或其他衍生应用时，应自行保证其行为符合法律法规及本协议。
+3. 用户对自身新增代码、业务数据和业务内容依法享有相应权利，但该等权利不当然延伸至 DolphinPHP 原始代码、产品名称、商标、官方视觉和其他受保护内容。
+
+五、禁止行为
+
+未经广东卓锐软件有限公司书面同意，用户不得实施以下行为：
+
+1. 将 DolphinPHP 或以其为主体的实质性衍生版本改名后作为自有框架、基础产品、源码产品或开发平台再次发布。
+2. 将 DolphinPHP 源码、安装包、二次封装版本或以其为主体的框架产品直接出售、转售、再许可、打包分发或作为独立商品提供下载。
+3. 删除、遮蔽或篡改源码、界面、文档、安装包中的版权声明、产品标识、许可声明或权利说明。
+4. 擅自使用 “DolphinPHP”、广东卓锐软件有限公司、卓锐软件及相关商标、Logo、官方文案、官网素材或足以使第三方误认为存在官方授权、认证、合作、隶属关系的标识与表述。
+5. 利用 DolphinPHP 从事任何违法违规、侵权、攻击、数据滥用、恶意传播或危害网络与信息安全的行为。
+
+六、第三方组件与其他许可
+
+1. DolphinPHP 中包含的第三方开源组件、第三方资源或第三方代码，仍按各自附带的许可证、版权声明或权利说明执行。
+2. 如第三方组件许可与本协议存在差异，第三方组件部分以其自身许可证为准；但该等第三方许可证不构成对 DolphinPHP 整体产品许可范围的扩张。
+
+七、免责声明
+
+1. DolphinPHP 按“现状”提供。广东卓锐软件有限公司不对其适销性、特定用途适用性、稳定性、持续可用性、无错误性或完全满足用户特定需求作出明示或默示保证。
+2. 因用户自行修改代码、错误部署、第三方组件接入、外部服务故障、服务器异常、网络攻击、不可抗力或违反本协议所导致的损失，由用户自行承担。
+
+八、违约处理
+
+1. 用户违反本协议的，广东卓锐软件有限公司有权要求停止侵权、停止分发、删除相关内容、补正授权、追究违约责任并保留采取进一步法律措施的权利。
+2. 如用户未按要求取得商业授权即实施商业使用，或未经授权改名再发布、转售、冒充官方，该行为均视为重大违约。
+
+九、附则
+
+1. 本协议与授权文件、订单文件、产品说明、用户协议及官方公告共同构成 DolphinPHP 后续新版本的完整许可体系。
+2. 广东卓锐软件有限公司有权根据产品策略、法律法规和经营安排更新本协议。更新后的协议适用于其公布后发布的新版本或公告中明确列明的版本范围。
+3. 本协议的解释、效力和争议解决适用中华人民共和国法律。

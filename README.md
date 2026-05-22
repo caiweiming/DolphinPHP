@@ -125,9 +125,9 @@ php think make:dp-chart-map
 
 测试版期间，建议统一通过 GitHub Discussions 提交反馈：
 
-- `Bug 反馈`：提交异常、报错、兼容性问题
-- `功能建议`：提交新需求、交互建议、流程优化建议
-- `使用咨询`：提交安装、配置、插件和权限使用问题
+- [`Bug 反馈`](https://github.com/caiweiming/DolphinPHP/discussions/categories/bug-%E5%8F%8D%E9%A6%88)：提交异常、报错、兼容性问题
+- [`功能建议`](https://github.com/caiweiming/DolphinPHP/discussions/categories/%E5%8A%9F%E8%83%BD%E5%BB%BA%E8%AE%AE)：提交新需求、交互建议、流程优化建议
+- [`使用咨询`](https://github.com/caiweiming/DolphinPHP/discussions/categories/%E4%BD%BF%E7%94%A8%E5%92%A8%E8%AF%A2)：提交安装、配置、插件和权限使用问题
 
 如果反馈的是故障问题，请尽量附带版本号、运行环境、复现步骤和错误日志。
 
