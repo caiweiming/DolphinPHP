@@ -28,6 +28,3 @@ Route::rule('_uploader/:driver/[:type]/:action', '\app\admin\controller\Uploader
 //   /_form/select2/search        # 表单组件 Select2 的搜索接口
 //   /_table/switch/toggle        # 表格组件 Switch 的切换接口
 Route::rule('_:type/:component/:action', '\app\admin\controller\RenderComponent@handle');
-
-// 商店支付宝回跳页兼容旧地址，避免与控制器基类保留方法重名
-Route::get('store/payment/result', '\app\store\controller\Payment@complete');
