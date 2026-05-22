@@ -48,6 +48,7 @@ class User extends Base
         'status'             => 'integer',
         'login_count'        => 'integer',
         'last_login_time'    => 'integer',
+        'password_updated_time' => 'integer',
         'remember_expires_at'=> 'integer',
         'create_time'        => 'integer',
         'update_time'        => 'integer',
@@ -166,6 +167,21 @@ class User extends Base
             'remember_selector'   => $selector,
             'remember_token_hash' => $tokenHash,
             'remember_expires_at' => $expiresAt,
+        ]);
+    }
+
+    /**
+     * 更新密码并刷新密码更新时间
+     * @param int $id
+     * @param string $passwordHash
+     * @param int|null $updatedAt
+     * @return bool|int
+     */
+    public function updatePasswordById(int $id, string $passwordHash, ?int $updatedAt = null): bool|int
+    {
+        return $this->updateById($id, [
+            'password'              => $passwordHash,
+            'password_updated_time'  => $updatedAt ?? time(),
         ]);
     }
 

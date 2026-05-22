@@ -19,6 +19,7 @@ use app\common\model\Role;
 use app\common\model\User;
 use app\common\service\AppService as AdminAppService;
 use app\common\service\AdminShellContextBuilder;
+use app\common\service\AdminSecurityPolicyService;
 use app\common\service\AssetManager;
 use app\common\service\ConfigService;
 use app\common\service\UserContext;
@@ -57,11 +58,16 @@ if (!function_exists('dp_is_login')) {
     function dp_is_login(): mixed
     {
         // 1. 检查 Session
-        $adminUser = session(Config::get('system.admin_session'));
-        $loginTime = session('dp_admin_login_time');
+        $adminUser        = session(Config::get('system.admin_session'));
+        $loginTime        = session('dp_admin_login_time');
+        $lastActivityTime = (int)Session::get('dp_admin_last_activity_time', 0);
 
         if (!empty($adminUser)) {
-            // Session 超时检查（默认 7200 秒 = 2 小时）
+            if ($lastActivityTime > 0) {
+                return $adminUser;
+            }
+
+            // 兼容旧版登录超时配置（默认 7200 秒 = 2 小时）
             $sessionTimeout = Config::get('system.session_timeout', 7200);
             if ($loginTime && (time() - $loginTime > $sessionTimeout)) {
                 dp_log_security('会话超时', [
@@ -174,6 +180,7 @@ if (!function_exists('dp_clear_admin_session')) {
     {
         session(Config::get('system.admin_session'), null);
         session('dp_admin_login_time', null);
+        session('dp_admin_last_activity_time', null);
     }
 }
 
@@ -227,8 +234,150 @@ if (!function_exists('dp_store_admin_session')) {
         $sessionUser = dp_normalize_admin_session_user($userInfo);
         session(Config::get('system.admin_session'), $sessionUser);
         session('dp_admin_login_time', time());
+        session('dp_admin_last_activity_time', time());
 
         return $sessionUser;
+    }
+}
+
+if (!function_exists('dp_is_admin_password_expired')) {
+    /**
+     * 判断后台用户密码是否过期
+     * @param mixed $userInfo
+     * @return bool
+     */
+    function dp_is_admin_password_expired(mixed $userInfo): bool
+    {
+        if ($userInfo instanceof Model) {
+            $userInfo = $userInfo->toArray();
+        }
+
+        if (!is_array($userInfo) || empty($userInfo['id'])) {
+            return false;
+        }
+
+        $userId = (int)$userInfo['id'];
+        $user   = UserModel::find($userId);
+        if (!$user) {
+            return false;
+        }
+
+        $days = app(AdminSecurityPolicyService::class)->getPasswordExpireDays();
+        if ($days <= 0) {
+            return false;
+        }
+
+        $updatedAt = (int)$user->getAttr('password_updated_time');
+        if ($updatedAt <= 0) {
+            $updatedAt = (int)$user->getAttr('update_time');
+        }
+        if ($updatedAt <= 0) {
+            $updatedAt = (int)$user->getAttr('create_time');
+        }
+        if ($updatedAt <= 0) {
+            return true;
+        }
+
+        return (time() - $updatedAt) > ($days * 86400);
+    }
+}
+
+if (!function_exists('dp_mark_admin_password_expiry_required')) {
+    /**
+     * 标记当前后台会话需要修改密码
+     * @return void
+     */
+    function dp_mark_admin_password_expiry_required(): void
+    {
+        session('dp_admin_password_expired', 1);
+    }
+}
+
+if (!function_exists('dp_clear_admin_password_expiry_required')) {
+    /**
+     * 清除后台密码过期标记
+     * @return void
+     */
+    function dp_clear_admin_password_expiry_required(): void
+    {
+        session('dp_admin_password_expired', null);
+    }
+}
+
+if (!function_exists('dp_admin_password_expiry_required')) {
+    /**
+     * 判断当前后台会话是否需要修改密码
+     * @return bool
+     */
+    function dp_admin_password_expiry_required(): bool
+    {
+        return (bool)Session::get('dp_admin_password_expired', 0);
+    }
+}
+
+if (!function_exists('dp_mark_admin_password_expiry_shell_target')) {
+    /**
+     * 标记密码过期后壳层首次打开目标
+     * @param string $target
+     * @return void
+     */
+    function dp_mark_admin_password_expiry_shell_target(string $target): void
+    {
+        Session::set('dp_admin_password_expiry_shell_target', trim($target));
+    }
+}
+
+if (!function_exists('dp_clear_admin_password_expiry_shell_target')) {
+    /**
+     * 清除密码过期壳层打开目标
+     * @return void
+     */
+    function dp_clear_admin_password_expiry_shell_target(): void
+    {
+        Session::delete('dp_admin_password_expiry_shell_target');
+    }
+}
+
+if (!function_exists('dp_admin_password_expiry_shell_target')) {
+    /**
+     * 获取密码过期壳层首次打开目标
+     * @return string
+     */
+    function dp_admin_password_expiry_shell_target(): string
+    {
+        return trim((string)Session::get('dp_admin_password_expiry_shell_target', ''));
+    }
+}
+
+if (!function_exists('dp_touch_admin_session_activity')) {
+    /**
+     * 刷新后台最近活动时间
+     * @return void
+     */
+    function dp_touch_admin_session_activity(): void
+    {
+        session('dp_admin_last_activity_time', time());
+    }
+}
+
+if (!function_exists('dp_admin_session_is_idle_expired')) {
+    /**
+     * 判断后台会话是否已空闲超时
+     * @param int $idleMinutes
+     * @return bool
+     */
+    function dp_admin_session_is_idle_expired(int $idleMinutes): bool
+    {
+        if ($idleMinutes <= 0) {
+            return false;
+        }
+
+        $lastActivityTime = (int)Session::get('dp_admin_last_activity_time', 0);
+        if ($lastActivityTime <= 0) {
+            return false;
+        }
+
+        return (time() - $lastActivityTime) > ($idleMinutes * 60);
     }
 }
 

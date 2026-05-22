@@ -13,6 +13,8 @@ declare (strict_types=1);
 namespace app\admin\service;
 
 use app\admin\facade\UserModel;
+use app\common\service\AdminLoginThrottleService;
+use app\common\service\AdminSecurityPolicyService;
 use Exception;
 use Throwable;
 
@@ -29,12 +31,16 @@ class User extends Common
      */
     public function login(array $param = []): mixed
     {
+        $username      = trim((string)($param['username'] ?? ''));
+        $policyService = app(AdminSecurityPolicyService::class);
+        $throttle      = app(AdminLoginThrottleService::class);
         $userInfo = UserModel::getInfo($param['username'], true);
 
         if (null === $userInfo) {
             dp_log_security('用户名无效', [
                 'username' => $param['username']
             ], 'error');
+            $throttle->recordFailure($username, $policyService->getLoginMaxRetries(), $policyService->getLoginLockMinutes());
             throw new Exception('dp#username or password incorrect');
         }
 
@@ -44,6 +50,7 @@ class User extends Common
                 'username' => $param['username'],
                 'user_id'  => $userInfo['id']
             ], 'error');
+            $throttle->recordFailure($username, $policyService->getLoginMaxRetries(), $policyService->getLoginLockMinutes());
             throw new Exception('dp#username or password incorrect');
         }
 
@@ -62,8 +69,18 @@ class User extends Common
         $userInfo['last_login_time'] = $this->request->time();
         $userInfo['last_login_ip']   = $this->request->ip();
 
+        $throttle->clear($username);
+
         // 保存session
         dp_store_admin_session($userInfo);
+
+        if (dp_is_admin_password_expired($userInfo)) {
+            dp_mark_admin_password_expiry_required();
+            dp_mark_admin_password_expiry_shell_target('admin/profile/index?tab=security');
+        } else {
+            dp_clear_admin_password_expiry_required();
+            dp_clear_admin_password_expiry_shell_target();
+        }
 
         // 免登录，默认7天
         if (isset($param['auto-login'])) {

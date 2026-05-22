@@ -12,6 +12,8 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\common\service\AdminLoginThrottleService;
+use app\common\service\AdminSecurityPolicyService;
 use Exception;
 use think\facade\View;
 use app\admin\facade\UserService;
@@ -53,6 +55,9 @@ class Login extends Common
             $captchaEnabled = (bool)dp_setting('login.enable_captcha', 1);
             $post           = $this->request->only(['username', 'password', 'captcha', 'auto-login', 'redirect', config('csrf.token_name')]);
             $post           = UserService::parseParam($post);
+            $policyService  = app(AdminSecurityPolicyService::class);
+            $throttle       = app(AdminLoginThrottleService::class);
+            $username       = trim((string)($post['username'] ?? ''));
 
             // 验证表单
             $this->autoValidate('User.login', $post);
@@ -64,10 +69,20 @@ class Login extends Common
                 }
             }
 
+            if ($throttle->isLocked($username)
+                && $policyService->getLoginMaxRetries() > 0
+                && $policyService->getLoginLockMinutes() > 0) {
+                $this->error('当前账号已被限制登录，请稍后再试');
+            }
+
             try {
                 UserService::login($post);
             } catch (Exception $e) {
                 $this->error($e->getMessage());
+            }
+
+            if (dp_admin_password_expiry_required()) {
+                $this->success('登录成功', '/admin/security/passwordExpired.html');
             }
 
             $redirect = $this->getSafeRedirect((string)($post['redirect'] ?? ''));

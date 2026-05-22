@@ -15,6 +15,7 @@ namespace app\admin\controller;
 use app\common\attribute\LoginCheck;
 use app\common\interface\PermissionService;
 use app\common\service\AdminNavigationService;
+use app\common\service\AdminSecurityPolicyService;
 use app\common\service\AdminShellContextBuilder;
 use app\common\model\User as UserModel;
 use app\common\trait\PermissionCheck;
@@ -52,7 +53,10 @@ class Auth extends Common
 
         // 验证用户状态（防止被禁用后仍能访问）
         if ($this->getUserContext()->isLoggedIn()) {
+            $this->handlePasswordExpiry();
+            $this->checkIdleTimeout();
             $this->checkUserStatus();
+            dp_touch_admin_session_activity();
             $this->assignMenusToLayout();
         }
     }
@@ -173,6 +177,58 @@ class Auth extends Common
 
         // 提示错误信息，并重定向到登录页
         $this->error($message, $this->buildLoginUrlWithRedirect());
+    }
+
+    /**
+     * 检查后台空闲超时
+     * @return void
+     */
+    protected function checkIdleTimeout(): void
+    {
+        $idleMinutes = app(AdminSecurityPolicyService::class)->getIdleLogoutMinutes();
+        if ($idleMinutes <= 0) {
+            return;
+        }
+
+        if (dp_admin_session_is_idle_expired($idleMinutes)) {
+            $this->forceLogout('由于长时间无操作，已自动退出');
+        }
+    }
+
+    /**
+     * 检查密码是否过期
+     * @return void
+     */
+    protected function handlePasswordExpiry(): void
+    {
+        if (!dp_admin_password_expiry_required()) {
+            return;
+        }
+
+        $currentRoute = strtolower(trim((string)$this->request->pathinfo(), '/'));
+        $controller   = strtolower((string)$this->request->controller());
+        $action       = strtolower((string)$this->request->action());
+        $suffix       = strtolower(ltrim((string)config('route.url_html_suffix', 'html'), '.'));
+
+        if ($suffix !== '' && str_ends_with($currentRoute, '.' . $suffix)) {
+            $currentRoute = substr($currentRoute, 0, -strlen('.' . $suffix));
+        }
+
+        if ($controller === 'security'
+            && in_array($action, ['passwordexpired', 'updateexpiredpassword'], true)) {
+            return;
+        }
+
+        if (in_array($currentRoute, [
+            'admin/security/passwordexpired',
+            'security/passwordexpired',
+            'admin/security/updateexpiredpassword',
+            'security/updateexpiredpassword',
+        ], true)) {
+            return;
+        }
+
+        $this->redirect((string)dp_url('admin/security/passwordExpired'));
     }
 
     /**

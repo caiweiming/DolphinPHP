@@ -111,6 +111,7 @@ class InstallExecutorService
             'username'    => (string)($admin['username'] ?? 'admin'),
             'nickname'    => (string)($admin['nickname'] ?? '超级管理员'),
             'password'    => dp_password_hash((string)($admin['password'] ?? '')),
+            'password_updated_time' => time(),
             'email'       => (string)($admin['email'] ?? ''),
             'status'      => 1,
             'reg_ip'      => $clientIp,

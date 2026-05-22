@@ -19,6 +19,7 @@ class Profile extends Auth
     public function index(): string
     {
         $user = $this->getCurrentProfileUser();
+        $this->page->title('账号管理');
 
         $profileForm = Form::make('admin_profile_edit', '基础资料')
             ->action((string)dp_url('admin/profile/edit'))
@@ -57,7 +58,7 @@ class Profile extends Auth
             ],
         ], [
             'id'       => 'admin-profile-tabs',
-            'active'   => 'base',
+            'active'   => $this->resolveActiveTab(),
             'remember' => true,
         ]);
 
@@ -123,8 +124,11 @@ class Profile extends Auth
         }
 
         $user->save([
-            'password' => dp_password_hash($data['password']),
+            'password'              => dp_password_hash($data['password']),
+            'password_updated_time' => time(),
         ]);
+        dp_clear_admin_password_expiry_required();
+        dp_clear_admin_password_expiry_shell_target();
 
         dp_log_user_action('修改个人密码', [
             'target_user_id' => $user->getAttr('id'),
@@ -189,5 +193,15 @@ class Profile extends Auth
         }
 
         return $payload;
+    }
+
+    /**
+     * 解析当前激活页签
+     * @return string
+     */
+    protected function resolveActiveTab(): string
+    {
+        $tab = trim((string)$this->request->param('tab', 'base'));
+        return in_array($tab, ['base', 'security'], true) ? $tab : 'base';
     }
 }

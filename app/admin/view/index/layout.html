@@ -54,6 +54,10 @@
             tabMode: '{$Think.config.system.tab_mode|default="iframe"}',
             navigation: JSON.parse('{$dp_navigation_context|default=[]|raw|json_encode}'),
         }
+        window.dpAdminSecurity = {
+            idleLogoutMinutes: Number('{:dp_setting("security.idle_logout_minutes", 15)}' || 0),
+            logoutUrl: '{:dp_url("admin/logout/index")}',
+        };
     </script>
 </head>
 <body class="layout-fluid {$Think.config.system.tab_mode == 'iframe' ? 'iframe-mode' : ''}">
@@ -1209,6 +1213,44 @@
             window.history.pushState({}, "", url);
         });
         checkItems();
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const securityConfig = window.dpAdminSecurity || {};
+        const idleLogoutMinutes = Number(securityConfig.idleLogoutMinutes || 0);
+        const logoutUrl = String(securityConfig.logoutUrl || '');
+
+        if (idleLogoutMinutes <= 0 || logoutUrl === '') {
+            return;
+        }
+
+        let idleTimer = null;
+        const idleTimeoutMs = idleLogoutMinutes * 60 * 1000;
+        const restartIdleTimer = function () {
+            if (idleTimer) {
+                window.clearTimeout(idleTimer);
+            }
+
+            idleTimer = window.setTimeout(function () {
+                window.location.href = logoutUrl;
+            }, idleTimeoutMs);
+        };
+
+        window.addEventListener('message', function (event) {
+            const payload = event.data || {};
+            if (!payload || payload.type !== 'dp_admin_activity_ping') {
+                return;
+            }
+
+            restartIdleTimer();
+        });
+
+        ['click', 'keydown', 'mousemove', 'scroll'].forEach(function (eventName) {
+            window.addEventListener(eventName, restartIdleTimer, {passive: true});
+        });
+
+        restartIdleTimer();
     });
 </script>
 </body>

@@ -154,6 +154,7 @@ class User extends Auth
             // 密码加密
             if ($data['password'] != '') {
                 $data['password'] = dp_password_hash($data['password']);
+                $data['password_updated_time'] = time();
             }
 
             // 处理角色ID（先保存，后面再关联）
@@ -308,6 +309,7 @@ class User extends Auth
             $passwordChanged = false;
             if (!empty($data['password'])) {
                 $data['password'] = dp_password_hash($data['password']);
+                $data['password_updated_time'] = time();
                 $passwordChanged  = true;
             } else {
                 unset($data['password']);
@@ -582,6 +584,7 @@ class User extends Auth
 
             // 更新密码
             $user['password'] = dp_password_hash($password);
+            $user['password_updated_time'] = time();
             $user->save();
 
             // 记录日志
