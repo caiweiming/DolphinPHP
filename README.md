@@ -1,85 +1,138 @@
-![](https://www.thinkphp.cn/uploads/images/20230630/300c856765af4d8ae758c503185f8739.png)
+# DolphinPHP
 
-ThinkPHP 8.0
-===============
+DophinPHP（海豚PHP）是一个基于 ThinkPHP 8 的 后台开发脚手架，提供管理后台、多应用组织、权限体系、插件系统，借助内置的表单、表格、图表三大渲染器，可以快速的搭建后台功能。
 
-## 特性
+## 运行环境
 
-* 基于PHP`8.0+`重构
-* 升级`PSR`依赖
-* 依赖`think-orm`3.0版本
-* `6.0`/`6.1`无缝升级
+- PHP `>= 8.2.0`
+- Composer `>= 2.5`
+- MySQL / MariaDB
 
+建议启用的 PHP 扩展：
 
-> ThinkPHP8.0的运行环境要求PHP8.0.0+
+- `openssl`
+- `mbstring`
+- `pdo`
+- `curl`
+- `fileinfo`
+- `dom`
+- `libxml`
 
-现在开始，你可以使用官方提供的[ThinkChat](https://chat.topthink.com/)，让你在学习ThinkPHP的旅途中享受私人AI助理服务！
+## 快速开始
 
-![](https://www.topthink.com/uploads/assistant/20230630/4d1a3f0ad2958b49bb8189b7ef824cb0.png)
+### 1. 部署框架
 
-## 文档
+新建站点，将站点目录指向 `public` 目录。
 
-[完全开发手册](https://doc.thinkphp.cn)
+### 2. 设置伪静态
 
-## 服务
+```text
+location / {
+	if (!-e $request_filename){
+		rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+	}
+}
+```
 
-ThinkPHP生态服务由[顶想云](https://www.topthink.com)（TOPThink Cloud）提供，为生态提供专业的开发者服务和价值之选。
+### 3. 执行安装向导
 
-## 赞助
-全新的[赞助计划](https://www.thinkphp.cn/sponsor)可以让你通过我们的网站、手册、欢迎页及GIT仓库获得巨大曝光，同时提升企业的品牌声誉，也更好保障ThinkPHP的可持续发展。
+项目首次访问时，如果尚未安装，系统会自动将 `/` 或 `/admin` 引导到安装向导：
 
-[![](https://www.thinkphp.cn/uploads/images/20230630/48396092a0515886a3da6bd268131c8f.png)](http://github.crmeb.net/u/TPSY)
+安装向导会完成以下工作：
 
-[![](https://www.thinkphp.cn/uploads/images/20230630/a12bd248beee0e7491dd0f79dc4dd5e9.png)](https://www.thinkphp.cn/sponsor)
+- 环境检测
+- 数据库连接校验
+- 写入数据库配置
+- 导入初始 SQL
+- 创建超级管理员
+- 生成安装锁文件 `config/install.lock`
 
-[![](https://www.thinkphp.cn/uploads/images/20230630/e7f48d909d41dd5ebaf4a5aa982d0455.png)](https://www.thinkphp.cn/sponsor)
+安装完成后：
 
-## 安装
+- 后台入口：`/admin`
+- 前台入口：`/`
 
-~~~
-composer create-project topthink/think tp
-~~~
+## 目录结构
 
-### DolphinPHP 安装向导
+```text
+.
+├── app/           应用代码
+├── config/        全局配置
+├── database/      Seeder 等数据库辅助文件
+├── extend/        项目级扩展
+├── frontend/      前端资源或构建相关内容
+├── plugins/       插件目录
+├── public/        Web 根目录与静态资源
+├── route/         路由定义
+├── runtime/       运行时目录
+└── think          ThinkPHP 命令入口
+```
 
-- 首次访问 `/` 或 `/admin` 时，如果项目根目录不存在 `install.lock`，系统会自动跳转到 `/install`
-- 安装向导会完成环境检测、数据库配置写入、`sql/dolphin.sql` 导入和超级管理员初始化
-- 安装完成后会在项目根目录生成 `install.lock`
+应用层重点目录：
 
-启动服务
+- `app/admin`：后台管理、权限、系统设置、插件与应用管理
+- `app/common`：公共抽象、服务、渲染器、插件与应用基础设施
+- `app/install`：安装向导与安装状态管理
 
-~~~
-cd tp
+## 常用命令
+
+### 启动与缓存
+
+```bash
 php think run
-~~~
+php think clear
+php think optimize:config
+php think optimize:route
+php think optimize:schema
+```
 
-然后就可以在浏览器中访问
+### 权限与队列
 
-~~~
-http://localhost:8000
-~~~
+```bash
+php think permission:sync
+php think queue:listen
+```
 
-如果需要更新框架使用
-~~~
-composer update topthink/framework
-~~~
+### 插件相关
 
-## 命名规范
+```bash
+php think plugin:list
+php think plugin:install <vendor>/<name>
+php think plugin:enable <vendor>/<name>
+php think plugin:disable <vendor>/<name>
+php think plugin:upgrade <vendor>/<name>
+php think plugin:publish <vendor>/<name>
+php think plugin:uninstall <vendor>/<name>
+```
 
-`ThinkPHP`遵循PSR-2命名规范和PSR-4自动加载规范。
+### 脚手架命令
 
-## 参与开发
+```bash
+php think make:dp-plugin
+php think make:dp-form-item
+php think make:dp-table-item
+php think make:dp-chart-type
+php think make:dp-chart-map
+```
 
-直接提交PR或者Issue即可
+## 开发说明
 
-## 版权信息
+### 代码组织
 
-ThinkPHP遵循Apache2开源协议发布，并提供免费使用。
+- 业务控制器尽量保持轻量，复杂逻辑下沉到 `app/*/service` 或 `app/common/service`
+- 公共能力优先沉淀在 `app/function.php`
+- 项目级扩展放在 `extend/`
+- 插件扩展放在 `plugins/<vendor>/<name>/`
 
-本项目包含的第三方源码和二进制文件之版权信息另行标注。
+## 授权说明
 
-版权所有Copyright © 2006-2023 by ThinkPHP (http://thinkphp.cn) All rights reserved。
+`DolphinPHP` 当前版本采用“公开源码可访问，但受产品许可协议约束”的分发模式。
 
-ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
+- 自然人用户可在非商业前提下免费使用、学习、修改和二次开发
+- 商业使用需按部署域名取得授权
+- 未经书面授权，不得改名后再次发布、出售或作为自有框架独立分发
+- 第三方组件与资源的版权和许可，以其各自附带声明为准
 
-更多细节参阅 [LICENSE.txt](LICENSE.txt)
+更多细节请参阅：
+
+- [LICENSE.txt](LICENSE.txt)

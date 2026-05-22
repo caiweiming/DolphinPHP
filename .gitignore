@@ -1,5 +1,7 @@
 *.log
 .env
+docs
+tests
 /config/install.lock
 composer.phar
 composer.lock
