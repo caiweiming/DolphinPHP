@@ -677,7 +677,15 @@ class AppLifecycleManager
      */
     private function resolveCallable(mixed $callable): mixed
     {
-        if (is_array($callable) || $callable instanceof Closure || is_object($callable)) {
+        if (is_array($callable)) {
+            if (isset($callable[0]) && is_string($callable[0]) && class_exists($callable[0])) {
+                $callable[0] = $this->app->make($callable[0]);
+            }
+
+            return $callable;
+        }
+
+        if ($callable instanceof Closure || is_object($callable)) {
             return $callable;
         }
 
