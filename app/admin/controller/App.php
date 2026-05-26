@@ -1095,10 +1095,10 @@ class App extends Auth
             ],
             [
                 'title'   => '卸载',
-                'url'     => dp_url('uninstall', ['name' => '__name__']),
+                'url'     => dp_url('uninstall', ['name' => '__name__', 'cleanup_data' => 1]),
                 'class'   => 'layui-btn layui-btn-xs layui-btn-danger',
                 'ajax'    => 'post',
-                'confirm' => '确定要卸载该应用吗？默认仅移除运行时接入，不会自动删除业务数据。',
+                'confirm' => '确定要卸载该应用吗？卸载将删除当前应用的所有数据，且不可恢复。',
                 'when'    => [
                     [
                         'callback' => fn(array $data): array => $this->resolveLifecycleActionState($data, 'uninstall'),
