@@ -34,7 +34,7 @@ CREATE TABLE `dp_admin_app` (
   `settings` longtext COMMENT '应用声明型配置值(JSON)',
   `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态:1启用,0禁用',
-  `is_system` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否系统内置应用',
+  `is_system` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否系统内置应用',
   `show_in_config` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否在 Config 页面显示',
   `lifecycle_status` varchar(32) NOT NULL DEFAULT 'installed' COMMENT '生命周期状态: imported/installed',
   `distribution_protocol_version` varchar(16) NOT NULL DEFAULT '' COMMENT '应用分发协议版本',
