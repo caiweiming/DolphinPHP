@@ -1086,6 +1086,7 @@ class AppService
     private function buildInsertPayload(string $appName, array $meta): array
     {
         $distributionState = $this->inspectDistributionState($appName);
+        $now               = time();
 
         return [
             'name'                          => $appName,
@@ -1093,21 +1094,21 @@ class AppService
             'description'                   => (string)($meta['description'] ?? ''),
             'icon'                          => (string)($meta['icon'] ?? ''),
             'version'                       => (string)($meta['version'] ?? ''),
-            'installed_version'             => (string)($meta['version'] ?? ''),
+            'installed_version'             => '',
             'author'                        => (string)($meta['author'] ?? ''),
             'provider'                      => (string)($meta['provider'] ?? ''),
             'settings'                      => '',
             'sort'                          => max(0, (int)($meta['sort'] ?? 0)),
-            'status'                        => !empty($meta['status']) ? 1 : 0,
+            'status'                        => 0,
             'show_in_config'                => 0,
-            'lifecycle_status'              => (string)config('app_package.lifecycle.installed', 'installed'),
+            'lifecycle_status'              => (string)config('app_package.lifecycle.imported', 'imported'),
             'distribution_protocol_version' => (string)($distributionState['protocol_version'] ?? ''),
             'distribution_meta'             => (string)($distributionState['manifest_json'] ?? ''),
             'last_operation'                => 'discover',
             'last_error'                    => '',
-            'install_time'                  => time(),
-            'enable_time'                   => !empty($meta['status']) ? time() : 0,
-            'disable_time'                  => empty($meta['status']) ? time() : 0,
+            'install_time'                  => 0,
+            'enable_time'                   => 0,
+            'disable_time'                  => $now,
         ];
     }
 
