@@ -19,6 +19,8 @@
                autocomplete="off"
                placeholder="{$placeholder !== null ? $placeholder : '请输入'.(isset($label) ? strip_tags($label) : '')}"
                data-options="{$options|default=''|raw}"
+               {$readonly ?= 'readonly '}
+               {$disabled ?= 'disabled '}
                {$props|default=''|raw}>
         {eq name="icon" value="right"}
         <span class="input-icon-addon">

@@ -13,7 +13,9 @@ declare (strict_types=1);
 namespace app\common\render\form\items\datetime_range;
 
 use app\common\abstract\FormType;
+use app\common\render\form\traits\Disabled;
 use app\common\render\form\traits\DatetimeIcon;
+use app\common\render\form\traits\HasReadonly;
 use app\common\render\form\traits\Placeholder;
 use app\common\render\form\traits\Rounded;
 use app\common\render\form\traits\Flush;
@@ -27,6 +29,8 @@ class DatetimeRange extends FormType
     use Rounded;
     use Flush;
     use DatetimeIcon;
+    use Disabled;
+    use HasReadonly;
 
     /**
      * 设置表单项类型

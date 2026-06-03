@@ -10,7 +10,7 @@
         {php}$key = (string)$key;{/php}
         <div class="col-auto">
             <label class="form-colorinput {$option.label_class|default=''}">
-                <input name="{$name}" type="{$multiple ? 'checkbox' : 'radio'}" value="{$key}" class="form-colorinput-input" {eq name="key" value="$value|default=''"}checked {/eq} {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
+                <input name="{$name}" type="{$multiple ? 'checkbox' : 'radio'}" value="{$key}" class="form-colorinput-input" {in name="key" value="$value|default=''"}checked {/in} {present name="disabled"}{in name="key" value="$disabled"}disabled{/in}{/present}>
                 <span class="form-colorinput-color {$option.class|default=''} {$circle == true ? 'rounded-circle' : ''}" style="{$option.style|default=''}"></span>
             </label>
         </div>
