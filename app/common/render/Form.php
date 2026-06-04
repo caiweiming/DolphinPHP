@@ -683,7 +683,7 @@ class Form extends Common implements FormRenderInterface
         // 添加默认加载的静态资源到AssetManager
         $this->assetManager->addJs(dp_static_render_path() . 'form/form.js', 10);
         $this->assetManager->addJs(dp_static_render_path() . 'form/components.js', 10);
-        $this->assetManager->addCss(dp_static_render_path() . 'form/form.css', 10);
+        $this->assetManager->addCss(dp_static_render_path() . 'form/form.css', 90);
 
         // 获取AssetManager管理的资源
         return $this->assetManager->getAssets();

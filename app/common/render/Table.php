@@ -330,7 +330,7 @@ class Table extends Common implements TableRenderInterface
     {
         // 添加默认加载的静态资源到AssetManager
         $this->assetManager->addJs(dp_static_render_path() . 'table/table.js', 50, [], 'table-js');
-        $this->assetManager->addCss(dp_static_render_path() . 'table/table.css', 50, [], 'table-css');
+        $this->assetManager->addCss(dp_static_render_path() . 'table/table.css', 90, [], 'table-css');
 
         // 获取AssetManager管理的资源
         return $this->assetManager->getAssets();
