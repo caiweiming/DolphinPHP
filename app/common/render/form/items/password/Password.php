@@ -68,14 +68,4 @@ class Password extends FormType
         return $this;
     }
 
-    /**
-     * 设置数据列表
-     * @param array $datalist
-     * @return $this
-     */
-    public function datalist(array $datalist = []): static
-    {
-        $this->config['datalist'] = $datalist;
-        return $this;
-    }
 }
