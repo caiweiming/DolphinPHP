@@ -4,14 +4,21 @@
         <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-html="true" data-bs-content="{$help|raw}">?</span>
         {/notempty}
     </label>
+    {php}
+    $selectIsMultiple = !empty($multiple);
+    $selectPlaceholder = $placeholder ?? '请选择' . strip_tags($label ?? '');
+    $selectHasValue = array_key_exists('value', get_defined_vars()) && $value !== '' && $value !== null;
+    {/php}
     <select class="form-select {$class|default=''}"
             name="{$name|default=''}"
             id="{$id|default=''}"
-            data-placeholder="{$placeholder|default='请选择'.strip_tags($label)}"
-            {$multiple ? 'multiple data-close-on-select="false"' : 'data-allow-clear="true"'}
+            data-placeholder="{$selectPlaceholder}"
+            {$selectIsMultiple ? 'multiple data-close-on-select="false"' : 'data-allow-clear="true"'}
             {$disabled ?= 'disabled '}
             {$props|default=''|raw}>
-        <option></option>
+        {if !$selectIsMultiple}
+        <option value="" {$selectHasValue ? '' : 'selected '}>{$selectPlaceholder}</option>
+        {/if}
 
         {notempty name="options"}
             {volist name="options" id="option"}
