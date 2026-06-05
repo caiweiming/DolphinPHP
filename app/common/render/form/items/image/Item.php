@@ -101,6 +101,7 @@ class Item extends FormItem
         return [
             'js'   => [
                 '__THEME_LIBS__/fslightbox/index.js',
+                '__LIBS__/sortable/Sortable.min.js',
                 '__LIBS__/dolphin-uploader/uploader.js',
             ],
             'init' => ['image-upload']
