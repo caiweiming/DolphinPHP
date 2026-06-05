@@ -149,6 +149,21 @@ div + .form-hint {
 .air-datepicker-global-container {
     z-index: 1020!important;
 }
+
+/*tabs*/
+.dp-form-tabs-nav .dp-form-tabs-link-icon-only {
+    display: inline-block;
+    min-width: 2.5rem;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    text-align: center;
+}
+
+.dp-form-tabs-nav .dp-form-tabs-link-icon-only > i,
+.dp-form-tabs-nav .dp-form-tabs-link-icon-only > svg {
+    margin-right: 0;
+}
+
 .air-datepicker-inline .input-icon-addon {
     display: inline-block;
     margin: 4px 0 0 10px;

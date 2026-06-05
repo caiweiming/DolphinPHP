@@ -7,10 +7,10 @@
     </label>
     <div class="card">
         <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs {$fill ?= 'nav-fill'} {$right ?= ' flex-row-reverse'}" data-bs-toggle="tabs">
+            <ul class="nav nav-tabs card-header-tabs dp-form-tabs-nav {$fill ?= 'nav-fill'} {$right ?= ' flex-row-reverse'}" data-bs-toggle="tabs">
                 {volist name="options" id="option"}
                 <li class="nav-item {$option.right ?= 'ms-auto'}">
-                    <a href="#{$id}-{$key}" class="nav-link {$key == 0 ?= 'active'} {$option.disabled ?= ' disabled'}" data-bs-toggle="tab">
+                    <a href="#{$id}-{$key}" class="nav-link {$key == 0 ?= 'active'} {$option.disabled ?= ' disabled'} {$option.icon_only ?= 'dp-form-tabs-link-icon-only'}" data-bs-toggle="tab">
                         {$option.icon|default=''|raw}
                         {$option.title|default=''}
                     </a>

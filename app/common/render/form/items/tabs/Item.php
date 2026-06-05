@@ -49,9 +49,10 @@ class Item extends FormItem
         }
 
         foreach ($params['options'] as $key => $option) {
-            $option['right']    = $option['right'] ?? false;
-            $option['disabled'] = $option['disabled'] ?? ($params['disabled'] === true || in_array($key, $params['disabled']));
-            $option['content']  = $this->parseTabsContent($option);
+            $option['right']     = $option['right'] ?? false;
+            $option['disabled']  = $option['disabled'] ?? ($params['disabled'] === true || in_array($key, $params['disabled']));
+            $option['icon_only'] = trim(strip_tags((string) ($option['title'] ?? ''))) === '' && trim((string) ($option['icon'] ?? '')) !== '';
+            $option['content']   = $this->parseTabsContent($option);
 
             $params['options'][$key] = $option;
         }
