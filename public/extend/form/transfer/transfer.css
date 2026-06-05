@@ -5,9 +5,90 @@
     line-height: 1.5;
     border-radius: 3px;
 }
-.bootstrap-duallistbox-container .info {
-    margin-bottom: 10px;
+
+.bootstrap-duallistbox-container .box1,
+.bootstrap-duallistbox-container .box2 {
+    display: flex;
+    flex-direction: column;
 }
+
+.bootstrap-duallistbox-container .buttons {
+    display: flex;
+    width: 100%;
+}
+
+.bootstrap-duallistbox-container .buttons .btn {
+    display: inline-flex;
+    flex: 1 1 50%;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    color: var(--tblr-body-color, #1f2937);
+    border-color: var(--tblr-border-color, #d9dee7);
+    background: var(--tblr-bg-forms, #fff);
+    border-radius: 0;
+}
+
+.bootstrap-duallistbox-container .buttons .btn:first-child {
+    border-top-left-radius: 0.375rem;
+}
+
+.bootstrap-duallistbox-container .buttons .btn:last-child {
+    border-top-right-radius: 0.375rem;
+}
+
+.bootstrap-duallistbox-container .buttons .btn + .btn {
+    margin-left: -1px;
+}
+
+.bootstrap-duallistbox-container .buttons .btn:hover,
+.bootstrap-duallistbox-container .buttons .btn:focus {
+    position: relative;
+    z-index: 1;
+    border-color: var(--tblr-border-color-dark, #c7ced9);
+    background: var(--tblr-bg-surface-secondary, #f6f8fb);
+}
+
+.bootstrap-duallistbox-container .move,
+.bootstrap-duallistbox-container .remove,
+.bootstrap-duallistbox-container .moveall,
+.bootstrap-duallistbox-container .removeall {
+    width: auto;
+    box-sizing: border-box;
+}
+
+.bootstrap-duallistbox-container .info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 22px;
+    margin-bottom: 6px;
+}
+
+.bootstrap-duallistbox-container .info {
+    margin-bottom: 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--tblr-secondary, #667382);
+}
+
+.bootstrap-duallistbox-container .clear1,
+.bootstrap-duallistbox-container .clear2 {
+    color: var(--tblr-secondary, #667382);
+    border-color: var(--tblr-border-color, #d9dee7);
+}
+
 .bootstrap-duallistbox-container .form-select[multiple] {
-    padding-right: 0
+    min-height: 240px;
+    padding-right: 0;
+    line-height: 1.6;
+}
+
+.bootstrap-duallistbox-container .form-select[multiple]:focus {
+    outline: 0;
+    border-color: var(--tblr-border-color-dark, #c7ced9);
+    box-shadow: none;
 }
