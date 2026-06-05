@@ -61,6 +61,7 @@ class Item extends FormItem
             $params['buttons'] = explode(',', $params['buttons']);
         }
 
+        $params['options'] = $this->validateCropperOptions((array) ($params['options'] ?? []));
         $params['options'] = dp_parse_options($params['options']);
 
         return $params;
@@ -80,5 +81,26 @@ class Item extends FormItem
             ],
             'init' => ['cropper']
         ];
+    }
+
+    /**
+     * 校验 Cropper.js v2 参数结构
+     * @param array $options
+     * @return array
+     * @throws Exception
+     */
+    private function validateCropperOptions(array $options): array
+    {
+        $legacyKeys = ['aspectRatio', 'initialAspectRatio', 'viewMode'];
+        $usedLegacyKeys = array_values(array_intersect($legacyKeys, array_keys($options)));
+
+        if ($usedLegacyKeys !== []) {
+            throw new Exception(
+                'Cropper.js v2 不支持顶层 options.' . implode(' / options.', $usedLegacyKeys)
+                . '；请改用 options.selection.aspectRatio / options.selection.initialAspectRatio 等 v2 写法'
+            );
+        }
+
+        return $options;
     }
 }

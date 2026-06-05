@@ -3597,6 +3597,121 @@
         }
 
         /**
+         * 判断是否为有效的正数
+         * @private
+         * @param {any} value - 待判断的值
+         * @returns {boolean}
+         */
+        _isPositiveNumber(value) {
+            return typeof value === 'number' && Number.isFinite(value) && value > 0;
+        }
+
+        /**
+         * 解析固定裁剪比例
+         * @private
+         * @param {Object} cropperSelection - CropperSelection 实例
+         * @param {Object} selectionOptions - selection 配置
+         * @returns {number|null}
+         */
+        _resolveSelectionAspectRatio(cropperSelection, selectionOptions = {}) {
+            const aspectRatio = selectionOptions.aspectRatio ?? cropperSelection?.aspectRatio;
+            if (this._isPositiveNumber(aspectRatio)) {
+                return aspectRatio;
+            }
+
+            const initialAspectRatio = selectionOptions.initialAspectRatio ?? cropperSelection?.initialAspectRatio;
+            if (this._isPositiveNumber(initialAspectRatio)) {
+                return initialAspectRatio;
+            }
+
+            return null;
+        }
+
+        /**
+         * 获取图片在裁剪画布中的实际可见区域
+         * @private
+         * @param {Object} cropperCanvas - CropperCanvas 实例
+         * @param {Object} cropperImage - CropperImage 实例
+         * @returns {{x:number, y:number, width:number, height:number}|null}
+         */
+        _getCropperVisibleImageRect(cropperCanvas, cropperImage) {
+            if (!cropperCanvas || !cropperImage) {
+                return null;
+            }
+
+            const canvasRect = cropperCanvas.getBoundingClientRect();
+            const imageRect = cropperImage.getBoundingClientRect();
+            const left = Math.max(canvasRect.left, imageRect.left);
+            const top = Math.max(canvasRect.top, imageRect.top);
+            const right = Math.min(canvasRect.right, imageRect.right);
+            const bottom = Math.min(canvasRect.bottom, imageRect.bottom);
+            const width = right - left;
+            const height = bottom - top;
+
+            if (!(width > 0) || !(height > 0)) {
+                return null;
+            }
+
+            return {
+                x: left - canvasRect.left,
+                y: top - canvasRect.top,
+                width,
+                height,
+            };
+        }
+
+        /**
+         * 在固定比例且未显式指定尺寸时，按图片实际可见区域生成默认选区
+         * @private
+         * @param {Object} cropperCanvas - CropperCanvas 实例
+         * @param {Object} cropperImage - CropperImage 实例
+         * @param {Object} cropperSelection - CropperSelection 实例
+         * @param {Object} selectionOptions - selection 配置
+         * @returns {boolean}
+         */
+        _applyAutoFittedSelection(cropperCanvas, cropperImage, cropperSelection, selectionOptions = {}) {
+            const aspectRatio = this._resolveSelectionAspectRatio(cropperSelection, selectionOptions);
+            if (!this._isPositiveNumber(aspectRatio)) {
+                return false;
+            }
+
+            const visibleRect = this._getCropperVisibleImageRect(cropperCanvas, cropperImage);
+            if (!visibleRect) {
+                return false;
+            }
+
+            let width = visibleRect.width;
+            let height = width / aspectRatio;
+
+            if (height > visibleRect.height) {
+                height = visibleRect.height;
+                width = height * aspectRatio;
+            }
+
+            const initialCoverage = selectionOptions.initialCoverage ?? cropperSelection?.initialCoverage;
+            if (this._isPositiveNumber(initialCoverage) && initialCoverage <= 1) {
+                width *= initialCoverage;
+                height *= initialCoverage;
+            }
+
+            const x = visibleRect.x + ((visibleRect.width - width) / 2);
+            const y = visibleRect.y + ((visibleRect.height - height) / 2);
+
+            cropperSelection.$change(x, y, width, height);
+
+            if (cropperSelection.$initialSelection && typeof cropperSelection.$initialSelection === 'object') {
+                cropperSelection.$initialSelection = {
+                    x: cropperSelection.x,
+                    y: cropperSelection.y,
+                    width: cropperSelection.width,
+                    height: cropperSelection.height,
+                };
+            }
+
+            return true;
+        }
+
+        /**
          * 组件初始化
          * @returns {Promise<void>}
          */
@@ -3724,6 +3839,28 @@
                         $.each(options['selection'], function (name, value) {
                             cropperSelection[name] = value;
                         });
+
+                        const hasExplicitSelectionPosition = ['x', 'y', 'width', 'height'].some(function (name) {
+                            return options['selection'][name] !== undefined;
+                        });
+
+                        if (!hasExplicitSelectionPosition) {
+                            const applied = this._applyAutoFittedSelection(
+                                cropperCanvas,
+                                cropperImage,
+                                cropperSelection,
+                                options['selection']
+                            );
+
+                            if (!applied) {
+                                if (typeof cropperSelection.$reset === 'function') {
+                                    cropperSelection.$reset();
+                                }
+                                if (typeof cropperSelection.$center === 'function') {
+                                    cropperSelection.$center();
+                                }
+                            }
+                        }
                     }
 
                     // 设置handle参数
