@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | 作者: 蔡伟明 <314013107@qq.com>
 // +----------------------------------------------------------------------
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace app\common\render;
 
@@ -540,8 +540,7 @@ class Table extends Common implements TableRenderInterface
         mixed        $type = 'normal',
         mixed        $options = [],
         array        $cols = []
-    ): static
-    {
+    ): static {
         if (empty($field)) {
             return $this;
         }
@@ -940,7 +939,7 @@ class Table extends Common implements TableRenderInterface
      */
     private function handleColumn(array $column): array
     {
-        $type           = dp_normalize_extension_path((string)($column['type'] ?? ''));
+        $type           = trim((string)($column['type'] ?? ''));
         $column['type'] = $type;
 
         // 处理默认类型
@@ -992,12 +991,12 @@ class Table extends Common implements TableRenderInterface
             return '';
         }
 
-        $type = dp_normalize_extension_path($type);
-
         // 内置类型
         if (isset($this->types[$type]) && is_string($this->types[$type]) && $this->types[$type] !== '') {
             return $this->types[$type];
         }
+
+        $type = dp_normalize_extension_path($type);
 
         $pluginClass = app(PluginRegistry::class)->getTableItemClass($type);
         if ($pluginClass !== '') {
@@ -1561,9 +1560,11 @@ class Table extends Common implements TableRenderInterface
             // 处理按钮链接
             if (isset($button['url'])) {
                 $button['url'] = (string)$button['url'];
-                if (!str_starts_with($button['url'], '/') &&
+                if (
+                    !str_starts_with($button['url'], '/') &&
                     !str_starts_with($button['url'], 'http:') &&
-                    !str_starts_with($button['url'], 'https:')) {
+                    !str_starts_with($button['url'], 'https:')
+                ) {
                     $button['url'] = (string)dp_url($button['url']);
                 }
 
