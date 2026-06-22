@@ -1,0 +1,340 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<link rel="stylesheet" href="__APP_CSS__/showcase.css?v={:filemtime(public_path() . 'apps/showcase/css/showcase.css')}">
+{/block}
+
+{block name="container"}
+<div class="showcase-page" id="showcase-page-top">
+    <div class="showcase-page__header">
+        <div>
+            <div class="showcase-page__eyebrow">Form Component</div>
+            <h1 class="showcase-page__title">{$pageData.component.title|default=''|htmlspecialchars}</h1>
+            <p class="showcase-page__summary">{$pageData.component.summary|default=''|htmlspecialchars}</p>
+        </div>
+    </div>
+
+    <div class="showcase-page-floating-nav">
+        <section class="showcase-panel showcase-panel__section">
+            <h2 class="showcase-panel__title">本页目录</h2>
+            <nav class="showcase-page-nav" aria-label="本页目录">
+                {volist name="pageData.sections|default=[]" id="navSection"}
+                <a class="showcase-page-nav__link" data-section-nav="{$navSection.key|default=''}" href="#section-{$navSection.key|default=''}">
+                    {$navSection.title|default=''|htmlspecialchars}
+                </a>
+                {/volist}
+                <div class="showcase-page-nav__actions">
+                    <a class="showcase-page-nav__action showcase-page-nav__back" href="{:url('showcase/admin.form/index')}">
+                        <i class="ti ti-arrow-left"></i>
+                        <span>返回上级</span>
+                    </a>
+                    <a class="showcase-page-nav__action showcase-page-nav__backtop" href="#showcase-page-top">
+                        <i class="ti ti-arrow-up"></i>
+                        <span>回到顶部</span>
+                    </a>
+                </div>
+            </nav>
+        </section>
+    </div>
+
+    <div class="showcase-page-layout">
+        <main class="showcase-page-main">
+            <section class="showcase-panel">
+                <h2 class="showcase-panel__title">组件总览</h2>
+                <p class="showcase-panel__text">{$pageData.overview.summary|default=''|htmlspecialchars}</p>
+                <div class="showcase-overview-grid">
+                    <article class="showcase-overview-card">
+                        <h3 class="showcase-panel__subtitle">适用场景</h3>
+                        <div class="showcase-note-list">
+                            {volist name="pageData.overview.scenarios|default=[]" id="scenario"}
+                            <p class="showcase-panel__text">{$scenario|htmlspecialchars}</p>
+                            {/volist}
+                        </div>
+                    </article>
+                    <article class="showcase-overview-card">
+                        <h3 class="showcase-panel__subtitle">核心能力</h3>
+                        <div class="showcase-overview-list">
+                            {volist name="pageData.overview.capabilities|default=[]" id="capability"}
+                            <span class="showcase-tag showcase-tag--accent">{$capability|htmlspecialchars}</span>
+                            {/volist}
+                        </div>
+                    </article>
+                </div>
+                <div class="showcase-code-grid">
+                    <article class="showcase-code-card">
+                        <div class="showcase-code-card__title">快速开始</div>
+                        <div class="showcase-code-card__meta">数组配置</div>
+                        <pre class="showcase-code-card__content"><code>{$pageData.overview.quick_start.array_code|default=''}</code></pre>
+                    </article>
+                    <article class="showcase-code-card">
+                        <div class="showcase-code-card__title">快速开始</div>
+                        <div class="showcase-code-card__meta">Field 链式</div>
+                        <pre class="showcase-code-card__content"><code>{$pageData.overview.quick_start.field_code|default=''}</code></pre>
+                    </article>
+                </div>
+            </section>
+
+            <section class="showcase-panel showcase-panel--table">
+                <h2 class="showcase-panel__title">参数总表</h2>
+                <div class="showcase-param-groups">
+                    {volist name="pageData.param_groups|default=[]" id="paramGroup"}
+                    <article class="showcase-param-group">
+                        <h3 class="showcase-panel__subtitle">{$paramGroup.title|default=''|htmlspecialchars}</h3>
+                        <table class="showcase-param-table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name="paramGroup.items|default=[]" id="item"}
+                                <tr>
+                                    <td><code>{$item.name|default=''|htmlspecialchars}</code></td>
+                                    <td>{$item.summary|default=''|htmlspecialchars}</td>
+                                </tr>
+                                {/volist}
+                            </tbody>
+                        </table>
+                    </article>
+                    {/volist}
+                    {empty name="pageData.param_groups"}
+                    <div class="showcase-placeholder">
+                        <div>该组件参数总表仍在整理中，可先参考右侧文档与源码入口。</div>
+                    </div>
+                    {/empty}
+                </div>
+            </section>
+
+            <section class="showcase-panel showcase-panel--examples">
+                <h2 class="showcase-panel__title">能力示例</h2>
+                <div class="showcase-example-list">
+                    {volist name="pageData.sections|default=[]" id="section"}
+                    <article class="showcase-example-section" id="section-{$section.key|default=''|htmlspecialchars}">
+                        <div class="showcase-example-section__header">
+                            <h3 class="showcase-panel__subtitle">{$section.title|default=''|htmlspecialchars}</h3>
+                            <p class="showcase-panel__text">{$section.summary|default=''|htmlspecialchars}</p>
+                        </div>
+                        <div class="showcase-preview">{$section.preview_html|default=''|raw}</div>
+                        <div class="showcase-example-meta">
+                            <table class="showcase-param-table showcase-param-table--compact">
+                                <thead>
+                                    <tr>
+                                        <th>参数</th>
+                                        <th>示例值</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {volist name="section.params|default=[]" id="param"}
+                                    <tr>
+                                        <td><code>{$param.name|default=''|htmlspecialchars}</code></td>
+                                        <td><code>{$param.value|default=''}</code></td>
+                                    </tr>
+                                    {/volist}
+                                </tbody>
+                            </table>
+                            <article class="showcase-meta-card">
+                                <h4 class="showcase-meta-card__title">效果说明</h4>
+                                <div class="showcase-note-list">
+                                {volist name="section.notes|default=[]" id="note"}
+                                <p class="showcase-panel__text">{$note|htmlspecialchars}</p>
+                                {/volist}
+                                </div>
+                            </article>
+                        </div>
+                        <div class="showcase-code-grid">
+                            <article class="showcase-code-card">
+                                <div class="showcase-code-card__title">数组配置代码</div>
+                                <pre class="showcase-code-card__content"><code>{$section.array_code|default=''}</code></pre>
+                            </article>
+                            <article class="showcase-code-card">
+                                <div class="showcase-code-card__title">Field 链式代码</div>
+                                <pre class="showcase-code-card__content"><code>{$section.field_code|default=''}</code></pre>
+                            </article>
+                        </div>
+                        <div class="showcase-inline-source">
+                            <h4 class="showcase-meta-card__title">本节源码</h4>
+                            <div class="source-code-list">
+                                {volist name="sectionSourceCodes[$section.key]|default=[]" id="sourceCode"}
+                                <details class="source-code-card">
+                                    <summary class="source-code-card__summary">
+                                        <div class="source-code-card__meta">
+                                            <div class="source-code-card__heading">
+                                                <div class="source-code-card__label">{$sourceCode.label|default=''|htmlspecialchars}</div>
+                                                <div class="source-code-card__path"><code>{$sourceCode.path|default=''|htmlspecialchars}</code></div>
+                                            </div>
+                                            <div class="source-code-card__toggle">
+                                                <span class="source-code-card__toggle-expand">展开源码</span>
+                                                <span class="source-code-card__toggle-collapse">收起源码</span>
+                                            </div>
+                                        </div>
+                                    </summary>
+                                    <div class="source-code-card__panel">
+                                        <pre class="source-code-card__content"><code>{$sourceCode.content|default=''}</code></pre>
+                                    </div>
+                                </details>
+                                {/volist}
+                            </div>
+                        </div>
+                    </article>
+                    {/volist}
+                    {empty name="pageData.sections"}
+                    <div class="showcase-placeholder">
+                        <div>当前没有可展示的能力示例，请先参考右侧源码与文档入口。</div>
+                    </div>
+                    {/empty}
+                </div>
+            </section>
+        </main>
+
+        <aside class="showcase-page-rail">
+            <section class="showcase-panel showcase-panel__section">
+                <h2 class="showcase-panel__title">关联组件</h2>
+                <div class="showcase-related-list">
+                    {volist name="pageData.related_components|default=[]" id="relatedComponent"}
+                    <div class="showcase-related-item">
+                        <a class="showcase-related-item__link" href="{:url('showcase/admin.form/show', ['key' => $relatedComponent.key])}">
+                            <div class="showcase-related-item__title">{$relatedComponent.title|default=''|htmlspecialchars}</div>
+                        </a>
+                        <div class="showcase-related-item__meta">
+                            <span class="showcase-card__status showcase-card__status--{$relatedComponent.status|default='planned'}">
+                                {eq name="relatedComponent.status" value="available"}可用{else /}开发中{/eq}
+                            </span>
+                        </div>
+                    </div>
+                    {/volist}
+                </div>
+            </section>
+
+            <section class="showcase-panel showcase-panel__section">
+                <h2 class="showcase-panel__title">相关文档</h2>
+                <ul class="doc-link-list">
+                    {volist name="pageData.doc_links|default=[]" id="docLink"}
+                    <li><code>{$docLink|htmlspecialchars}</code></li>
+                    {/volist}
+                </ul>
+            </section>
+
+            <section class="showcase-panel showcase-panel__section">
+                <h2 class="showcase-panel__title">源码参考</h2>
+                <ul class="source-ref-list">
+                    {volist name="pageData.sidebar_source_refs|default=[]" id="sourceRef"}
+                    <li>
+                        <div class="source-ref-list__label">{$sourceRef.label|default=''|htmlspecialchars}</div>
+                        <div class="source-ref-list__path"><code>{$sourceRef.path|default=''|htmlspecialchars}</code></div>
+                        <div class="source-ref-list__description">{$sourceRef.description|default=''|htmlspecialchars}</div>
+                    </li>
+                    {/volist}
+                </ul>
+                <p class="showcase-panel__text">更多源码文件请继续查看下方“本节源码”。</p>
+            </section>
+        </aside>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (!('IntersectionObserver' in window)) {
+        return;
+    }
+
+    const navLinks = Array.from(document.querySelectorAll('[data-section-nav]'));
+    const sectionMap = new Map();
+
+    navLinks.forEach(function (link) {
+        const sectionKey = link.getAttribute('data-section-nav');
+        const section = document.getElementById('section-' + sectionKey);
+
+        if (section && sectionKey) {
+            sectionMap.set(sectionKey, {
+                section: section,
+                link: link
+            });
+        }
+    });
+
+    if (sectionMap.size === 0) {
+        return;
+    }
+
+    let manualActiveKey = '';
+    let manualActiveTimer = null;
+
+    const setActive = function (activeKey) {
+        navLinks.forEach(function (link) {
+            link.classList.remove('is-active');
+        });
+
+        if (!activeKey || !sectionMap.has(activeKey)) {
+            return;
+        }
+
+        sectionMap.get(activeKey).link.classList.add('is-active');
+    };
+
+    const clearManualActiveState = function () {
+        if (manualActiveTimer) {
+            window.clearTimeout(manualActiveTimer);
+            manualActiveTimer = null;
+        }
+
+        manualActiveKey = '';
+    };
+
+    navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            const targetKey = link.getAttribute('data-section-nav') || '';
+
+            if (targetKey === '') {
+                return;
+            }
+
+            manualActiveKey = targetKey;
+            setActive(targetKey);
+
+            if (manualActiveTimer) {
+                window.clearTimeout(manualActiveTimer);
+            }
+
+            manualActiveTimer = window.setTimeout(function () {
+                clearManualActiveState();
+            }, 900);
+        });
+    });
+
+    const observer = new IntersectionObserver(function (entries) {
+        if (manualActiveKey !== '') {
+            return;
+        }
+
+        const visibleEntries = entries
+            .filter(function (entry) {
+                return entry.isIntersecting;
+            })
+            .sort(function (a, b) {
+                return b.intersectionRatio - a.intersectionRatio;
+            });
+
+        if (visibleEntries.length === 0) {
+            return;
+        }
+
+        const activeSection = visibleEntries[0].target;
+        const activeKey = activeSection.id.replace('section-', '');
+        setActive(activeKey);
+    }, {
+        rootMargin: '-20% 0px -55% 0px',
+        threshold: [0.15, 0.35, 0.6]
+    });
+
+    sectionMap.forEach(function (item, key) {
+        observer.observe(item.section);
+        if (key === navLinks[0].getAttribute('data-section-nav')) {
+            setActive(key);
+        }
+    });
+});
+</script>
+{/block}

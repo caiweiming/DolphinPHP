@@ -1,0 +1,45 @@
+{extend name="layout" /}
+{block name="body"}
+<div class="container-xl py-5">
+    <div class="mb-4">
+        <h1 class="mb-2">文章列表</h1>
+        <p class="text-muted">这是 `cms` 应用前台列表页示例，可用于参考最小应用如何输出公开页面。</p>
+    </div>
+
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-dark btn-sm" href="{:url('cms/article/index')}">全部分类</a>
+        {if empty($categories)}
+        <span class="text-muted">暂无分类可筛选</span>
+        {/if}
+        {foreach $categories as $category}
+        <a class="btn {if condition='(int)$currentCategoryId === (int)$category.id'}btn-dark{else /}btn-outline-dark{/if} btn-sm" href="{:url('cms/article/index', ['category_id' => $category.id])}">
+            {$category.name|htmlspecialchars}
+        </a>
+        {/foreach}
+    </div>
+
+    <div class="row g-3">
+        {if empty($articles)}
+        <div class="col-12">
+            <div class="alert alert-light border text-muted mb-0">当前条件下暂无文章</div>
+        </div>
+        {/if}
+        {foreach $articles as $article}
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-muted mb-2">{$article.category_name|htmlspecialchars}</div>
+                    <h3 class="card-title mb-2">{$article.title|htmlspecialchars}</h3>
+                    <div class="small text-muted mb-2">
+                        <span>发布时间：{$article.published_time_text|htmlspecialchars}</span>
+                        <span class="ms-2">来源：{$article.source_text|htmlspecialchars}</span>
+                    </div>
+                    <div class="text-muted mb-3">{$article.summary|default='这是一篇用于演示最小 CMS 应用的文章。'|htmlspecialchars}</div>
+                    <a class="btn btn-dark" href="{:url('cms/article/detail', ['id' => $article.id])}">查看详情</a>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+{/block}

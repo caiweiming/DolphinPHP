@@ -1,0 +1,12 @@
+{
+    "name": "showcase",
+    "title": "渲染器示例",
+    "description": "DolphinPHP 核心渲染器示例中心，供开发者学习和参考。",
+    "version": "1.0.0",
+    "app_api_version": "1.0",
+    "author": "广东卓锐软件",
+    "dependencies": [],
+    "require": {
+        "php": ">=8.2.0"
+    }
+}

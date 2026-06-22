@@ -1,0 +1,12 @@
+{
+    "name": "cms",
+    "title": "内容管理",
+    "description": "内容管理系统，仅用于开发演示，请勿在生成环境下安装使用。",
+    "version": "1.0.1",
+    "app_api_version": "1.0",
+    "author": "广东卓锐软件",
+    "dependencies": [],
+    "require": {
+        "php": ">=8.2.0"
+    }
+}

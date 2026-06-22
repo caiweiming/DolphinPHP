@@ -1,0 +1,50 @@
+{extend name="layout" /}
+{block name="body"}
+<div class="container-xl py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-muted mb-2">{$article.category_name|htmlspecialchars}</div>
+                    <h1 class="h2 mb-3">{$article.title|htmlspecialchars}</h1>
+                    <div class="d-flex flex-wrap gap-3 text-muted mb-4">
+                        <span>发布时间：{$article.published_time_text|htmlspecialchars}</span>
+                        <span>来源：{$article.source_text|htmlspecialchars}</span>
+                        <span>浏览量：{$article.view_count|default=0}</span>
+                    </div>
+                    <div class="lead mb-4">{$article.summary|default=''|htmlspecialchars}</div>
+                    <div class="mb-4" style="white-space: pre-wrap;">{$article.content|default='暂无正文'|htmlspecialchars}</div>
+
+                    <div class="border-top pt-4 mt-4">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <div class="text-muted small mb-1">上一篇</div>
+                                {if $prevArticle}
+                                <a class="link-dark text-decoration-none" href="{:url('cms/article/detail', ['id' => $prevArticle.id])}">
+                                    {$prevArticle.title|htmlspecialchars}
+                                </a>
+                                {else /}
+                                <span class="text-muted">没有上一篇了</span>
+                                {/if}
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <a class="btn btn-outline-dark btn-sm" href="{:url('cms/article/index')}">返回列表</a>
+                            </div>
+                            <div class="col-md-5 text-md-end">
+                                <div class="text-muted small mb-1">下一篇</div>
+                                {if $nextArticle}
+                                <a class="link-dark text-decoration-none" href="{:url('cms/article/detail', ['id' => $nextArticle.id])}">
+                                    {$nextArticle.title|htmlspecialchars}
+                                </a>
+                                {else /}
+                                <span class="text-muted">没有下一篇了</span>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

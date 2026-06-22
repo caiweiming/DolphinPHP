@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CMS 示例应用</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css">
+</head>
+<body class="bg-light">
+<div class="page">
+    <header class="navbar navbar-expand-md navbar-light bg-white border-bottom">
+        <div class="container-xl">
+            <a class="navbar-brand text-dark" href="{:url('cms/index/index')}">CMS 示例应用</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{:url('cms/index/index')}">首页</a>
+                <a class="nav-link" href="{:url('cms/article/index')}">文章列表</a>
+            </div>
+        </div>
+    </header>
+    <main class="page-wrapper">
+        {block name="body"}{/block}
+    </main>
+</div>
+</body>
+</html>

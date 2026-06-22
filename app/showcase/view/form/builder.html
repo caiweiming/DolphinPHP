@@ -1,0 +1,310 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<link rel="stylesheet" href="__APP_CSS__/showcase.css?v={:filemtime(public_path() . 'apps/showcase/css/showcase.css')}">
+{/block}
+
+{block name="container"}
+<div class="showcase-builder-page" id="showcase-builder-top">
+    <header class="showcase-page__header">
+        <div>
+            <div class="showcase-page__eyebrow">Form Builder</div>
+            <h1 class="showcase-page__title">{$pageData.page.title|default=''|htmlspecialchars}</h1>
+            <p class="showcase-page__summary">{$pageData.overview.summary|default=''|htmlspecialchars}</p>
+        </div>
+    </header>
+
+    <section class="showcase-panel showcase-builder-intro">
+        <div class="showcase-builder-intro__grid">
+            <article class="showcase-code-card">
+                <div class="showcase-code-card__title">快速开始</div>
+                <div class="showcase-code-card__meta">数组配置代码</div>
+                <pre class="showcase-code-card__content"><code>{$pageData.overview.quick_start.array_code|default=''}</code></pre>
+            </article>
+            <article class="showcase-code-card">
+                <div class="showcase-code-card__title">快速开始</div>
+                <div class="showcase-code-card__meta">Form 链式代码</div>
+                <pre class="showcase-code-card__content"><code>{$pageData.overview.quick_start.form_code|default=''}</code></pre>
+            </article>
+        </div>
+    </section>
+
+    <section class="showcase-builder-quick-links">
+        <article class="showcase-builder-quick-links__card">
+            <div class="showcase-builder-quick-links__eyebrow">高频方法</div>
+            <div class="showcase-builder-quick-links__items">
+                <a class="showcase-builder-quick-links__item" href="#section-title">title()</a>
+                <a class="showcase-builder-quick-links__item" href="#section-data">data()</a>
+                <a class="showcase-builder-quick-links__item" href="#section-items">items()</a>
+                <a class="showcase-builder-quick-links__item" href="#section-action">action()</a>
+                <a class="showcase-builder-quick-links__item" href="#section-ajax">ajax()</a>
+                <a class="showcase-builder-quick-links__item" href="#section-assign">assign()</a>
+            </div>
+        </article>
+        <article class="showcase-builder-quick-links__card">
+            <div class="showcase-builder-quick-links__eyebrow">阅读建议</div>
+            <p class="showcase-panel__text">如果你主要是来找“怎么把表单搭出来”，优先看 `title()`、`data()`、`items()`、`action()`；只有当你需要模板扩展、附加资源或提交链路微调时，再补看 `assign()`、`extra_js()`、`sticky()` 这些进阶方法。</p>
+        </article>
+    </section>
+
+    <nav class="showcase-builder-group-nav" aria-label="表单构建器分组">
+        <a class="showcase-builder-group-nav__link showcase-builder-group-nav__link--back" href="{:url('showcase/admin.form/index')}">
+            返回上级
+        </a>
+        <a class="showcase-builder-group-nav__link showcase-builder-group-nav__link--top" href="#showcase-builder-top">
+            回到顶部
+        </a>
+        {volist name="pageData.groups|default=[]" id="group"}
+        <a class="showcase-builder-group-nav__link" data-group-nav="{$group.key|default=''}" href="#group-{$group.key|default=''}">
+            {$group.title|default=''|htmlspecialchars}
+        </a>
+        {/volist}
+    </nav>
+
+    <div class="showcase-builder-groups">
+        {volist name="pageData.groups|default=[]" id="group"}
+        <section class="showcase-builder-group" id="group-{$group.key|default=''}">
+            <div class="showcase-builder-group__head">
+                <div>
+                    <div class="showcase-page__eyebrow">{$group.key|default=''|htmlspecialchars}</div>
+                    <h2 class="showcase-panel__title">{$group.title|default=''|htmlspecialchars}</h2>
+                </div>
+                <p class="showcase-panel__text">{$group.summary|default=''|htmlspecialchars}</p>
+            </div>
+
+            <div class="showcase-builder-method-index">
+                {volist name="group.methods|default=[]" id="methodKey"}
+                <a class="showcase-builder-method-index__item" href="#section-{$methodKey|default=''}">{$methodKey|default=''|htmlspecialchars}()</a>
+                {/volist}
+            </div>
+
+            <div class="showcase-builder-method-list">
+                {volist name="pageData.sections|default=[]" id="section"}
+                {eq name="section.group_key|default=''" value="$group.key"}
+                <article class="showcase-builder-method" id="section-{$section.key|default=''|htmlspecialchars}">
+                    <div class="showcase-builder-method__head">
+                        <div>
+                            <h3 class="showcase-panel__subtitle">{$section.title|default=''|htmlspecialchars}</h3>
+                            <div class="showcase-builder-method__signature"><code>{$section.signature|default=''|raw}</code></div>
+                        </div>
+                        <span class="showcase-tag showcase-tag--accent">{$section.example_mode|default=''|htmlspecialchars}</span>
+                    </div>
+
+                    <p class="showcase-panel__text">{$section.summary|default=''|htmlspecialchars}</p>
+
+                    <table class="showcase-builder-parameter-table">
+                        <thead>
+                        <tr>
+                            <th>参数</th>
+                            <th>说明</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="section.parameter_details|default=[]" id="parameter"}
+                        <tr>
+                            <td><code>{$parameter.name|default=''|htmlspecialchars}</code></td>
+                            <td>{$parameter.summary|default=''|htmlspecialchars}</td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+
+                    {eq name="section.example_mode|default=''" value="preview"}
+                    <div class="showcase-preview showcase-builder-preview">{$section.preview_html|default=''|raw}</div>
+                    {else /}
+                    <div class="showcase-builder-placeholder">
+                        {eq name="section.example_mode|default=''" value="behavior"}
+                        <div class="showcase-builder-placeholder__title">行为说明</div>
+                        <p class="showcase-panel__text">该方法主要影响表单整体行为或渲染流程，建议结合下方说明、提示和源码一起阅读。</p>
+                        {else /}
+                        <div class="showcase-builder-placeholder__title">源码导向示例</div>
+                        <p class="showcase-panel__text">该方法更适合直接抄用代码片段，预览区保留为说明型占位块，避免展示误导性的静态效果。</p>
+                        {/eq}
+                    </div>
+                    {/eq}
+
+                    <div class="showcase-overview-grid">
+                        <article class="showcase-overview-card">
+                            <h4 class="showcase-meta-card__title">行为说明</h4>
+                            <div class="showcase-note-list">
+                                {volist name="section.behavior_notes|default=[]" id="note"}
+                                <p class="showcase-panel__text">{$note|htmlspecialchars}</p>
+                                {/volist}
+                            </div>
+                        </article>
+                        <article class="showcase-overview-card">
+                            <h4 class="showcase-meta-card__title">使用提示</h4>
+                            <div class="showcase-note-list">
+                                {volist name="section.tips|default=[]" id="tip"}
+                                <p class="showcase-panel__text">{$tip|htmlspecialchars}</p>
+                                {/volist}
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="showcase-code-grid">
+                        <article class="showcase-code-card">
+                            <div class="showcase-code-card__title">数组配置代码</div>
+                            <pre class="showcase-code-card__content"><code>{$section.array_code|default=''}</code></pre>
+                        </article>
+                        <article class="showcase-code-card">
+                            <div class="showcase-code-card__title">Form 链式代码</div>
+                            <pre class="showcase-code-card__content"><code>{$section.form_code|default=''}</code></pre>
+                        </article>
+                    </div>
+
+                    {notempty name="section.usage_variants|default=[]"}
+                    <div class="showcase-builder-variants">
+                        <h4 class="showcase-meta-card__title">更多写法</h4>
+                        <div class="showcase-builder-variant-grid">
+                            {volist name="section.usage_variants|default=[]" id="variant"}
+                            <article class="showcase-code-card showcase-builder-variant-card">
+                                <div class="showcase-code-card__title">{$variant.title|default=''|htmlspecialchars}</div>
+                                <div class="showcase-code-card__meta">{$variant.summary|default=''|htmlspecialchars}</div>
+                                <pre class="showcase-code-card__content"><code>{$variant.array_code|default=''}</code></pre>
+                                <pre class="showcase-code-card__content"><code>{$variant.form_code|default=''}</code></pre>
+                            </article>
+                            {/volist}
+                        </div>
+                    </div>
+                    {/notempty}
+
+                    <div class="source-code-list">
+                        {volist name="sectionSourceCodes[$section.key]|default=[]" id="sourceCode"}
+                        <details class="source-code-card">
+                            <summary class="source-code-card__summary">
+                                <div class="source-code-card__meta">
+                                    <div class="source-code-card__heading">
+                                        <div class="source-code-card__label">{$sourceCode.label|default=''|htmlspecialchars}</div>
+                                        <div class="source-code-card__path"><code>{$sourceCode.path|default=''|htmlspecialchars}</code></div>
+                                    </div>
+                                    <div class="source-code-card__toggle">
+                                        <span class="source-code-card__toggle-expand">展开源码</span>
+                                        <span class="source-code-card__toggle-collapse">收起源码</span>
+                                    </div>
+                                </div>
+                            </summary>
+                            <div class="source-code-card__panel">
+                                <pre class="source-code-card__content"><code>{$sourceCode.content|default=''}</code></pre>
+                            </div>
+                        </details>
+                        {/volist}
+                    </div>
+                </article>
+                {/eq}
+                {/volist}
+            </div>
+        </section>
+        {/volist}
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (!('IntersectionObserver' in window)) {
+        return;
+    }
+
+    const navLinks = Array.from(document.querySelectorAll('[data-group-nav]'));
+    const groupMap = new Map();
+
+    navLinks.forEach(function (link) {
+        const groupKey = link.getAttribute('data-group-nav');
+        const group = document.getElementById('group-' + groupKey);
+
+        if (group && groupKey) {
+            groupMap.set(groupKey, {
+                group: group,
+                link: link
+            });
+        }
+    });
+
+    if (groupMap.size === 0) {
+        return;
+    }
+
+    let manualActiveKey = '';
+    let manualActiveTimer = null;
+
+    const setActive = function (activeKey) {
+        navLinks.forEach(function (link) {
+            link.classList.remove('is-active');
+        });
+
+        if (!activeKey || !groupMap.has(activeKey)) {
+            return;
+        }
+
+        groupMap.get(activeKey).link.classList.add('is-active');
+    };
+
+    const clearManualActiveState = function () {
+        if (manualActiveTimer) {
+            window.clearTimeout(manualActiveTimer);
+            manualActiveTimer = null;
+        }
+
+        manualActiveKey = '';
+    };
+
+    navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            const targetKey = link.getAttribute('data-group-nav') || '';
+
+            if (targetKey === '') {
+                return;
+            }
+
+            manualActiveKey = targetKey;
+            setActive(targetKey);
+
+            if (manualActiveTimer) {
+                window.clearTimeout(manualActiveTimer);
+            }
+
+            manualActiveTimer = window.setTimeout(function () {
+                clearManualActiveState();
+            }, 900);
+        });
+    });
+
+    const observer = new IntersectionObserver(function (entries) {
+        if (manualActiveKey !== '') {
+            return;
+        }
+
+        const visibleEntries = entries
+            .filter(function (entry) {
+                return entry.isIntersecting;
+            })
+            .sort(function (a, b) {
+                return b.intersectionRatio - a.intersectionRatio;
+            });
+
+        if (visibleEntries.length === 0) {
+            return;
+        }
+
+        const activeGroup = visibleEntries[0].target;
+        const activeKey = activeGroup.id.replace('group-', '');
+
+        setActive(activeKey);
+    }, {
+        rootMargin: '-18% 0px -55% 0px',
+        threshold: [0.2, 0.35, 0.5, 0.7]
+    });
+
+    groupMap.forEach(function (item) {
+        observer.observe(item.group);
+    });
+
+    const initialKey = navLinks[0].getAttribute('data-group-nav') || '';
+    if (initialKey !== '') {
+        setActive(initialKey);
+    }
+});
+</script>
+{/block}

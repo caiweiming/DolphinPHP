@@ -1,0 +1,174 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<link rel="stylesheet" href="__APP_CSS__/showcase.css?v={:filemtime(public_path() . 'apps/showcase/css/showcase.css')}">
+{/block}
+
+{block name="container"}
+<div class="showcase-page">
+    <div class="showcase-page__header">
+        <div>
+            <div class="showcase-page__eyebrow">Table Renderer</div>
+            <h1 class="showcase-page__title">表格渲染器</h1>
+            <p class="showcase-page__summary">按分组浏览基础展示、状态映射、媒体预览、交互操作与高级定制列能力。</p>
+        </div>
+        <div class="showcase-page__actions">
+            {volist name="tableActions|default=[]" id="action"}
+            <a
+                class="showcase-card__link"
+                href="{:url('showcase/admin.table/resetDemoData')}"
+                title="{$action.summary|default=''|htmlspecialchars}"
+            >
+                重置演示数据
+            </a>
+            {/volist}
+        </div>
+    </div>
+
+    <section class="showcase-form-builder-entry">
+        <div class="showcase-form-builder-entry__content">
+            <div class="showcase-form-builder-entry__eyebrow">Table Builder</div>
+            <h2 class="showcase-form-builder-entry__title">表格构建器</h2>
+            <p class="showcase-form-builder-entry__summary">
+                想看整个表格怎么写，不只是单个列类型怎么配，就直接进入 Table Builder 手册。这里集中整理
+                <code>data()</code>、<code>columns()</code>、<code>search()</code>、<code>toolbar()</code> 等表格级能力。
+            </p>
+            <div class="showcase-form-builder-entry__highlights">
+                <span class="showcase-form-builder-entry__tag">数据源与 CRUD</span>
+                <span class="showcase-form-builder-entry__tag">列定义与搜索 DSL</span>
+                <span class="showcase-form-builder-entry__tag">工具栏与交互配置</span>
+                <span class="showcase-form-builder-entry__tag">源码可直接参考</span>
+            </div>
+        </div>
+        <div class="showcase-form-builder-entry__action">
+            <a class="showcase-form-builder-entry__cta" href="{:url('showcase/admin.table/builder')}">
+                <span class="showcase-form-builder-entry__cta-label">进入手册</span>
+                <span class="showcase-form-builder-entry__cta-meta">Table Builder</span>
+            </a>
+        </div>
+    </section>
+
+    <div class="showcase-form-directory" data-showcase-form-tabs>
+        <div class="showcase-form-tabs" role="tablist" aria-label="表格组件分组">
+            {volist name="sections" id="section"}
+            <button
+                class="showcase-form-tab {eq name='i' value='1'}is-active{/eq}"
+                type="button"
+                role="tab"
+                aria-selected="{eq name='i' value='1'}true{else /}false{/eq}"
+                aria-controls="showcase-table-panel-{$section.key|default=''}"
+                data-tab-target="{$section.key|default=''}"
+            >
+                <span class="showcase-form-tab__title">{$section.title|default=''|htmlspecialchars}</span>
+            </button>
+            {/volist}
+        </div>
+
+        <div class="showcase-form-tab-panels">
+            {volist name="sections" id="section"}
+            <section
+                id="showcase-table-panel-{$section.key|default=''}"
+                class="showcase-form-tab-panel {eq name='i' value='1'}is-active{/eq}"
+                role="tabpanel"
+                data-tab-panel="{$section.key|default=''}"
+            >
+                <div class="showcase-form-panel-head">
+                    <h2 class="showcase-form-panel-head__title">{$section.title|default=''|htmlspecialchars}</h2>
+                    <p class="showcase-form-panel-head__summary">{$section.summary|default=''|htmlspecialchars}</p>
+                </div>
+
+                <div class="showcase-form-table-wrap">
+                    <table class="showcase-form-table">
+                        <thead>
+                        <tr>
+                            <th>组件标识</th>
+                            <th>组件名称</th>
+                            <th>简介</th>
+                            <th>标签</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="section.components" id="component"}
+                        {php}
+                            $__componentKeyParts = explode('.', (string)($component['key'] ?? ''));
+                            $__componentType = (string)end($__componentKeyParts);
+                            $__componentTitle = trim((string)($component['title'] ?? ''));
+                            $__componentName = $__componentTitle;
+                            if ($__componentType !== '' && str_starts_with($__componentTitle, $__componentType . ' ')) {
+                                $__componentName = trim((string)substr($__componentTitle, strlen($__componentType) + 1));
+                            }
+                        {/php}
+                        <tr>
+                            <td class="showcase-form-table__key">
+                                <code class="showcase-form-table__key-text">{$__componentType|default=''|htmlspecialchars}</code>
+                            </td>
+                            <td class="showcase-form-table__name">
+                                <div class="showcase-form-table__title">{$__componentName|default=''|htmlspecialchars}</div>
+                            </td>
+                            <td class="showcase-form-table__summary">
+                                {$component.summary|default=''|htmlspecialchars}
+                            </td>
+                            <td class="showcase-form-table__tags">
+                                <div class="showcase-tag-list showcase-tag-list--compact">
+                                    {volist name="component.tags|default=[]" id="tag"}
+                                    <span class="showcase-tag showcase-tag--compact">{$tag|htmlspecialchars}</span>
+                                    {/volist}
+                                </div>
+                            </td>
+                            <td class="showcase-form-table__status">
+                                <span class="showcase-card__status showcase-card__status--{$component.status|default='planned'}">
+                                    {eq name="component.status" value="available"}可用{else /}开发中{/eq}
+                                </span>
+                            </td>
+                            <td class="showcase-form-table__action">
+                                {eq name="component.status" value="available"}
+                                <a class="showcase-card__link" href="{:url('showcase/admin.table/show', ['key' => $component.key])}">查看详情</a>
+                                {else /}
+                                <a class="showcase-card__muted" href="javascript:;">暂不可查看</a>
+                                {/eq}
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            {/volist}
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const root = document.querySelector('[data-showcase-form-tabs]');
+    if (!root) {
+        return;
+    }
+
+    const tabs = Array.from(root.querySelectorAll('[data-tab-target]'));
+    const panels = Array.from(root.querySelectorAll('[data-tab-panel]'));
+
+    const activate = function (key) {
+        tabs.forEach(function (tab) {
+            const active = tab.getAttribute('data-tab-target') === key;
+            tab.classList.toggle('is-active', active);
+            tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        panels.forEach(function (panel) {
+            panel.classList.toggle('is-active', panel.getAttribute('data-tab-panel') === key);
+        });
+    };
+
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            activate(tab.getAttribute('data-tab-target') || '');
+        });
+    });
+});
+</script>
+{/block}

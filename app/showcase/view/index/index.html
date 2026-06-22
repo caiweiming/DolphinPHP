@@ -1,0 +1,39 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="style"}
+<link rel="stylesheet" href="__APP_CSS__/showcase.css?v={:filemtime(public_path() . 'apps/showcase/css/showcase.css')}">
+{/block}
+
+{block name="container"}
+<div class="showcase-page">
+    <div class="showcase-page__header">
+        <div>
+            <div class="showcase-page__eyebrow">Showcase</div>
+            <h1 class="showcase-page__title">渲染器示例中心</h1>
+            <p class="showcase-page__summary">聚合后台常用渲染器的最小示例入口，帮助开发者快速定位可复用能力。</p>
+            <p class="showcase-page__summary">当前覆盖表单渲染器、表格渲染器、图表渲染器、页面渲染器四类入口。</p>
+        </div>
+    </div>
+
+    <div class="showcase-card-grid">
+        {volist name="renderers" id="renderer"}
+        <article class="showcase-card">
+            <div class="showcase-card__meta">
+                <span class="showcase-card__status showcase-card__status--{$renderer.status|default='planned'}">
+                    {$renderer.status|default='planned'|htmlspecialchars}
+                </span>
+            </div>
+            <h2 class="showcase-card__title">{$renderer.title|default=''|htmlspecialchars}</h2>
+            <p class="showcase-card__summary">{$renderer.summary|default=''|htmlspecialchars}</p>
+            <div class="showcase-card__footer">
+                {if !empty($renderer.route)}
+                <a class="showcase-card__link" href="{:url($renderer.route)}">进入专题</a>
+                {else /}
+                <span class="showcase-card__muted">规划中</span>
+                {/if}
+            </div>
+        </article>
+        {/volist}
+    </div>
+</div>
+{/block}
