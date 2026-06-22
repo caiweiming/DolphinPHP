@@ -1758,7 +1758,7 @@ final class ShowcaseFormComponentSectionCatalog
                     'builder' => 'app\\showcase\\service\\components\\form\\vditor\\VditorProfileFormSection',
                 ],
             ],
-            'rich.transfer' => [
+            'extensions.transfer' => [
                 [
                     'key' => 'basic',
                     'title' => '基础穿梭框',
@@ -1800,6 +1800,132 @@ final class ShowcaseFormComponentSectionCatalog
                     'title' => '业务表单片段',
                     'summary' => '把 transfer 与标题等字段组合成真实角色分配表单片段。',
                     'builder' => 'app\\showcase\\service\\components\\form\\transfer\\TransferSectionBuilder',
+                ],
+            ],
+            'extensions.data_table' => [
+                [
+                    'key' => 'basic',
+                    'title' => '基础数据表格',
+                    'summary' => '最小可用的 data_table 配置。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'default_value',
+                    'title' => '默认值与回填',
+                    'summary' => '通过二维数组回显已有明细数据。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'assoc_columns',
+                    'title' => '关联数组列定义',
+                    'summary' => '使用关联数组写法声明列配置。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'validation',
+                    'title' => '列级校验',
+                    'summary' => '演示 required、pattern 与错误提示。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'sortable_confirm',
+                    'title' => '排序与删除确认',
+                    'summary' => '演示 sortable 与 confirm_delete 等交互配置。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'cell_types',
+                    'title' => '单元格类型边界',
+                    'summary' => '展示当前支持的单元格类型和适用边界。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+                [
+                    'key' => 'profile_form',
+                    'title' => '业务表单片段',
+                    'summary' => '把 data_table 与标题、状态等字段组合成真实业务表单片段。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\DataTableSectionBuilder',
+                ],
+            ],
+            'extensions.fieldset' => [
+                [
+                    'key' => 'basic',
+                    'title' => '基础字段块',
+                    'summary' => '最小可用的 fieldset 配置。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+                [
+                    'key' => 'nested_items',
+                    'title' => '复杂子项组合',
+                    'summary' => '在 fieldset 中组合 select2、switch、textarea 等真实子项。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+                [
+                    'key' => 'when',
+                    'title' => '外层联动控制',
+                    'summary' => '通过 when 控制整组字段的显示与隐藏。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+                [
+                    'key' => 'default_value',
+                    'title' => '默认值与回显方式',
+                    'summary' => '说明 fieldset 如何依赖内部字段名完成回显。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+                [
+                    'key' => 'help_tips',
+                    'title' => 'help 与 tips',
+                    'summary' => '演示标题帮助信息和底部提示文案。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+                [
+                    'key' => 'profile_form',
+                    'title' => '业务表单片段',
+                    'summary' => '把 fieldset 组织成真实业务页面中的结构分区。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\FieldsetSectionBuilder',
+                ],
+            ],
+            'extensions.select_table' => [
+                [
+                    'key' => 'basic',
+                    'title' => '基础选表',
+                    'summary' => '最小可用的 select_table 配置。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'default_value',
+                    'title' => '默认值与回填',
+                    'summary' => '通过二维数组回显已选数据行。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'single',
+                    'title' => '单选模式',
+                    'summary' => '通过 selection_mode 切换为单选。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'limit',
+                    'title' => '条数限制',
+                    'summary' => '通过 select_limit 限制最多回填条数。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'extra_fields',
+                    'title' => 'extra_fields 附加字段',
+                    'summary' => '追加隐藏提交字段，但不在当前表格中展示。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'popup',
+                    'title' => 'popup 参数',
+                    'summary' => '控制弹窗标题、尺寸和弹窗表格 ID。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
+                ],
+                [
+                    'key' => 'profile_form',
+                    'title' => '业务表单片段',
+                    'summary' => '把 select_table 与负责人、备注等字段组合成真实业务表单片段。',
+                    'builder' => 'app\\showcase\\service\\components\\form\\extensions\\SelectTableSectionBuilder',
                 ],
             ],
             'rich.amap' => [

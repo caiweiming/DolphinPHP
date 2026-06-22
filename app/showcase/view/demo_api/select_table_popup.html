@@ -1,0 +1,15 @@
+{extend name="$dp_theme_layout" /}
+
+{block name="container"}
+    {volist name="dp_page_rows" id="row"}
+    <div class="row row-cards mb-3 {$row.class|default=''}" {$row.attr|default=""|raw}>
+        {volist name="row.cols" id="col"}
+        {eq name="col" value="-"}
+        {$dp_newline|raw}
+        {else/}
+        <div class="{$col.class|default='col'}" {$col.attr|default=""|raw}>{$col.content|raw|default=''}</div>
+        {/eq}
+        {/volist}
+    </div>
+    {/volist}
+{/block}

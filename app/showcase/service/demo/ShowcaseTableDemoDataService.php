@@ -40,7 +40,7 @@ final class ShowcaseTableDemoDataService
      */
     private function runInstallSql(): void
     {
-        $sqlFile = BASE_PATH . '/app/showcase/database/install.sql';
+        $sqlFile = root_path() . 'app/showcase/database/install.sql';
 
         if (!is_file($sqlFile)) {
             throw new RuntimeException(sprintf('SQL 文件不存在: %s', $sqlFile));

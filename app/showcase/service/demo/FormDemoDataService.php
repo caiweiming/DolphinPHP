@@ -22,6 +22,7 @@ final class FormDemoDataService
             'departments' => $this->departments(),
             'select2_departments' => $this->select2Departments(),
             'roles' => $this->roles(),
+            'select_table_members' => $this->selectTableMembers($params),
             'linkage' => $this->linkageOptions($params),
             'linkages' => $this->linkagesOptions($params),
             default => null,
@@ -73,6 +74,33 @@ final class FormDemoDataService
             ['value' => 'member', 'label' => '执行成员'],
             ['value' => 'guest', 'label' => '协作访客'],
         ];
+    }
+
+    /**
+     * 返回 select_table 弹窗演示数据。
+     *
+     * @param array<string, mixed> $params
+     * @return array<int, array<string, mixed>>
+     */
+    public function selectTableMembers(array $params = []): array
+    {
+        $rows = [
+            ['id' => 1, 'nickname' => '张三', 'mobile' => '13800000001', 'status' => '启用', 'department' => '产品中心'],
+            ['id' => 2, 'nickname' => '李四', 'mobile' => '13800000002', 'status' => '启用', 'department' => '研发中心'],
+            ['id' => 3, 'nickname' => '王五', 'mobile' => '13800000003', 'status' => '禁用', 'department' => '运营中心'],
+            ['id' => 4, 'nickname' => '赵六', 'mobile' => '13800000004', 'status' => '启用', 'department' => '财务部'],
+        ];
+
+        $keyword = trim((string) ($params['keyword'] ?? $params['q'] ?? ''));
+        if ($keyword === '') {
+            return $rows;
+        }
+
+        return array_values(array_filter($rows, static function (array $row) use ($keyword): bool {
+            return str_contains((string) ($row['nickname'] ?? ''), $keyword)
+                || str_contains((string) ($row['mobile'] ?? ''), $keyword)
+                || str_contains((string) ($row['department'] ?? ''), $keyword);
+        }));
     }
 
     /**

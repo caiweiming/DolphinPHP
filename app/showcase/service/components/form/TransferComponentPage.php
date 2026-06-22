@@ -80,7 +80,7 @@ CODE,
             'related_components' => [
                 ['key' => 'choice.checkbox_group', 'title' => 'checkbox_group 多选框组', 'status' => 'available'],
                 ['key' => 'choice.select_group', 'title' => 'select_group 多选标签', 'status' => 'available'],
-                ['key' => 'rich.vditor', 'title' => 'vditor Markdown 编辑器', 'status' => 'available'],
+                ['key' => 'choice.select2', 'title' => 'select2 增强下拉选择', 'status' => 'available'],
             ],
             'doc_links' => (array) ($component['doc_links'] ?? []),
             'sidebar_source_refs' => array_slice($this->mergeSourceRefs((array) ($component['source_refs'] ?? []), $sections), 0, 3),

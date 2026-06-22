@@ -40,6 +40,49 @@ final class DemoApi extends Auth
     }
 
     /**
+     * select_table 弹窗页。
+     */
+    public function selectTablePopup(): string
+    {
+        $dataset = (string) $this->request->param('dataset/s', 'members');
+        $tableId = 'showcase_select_table_' . $dataset;
+
+        $this->table->id($tableId)
+            ->checkbox()
+            ->page([
+                'limit' => 10,
+                'limits' => [10, 20, 50],
+            ])
+            ->search([
+                [
+                    'name' => 'keyword',
+                    'placeholder' => '搜索昵称、手机号或部门',
+                ],
+            ])
+            ->columns([
+                ['id', 'ID', 'normal', [], ['width' => 80]],
+                ['nickname', '昵称', 'normal', [], ['minWidth' => 120]],
+                ['mobile', '手机号', 'normal', [], ['minWidth' => 150]],
+                ['department', '部门', 'normal', [], ['minWidth' => 120]],
+                ['status', '状态', 'status', ['禁用', '启用:green'], ['width' => 100]],
+            ])
+            ->data(function () use ($dataset) {
+                $search = $this->request->param('_s/a', []);
+                $keyword = trim((string) (($search['keyword'] ?? null) ?: $this->request->param('keyword/s', '')));
+                $rows = app(FormDemoDataService::class)->dataset('select_table_' . $dataset, ['keyword' => $keyword]);
+
+                return is_array($rows) ? $rows : [];
+            })
+            ->render();
+
+        $this->page
+            ->title('选择数据')
+            ->row($this->table, ['class' => 'showcase-select-table-popup']);
+
+        return $this->fetch('demo_api/select_table_popup');
+    }
+
+    /**
      * 处理示例提交。
      */
     public function submit(): Json
