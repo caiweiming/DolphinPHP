@@ -154,6 +154,89 @@ abstract class Common
     }
 
     /**
+     * 引入当前应用或指定应用的js文件
+     * @param string|array $filesName js文件名，多个文件可用逗号隔开
+     * @param string $app 指定应用
+     * @return $this
+     */
+    public function js(string|array $filesName = '', string $app = ''): static
+    {
+        $this->loadAppAssetFile('js', $filesName, $app);
+        return $this;
+    }
+
+    /**
+     * 引入当前应用或指定应用的css文件
+     * @param string|array $filesName css文件名，多个文件可用逗号隔开
+     * @param string $app 指定应用
+     * @return $this
+     */
+    public function css(string|array $filesName = '', string $app = ''): static
+    {
+        $this->loadAppAssetFile('css', $filesName, $app);
+        return $this;
+    }
+
+    /**
+     * 引入应用静态资源文件
+     * @param string $type 类型：css/js
+     * @param string|array $filesName 文件名，多个可用逗号隔开
+     * @param string $app 指定应用
+     */
+    protected function loadAppAssetFile(string $type, string|array $filesName = '', string $app = ''): void
+    {
+        if (empty($filesName)) {
+            return;
+        }
+
+        $files = is_array($filesName) ? $filesName : explode(',', $filesName);
+        $app   = trim($app) !== '' ? $app : (string)(app('http')->getName() ?: Config::get('app.default_app', 'index'));
+
+        foreach ($files as $file) {
+            $file = trim($file);
+
+            if (empty($file)) {
+                continue;
+            }
+
+            $filepath = $this->buildAppAssetPath($file, $type, $app);
+
+            if ($type === 'js') {
+                $this->assetManager->addJs($filepath, 60);
+            } else {
+                $this->assetManager->addCss($filepath, 60);
+            }
+        }
+    }
+
+    /**
+     * 构建应用静态资源路径
+     * @param string $file 文件名
+     * @param string $type 类型
+     * @param string $app 应用
+     * @return string
+     */
+    protected function buildAppAssetPath(string $file, string $type, string $app): string
+    {
+        if (dp_is_url($file)) {
+            return $file;
+        }
+
+        $filepath = sprintf(
+            '/apps/%s/%s/%s',
+            trim($app, '/'),
+            $type,
+            ltrim($file, '/')
+        );
+
+        if (!str_ends_with(strtolower($filepath), '.' . $type)) {
+            $filepath .= '.' . $type;
+        }
+
+        return $filepath;
+    }
+
+    /**
      * 获取资源管理器实例
      * @return AssetManager
      */

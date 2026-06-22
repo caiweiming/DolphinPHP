@@ -690,34 +690,6 @@ class Form extends Common implements FormRenderInterface
     }
 
     /**
-     * 引入模块js文件
-     * @param string|array $files_name js文件名，多个文件用逗号隔开
-     * @param string $app 指定应用
-     * @return $this
-     */
-    public function js(string|array $files_name = '', string $app = ''): static
-    {
-        if ($files_name != '') {
-            $this->loadFile('js', $files_name, $app);
-        }
-        return $this;
-    }
-
-    /**
-     * 引入模块css文件
-     * @param string|array $files_name css文件名，多个文件用逗号隔开
-     * @param string $app 指定应用
-     * @return $this
-     */
-    public function css(string|array $files_name = '', string $app = ''): static
-    {
-        if ($files_name != '') {
-            $this->loadFile('css', $files_name, $app);
-        }
-        return $this;
-    }
-
-    /**
      * 设置页面额外html代码
      * @param string $content
      * @param string $pos
@@ -1378,66 +1350,4 @@ class Form extends Common implements FormRenderInterface
         }
     }
 
-    /**
-     * 引入文件
-     * @param string $type 类型：css/js
-     * @param string|array $files_name 文件名，多个用逗号隔开
-     * @param string $app 指定应用
-     */
-    private function loadFile(string $type = '', string|array $files_name = '', string $app = ''): void
-    {
-        if (empty($files_name)) {
-            return;
-        }
-
-        $files = is_array($files_name) ? $files_name : explode(',', $files_name);
-        $app   = $app ?: app('http')->getName();
-
-        foreach ($files as $file) {
-            $file = trim($file);
-
-            if (empty($file)) {
-                continue;
-            }
-
-            $filepath = $this->buildFilePath($file, $type, $app);
-
-            if ($type == 'js') {
-                $this->assetManager->addJs($filepath, 60);
-            } else {
-                $this->assetManager->addCss($filepath, 60);
-            }
-        }
-    }
-
-    /**
-     * 构建文件路径
-     * @param string $file 文件名
-     * @param string $type 类型
-     * @param string $app 应用
-     * @return string
-     */
-    private function buildFilePath(string $file, string $type, string $app): string
-    {
-        if (dp_is_url($file)) {
-            return $file;
-        }
-
-        if (str_contains($file, '/')) {
-            $filepath = '/static/' . ltrim($file, '/');
-        } else {
-            $filepath = sprintf(
-                '/static/%s/%s/%s',
-                $app,
-                $type,
-                $file
-            );
-        }
-
-        if (!str_ends_with(strtolower($filepath), '.' . $type)) {
-            $filepath .= '.' . $type;
-        }
-
-        return $filepath;
-    }
 }
