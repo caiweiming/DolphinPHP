@@ -663,14 +663,14 @@ class Table extends Common implements TableRenderInterface
      * 自动生成 Token 并传递给前端，用于快速编辑等 CRUD 操作
      *
      * @param string $tableName 表名（不含前缀）或完整表名
-     * @param string $type 类型：name(不含前缀) 或 table(完整表名)，默认 name
+     * @param bool $fullName 是否完整表名
      * @return $this
      */
-    public function tableName(string $tableName, string $type = 'name'): static
+    public function tableName(string $tableName, bool $fullName = false): static
     {
         if ($tableName !== '') {
             $this->crudTableName = $tableName;
-            $this->crudTableType = $type === 'table' ? 'table' : 'name';
+            $this->crudTableType = $fullName === true ? 'table' : 'name';
             $this->refreshCrudToken();
         }
         return $this;
