@@ -735,36 +735,6 @@ class Form extends Common implements FormRenderInterface
     }
 
     /**
-     * 设置页面额外js代码
-     * @param string $content
-     * @return $this
-     */
-    public function extraJs(string $content = ''): static
-    {
-        if (empty($content)) {
-            return $this;
-        }
-
-        $this->assetManager->addInlineJs($content);
-        return $this;
-    }
-
-    /**
-     * 设置页面额外css代码
-     * @param string $content
-     * @return $this
-     */
-    public function extraCss(string $content = ''): static
-    {
-        if (empty($content)) {
-            return $this;
-        }
-
-        $this->assetManager->addInlineCss($content);
-        return $this;
-    }
-
-    /**
      * 设置表单吸附
      * @param mixed $pos 位置: top,bottom
      * @param bool|int $num 距离

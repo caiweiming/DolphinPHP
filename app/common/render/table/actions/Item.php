@@ -54,7 +54,7 @@ class Item extends TableItem
     {
         $this->ensureBuiltinButtonsLoaded();
 
-        $table->addExtraJs($this->createTemplet($column));
+        $table->extraJs($this->createTemplet($column));
 
         // 删除field字段，确保字段筛选、导出、打印的时候，忽略操作栏
         unset($column['field']);

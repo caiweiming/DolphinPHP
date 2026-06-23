@@ -25,7 +25,7 @@ class Item extends TableItem
         // $table->addJsUrl('...');
         // $table->addCssUrl('...');
 
-        $table->addExtraJs($this->createTemplet($column, [
+        $table->extraJs($this->createTemplet($column, [
             // 传递到 item.html 的变量
             'options' => $column['options'] ?? [],
         ]));

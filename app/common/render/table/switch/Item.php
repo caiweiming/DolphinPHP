@@ -33,7 +33,7 @@ class Item extends TableItem
         $options = $column['options'] ?? '';
         $options = is_array($options) ? implode('|', $options) : $options;
 
-        $table->addExtraJs($this->createTemplet($column, [
+        $table->extraJs($this->createTemplet($column, [
             'options' => $options,
         ]));
         return $column;

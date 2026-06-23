@@ -30,7 +30,7 @@ class Item extends TableItem
      */
     public function handle(array $column, TableRender $table): array
     {
-        $table->addExtraJs(
+        $table->extraJs(
             $this->createTemplet($column, [
                 'href'   => $this->getUrl($column),
                 'dialog' => $this->getDialog($column),

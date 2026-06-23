@@ -80,7 +80,7 @@ class Item extends TableItem
             $table->pushVar('dp_table_class', 'dp-table-fix-cell');
         }
 
-        $table->addExtraJs(
+        $table->extraJs(
             $this->createTemplet($column, [
                 'options' => $column['options']
             ], $template ?? '')

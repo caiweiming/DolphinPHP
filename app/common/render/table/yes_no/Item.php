@@ -30,7 +30,7 @@ class Item extends TableItem
      */
     public function handle(array $column, TableRender $table): array
     {
-        $table->addExtraJs($this->createTemplet($column));
+        $table->extraJs($this->createTemplet($column));
         return $column;
     }
 }

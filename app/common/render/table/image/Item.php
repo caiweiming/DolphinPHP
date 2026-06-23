@@ -32,7 +32,7 @@ class Item extends TableItem
     {
         $table->pushVar('dp_table_class', 'dp-table-fix-cell');
         $table->addJsUrl('__THEME_LIBS__/fslightbox/index.js');
-        $table->addExtraJs($this->createTemplet($column));
+        $table->extraJs($this->createTemplet($column));
         return $column;
     }
 

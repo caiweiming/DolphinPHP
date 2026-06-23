@@ -98,7 +98,7 @@ abstract class Common
      * @param string $content
      * @return $this
      */
-    public function addExtraJs(string $content): static
+    public function extraJs(string $content = ''): static
     {
         $this->assetManager->addInlineJs($content);
         return $this;
@@ -109,7 +109,7 @@ abstract class Common
      * @param string $content
      * @return $this
      */
-    public function addExtraCss(string $content): static
+    public function extraCss(string $content = ''): static
     {
         $this->assetManager->addInlineCss($content);
         return $this;

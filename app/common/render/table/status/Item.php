@@ -44,7 +44,7 @@ class Item extends TableItem
             $colors[$key] = $color ? "-{$color}" : '';
         }
 
-        $table->addExtraJs($this->createTemplet($column, [
+        $table->extraJs($this->createTemplet($column, [
             'label' => $labels,
             'color' => $colors,
         ]));

@@ -32,7 +32,7 @@ class Item extends TableItem
     {
         // 编辑模式下，添加“dp-table-fix-cell”类，以修复行高不正确的问题
         $table->pushVar('dp_table_class', 'dp-table-fix-cell');
-        $table->addExtraJs($this->createTemplet($column, [
+        $table->extraJs($this->createTemplet($column, [
             'options' => $column['options'] ?? []
         ]));
         return $column;

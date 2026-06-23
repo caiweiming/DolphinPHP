@@ -31,7 +31,7 @@ class Item extends TableItem
     public function handle(array $column, TableRender $table): array
     {
         $table->pushVar('dp_table_class', 'dp-table-fix-cell');
-        $table->addExtraJs($this->createTemplet($column, [
+        $table->extraJs($this->createTemplet($column, [
             'options' => $column['options'] ?? [],
         ]));
         return $column;
