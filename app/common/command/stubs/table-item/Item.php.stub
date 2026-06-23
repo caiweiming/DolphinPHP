@@ -22,8 +22,8 @@ class Item extends TableItem
     public function handle(array $column, TableRender $table): array
     {
         // 需要资源依赖时可在此添加
-        // $table->addJsUrl('...');
-        // $table->addCssUrl('...');
+        // $table->jsUrl('...');
+        // $table->cssUrl('...');
 
         $table->extraJs($this->createTemplet($column, [
             // 传递到 item.html 的变量

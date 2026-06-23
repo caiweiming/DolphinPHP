@@ -31,7 +31,7 @@ class Item extends TableItem
     public function handle(array $column, TableRender $table): array
     {
         $table->pushVar('dp_table_class', 'dp-table-fix-cell');
-        $table->addJsUrl('__THEME_LIBS__/fslightbox/index.js');
+        $table->jsUrl('__THEME_LIBS__/fslightbox/index.js');
         $table->extraJs($this->createTemplet($column, [
             'options' => $this->normalizeOptions($column),
         ]));

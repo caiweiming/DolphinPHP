@@ -128,26 +128,26 @@ abstract class Common
     }
 
     /**
-     * 追加js链接
+     * 追加 JS URL
      * @param string|array $urls
      * @param int $priority 优先级，数值越小越先加载
      * @param array $dependencies 依赖的资源ID
      * @return $this
      */
-    public function addJsUrl(string|array $urls, int $priority = 50, array $dependencies = []): static
+    public function jsUrl(string|array $urls, int $priority = 50, array $dependencies = []): static
     {
         $this->assetManager->addJs($urls, $priority, $dependencies);
         return $this;
     }
 
     /**
-     * 添加css链接
+     * 追加 CSS URL
      * @param string|array $urls
      * @param int $priority 优先级，数值越小越先加载
      * @param array $dependencies 依赖的资源ID
      * @return $this
      */
-    public function addCssUrl(string|array $urls, int $priority = 50, array $dependencies = []): static
+    public function cssUrl(string|array $urls, int $priority = 50, array $dependencies = []): static
     {
         $this->assetManager->addCss($urls, $priority, $dependencies);
         return $this;
