@@ -228,20 +228,20 @@ class Form extends Common implements FormRenderInterface
     }
 
     /**
-     * 设置表单项处理类映射
+     * 设置表单项处理器映射
      * @param string|array $type 表单项类型
      * @param string $class 表单项处理类
      * @param string $template 模板名称或路径
      * @return $this
      */
-    public function handle(string|array $type = '', string $class = '', string $template = ''): static
+    public function itemHandler(string|array $type = '', string $class = '', string $template = ''): static
     {
         if (empty($type)) return $this;
 
         if (is_array($type)) {
             foreach ($type as $key => $item) {
                 $params = is_array($item) ? $item : ['class' => $item];
-                $this->handle($key, $params['class'] ?? '', $params['template'] ?? '');
+                $this->itemHandler($key, $params['class'] ?? '', $params['template'] ?? '');
             }
         } else {
             $type = dp_normalize_extension_path($type);

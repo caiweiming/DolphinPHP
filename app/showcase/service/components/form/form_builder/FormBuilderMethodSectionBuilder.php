@@ -29,7 +29,7 @@ final class FormBuilderMethodSectionBuilder
             'method' => $this->method(),
             'alert' => $this->alert(),
             'template' => $this->template(),
-            'handle' => $this->handle(),
+            'item_handler' => $this->itemHandler(),
             'btn_submit' => $this->btnSubmit(),
             'btn_back' => $this->btnBack(),
             'action' => $this->action(),
@@ -1184,13 +1184,13 @@ CODE,
     /**
      * @return array<string, mixed>
      */
-    private function handle(): array
+    private function itemHandler(): array
     {
         return $this->wrap([
-            'key' => 'handle',
+            'key' => 'item_handler',
             'group_key' => 'advanced',
-            'title' => 'handle() 类型处理映射',
-            'signature' => "handle(string|array \$type = '', string \$class = '', string \$template = '')",
+            'title' => 'itemHandler() 表单项处理器映射',
+            'signature' => "itemHandler(string|array \$type = '', string \$class = '', string \$template = '')",
             'summary' => '指定表单项类型对应的处理类与模板，实现扩展项接管。',
             'parameter_details' => [
                 ['name' => '$type', 'summary' => '字段类型或映射数组。'],
@@ -1200,7 +1200,7 @@ CODE,
             'variants' => ['behavior', 'source'],
             'array_code' => <<<'CODE'
 [
-    'handle' => [
+    'item_handler' => [
         'markdown' => [
             'class' => 'app\\showcase\\form\\MarkdownItem',
             'template' => 'showcase/form/markdown',
@@ -1212,13 +1212,13 @@ CODE,
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->handle('markdown', 'app\\showcase\\form\\MarkdownItem', 'showcase/form/markdown');
+    ->itemHandler('markdown', 'app\\showcase\\form\\MarkdownItem', 'showcase/form/markdown');
 CODE,
             'behavior_notes' => [
                 '适合把自定义类型接入 Form 渲染流程，是扩展表单项的重要入口。',
             ],
             'tips' => [
-                '先保证处理类和模板契约完整，再接入 handle()，否则运行时更难排查。',
+                '先保证处理类和模板契约完整，再接入 itemHandler()，否则运行时更难排查。',
             ],
             'usage_variants' => [
                 [
@@ -1226,7 +1226,7 @@ CODE,
                     'summary' => '先接入一个自定义类型，确认处理类和模板契约是否跑通。',
                     'array_code' => <<<'CODE'
 [
-    'handle' => [
+    'item_handler' => [
         'markdown' => [
             'class' => 'app\\showcase\\form\\MarkdownItem',
             'template' => 'showcase/form/markdown',
@@ -1238,7 +1238,7 @@ CODE,
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->handle('markdown', 'app\\showcase\\form\\MarkdownItem', 'showcase/form/markdown');
+    ->itemHandler('markdown', 'app\\showcase\\form\\MarkdownItem', 'showcase/form/markdown');
 CODE,
                 ],
                 [
@@ -1246,7 +1246,7 @@ CODE,
                     'summary' => '批量声明多个类型映射，适合扩展库或统一注册阶段。',
                     'array_code' => <<<'CODE'
 [
-    'handle' => [
+    'item_handler' => [
         'markdown' => [
             'class' => 'app\\showcase\\form\\MarkdownItem',
             'template' => 'showcase/form/markdown',
@@ -1262,7 +1262,7 @@ CODE,
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->handle([
+    ->itemHandler([
         'markdown' => [
             'class' => 'app\\showcase\\form\\MarkdownItem',
             'template' => 'showcase/form/markdown',
@@ -1740,14 +1740,14 @@ CODE,
             'variants' => ['source'],
             'array_code' => <<<'CODE'
 [
-    'js' => ['showcase/form-builder', 'showcase/common'],
+    'js' => ['form-builder', 'common'],
 ]
 CODE,
             'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->js(['showcase/form-builder', 'showcase/common'], 'showcase');
+    ->js(['form-builder', 'common'], 'showcase');
 CODE,
             'behavior_notes' => [
                 'js() 适合承载可复用的页面脚本资源，比 extraJs() 更容易维护和复用。',
@@ -1761,14 +1761,14 @@ CODE,
                     'summary' => '只引一个模块脚本时最简洁。',
                     'array_code' => <<<'CODE'
 [
-    'js' => 'showcase/form-builder',
+    'js' => 'form-builder',
 ]
 CODE,
                     'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->js('showcase/form-builder', 'showcase');
+    ->js('form-builder', 'showcase');
 CODE,
                 ],
                 [
@@ -1776,14 +1776,14 @@ CODE,
                     'summary' => '多个脚本一起引入时可直接传数组，避免逗号字符串难维护。',
                     'array_code' => <<<'CODE'
 [
-    'js' => ['showcase/form-builder', 'showcase/common'],
+    'js' => ['form-builder', 'common'],
 ]
 CODE,
                     'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->js(['showcase/form-builder', 'showcase/common'], 'showcase');
+    ->js(['form-builder', 'common'], 'showcase');
 CODE,
                 ],
             ],
@@ -1809,14 +1809,14 @@ CODE,
             'variants' => ['source'],
             'array_code' => <<<'CODE'
 [
-    'css' => ['showcase/form-builder', 'showcase/common'],
+    'css' => ['form-builder', 'common'],
 ]
 CODE,
             'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->css(['showcase/form-builder', 'showcase/common'], 'showcase');
+    ->css(['form-builder', 'common'], 'showcase');
 CODE,
             'behavior_notes' => [
                 'css() 适合沉淀页面样式资源，避免反复使用 extraCss() 写分散的内联样式。',
@@ -1830,14 +1830,14 @@ CODE,
                     'summary' => '只引一个页面样式时最直接。',
                     'array_code' => <<<'CODE'
 [
-    'css' => 'showcase/form-builder',
+    'css' => 'form-builder',
 ]
 CODE,
                     'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->css('showcase/form-builder', 'showcase');
+    ->css('form-builder', 'showcase');
 CODE,
                 ],
                 [
@@ -1845,14 +1845,14 @@ CODE,
                     'summary' => '多个样式模块一起引入时更适合用数组声明。',
                     'array_code' => <<<'CODE'
 [
-    'css' => ['showcase/form-builder', 'showcase/common'],
+    'css' => ['form-builder', 'common'],
 ]
 CODE,
                     'form_code' => <<<'CODE'
 use app\common\render\Form;
 
 Form::make('site_form', '站点设置')
-    ->css(['showcase/form-builder', 'showcase/common'], 'showcase');
+    ->css(['form-builder', 'common'], 'showcase');
 CODE,
                 ],
             ],

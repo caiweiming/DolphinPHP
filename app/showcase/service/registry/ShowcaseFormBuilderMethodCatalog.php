@@ -47,8 +47,8 @@ final class ShowcaseFormBuilderMethodCatalog
             [
                 'key' => 'advanced',
                 'title' => '进阶扩展',
-                'summary' => '控制布局模板、处理映射和模板变量等进阶能力。',
-                'methods' => ['template', 'handle', 'assign'],
+                'summary' => '控制布局模板、表单项处理器映射和模板变量等进阶能力。',
+                'methods' => ['template', 'item_handler', 'assign'],
             ],
         ];
     }
