@@ -16,7 +16,7 @@ final class TableBuilderMethodSectionBuilder
         return match ($methodKey) {
             'id' => $this->id(),
             'alert' => $this->alert(),
-            'html' => $this->html(),
+            'extra_html' => $this->extraHtml(),
             'data' => $this->data(),
             'url' => $this->url(),
             'method' => $this->method(),
@@ -119,7 +119,7 @@ final class TableBuilderMethodSectionBuilder
         return match ($method) {
             'id' => "id(string \$id = ''): static",
             'alert' => "alert(string|array \$content = '', string \$title = '', string \$type = 'info', string \$pos = 'top'): static",
-            'html' => "html(string \$content, string \$pos = 'bottom'): static",
+            'extra_html' => "extraHtml(string \$content, string \$pos = 'bottom'): static",
             'data' => "data(\$data = null, string \$method = ''): static",
             'url' => "url(string|Url \$url = ''): static",
             'method' => "method(string \$method = 'get'): static",
@@ -238,10 +238,10 @@ CODE,
     /**
      * @return array<string, mixed>
      */
-    private function html(): array
+    private function extraHtml(): array
     {
         return $this->section(
-            'html',
+            'extra_html',
             '在表格顶部或底部插入自定义 HTML，适合放摘要指标、批量操作提示或辅助说明块。',
             [
                 ['name' => '$content', 'summary' => '附加 HTML 内容。'],
@@ -249,7 +249,7 @@ CODE,
             ],
             <<<'CODE'
 [
-    'html' => '<div class="dp-summary">当前共 128 条数据</div>',
+    'extra_html' => '<div class="dp-summary">当前共 128 条数据</div>',
     'pos' => 'top',
 ]
 CODE,
@@ -257,26 +257,26 @@ CODE,
 use app\common\render\Table;
 
 Table::make('demo_table')
-    ->html('<div class="dp-summary">当前共 128 条数据</div>', 'top');
+    ->extraHtml('<div class="dp-summary">当前共 128 条数据</div>', 'top');
 CODE,
-            ['html() 更适合插入结构性说明或指标摘要，不建议塞复杂交互逻辑。'],
+            ['extraHtml() 更适合插入结构性说明或指标摘要，不建议塞复杂交互逻辑。'],
             ['如果内容会复用，优先抽成模板片段或视图片段，而不是长期内联字符串。'],
             'identity_notice',
-            'html() 附加 HTML',
+            'extraHtml() 附加 HTML',
             'source',
             '',
             [
                 $this->dualCodeVariant(
                     '顶部说明块',
                     '放在表格头部，适合摘要或说明。',
-                    "[\n    'html' => '<div class=\"dp-summary\">当前共 128 条数据</div>',\n    'pos' => 'top',\n]",
-                    "use app\\common\\render\\Table;\n\nTable::make('demo_table')\n    ->html('<div class=\"dp-summary\">当前共 128 条数据</div>', 'top');"
+                    "[\n    'extra_html' => '<div class=\"dp-summary\">当前共 128 条数据</div>',\n    'pos' => 'top',\n]",
+                    "use app\\common\\render\\Table;\n\nTable::make('demo_table')\n    ->extraHtml('<div class=\"dp-summary\">当前共 128 条数据</div>', 'top');"
                 ),
                 $this->dualCodeVariant(
                     '底部扩展块',
                     '放在表格底部，适合注意事项。',
-                    "[\n    'html' => '<div class=\"dp-footer-note\">导出结果以当前筛选条件为准</div>',\n    'pos' => 'bottom',\n]",
-                    "use app\\common\\render\\Table;\n\nTable::make('demo_table')\n    ->html('<div class=\"dp-footer-note\">导出结果以当前筛选条件为准</div>', 'bottom');"
+                    "[\n    'extra_html' => '<div class=\"dp-footer-note\">导出结果以当前筛选条件为准</div>',\n    'pos' => 'bottom',\n]",
+                    "use app\\common\\render\\Table;\n\nTable::make('demo_table')\n    ->extraHtml('<div class=\"dp-footer-note\">导出结果以当前筛选条件为准</div>', 'bottom');"
                 ),
             ]
         );

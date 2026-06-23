@@ -18,7 +18,7 @@ final class ShowcaseTableBuilderMethodCatalog
                 'key' => 'identity_notice',
                 'title' => '基础标识与提示',
                 'summary' => '控制表格 DOM 标识、提示条和附加 HTML 说明区。',
-                'methods' => ['id', 'alert', 'html'],
+                'methods' => ['id', 'alert', 'extra_html'],
             ],
             [
                 'key' => 'data_crud',

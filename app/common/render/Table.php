@@ -337,12 +337,12 @@ class Table extends Common implements TableRenderInterface
     }
 
     /**
-     * 添加html代码
+     * 添加额外html代码
      * @param string $content
      * @param string $pos
      * @return $this
      */
-    public function html(string $content, string $pos = 'bottom'): static
+    public function extraHtml(string $content, string $pos = 'bottom'): static
     {
         if (empty($content)) {
             return $this;
