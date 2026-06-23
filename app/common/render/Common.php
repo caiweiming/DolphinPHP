@@ -116,12 +116,12 @@ abstract class Common
     }
 
     /**
-     * 添加额外初始化js命令
+     * 添加初始化 JS 命令
      * @param string $content
      * @param string $app 应用标识
      * @return $this
      */
-    public function addInitJs(string $content, string $app = 'default'): static
+    public function initJs(string $content, string $app = 'default'): static
     {
         $this->assetManager->addInitJs($content, $app);
         return $this;
